@@ -41,7 +41,3 @@ export interface SkillCategory {
   categoryZh?: string;
   items: string[];
 }
-
-export interface TranslationDict {
-  [key: string]: string | TranslationDict;
-}

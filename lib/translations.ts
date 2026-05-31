@@ -7,11 +7,32 @@ const translations = {
     'status.terminal': '终端',
     'status.switchToMinimal': '切换极简',
     'status.switchToMacos': '切换 macOS',
+    'status.stylePresetAbbrevMacos': 'A',
+    'status.stylePresetAbbrevVercel': 'B',
+
+    // Theme
+    'theme.light': 'Light',
+    'theme.dark': 'Dark',
+    'theme.lightAbbrev': 'LGT',
+    'theme.darkAbbrev': 'DRK',
+
+    // Language
+    'lang.en': 'EN',
+    'lang.zh': 'ZH',
+
+    // Style Preset
+    'stylePreset.macos': 'macOS',
+    'stylePreset.vercel': 'Vercel',
 
     // Window Titles
     'window.main.title': 'Portfolio.app',
     'window.console.title.macos': 'visitor@DevOS: ~',
     'window.console.title.vercel': 'Terminal.app',
+
+    // Window ARIA
+    'window.aria.close': '关闭',
+    'window.aria.minimize': '最小化',
+    'window.aria.maximize': '最大化',
 
     // Desktop
     'desktop.openMain': 'Portfolio',
@@ -23,6 +44,17 @@ const translations = {
     'console.help': '输入 "help" 查看可用命令。',
     'console.prompt': 'DevOS:~ visitor$',
     'console.notFound': '命令未找到。输入 `help` 查看可用命令。',
+    'console.macosWelcome': (...args: string[]) => `Last login: ${args[0]} on ttys001\nDevOS:~ visitor$ welcome`,
+
+    // Hero
+    'hero.subtitle': '后端开发者 / AI 应用探索者 / 独立产品构建者',
+
+    // About
+    'about.description': '我是一名后端开发者，专注于构建稳定可靠的业务系统，并持续探索 AI 原生应用。我关注架构设计、工程实践、产品思维，以及如何借助 AI 工具更高效地完成独立交付。',
+
+    // Contact
+    'contact.resumeLabel': '简历',
+    'contact.downloadPdf': '下载 PDF',
 
     // Sections
     'section.hero': '面向 AI 时代构建产品的后端开发者',
@@ -32,7 +64,7 @@ const translations = {
     'section.blog': '博客',
     'section.contact': '联系',
 
-    // Commands
+    // Commands descriptions
     'cmd.help.desc': '显示帮助信息',
     'cmd.about.desc': '关于我',
     'cmd.skills.desc': '技能栈',
@@ -44,6 +76,19 @@ const translations = {
     'cmd.classic.desc': '切换到经典视图',
     'cmd.whoami.desc': '当前用户',
     'cmd.sudo.desc': 'sudo hire me',
+
+    // Command outputs
+    'cmd.help.header': '可用命令：',
+    'cmd.about.output': '后端开发者，专注于构建稳定可靠的业务系统，并持续探索 AI 原生应用。',
+    'cmd.skills.output': 'Java, Spring Boot, React, Next.js, LLM Apps, RAG, Docker...',
+    'cmd.projects.output': 'AI Agent Demo, Bidding System, Personal Dev OS',
+    'cmd.blog.output': '从 Java 后端到 AI Agent 开发的学习路线等文章',
+    'cmd.contact.output': 'Email, GitHub, LinkedIn',
+    'cmd.resume.output': '简历下载链接：[即将推出]',
+    'cmd.classic.output': '正在切换到经典视图...[即将推出]',
+    'cmd.whoami.output': 'visitor — Personal DevOS 的访客用户',
+    'cmd.sudo.hireMe': '不错的尝试！😄 给我发邮件来讨论机会吧。',
+    'cmd.sudo.error': 'sudo: 命令未找到或权限不足',
   },
   en: {
     // Status Bar
@@ -51,11 +96,32 @@ const translations = {
     'status.terminal': 'Terminal',
     'status.switchToMinimal': 'Switch to Minimal',
     'status.switchToMacos': 'Switch to macOS',
+    'status.stylePresetAbbrevMacos': 'A',
+    'status.stylePresetAbbrevVercel': 'B',
+
+    // Theme
+    'theme.light': 'Light',
+    'theme.dark': 'Dark',
+    'theme.lightAbbrev': 'LGT',
+    'theme.darkAbbrev': 'DRK',
+
+    // Language
+    'lang.en': 'EN',
+    'lang.zh': 'ZH',
+
+    // Style Preset
+    'stylePreset.macos': 'macOS',
+    'stylePreset.vercel': 'Vercel',
 
     // Window Titles
     'window.main.title': 'Portfolio.app',
     'window.console.title.macos': 'visitor@DevOS: ~',
     'window.console.title.vercel': 'Terminal.app',
+
+    // Window ARIA
+    'window.aria.close': 'Close',
+    'window.aria.minimize': 'Minimize',
+    'window.aria.maximize': 'Maximize',
 
     // Desktop
     'desktop.openMain': 'Portfolio',
@@ -67,6 +133,17 @@ const translations = {
     'console.help': 'Type "help" to see available commands.',
     'console.prompt': 'DevOS:~ visitor$',
     'console.notFound': 'Command not found. Type `help` to see available commands.',
+    'console.macosWelcome': (...args: string[]) => `Last login: ${args[0]} on ttys001\nDevOS:~ visitor$ welcome`,
+
+    // Hero
+    'hero.subtitle': 'Backend Developer / AI Explorer / Indie Builder',
+
+    // About
+    'about.description': 'I am a backend developer focused on building reliable business systems and exploring AI-native applications. I care about clean architecture, practical engineering, product thinking, and using AI tools to ship faster as an independent builder.',
+
+    // Contact
+    'contact.resumeLabel': 'Resume',
+    'contact.downloadPdf': 'Download PDF',
 
     // Sections
     'section.hero': 'Backend Developer building AI-era products.',
@@ -76,7 +153,7 @@ const translations = {
     'section.blog': 'Blog',
     'section.contact': 'Contact',
 
-    // Commands
+    // Commands descriptions
     'cmd.help.desc': 'Show help information',
     'cmd.about.desc': 'About me',
     'cmd.skills.desc': 'Skills stack',
@@ -88,14 +165,32 @@ const translations = {
     'cmd.classic.desc': 'Switch to classic view',
     'cmd.whoami.desc': 'Current user',
     'cmd.sudo.desc': 'sudo hire me',
+
+    // Command outputs
+    'cmd.help.header': 'Available commands:',
+    'cmd.about.output': 'Backend developer focused on building reliable business systems and exploring AI-native applications.',
+    'cmd.skills.output': 'Java, Spring Boot, React, Next.js, LLM Apps, RAG, Docker...',
+    'cmd.projects.output': 'AI Agent Demo, Bidding System, Personal Dev OS',
+    'cmd.blog.output': 'Learning path from Java backend to AI Agent dev, etc.',
+    'cmd.contact.output': 'Email, GitHub, LinkedIn',
+    'cmd.resume.output': 'Resume download link: [coming soon]',
+    'cmd.classic.output': 'Switching to classic view... [coming soon]',
+    'cmd.whoami.output': 'visitor — Guest user on Personal DevOS',
+    'cmd.sudo.hireMe': "Nice try! 😄 Send me an email to discuss opportunities.",
+    'cmd.sudo.error': 'sudo: command not found or insufficient privileges',
   },
 } as const;
 
-export function t(key: string, lang: Lang): string {
-  const dict = translations[lang] as Record<string, string>;
-  return dict[key] ?? key;
+export type TranslationKey = keyof (typeof translations)['zh'];
+
+export function t(key: TranslationKey, lang: Lang, ...args: string[]): string {
+  const value = translations[lang][key];
+  if (typeof value === 'function') {
+    return value(...args);
+  }
+  return value ?? key;
 }
 
-export function getAllTranslations(lang: Lang): Record<string, string> {
-  return translations[lang] as Record<string, string>;
+export function getAllTranslations(lang: Lang): Record<TranslationKey, string | ((...args: string[]) => string)> {
+  return translations[lang];
 }

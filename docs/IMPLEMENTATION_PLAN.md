@@ -11,13 +11,16 @@
 - Migrate to pnpm
 - Phase 1 visual calibration (layout, contrast, responsive)
 
-## Phase 2: Global Settings
-- Implement theme: light / dark
-- Implement language: zh / en
-- Implement stylePreset: macos / vercel
-- Save to localStorage
-- Extract translations
-- Extract style tokens
+## Phase 2: Global Settings ✅ COMPLETED
+- ✅ Implement theme: light / dark
+- ✅ Implement language: zh / en
+- ✅ Implement stylePreset: macos / vercel
+- ✅ Save to localStorage
+- ✅ Extract translations
+- ✅ Extract style tokens
+- ✅ Unified SettingsContext + useSettings hook
+- ✅ Light mode visual optimization across presets
+- ✅ Type-safe translations with TranslationKey
 
 ## Phase 3: Main Content
 - Hero / Overview

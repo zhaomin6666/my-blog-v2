@@ -2,35 +2,25 @@
 
 import { useState, useEffect } from 'react';
 import { Wifi, Battery, Search, Hash } from 'lucide-react';
-import { Theme, Lang, StylePreset, WindowState } from '@/lib/types';
+import { WindowState } from '@/lib/types';
+import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { formatTime } from '@/lib/utils';
 import { t } from '@/lib/translations';
 
 interface SystemStatusBarProps {
-  theme: Theme;
-  setTheme: (t: Theme) => void;
-  lang: Lang;
-  setLang: (l: Lang) => void;
-  stylePreset: StylePreset;
-  setStylePreset: (s: StylePreset) => void;
   setMainState: (s: WindowState) => void;
   setConsoleState: (s: WindowState) => void;
   focusWindow: (win: 'main' | 'console') => void;
 }
 
 export function SystemStatusBar({
-  theme,
-  setTheme,
-  lang,
-  setLang,
-  stylePreset,
-  setStylePreset,
   setMainState,
   setConsoleState,
   focusWindow,
 }: SystemStatusBarProps) {
   const [time, setTime] = useState<Date | null>(null);
+  const { theme, toggleTheme, lang, toggleLang, stylePreset, toggleStylePreset } = useSettings();
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
 
@@ -86,29 +76,31 @@ export function SystemStatusBar({
       {/* Right */}
       <div className="flex items-center gap-2 sm:gap-4">
         <button
-          onClick={() => setStylePreset(isMacos ? 'vercel' : 'macos')}
+          onClick={toggleStylePreset}
           className={`hidden sm:inline transition-colors ${isMacos ? 'text-blue-600 dark:text-blue-400' : 'text-emerald-600 dark:text-emerald-400'}`}
         >
           {isMacos ? t('status.switchToMinimal', lang) : `[${t('status.switchToMacos', lang)}]`}
         </button>
         <button
-          onClick={() => setStylePreset(isMacos ? 'vercel' : 'macos')}
+          onClick={toggleStylePreset}
           className={`sm:hidden transition-colors ${isMacos ? 'text-blue-600 dark:text-blue-400' : 'text-emerald-600 dark:text-emerald-400'}`}
           title={isMacos ? t('status.switchToMinimal', lang) : t('status.switchToMacos', lang)}
         >
-          {isMacos ? 'B' : 'A'}
+          {isMacos ? t('status.stylePresetAbbrevVercel', lang) : t('status.stylePresetAbbrevMacos', lang)}
         </button>
         <button
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          onClick={toggleTheme}
           className="hover:text-black dark:hover:text-white transition-colors"
         >
-          {isMacos ? (theme === 'dark' ? 'Light' : 'Dark') : (theme === 'dark' ? 'LGT' : 'DRK')}
+          {isMacos
+            ? (theme === 'dark' ? t('theme.light', lang) : t('theme.dark', lang))
+            : (theme === 'dark' ? t('theme.lightAbbrev', lang) : t('theme.darkAbbrev', lang))}
         </button>
         <button
-          onClick={() => setLang(lang === 'zh' ? 'en' : 'zh')}
+          onClick={toggleLang}
           className="hover:text-black dark:hover:text-white transition-colors"
         >
-          {lang === 'zh' ? 'EN' : 'ZH'}
+          {t(lang === 'zh' ? 'lang.en' : 'lang.zh', lang)}
         </button>
         {isMacos && (
           <div className="hidden sm:flex items-center gap-3 ml-2">

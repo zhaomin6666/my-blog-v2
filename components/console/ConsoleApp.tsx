@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { StylePreset, Lang, ConsoleOutputLine } from '@/lib/types';
+import { useSettings } from '@/lib/settings-context';
+import { ConsoleOutputLine } from '@/lib/types';
 import { generateId } from '@/lib/utils';
 import { t } from '@/lib/translations';
 import { executeCommand } from '@/lib/commands';
@@ -10,12 +11,11 @@ import { ConsoleOutput } from './ConsoleOutput';
 import { ConsoleInput } from './ConsoleInput';
 
 interface ConsoleAppProps {
-  stylePreset: StylePreset;
-  lang: Lang;
   onNavigate?: (target: string) => void;
 }
 
-export function ConsoleApp({ stylePreset, lang, onNavigate }: ConsoleAppProps) {
+export function ConsoleApp({ onNavigate }: ConsoleAppProps) {
+  const { lang, stylePreset } = useSettings();
   const [input, setInput] = useState('');
   const [lines, setLines] = useState<ConsoleOutputLine[]>(() => {
     const isMacos = stylePreset === 'macos';
@@ -24,7 +24,7 @@ export function ConsoleApp({ stylePreset, lang, onNavigate }: ConsoleAppProps) {
         id: generateId(),
         type: 'system',
         content: isMacos
-          ? `Last login: ${new Date().toLocaleString()} on ttys001\nDevOS:~ visitor$ welcome`
+          ? t('console.macosWelcome', lang, new Date().toLocaleString())
           : t('console.welcome', lang),
       },
       {
@@ -74,12 +74,11 @@ export function ConsoleApp({ stylePreset, lang, onNavigate }: ConsoleAppProps) {
     <div className={`h-full w-full flex flex-col ${tokens.consoleFont} ${
       stylePreset === 'macos' ? 'text-zinc-100' : 'bg-white dark:bg-black text-zinc-900 dark:text-zinc-100'
     }`}>
-      <ConsoleOutput lines={lines} stylePreset={stylePreset} />
+      <ConsoleOutput lines={lines} />
       <ConsoleInput
         input={input}
         setInput={setInput}
         onSubmit={handleSubmit}
-        stylePreset={stylePreset}
       />
     </div>
   );

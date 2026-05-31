@@ -1,26 +1,23 @@
 'use client';
 
 import { Layout, Terminal } from 'lucide-react';
-import { StylePreset, WindowState } from '@/lib/types';
+import { WindowState } from '@/lib/types';
+import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
-import { Lang } from '@/lib/types';
 
 interface DesktopProps {
-  stylePreset: StylePreset;
-  lang: Lang;
   setMainState: (s: WindowState) => void;
   setConsoleState: (s: WindowState) => void;
   focusWindow: (win: 'main' | 'console') => void;
 }
 
 export function Desktop({
-  stylePreset,
-  lang,
   setMainState,
   setConsoleState,
   focusWindow,
 }: DesktopProps) {
+  const { lang, stylePreset } = useSettings();
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
 

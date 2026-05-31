@@ -2,18 +2,18 @@
 
 import { useRef, useEffect } from 'react';
 import { ChevronRight } from 'lucide-react';
-import { StylePreset } from '@/lib/types';
+import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 
 interface ConsoleInputProps {
   input: string;
   setInput: (s: string) => void;
   onSubmit: () => void;
-  stylePreset: StylePreset;
 }
 
-export function ConsoleInput({ input, setInput, onSubmit, stylePreset }: ConsoleInputProps) {
+export function ConsoleInput({ input, setInput, onSubmit }: ConsoleInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const { stylePreset } = useSettings();
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
 
@@ -31,7 +31,7 @@ export function ConsoleInput({ input, setInput, onSubmit, stylePreset }: Console
     <div className={`flex-none px-4 py-3 border-t ${isMacos ? 'border-zinc-800/50' : 'border-zinc-200 dark:border-zinc-800'} ${tokens.consoleFont}`}>
       <div className="max-w-4xl mx-auto flex items-center gap-2">
         {isMacos ? (
-          <span className="text-green-400 shrink-0">{tokens.consolePrompt}</span>
+          <span className="text-green-500 dark:text-green-400 shrink-0">{tokens.consolePrompt}</span>
         ) : (
           <ChevronRight size={14} className="text-zinc-400 shrink-0" />
         )}

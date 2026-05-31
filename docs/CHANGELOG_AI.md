@@ -11,6 +11,92 @@ Every major change should include:
 - Design impact
 - Follow-up notes
 
+### 2026-05-31 — Claude Code
+**Summary:** Phase 2 completed. Global settings system established with React Context, unified settings management, centralized translations, and enhanced style tokens.
+
+**Phase 2 deliverables:**
+- Created `lib/settings-context.tsx` with `SettingsProvider` and `useSettings` hook
+- `SettingsContext` is the single source of truth for theme, lang, stylePreset
+- Existing `useTheme`, `useLanguage`, `useStylePreset` refactored as delegation wrappers
+- All localStorage logic centralized in SettingsContext; no duplicate reads/writes
+- Hydration mismatch prevention via `mounted` flag in context
+- Root `app/layout.tsx` wrapped with `SettingsProvider`
+- `lib/translations.ts` expanded with full coverage of all UI copy and command outputs
+- `t()` function now type-safe with `TranslationKey`
+- All components refactored to use `t()` — no hardcoded zh/en strings in components
+- `lib/commands.ts` fully translated, no inline `lang === 'zh'` conditionals
+- `lib/stylePresets.ts` expanded with comprehensive tokens (cardBg, cardBorder, textPrimary, tagBg, etc.)
+- macOS light mode enhanced with glass/blur质感 and softer shadows
+- Vercel light mode enhanced with ultra-minimal, high-contrast tool aesthetic
+- `app/globals.css` extended with CSS variable palette for OS chrome
+
+**Files changed:**
+- `lib/settings-context.tsx` — new: SettingsContext + Provider + useSettings
+- `lib/types.ts` — cleaned TranslationDict type
+- `lib/translations.ts` — expanded keys, type-safe TranslationKey, function support for dynamic strings
+- `lib/stylePresets.ts` — expanded token set, light mode optimization
+- `lib/commands.ts` — fully translated command outputs
+- `app/layout.tsx` — added SettingsProvider wrapper
+- `app/globals.css` — extended CSS variables
+- `hooks/useTheme.ts` — delegation wrapper to useSettings
+- `hooks/useLanguage.ts` — delegation wrapper to useSettings
+- `hooks/useStylePreset.ts` — delegation wrapper to useSettings
+- `components/os/DeveloperOS.tsx` — uses useSettings, hydration guard
+- `components/os/SystemStatusBar.tsx` — uses useSettings, translated labels
+- `components/os/WindowControls.tsx` — translated aria-labels
+- `components/os/AppWindow.tsx` — uses style tokens
+- `components/os/Desktop.tsx` — uses useSettings
+- `components/settings/ThemeToggle.tsx` — uses useSettings
+- `components/settings/LanguageToggle.tsx` — uses useSettings
+- `components/settings/StylePresetToggle.tsx` — uses useSettings
+- `components/main/MainApp.tsx` — simplified props
+- `components/main/HeroOverview.tsx` — translated, uses tokens
+- `components/main/AboutSection.tsx` — translated, uses tokens
+- `components/main/SkillsSection.tsx` — uses tokens
+- `components/main/ProjectsSection.tsx` — uses tokens
+- `components/main/BlogSection.tsx` — uses tokens
+- `components/main/ContactSection.tsx` — translated, uses tokens
+- `components/console/ConsoleApp.tsx` — translated welcome, uses tokens
+- `components/console/ConsoleInput.tsx` — uses tokens
+- `components/console/ConsoleOutput.tsx` — uses tokens
+- `docs/IMPLEMENTATION_PLAN.md` — marked Phase 2 as completed
+- `docs/CHANGELOG_AI.md` — this entry
+
+**Design impact:**
+- Theme, language, and style preset now share a single source of truth via React Context.
+- All UI copy is centralized; switching language is instant with no orphaned strings.
+- Light mode is now a first-class citizen with distinct visual质感 for both macos and vercel presets.
+- Style token system is extensible; adding new presets or theme variants only requires updating tokens.
+
+**Follow-up notes:**
+- Ready to proceed to Phase 3: Replace skeleton placeholders with rich content.
+- Phase 4: Implement CLI-to-Main-App scroll/linkage.
+- Phase 5: Fine-tune individual preset + theme combinations.
+
+### 2026-05-31 — Claude Code
+**Summary:** Phase 2 self-audit. Verified all 7 check items passed; one minor fix applied.
+
+**Audit results:**
+
+| # | Check item | Result | Notes |
+|---|-----------|--------|-------|
+| 1 | SettingsContext is the single source of truth | ✅ Pass | All theme/lang/stylePreset state lives in `lib/settings-context.tsx`; no other useState or localStorage for these three exists |
+| 2 | Legacy hooks are pure delegation wrappers | ✅ Pass | `useTheme.ts`, `useLanguage.ts`, `useStylePreset.ts` only destructure from `useSettings()` and return; no useState/localStorage/matchMedia |
+| 3 | No hardcoded zh/en UI copy in components | ✅ Pass | grep found only data-layer field selections (`blog.title/titleEn`, `skill.categoryZh`, `project.titleZh`) and one language-code label; all UI copy uses `t()` |
+| 4 | macos/vercel via tokens only, no duplicated components | ✅ Pass | Visual differences come from `getStyleTokens()` and Tailwind class strings; zero duplicated components |
+| 5 | All 6 combinations preserve Phase 1 OS shell | ✅ Pass | Status Bar, Main App, Console App, Desktop all render correctly under any combo; layout classes adapt per preset |
+| 6 | No hydration mismatch risk | ✅ Pass | `layout.tsx` has `suppressHydrationWarning`; `DeveloperOS.tsx` guards with `if (!mounted)` returning static placeholder; Console welcome uses lazy init |
+| 7 | pnpm lint & pnpm build pass | ✅ Pass | Both clean |
+
+**Fix applied during audit:**
+- `SystemStatusBar.tsx:103` — moved the `EN`/`ZH` language-code label from inline ternary into `lib/translations.ts` under keys `lang.en`/`lang.zh` for full centralization.
+
+**Files unchanged by audit (verified correct):**
+- `lib/settings-context.tsx`, `hooks/useTheme.ts`, `hooks/useLanguage.ts`, `hooks/useStylePreset.ts`
+- All `components/main/*`, `components/os/*`, `components/console/*`, `components/settings/*`
+
+**No Phase 3 content added.**
+
 ## Current design baseline
 The project baseline is **Personal Developer OS**:
 - System Status Bar

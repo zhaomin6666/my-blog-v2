@@ -10,7 +10,7 @@ export type CommandResult = {
 const commands: Record<string, (lang: Lang, args: string[]) => CommandResult> = {
   help: (lang) => ({
     output: [
-      'Available commands:',
+      t('cmd.help.header', lang),
       '  help      — ' + t('cmd.help.desc', lang),
       '  about     — ' + t('cmd.about.desc', lang),
       '  skills    — ' + t('cmd.skills.desc', lang),
@@ -26,63 +26,57 @@ const commands: Record<string, (lang: Lang, args: string[]) => CommandResult> = 
     action: 'none',
   }),
   about: (lang) => ({
-    output: t('section.about', lang) + ' — ' + (lang === 'zh'
-      ? '后端开发者，专注于构建稳定可靠的业务系统，并持续探索 AI 原生应用。'
-      : 'Backend developer focused on building reliable business systems and exploring AI-native applications.'),
+    output: t('section.about', lang) + ' — ' + t('cmd.about.output', lang),
     action: 'scroll',
     target: 'about',
   }),
   skills: (lang) => ({
-    output: t('section.skills', lang) + ' — ' + (lang === 'zh'
-      ? 'Java, Spring Boot, React, Next.js, LLM Apps, RAG, Docker...'
-      : 'Java, Spring Boot, React, Next.js, LLM Apps, RAG, Docker...'),
+    output: t('section.skills', lang) + ' — ' + t('cmd.skills.output', lang),
     action: 'scroll',
     target: 'skills',
   }),
   projects: (lang) => ({
-    output: t('section.projects', lang) + ' — AI Agent Demo, Bidding System, Personal Dev OS',
+    output: t('section.projects', lang) + ' — ' + t('cmd.projects.output', lang),
     action: 'scroll',
     target: 'projects',
   }),
   blog: (lang) => ({
-    output: t('section.blog', lang) + ' — ' + (lang === 'zh'
-      ? '从 Java 后端到 AI Agent 开发的学习路线等文章'
-      : 'Learning path from Java backend to AI Agent dev, etc.'),
+    output: t('section.blog', lang) + ' — ' + t('cmd.blog.output', lang),
     action: 'scroll',
     target: 'blog',
   }),
   contact: (lang) => ({
-    output: t('section.contact', lang) + ' — Email, GitHub, LinkedIn',
+    output: t('section.contact', lang) + ' — ' + t('cmd.contact.output', lang),
     action: 'scroll',
     target: 'contact',
   }),
-  resume: () => ({
-    output: 'Resume download link: [coming soon]',
+  resume: (lang) => ({
+    output: t('cmd.resume.output', lang),
     action: 'none',
   }),
   clear: () => ({
     output: '',
     action: 'clear',
   }),
-  classic: () => ({
-    output: 'Switching to classic view... [coming soon]',
+  classic: (lang) => ({
+    output: t('cmd.classic.output', lang),
     action: 'none',
   }),
-  whoami: () => ({
-    output: 'visitor — Guest user on Personal DevOS',
+  whoami: (lang) => ({
+    output: t('cmd.whoami.output', lang),
     action: 'none',
   }),
-  sudo: (_, args) => {
+  sudo: (lang, args) => {
     const rest = args.join(' ');
     if (rest.toLowerCase() === 'hire me') {
       return {
-        output: 'Nice try! 😄 Send me an email to discuss opportunities.',
+        output: t('cmd.sudo.hireMe', lang),
         action: 'scroll',
         target: 'contact',
       };
     }
     return {
-      output: 'sudo: command not found or insufficient privileges',
+      output: t('cmd.sudo.error', lang),
       action: 'none',
     };
   },

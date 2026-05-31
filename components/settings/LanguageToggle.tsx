@@ -1,14 +1,11 @@
 'use client';
 
 import { Globe } from 'lucide-react';
-import { Lang } from '@/lib/types';
+import { useSettings } from '@/lib/settings-context';
 
-interface LanguageToggleProps {
-  lang: Lang;
-  toggleLang: () => void;
-}
+export function LanguageToggle() {
+  const { lang, toggleLang } = useSettings();
 
-export function LanguageToggle({ lang, toggleLang }: LanguageToggleProps) {
   return (
     <button
       onClick={toggleLang}

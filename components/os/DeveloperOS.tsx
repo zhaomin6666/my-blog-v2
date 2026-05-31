@@ -1,9 +1,7 @@
 'use client';
 
 import { Layout, Terminal } from 'lucide-react';
-import { useTheme } from '@/hooks/useTheme';
-import { useLanguage } from '@/hooks/useLanguage';
-import { useStylePreset } from '@/hooks/useStylePreset';
+import { useSettings } from '@/lib/settings-context';
 import { useWindowManager } from '@/hooks/useWindowManager';
 import { t } from '@/lib/translations';
 import { SystemStatusBar } from './SystemStatusBar';
@@ -13,9 +11,7 @@ import { MainApp } from '@/components/main/MainApp';
 import { ConsoleApp } from '@/components/console/ConsoleApp';
 
 export function DeveloperOS() {
-  const { theme, toggleTheme } = useTheme();
-  const { lang, toggleLang } = useLanguage();
-  const { stylePreset, toggleStylePreset } = useStylePreset();
+  const { lang, stylePreset, mounted } = useSettings();
   const {
     main,
     console: consoleState,
@@ -25,23 +21,22 @@ export function DeveloperOS() {
     focusWindow,
   } = useWindowManager();
 
+  // Prevent hydration mismatch: don't render dynamic content until mounted
+  if (!mounted) {
+    return (
+      <div className="h-screen w-screen overflow-hidden flex flex-col bg-white dark:bg-black" />
+    );
+  }
+
   return (
     <div className="h-screen w-screen overflow-hidden flex flex-col transition-colors duration-200 bg-white dark:bg-black text-black dark:text-white">
       <SystemStatusBar
-        theme={theme}
-        setTheme={(t) => t !== theme && toggleTheme()}
-        lang={lang}
-        setLang={(l) => l !== lang && toggleLang()}
-        stylePreset={stylePreset}
-        setStylePreset={(s) => s !== stylePreset && toggleStylePreset()}
         setMainState={setMainState}
         setConsoleState={setConsoleState}
         focusWindow={focusWindow}
       />
       <div className="flex-1 relative overflow-hidden">
         <Desktop
-          stylePreset={stylePreset}
-          lang={lang}
           setMainState={setMainState}
           setConsoleState={setConsoleState}
           focusWindow={focusWindow}
@@ -63,7 +58,7 @@ export function DeveloperOS() {
             }
             maxClasses="inset-0"
           >
-            <MainApp lang={lang} stylePreset={stylePreset} />
+            <MainApp />
           </AppWindow>
         )}
 
@@ -87,7 +82,7 @@ export function DeveloperOS() {
           maxClasses="inset-0"
           isDarkContent={stylePreset === 'macos'}
         >
-          <ConsoleApp stylePreset={stylePreset} lang={lang} />
+          <ConsoleApp />
         </AppWindow>
       </div>
     </div>

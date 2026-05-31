@@ -1,27 +1,25 @@
 'use client';
 
 import { Mail, Github, Linkedin, FileDown } from 'lucide-react';
-import { Lang, StylePreset } from '@/lib/types';
+import { useSettings } from '@/lib/settings-context';
+import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
 
-interface ContactSectionProps {
-  lang: Lang;
-  stylePreset: StylePreset;
-}
-
-export function ContactSection({ lang, stylePreset }: ContactSectionProps) {
+export function ContactSection() {
+  const { lang, stylePreset } = useSettings();
+  const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
 
   const contacts = [
     { icon: Mail, label: 'Email', value: 'your@email.com', href: 'mailto:your@email.com' },
     { icon: Github, label: 'GitHub', value: 'github.com/yourname', href: 'https://github.com/yourname' },
     { icon: Linkedin, label: 'LinkedIn', value: 'linkedin.com/in/yourname', href: 'https://linkedin.com/in/yourname' },
-    { icon: FileDown, label: lang === 'zh' ? '简历' : 'Resume', value: lang === 'zh' ? '下载 PDF' : 'Download PDF', href: '#' },
+    { icon: FileDown, label: t('contact.resumeLabel', lang), value: t('contact.downloadPdf', lang), href: '#' },
   ];
 
   return (
-    <div className={`p-6 ${isMacos ? 'bg-white/50 dark:bg-black/30 border border-white/40 dark:border-white/5 rounded-2xl shadow-sm' : 'border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black rounded-md'}`}>
-      <h2 className={`mb-4 ${isMacos ? 'text-xl font-semibold' : 'text-sm font-mono font-bold uppercase tracking-wider'}`}>
+    <div className={`p-6 ${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow}`}>
+      <h2 className={`mb-4 ${isMacos ? 'text-xl font-semibold' : 'text-sm font-mono font-bold uppercase tracking-wider'} ${tokens.textPrimary}`}>
         {t('section.contact', lang)}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -31,12 +29,12 @@ export function ContactSection({ lang, stylePreset }: ContactSectionProps) {
             href={contact.href}
             target={contact.href.startsWith('http') ? '_blank' : undefined}
             rel={contact.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            className={`flex items-center gap-3 p-3 ${isMacos ? 'bg-white/30 dark:bg-black/20 border border-white/30 dark:border-white/5 rounded-xl hover:bg-white/50 dark:hover:bg-black/30 transition-colors' : 'border border-zinc-200 dark:border-zinc-800 rounded hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors'}`}
+            className={`flex items-center gap-3 p-3 ${isMacos ? `${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} hover:bg-white/60 dark:hover:bg-black/30 transition-colors` : `${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors`}`}
           >
-            <contact.icon size={isMacos ? 20 : 16} className={isMacos ? 'text-zinc-600 dark:text-zinc-400' : 'text-zinc-500 dark:text-zinc-400'} />
+            <contact.icon size={isMacos ? 20 : 16} className={tokens.textSecondary} />
             <div>
-              <div className={`${isMacos ? 'text-sm font-medium' : 'text-xs font-mono font-bold'}`}>{contact.label}</div>
-              <div className={`${isMacos ? 'text-xs text-zinc-500 dark:text-zinc-500' : 'text-xs font-mono text-zinc-500'}`}>{contact.value}</div>
+              <div className={`${isMacos ? 'text-sm font-medium' : 'text-xs font-mono font-bold'} ${tokens.textPrimary}`}>{contact.label}</div>
+              <div className={`${isMacos ? 'text-xs' : 'text-xs font-mono'} ${tokens.textMuted}`}>{contact.value}</div>
             </div>
           </a>
         ))}

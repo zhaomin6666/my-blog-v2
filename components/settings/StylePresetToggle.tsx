@@ -1,14 +1,11 @@
 'use client';
 
 import { Monitor, Terminal } from 'lucide-react';
-import { StylePreset } from '@/lib/types';
+import { useSettings } from '@/lib/settings-context';
+import { t } from '@/lib/translations';
 
-interface StylePresetToggleProps {
-  stylePreset: StylePreset;
-  toggleStylePreset: () => void;
-}
-
-export function StylePresetToggle({ stylePreset, toggleStylePreset }: StylePresetToggleProps) {
+export function StylePresetToggle() {
+  const { stylePreset, toggleStylePreset, lang } = useSettings();
   const isMacos = stylePreset === 'macos';
 
   return (
@@ -20,12 +17,12 @@ export function StylePresetToggle({ stylePreset, toggleStylePreset }: StylePrese
       {isMacos ? (
         <>
           <Monitor size={14} />
-          <span className="text-xs font-medium">macOS</span>
+          <span className="text-xs font-medium">{t('stylePreset.macos', lang)}</span>
         </>
       ) : (
         <>
           <Terminal size={14} />
-          <span className="text-xs font-medium">Vercel</span>
+          <span className="text-xs font-medium">{t('stylePreset.vercel', lang)}</span>
         </>
       )}
     </button>

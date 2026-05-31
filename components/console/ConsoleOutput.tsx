@@ -1,17 +1,17 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
-import { StylePreset } from '@/lib/types';
+import { useSettings } from '@/lib/settings-context';
 import { ConsoleOutputLine } from '@/lib/types';
 import { getStyleTokens } from '@/lib/stylePresets';
 
 interface ConsoleOutputProps {
   lines: ConsoleOutputLine[];
-  stylePreset: StylePreset;
 }
 
-export function ConsoleOutput({ lines, stylePreset }: ConsoleOutputProps) {
+export function ConsoleOutput({ lines }: ConsoleOutputProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { stylePreset } = useSettings();
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
 

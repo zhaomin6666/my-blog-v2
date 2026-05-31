@@ -1,14 +1,11 @@
 'use client';
 
 import { Moon, Sun } from 'lucide-react';
-import { Theme } from '@/lib/types';
+import { useSettings } from '@/lib/settings-context';
 
-interface ThemeToggleProps {
-  theme: Theme;
-  toggleTheme: () => void;
-}
+export function ThemeToggle() {
+  const { theme, toggleTheme } = useSettings();
 
-export function ThemeToggle({ theme, toggleTheme }: ThemeToggleProps) {
   return (
     <button
       onClick={toggleTheme}

@@ -27,15 +27,24 @@ data/               → Mock data
 ```
 
 ## 4. Copy Rules
-- Chinese and English copy must be centralized in translations.
+- Chinese and English copy must be centralized in `lib/translations.ts`.
 - No hardcoded strings scattered in components.
+- Use `t(key, lang)` from `@/lib/translations` for all user-facing text.
 - Mock data should also consider bilingual structure.
 
-## 5. Theme & Style Rules
+## 5. Settings Rules
+- All global settings (theme, lang, stylePreset) must come from `useSettings()` in `@/lib/settings-context`.
+- Do NOT create new localStorage reads/writes outside of `SettingsContext`.
+- The legacy hooks (`useTheme`, `useLanguage`, `useStylePreset`) are compatibility wrappers only.
+- Always check `mounted` from `useSettings()` before rendering theme-dependent UI to avoid hydration mismatch.
+
+## 6. Theme & Style Rules
 - `theme` controls light / dark.
 - `stylePreset` controls macos / vercel.
 - Do NOT mix theme and stylePreset together.
 - Do NOT write completely independent components for a single theme.
+- Use `getStyleTokens(preset)` from `@/lib/stylePresets` for all visual token lookups.
+- Add new visual differences via style tokens, CSS variables, or Tailwind class mapping — never by duplicating components.
 
 ## 6. Package Manager Rules
 - Use **pnpm** as the only package manager.
