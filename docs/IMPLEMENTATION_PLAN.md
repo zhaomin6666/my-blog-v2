@@ -1,6 +1,6 @@
 # Implementation Plan — Personal Dev OS
 
-## Phase 1: Project Foundation & OS Shell
+## Phase 1: Project Foundation & OS Shell ✅ COMPLETED
 - Initialize Next.js / Tailwind / TypeScript
 - Create base directory structure
 - Implement System Status Bar
@@ -8,6 +8,8 @@
 - Implement Console App bottom window
 - Implement Desktop placeholder
 - Implement window state management
+- Migrate to pnpm
+- Phase 1 visual calibration (layout, contrast, responsive)
 
 ## Phase 2: Global Settings
 - Implement theme: light / dark

@@ -21,6 +21,33 @@ The project baseline is **Personal Developer OS**:
 - light / dark themes
 - zh / en language switching
 
+### 2026-05-31 — Claude Code
+**Summary:** Phase 1 completed. Developer OS shell established and visually calibrated.
+
+**Phase 1 deliverables:**
+- Developer OS shell created
+- System Status Bar implemented
+- Main App window implemented
+- Console App dock window implemented
+- Desktop fallback implemented
+- pnpm migration completed
+- Basic style preset / theme / language structure prepared
+
+**Files changed:**
+- `docs/IMPLEMENTATION_PLAN.md` — marked Phase 1 as completed
+- `docs/CHANGELOG_AI.md` — this entry
+- All Phase 1 files listed in previous entries
+
+**Design impact:**
+- The Personal Developer OS product concept is now structurally sound.
+- All core OS primitives (Status Bar, Main App, Console App, Desktop) are functional.
+- Visual calibration ensures the shell reads as an OS, not a generic website.
+
+**Follow-up notes:**
+- Ready to proceed to Phase 2: Global Settings refinement.
+- Phase 3: Replace skeleton placeholders with rich content.
+- Phase 4: Implement CLI-to-Main-App scroll/linkage.
+
 ## Entries
 
 ### 2026-05-31 — Claude Code
