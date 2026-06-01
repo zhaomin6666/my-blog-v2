@@ -22,13 +22,17 @@
 - ✅ Light mode visual optimization across presets
 - ✅ Type-safe translations with TranslationKey
 
-## Phase 3: Main Content
-- Hero / Overview
-- About
-- Skills
-- Projects
-- Blog / Engineering Logs
-- Contact
+## Phase 3: Main Content READY FOR REVIEW
+- Hero / Overview - Dashboard widget with badge, title, subtitle, CTA buttons
+- About - Profile panel / profile.json style with info fields
+- Skills - Skill Matrix / stack.config style with module headers
+- Projects - Service modules / app cards with status badges and tech stacks
+- Blog / Engineering Logs - Log entries with timestamp, level, tags
+- Contact - Contact channel / endpoint panel with endpoint labels
+- Main App internal navigation - App-tab style with smooth scroll
+- Unified bilingual data structure (LocalizedText)
+- Stable section ids: overview, about, skills, projects, blog, contact
+- Awaiting user review before marking completed
 
 ## Phase 4: CLI Command System
 - Command parser

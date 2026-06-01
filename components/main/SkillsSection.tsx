@@ -12,24 +12,45 @@ export function SkillsSection() {
 
   return (
     <div className={`p-6 ${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow}`}>
-      <h2 className={`mb-4 ${isMacos ? 'text-xl font-semibold' : 'text-sm font-mono font-bold uppercase tracking-wider'} ${tokens.textPrimary}`}>
-        {t('section.skills', lang)}
-      </h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      {/* Section header like a system config panel */}
+      <div className="flex items-center gap-2 mb-5">
+        <div className={`w-1 h-5 rounded-full ${isMacos ? 'bg-purple-500' : 'bg-zinc-900 dark:bg-zinc-100'}`} />
+        <h2 className={`${isMacos ? 'text-lg font-semibold' : 'text-xs font-mono font-bold uppercase tracking-wider'} ${tokens.textPrimary}`}>
+          {t('skills.title', lang)}
+        </h2>
+        <span className={`ml-auto text-[10px] px-2 py-0.5 ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius}`}>
+          stack.config
+        </span>
+      </div>
+
+      {/* Skill modules like config sections */}
+      <div className="space-y-3">
         {skills.map((skill) => (
-          <div key={skill.category} className="space-y-2">
-            <h3 className={`${isMacos ? 'text-sm font-medium' : 'text-xs font-mono font-bold uppercase'} ${tokens.textPrimary}`}>
-              {lang === 'zh' ? skill.categoryZh || skill.category : skill.category}
-            </h3>
-            <div className="flex flex-wrap gap-1.5">
-              {skill.items.map((item) => (
-                <span
-                  key={item}
-                  className={`px-2 py-0.5 text-xs ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius}`}
-                >
-                  {item}
-                </span>
-              ))}
+          <div
+            key={skill.category.en}
+            className={`${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} overflow-hidden`}
+          >
+            {/* Module header */}
+            <div className={`flex items-center gap-2 px-3 py-2 ${isMacos ? 'bg-white/30 dark:bg-white/5' : 'bg-zinc-100/50 dark:bg-zinc-900/30'}`}>
+              <span className={`text-[10px] ${tokens.textMuted} ${isMacos ? 'uppercase tracking-wider font-medium' : 'font-mono uppercase'}`}>
+                {t('skills.module', lang)}
+              </span>
+              <span className={`text-xs ${isMacos ? 'font-semibold' : 'font-mono font-bold'} ${tokens.textPrimary}`}>
+                {skill.category[lang]}
+              </span>
+            </div>
+            {/* Config entries */}
+            <div className="px-3 py-2">
+              <div className="flex flex-wrap gap-1.5">
+                {skill.items.map((item) => (
+                  <span
+                    key={item}
+                    className={`px-2 py-0.5 text-[11px] ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius} ${isMacos ? '' : 'font-mono'}`}
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         ))}

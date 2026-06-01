@@ -16,28 +16,33 @@ export interface ConsoleOutputLine {
   content: string;
 }
 
+// Unified bilingual text structure
+export interface LocalizedText {
+  zh: string;
+  en: string;
+}
+
+export type ProjectStatus = 'building' | 'production' | 'mvp';
+
 export interface Project {
   id: string;
-  title: string;
-  titleZh?: string;
-  description: string;
-  descriptionZh?: string;
-  tags: string[];
+  title: LocalizedText;
+  description: LocalizedText;
+  status: ProjectStatus;
+  stack: string[];
   link?: string;
 }
 
 export interface Blog {
   id: string;
-  title: string;
-  titleEn?: string;
+  title: LocalizedText;
   date: string;
-  excerpt: string;
-  excerptEn?: string;
+  summary: LocalizedText;
+  tags: string[];
   link?: string;
 }
 
 export interface SkillCategory {
-  category: string;
-  categoryZh?: string;
+  category: LocalizedText;
   items: string[];
 }

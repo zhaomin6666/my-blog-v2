@@ -58,7 +58,7 @@ export function DeveloperOS() {
             }
             maxClasses="inset-0"
           >
-            <MainApp />
+            <MainApp onOpenTerminal={() => setConsoleState('open')} />
           </AppWindow>
         )}
 

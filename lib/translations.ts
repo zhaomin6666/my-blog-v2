@@ -46,23 +46,65 @@ const translations = {
     'console.notFound': '命令未找到。输入 `help` 查看可用命令。',
     'console.macosWelcome': (...args: string[]) => `Last login: ${args[0]} on ttys001\nDevOS:~ visitor$ welcome`,
 
-    // Hero
-    'hero.subtitle': '后端开发者 / AI 应用探索者 / 独立产品构建者',
+    // Nav — App module navigation (not normal website nav)
+    'nav.overview': 'Overview',
+    'nav.profile': 'Profile',
+    'nav.stack': 'Stack',
+    'nav.services': 'Services',
+    'nav.logs': 'Logs',
+    'nav.contact': 'Contact',
 
-    // About
+    // Hero — Dashboard widget style
+    'hero.title': '面向 AI 时代构建产品的后端开发者',
+    'hero.subtitle': '我专注于构建可靠的后端系统、AI 驱动的应用，以及独立数字产品。这个网站既是我的作品集，也是我的技术笔记与产品实验室。',
+    'hero.badge': '后端开发者 · AI 构建者 · 独立开发者',
+    'hero.cta.projects': 'View Projects',
+    'hero.cta.terminal': 'Open Terminal',
+
+    // About — Profile panel
     'about.description': '我是一名后端开发者，专注于构建稳定可靠的业务系统，并持续探索 AI 原生应用。我关注架构设计、工程实践、产品思维，以及如何借助 AI 工具更高效地完成独立交付。',
+    'about.role': '后端开发者',
+    'about.location': 'Location',
+    'about.focus': 'Focus',
 
-    // Contact
-    'contact.resumeLabel': '简历',
-    'contact.downloadPdf': '下载 PDF',
+    // Skills — Skill matrix / system config
+    'skills.title': 'System Stack',
+    'skills.module': '模块',
 
-    // Sections
+    // Projects — Service modules / app cards
+    'projects.title': 'Services',
+    'projects.status.building': 'Building',
+    'projects.status.production': 'Production',
+    'projects.status.mvp': 'MVP',
+    'projects.techStack': 'Tech Stack',
+    'projects.viewProject': '查看项目',
+
+    // Blog — Engineering logs
+    'blog.title': 'Engineering Logs',
+    'blog.logLevel': 'INFO',
+    'blog.readMore': '查看详情',
+    'blog.tags': 'Tags',
+
+    // Contact — Contact channels / endpoint panel
+    'contact.title': 'Contact Channels',
+    'contact.email': 'Email',
+    'contact.github': 'GitHub',
+    'contact.linkedin': 'LinkedIn',
+    'contact.resume': 'Resume',
+    'contact.comingSoon': 'Coming Soon',
+    'contact.endpoint': 'Endpoint',
+
+    // Sections (legacy, kept for compatibility)
     'section.hero': '面向 AI 时代构建产品的后端开发者',
     'section.about': '关于',
     'section.skills': '技能',
     'section.projects': '项目',
     'section.blog': '博客',
     'section.contact': '联系',
+
+    // Contact (legacy)
+    'contact.resumeLabel': '简历',
+    'contact.downloadPdf': '下载 PDF',
 
     // Commands descriptions
     'cmd.help.desc': '显示帮助信息',
@@ -135,23 +177,65 @@ const translations = {
     'console.notFound': 'Command not found. Type `help` to see available commands.',
     'console.macosWelcome': (...args: string[]) => `Last login: ${args[0]} on ttys001\nDevOS:~ visitor$ welcome`,
 
-    // Hero
-    'hero.subtitle': 'Backend Developer / AI Explorer / Indie Builder',
+    // Nav — App module navigation (not normal website nav)
+    'nav.overview': 'Overview',
+    'nav.profile': 'Profile',
+    'nav.stack': 'Stack',
+    'nav.services': 'Services',
+    'nav.logs': 'Logs',
+    'nav.contact': 'Contact',
 
-    // About
+    // Hero — Dashboard widget style
+    'hero.title': 'Backend Developer building AI-era products.',
+    'hero.subtitle': 'I build reliable backend systems, AI-powered applications, and independent digital products. This site is my portfolio, technical notebook, and product lab.',
+    'hero.badge': 'Backend Developer · AI Builder · Indie Hacker',
+    'hero.cta.projects': 'View Projects',
+    'hero.cta.terminal': 'Open Terminal',
+
+    // About — Profile panel
     'about.description': 'I am a backend developer focused on building reliable business systems and exploring AI-native applications. I care about clean architecture, practical engineering, product thinking, and using AI tools to ship faster as an independent builder.',
+    'about.role': 'Backend Developer',
+    'about.location': 'Location',
+    'about.focus': 'Focus',
 
-    // Contact
-    'contact.resumeLabel': 'Resume',
-    'contact.downloadPdf': 'Download PDF',
+    // Skills — Skill matrix / system config
+    'skills.title': 'System Stack',
+    'skills.module': 'Module',
 
-    // Sections
+    // Projects — Service modules / app cards
+    'projects.title': 'Services',
+    'projects.status.building': 'Building',
+    'projects.status.production': 'Production',
+    'projects.status.mvp': 'MVP',
+    'projects.techStack': 'Tech Stack',
+    'projects.viewProject': 'View Project',
+
+    // Blog — Engineering logs
+    'blog.title': 'Engineering Logs',
+    'blog.logLevel': 'INFO',
+    'blog.readMore': 'Read More',
+    'blog.tags': 'Tags',
+
+    // Contact — Contact channels / endpoint panel
+    'contact.title': 'Contact Channels',
+    'contact.email': 'Email',
+    'contact.github': 'GitHub',
+    'contact.linkedin': 'LinkedIn',
+    'contact.resume': 'Resume',
+    'contact.comingSoon': 'Coming Soon',
+    'contact.endpoint': 'Endpoint',
+
+    // Sections (legacy, kept for compatibility)
     'section.hero': 'Backend Developer building AI-era products.',
     'section.about': 'About',
     'section.skills': 'Skills',
     'section.projects': 'Projects',
     'section.blog': 'Blog',
     'section.contact': 'Contact',
+
+    // Contact (legacy)
+    'contact.resumeLabel': 'Resume',
+    'contact.downloadPdf': 'Download PDF',
 
     // Commands descriptions
     'cmd.help.desc': 'Show help information',
