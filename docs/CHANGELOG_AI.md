@@ -1,5 +1,27 @@
 # AI Development Changelog
 
+### 2026-06-01 - Codex
+**Summary:** Phase 3.5 Step 1 only. Adjusted the default window initialization so first load opens Main App maximized, keeps Console App closed, and preserves the existing OS shell behavior.
+
+**Step 1 deliverables:**
+- Updated the default window manager state for first page load.
+- Main App now initializes as `maximized`.
+- Console App now initializes as `closed`.
+- Active window remains `main`.
+- No style, background, preset, theme, or content module changes were made.
+
+**Files changed:**
+- `lib/constants.ts`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- First load now lands in a focused single-window Main App view while preserving the Personal Developer OS structure.
+- System Status Bar, Desktop fallback, and Console reopen entry points remain part of the existing shell.
+
+**Follow-up notes:**
+- This is only Phase 3.5 Step 1.
+- Do not mark Phase 3.5 completed from this change alone.
+
 ### 2026-05-31 - Claude Code
 **Summary:** Phase 3 ready for review. Main Content modules fully implemented with Developer OS / Dashboard / Application Window aesthetic. All skeleton placeholders replaced with rich bilingual content.
 

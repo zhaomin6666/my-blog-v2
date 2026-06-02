@@ -1,8 +1,8 @@
 import { WindowManagerState } from './types';
 
 export const DEFAULT_WINDOW_STATE: WindowManagerState = {
-  main: 'open',
-  console: 'open',
+  main: 'maximized',
+  console: 'closed',
   active: 'main',
 };
 
