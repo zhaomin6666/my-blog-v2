@@ -18,6 +18,7 @@ export function DeveloperOS() {
     active,
     setMainState,
     setConsoleState,
+    openConsole,
     focusWindow,
   } = useWindowManager();
 
@@ -32,13 +33,13 @@ export function DeveloperOS() {
     <div className="h-screen w-screen overflow-hidden flex flex-col transition-colors duration-200 bg-white dark:bg-black text-black dark:text-white">
       <SystemStatusBar
         setMainState={setMainState}
-        setConsoleState={setConsoleState}
+        openConsole={openConsole}
         focusWindow={focusWindow}
       />
       <div className="flex-1 relative overflow-hidden">
         <Desktop
           setMainState={setMainState}
-          setConsoleState={setConsoleState}
+          openConsole={openConsole}
           focusWindow={focusWindow}
         />
 
@@ -58,7 +59,7 @@ export function DeveloperOS() {
             }
             maxClasses="inset-0"
           >
-            <MainApp onOpenTerminal={() => setConsoleState('open')} />
+            <MainApp onOpenTerminal={openConsole} />
           </AppWindow>
         )}
 

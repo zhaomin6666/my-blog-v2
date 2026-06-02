@@ -1,5 +1,30 @@
 # AI Development Changelog
 
+### 2026-06-02 - Codex
+**Summary:** Phase 3.5 Step 2 only. Unified the user-triggered Console open behavior so opening Terminal enters the dual-window working state without changing the existing visual system.
+
+**Step 2 deliverables:**
+- Added a dedicated `openConsole()` window manager action for user-triggered Console entry points.
+- When Terminal is opened while Main App is maximized, Main App now returns to normal window state.
+- Console App opens in its default dock panel state instead of maximized mode.
+- Active window switches to `console` for the newly opened Terminal session.
+- Wired the same behavior into the status bar Terminal entry, Hero / Overview Open Terminal button, and Desktop Open Console entry.
+
+**Files changed:**
+- `hooks/useWindowManager.ts`
+- `components/os/DeveloperOS.tsx`
+- `components/os/SystemStatusBar.tsx`
+- `components/os/Desktop.tsx`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- Opening Terminal now reliably transitions the OS from single-window focus into the intended Main + Console dual-window workflow.
+- No window chrome, background, preset, theme, or content styling was changed in this step.
+
+**Follow-up notes:**
+- This is only Phase 3.5 Step 2.
+- Do not mark Phase 3.5 completed from this change alone.
+
 ### 2026-06-01 - Codex
 **Summary:** Phase 3.5 Step 1 only. Adjusted the default window initialization so first load opens Main App maximized, keeps Console App closed, and preserves the existing OS shell behavior.
 

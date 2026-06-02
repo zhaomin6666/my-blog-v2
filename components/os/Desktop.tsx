@@ -8,13 +8,13 @@ import { t } from '@/lib/translations';
 
 interface DesktopProps {
   setMainState: (s: WindowState) => void;
-  setConsoleState: (s: WindowState) => void;
+  openConsole: () => void;
   focusWindow: (win: 'main' | 'console') => void;
 }
 
 export function Desktop({
   setMainState,
-  setConsoleState,
+  openConsole,
   focusWindow,
 }: DesktopProps) {
   const { lang, stylePreset } = useSettings();
@@ -27,8 +27,7 @@ export function Desktop({
   };
 
   const handleOpenConsole = () => {
-    setConsoleState('open');
-    focusWindow('console');
+    openConsole();
   };
 
   return (

@@ -25,6 +25,15 @@ export function useWindowManager() {
     }));
   }, []);
 
+  const openConsole = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      main: prev.main === 'maximized' ? 'open' : prev.main,
+      console: 'open',
+      active: 'console',
+    }));
+  }, []);
+
   const focusWindow = useCallback((win: Exclude<ActiveWindow, null>) => {
     setState(prev => ({ ...prev, active: win }));
   }, []);
@@ -35,6 +44,7 @@ export function useWindowManager() {
     ...state,
     setMainState,
     setConsoleState,
+    openConsole,
     focusWindow,
     bothClosed,
   };

@@ -10,13 +10,13 @@ import { t } from '@/lib/translations';
 
 interface SystemStatusBarProps {
   setMainState: (s: WindowState) => void;
-  setConsoleState: (s: WindowState) => void;
+  openConsole: () => void;
   focusWindow: (win: 'main' | 'console') => void;
 }
 
 export function SystemStatusBar({
   setMainState,
-  setConsoleState,
+  openConsole,
   focusWindow,
 }: SystemStatusBarProps) {
   const [time, setTime] = useState<Date | null>(null);
@@ -36,8 +36,7 @@ export function SystemStatusBar({
   };
 
   const handleOpenConsole = () => {
-    setConsoleState('open');
-    focusWindow('console');
+    openConsole();
   };
 
   return (
