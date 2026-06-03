@@ -3,13 +3,14 @@
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
+import { MainSectionId } from '@/lib/types';
 
 interface MainAppNavProps {
-  activeSection?: string;
-  onNavigate: (sectionId: string) => void;
+  activeSection?: MainSectionId;
+  onNavigate: (sectionId: MainSectionId) => void;
 }
 
-const navItems = [
+const navItems: { id: MainSectionId; labelKey: Parameters<typeof t>[0] }[] = [
   { id: 'overview', labelKey: 'nav.overview' as const },
   { id: 'about', labelKey: 'nav.profile' as const },
   { id: 'skills', labelKey: 'nav.stack' as const },

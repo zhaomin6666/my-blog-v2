@@ -1,6 +1,37 @@
 # AI Development Changelog
 
 ### 2026-06-03 - Codex
+**Summary:** Phase 4.3 only. Added conditional CLI-to-Main-App section linkage while preserving Console pure terminal behavior.
+
+**Phase 4.3 deliverables:**
+- CLI command results can now carry a typed Main App section target without directly touching the DOM from `lib/commands.ts`.
+- DeveloperOS decides whether linkage is allowed: Main App must be open and not minimized, and Console App must not be maximized.
+- about, skills, projects, blog, contact, and sudo hire me keep Console active while scrolling Main App to the matching section.
+- classic can activate Main App and scroll to overview when Main App is already available.
+- Console maximized mode only outputs text and does not scroll or highlight Main App.
+- Main App sections now receive a brief lightweight highlight after command-driven navigation.
+
+**Files changed:**
+- `lib/types.ts`
+- `lib/commands.ts`
+- `hooks/useWindowManager.ts`
+- `components/os/DeveloperOS.tsx`
+- `components/main/MainApp.tsx`
+- `components/main/MainAppNav.tsx`
+- `components/main/HeroOverview.tsx`
+- `components/console/ConsoleApp.tsx`
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- Console now works as a navigation entry point for the Personal Developer OS without turning the page into a generic website.
+- The Main App / Console App window model, Desktop fallback, settings system, and preset/theme/language switching remain unchanged.
+
+**Follow-up notes:**
+- Full Phase 4 is still in progress, not completed.
+- Autocomplete, arrow-key command history, aliases, AI natural language command parsing, and structured card output remain out of scope for this step.
+
+### 2026-06-03 - Codex
 **Summary:** Phase 4.1 / 4.2 only. Added the basic CLI command skeleton and plain-text command output for Console App.
 
 **Phase 4.1 / 4.2 deliverables:**

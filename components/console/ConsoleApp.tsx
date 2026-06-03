@@ -5,12 +5,16 @@ import { useSettings } from '@/lib/settings-context';
 import { ConsoleOutputLine } from '@/lib/types';
 import { generateId } from '@/lib/utils';
 import { t } from '@/lib/translations';
-import { executeCommand } from '@/lib/commands';
+import { CommandResult, executeCommand } from '@/lib/commands';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { ConsoleOutput } from './ConsoleOutput';
 import { ConsoleInput } from './ConsoleInput';
 
-export function ConsoleApp() {
+interface ConsoleAppProps {
+  onCommandResult?: (result: CommandResult) => void;
+}
+
+export function ConsoleApp({ onCommandResult }: ConsoleAppProps) {
   const { lang, stylePreset } = useSettings();
   const [input, setInput] = useState('');
   const [lines, setLines] = useState<ConsoleOutputLine[]>(() => {
@@ -59,8 +63,9 @@ export function ConsoleApp() {
     }
 
     setLines((prev) => [...prev, ...nextLines]);
+    onCommandResult?.(result);
     setInput('');
-  }, [input, lang]);
+  }, [input, lang, onCommandResult]);
 
   return (
     <div className={`h-full w-full min-h-0 overflow-hidden flex flex-col ${tokens.consoleFont} ${

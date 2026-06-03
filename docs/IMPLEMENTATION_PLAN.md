@@ -60,6 +60,13 @@
 - clear and unknown command handling are implemented.
 - Main App linkage remains deferred to a later Phase 4 step.
 
+### Phase 4.3: CLI-to-Main-App Section Linkage COMPLETED
+- about / skills / projects / blog / contact / sudo hire me can scroll Main App to the matching section when linkage conditions are met.
+- classic can activate Main App and scroll to overview when Main App is already open and not minimized.
+- Linkage only runs when Main App is open and not minimized, and Console App is not maximized.
+- Console maximized mode remains pure terminal output with no Main App linkage.
+- Linked sections receive a brief lightweight highlight.
+
 ## Phase 5: Visual Polish
 - macos preset visual optimization
 - vercel preset visual optimization

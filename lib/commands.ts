@@ -1,7 +1,7 @@
 import { blogs } from '@/data/blogs';
 import { projects } from '@/data/projects';
 import { skills } from '@/data/skills';
-import { Lang, ProjectStatus } from './types';
+import { Lang, MainSectionId, ProjectStatus } from './types';
 import { t } from './translations';
 
 export type CommandAction = 'clear' | 'none';
@@ -10,6 +10,8 @@ export type CommandResult = {
   output: string;
   action: CommandAction;
   isError?: boolean;
+  navigationTarget?: MainSectionId;
+  activateMain?: boolean;
 };
 
 type CommandDefinition = {
@@ -46,9 +48,13 @@ const projectStatusLabels: Record<ProjectStatus, { zh: string; en: string }> = {
   },
 };
 
-const command = (output: string): CommandResult => ({
+const command = (
+  output: string,
+  options: Pick<CommandResult, 'navigationTarget' | 'activateMain'> = {}
+): CommandResult => ({
   output,
   action: 'none',
+  ...options,
 });
 
 const clearCommand = (): CommandResult => ({
@@ -113,27 +119,27 @@ const commandDefinitions: CommandDefinition[] = [
   {
     name: 'about',
     descriptionKey: 'cmd.about.desc',
-    run: (lang) => command(t('cmd.about.output', lang)),
+    run: (lang) => command(t('cmd.about.output', lang), { navigationTarget: 'about' }),
   },
   {
     name: 'skills',
     descriptionKey: 'cmd.skills.desc',
-    run: (lang) => command(formatSkills(lang)),
+    run: (lang) => command(formatSkills(lang), { navigationTarget: 'skills' }),
   },
   {
     name: 'projects',
     descriptionKey: 'cmd.projects.desc',
-    run: (lang) => command(formatProjects(lang)),
+    run: (lang) => command(formatProjects(lang), { navigationTarget: 'projects' }),
   },
   {
     name: 'blog',
     descriptionKey: 'cmd.blog.desc',
-    run: (lang) => command(formatBlogs(lang)),
+    run: (lang) => command(formatBlogs(lang), { navigationTarget: 'blog' }),
   },
   {
     name: 'contact',
     descriptionKey: 'cmd.contact.desc',
-    run: (lang) => command(formatContact(lang)),
+    run: (lang) => command(formatContact(lang), { navigationTarget: 'contact' }),
   },
   {
     name: 'resume',
@@ -148,7 +154,10 @@ const commandDefinitions: CommandDefinition[] = [
   {
     name: 'classic',
     descriptionKey: 'cmd.classic.desc',
-    run: (lang) => command(t('cmd.classic.output', lang)),
+    run: (lang) => command(t('cmd.classic.output', lang), {
+      navigationTarget: 'overview',
+      activateMain: true,
+    }),
   },
   {
     name: 'whoami',
@@ -158,7 +167,7 @@ const commandDefinitions: CommandDefinition[] = [
   {
     name: 'sudo hire me',
     descriptionKey: 'cmd.sudo.desc',
-    run: (lang) => command(t('cmd.sudo.hireMe', lang)),
+    run: (lang) => command(t('cmd.sudo.hireMe', lang), { navigationTarget: 'contact' }),
   },
 ];
 

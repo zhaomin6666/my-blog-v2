@@ -4,10 +4,11 @@ import { Terminal, ArrowRight } from 'lucide-react';
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
+import { MainSectionId } from '@/lib/types';
 
 interface HeroOverviewProps {
   onOpenTerminal?: () => void;
-  onNavigate?: (sectionId: string) => void;
+  onNavigate?: (sectionId: MainSectionId) => void;
 }
 
 export function HeroOverview({ onOpenTerminal, onNavigate }: HeroOverviewProps) {

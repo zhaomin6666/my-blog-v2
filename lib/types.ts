@@ -3,6 +3,7 @@ export type Theme = 'light' | 'dark';
 export type Lang = 'zh' | 'en';
 export type StylePreset = 'macos' | 'vercel';
 export type ActiveWindow = 'main' | 'console' | null;
+export type MainSectionId = 'overview' | 'about' | 'skills' | 'projects' | 'blog' | 'contact';
 
 export interface WindowManagerState {
   main: WindowState;

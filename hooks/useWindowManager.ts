@@ -59,6 +59,13 @@ export function useWindowManager() {
     setState(prev => ({ ...prev, active: win }));
   }, []);
 
+  const activateMain = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      active: isVisibleWindow(prev.main) ? 'main' : prev.active,
+    }));
+  }, []);
+
   const bothClosed = state.main === 'closed' && state.console === 'closed';
 
   return {
@@ -69,6 +76,7 @@ export function useWindowManager() {
     openConsole,
     openConsoleFromMain,
     focusWindow,
+    activateMain,
     bothClosed,
   };
 }

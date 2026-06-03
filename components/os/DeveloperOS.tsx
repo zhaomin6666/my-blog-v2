@@ -1,13 +1,15 @@
 'use client';
 
+import { useCallback, useRef } from 'react';
 import { Layout, Terminal } from 'lucide-react';
 import { useSettings } from '@/lib/settings-context';
 import { useWindowManager } from '@/hooks/useWindowManager';
 import { t } from '@/lib/translations';
+import { CommandResult } from '@/lib/commands';
 import { SystemStatusBar } from './SystemStatusBar';
 import { Desktop } from './Desktop';
 import { AppWindow } from './AppWindow';
-import { MainApp } from '@/components/main/MainApp';
+import { MainApp, MainAppHandle } from '@/components/main/MainApp';
 import { ConsoleApp } from '@/components/console/ConsoleApp';
 
 export function DeveloperOS() {
@@ -22,7 +24,23 @@ export function DeveloperOS() {
     openConsole,
     openConsoleFromMain,
     focusWindow,
+    activateMain,
   } = useWindowManager();
+  const mainAppRef = useRef<MainAppHandle>(null);
+
+  const canLinkConsoleCommand = main !== 'closed' && main !== 'minimized' && consoleState !== 'maximized';
+
+  const handleConsoleCommandResult = useCallback((result: CommandResult) => {
+    if (!result.navigationTarget || !canLinkConsoleCommand) {
+      return;
+    }
+
+    mainAppRef.current?.scrollToSection(result.navigationTarget);
+
+    if (result.activateMain) {
+      activateMain();
+    }
+  }, [activateMain, canLinkConsoleCommand]);
 
   // Prevent hydration mismatch: don't render dynamic content until mounted
   if (!mounted) {
@@ -59,7 +77,10 @@ export function DeveloperOS() {
             }
             maxClasses="inset-0"
           >
-            <MainApp onOpenTerminal={openConsoleFromMain} />
+            <MainApp
+              ref={mainAppRef}
+              onOpenTerminal={openConsoleFromMain}
+            />
           </AppWindow>
         )}
 
@@ -83,7 +104,7 @@ export function DeveloperOS() {
           maxClasses="inset-0"
           isDarkContent={stylePreset === 'macos'}
         >
-          <ConsoleApp />
+          <ConsoleApp onCommandResult={handleConsoleCommandResult} />
         </AppWindow>
       </div>
     </div>
