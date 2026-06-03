@@ -48,7 +48,7 @@ export function ProjectsSection() {
         {projects.map((project) => (
           <div
             key={project.id}
-            className={`group ${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} overflow-hidden transition-all hover:opacity-90`}
+            className={`group ${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:opacity-95`}
           >
             {/* Card header */}
             <div className={`px-4 py-3 ${isMacos ? 'bg-white/30 dark:bg-white/5' : 'bg-zinc-100/50 dark:bg-zinc-900/30'} flex items-center justify-between`}>

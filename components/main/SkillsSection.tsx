@@ -28,7 +28,7 @@ export function SkillsSection() {
         {skills.map((skill) => (
           <div
             key={skill.category.en}
-            className={`${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} overflow-hidden`}
+            className={`${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm`}
           >
             {/* Module header */}
             <div className={`flex items-center gap-2 px-3 py-2 ${isMacos ? 'bg-white/30 dark:bg-white/5' : 'bg-zinc-100/50 dark:bg-zinc-900/30'}`}>

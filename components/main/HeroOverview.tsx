@@ -41,7 +41,7 @@ export function HeroOverview({ onOpenTerminal, onNavigate }: HeroOverviewProps) 
         <div className="flex flex-wrap items-center gap-3 pt-2">
           <button
             onClick={() => onNavigate?.('projects')}
-            className={`inline-flex items-center gap-2 px-4 py-2 text-sm transition-all ${
+            className={`inline-flex items-center gap-2 px-4 py-2 text-sm transition-all duration-150 active:scale-95 ${
               isMacos
                 ? 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-full font-medium hover:opacity-90'
                 : 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-mono font-medium uppercase tracking-wider hover:opacity-90'
@@ -53,7 +53,7 @@ export function HeroOverview({ onOpenTerminal, onNavigate }: HeroOverviewProps) 
           {onOpenTerminal && (
             <button
               onClick={onOpenTerminal}
-              className={`inline-flex items-center gap-2 px-4 py-2 text-sm transition-all ${
+              className={`inline-flex items-center gap-2 px-4 py-2 text-sm transition-all duration-150 active:scale-95 ${
                 isMacos
                   ? `${tokens.nestedCardBg} ${tokens.nestedCardBorder} rounded-full font-medium hover:bg-white/60 dark:hover:bg-black/40`
                   : `${tokens.nestedCardBg} ${tokens.nestedCardBorder} font-mono font-medium uppercase tracking-wider hover:border-zinc-400 dark:hover:border-zinc-600`

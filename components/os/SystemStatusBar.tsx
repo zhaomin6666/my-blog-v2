@@ -54,13 +54,13 @@ export function SystemStatusBar({
         </div>
         <div className="hidden md:flex gap-4">
           <button
-            className={`hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors ${isMacos ? 'font-semibold' : ''}`}
+            className={`hover:text-zinc-900 dark:hover:text-zinc-100 transition-all duration-150 active:scale-95 ${isMacos ? 'font-semibold' : ''}`}
             onClick={handleOpenMain}
           >
             {isMacos ? t('status.portfolio', lang) : `[${t('status.portfolio', lang)}]`}
           </button>
           <button
-            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-all duration-150 active:scale-95"
             onClick={handleOpenConsole}
           >
             {isMacos ? t('status.terminal', lang) : `[${t('status.terminal', lang)}]`}
@@ -69,13 +69,13 @@ export function SystemStatusBar({
         {/* Mobile app entry buttons */}
         <div className="flex md:hidden items-center gap-2 text-xs">
           <button
-            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-all duration-150 active:scale-95"
             onClick={handleOpenMain}
           >
             {t('status.portfolio', lang)}
           </button>
           <button
-            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-all duration-150 active:scale-95"
             onClick={handleOpenConsole}
           >
             {t('status.terminal', lang)}
@@ -87,20 +87,20 @@ export function SystemStatusBar({
       <div className="flex items-center gap-2 sm:gap-4">
         <button
           onClick={toggleStylePreset}
-          className={`hidden sm:inline transition-colors ${isMacos ? 'text-blue-600 dark:text-blue-400' : 'text-emerald-600 dark:text-emerald-400'}`}
+          className={`hidden sm:inline transition-all duration-150 active:scale-95 ${isMacos ? 'text-blue-600 dark:text-blue-400' : 'text-emerald-600 dark:text-emerald-400'}`}
         >
           {isMacos ? t('status.switchToMinimal', lang) : `[${t('status.switchToMacos', lang)}]`}
         </button>
         <button
           onClick={toggleStylePreset}
-          className={`sm:hidden transition-colors ${isMacos ? 'text-blue-600 dark:text-blue-400' : 'text-emerald-600 dark:text-emerald-400'}`}
+          className={`sm:hidden transition-all duration-150 active:scale-95 ${isMacos ? 'text-blue-600 dark:text-blue-400' : 'text-emerald-600 dark:text-emerald-400'}`}
           title={isMacos ? t('status.switchToMinimal', lang) : t('status.switchToMacos', lang)}
         >
           {isMacos ? t('status.stylePresetAbbrevVercel', lang) : t('status.stylePresetAbbrevMacos', lang)}
         </button>
         <button
           onClick={toggleTheme}
-          className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+          className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-all duration-150 active:scale-95"
         >
           {isMacos
             ? (theme === 'dark' ? t('theme.light', lang) : t('theme.dark', lang))
@@ -108,7 +108,7 @@ export function SystemStatusBar({
         </button>
         <button
           onClick={toggleLang}
-          className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+          className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-all duration-150 active:scale-95"
         >
           {t(lang === 'zh' ? 'lang.en' : 'lang.zh', lang)}
         </button>

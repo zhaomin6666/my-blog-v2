@@ -11,7 +11,7 @@ export function StylePresetToggle() {
   return (
     <button
       onClick={toggleStylePreset}
-      className="flex items-center gap-1.5 px-2 py-1.5 rounded-md hover:bg-zinc-100/70 dark:hover:bg-zinc-800/70 transition-colors text-sm"
+      className="flex items-center gap-1.5 px-2 py-1.5 rounded-md hover:bg-zinc-100/70 dark:hover:bg-zinc-800/70 transition-all duration-150 active:scale-95 text-sm"
       aria-label="Toggle style preset"
     >
       {isMacos ? (

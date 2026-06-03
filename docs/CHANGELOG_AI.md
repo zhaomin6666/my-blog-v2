@@ -1,6 +1,79 @@
 # AI Development Changelog
 
 ### 2026-06-03 — Claude Code
+**Summary:** Phase 5.5 only. Added restrained motion and interaction feedback animations across the Personal Developer OS shell.
+
+**Phase 5.5 deliverables:**
+
+**Window animations:**
+- Added `os-window-enter` CSS keyframe animation: subtle `opacity 0 → 1` + `scale(0.97) → scale(1)` + `translateY(6px) → 0`, 200ms ease-out.
+- AppWindow outer container now uses `transition-[opacity,transform,box-shadow,border-radius] duration-300 ease-out` for smoother state transitions.
+- Inactive window title bar now transitions `opacity` and `filter` (grayscale) over 300ms.
+
+**Window control button feedback:**
+- macOS traffic lights and Vercel control buttons: `hover:scale-110 active:scale-95` with `transition-all duration-150`.
+- Replaces plain `transition-opacity` with tactile scale feedback.
+
+**Console output animation:**
+- New output lines fade in via framer-motion: `initial={{ opacity: 0, y: 3 }}` → `animate={{ opacity: 1, y: 0 }}`, 120ms ease-out.
+- Existing lines (stable keys) do not re-animate.
+- Keeps auto-scroll behavior intact.
+
+**Desktop icon hover:**
+- Added `group-hover:-translate-y-1` lift effect alongside existing `group-hover:scale-105`.
+- Transition refined to `duration-200 ease-out`.
+
+**Content card hover feedback:**
+- Projects cards: `hover:-translate-y-0.5 hover:shadow-md hover:opacity-95`.
+- Blog log entries: `hover:-translate-y-0.5 hover:shadow-md hover:opacity-95`.
+- Contact channel cards: `hover:-translate-y-0.5`.
+- About profile fields: `hover:-translate-y-0.5 hover:shadow-sm`.
+- Skills modules: `hover:-translate-y-0.5 hover:shadow-sm`.
+- All use `transition-all duration-200`.
+
+**Interactive button feedback (global):**
+- System Status Bar: all buttons (`Portfolio`, `Terminal`, `Theme`, `Lang`, `Style`) get `active:scale-95` + `transition-all duration-150`.
+- MainAppNav: all nav items get `active:scale-95`.
+- Settings toggles (ThemeToggle, LanguageToggle, StylePresetToggle): `active:scale-95`.
+- HeroOverview CTA buttons: `active:scale-95`.
+
+**Reduced motion support:**
+- Global `@media (prefers-reduced-motion: reduce)` rule in `globals.css` disables all animations and transitions.
+- Framer-motion automatically respects system reduced-motion preference.
+- `.os-window-enter` and `.console-line-in` explicitly overridden to `animation: none` under reduced motion.
+
+**Files changed:**
+- `app/globals.css`
+- `components/os/AppWindow.tsx`
+- `components/os/WindowControls.tsx`
+- `components/os/SystemStatusBar.tsx`
+- `components/os/Desktop.tsx`
+- `components/console/ConsoleOutput.tsx`
+- `components/main/MainAppNav.tsx`
+- `components/main/HeroOverview.tsx`
+- `components/main/AboutSection.tsx`
+- `components/main/SkillsSection.tsx`
+- `components/main/ProjectsSection.tsx`
+- `components/main/BlogSection.tsx`
+- `components/main/ContactSection.tsx`
+- `components/settings/ThemeToggle.tsx`
+- `components/settings/LanguageToggle.tsx`
+- `components/settings/StylePresetToggle.tsx`
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- Window open/close/maximize now feels more like a real OS window appearing.
+- Console output gains subtle life without slowing down command execution.
+- Cards and buttons provide clearer tactile feedback on hover and click.
+- All animations are under 250ms and do not block interaction.
+- Reduced-motion users experience no animations.
+
+**Follow-up notes:**
+- Phase 5 remains in progress.
+- No Phase 6 work has started.
+
+### 2026-06-03 — Claude Code
 **Summary:** Phase 5.4 only. Responsive and mobile optimization for the Personal Developer OS shell.
 
 **Phase 5.4 deliverables:**

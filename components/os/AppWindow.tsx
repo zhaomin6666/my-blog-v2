@@ -43,11 +43,11 @@ export function AppWindow({
   return (
     <div
       onMouseDown={onFocus}
-      className={`absolute flex flex-col overflow-hidden transition-all duration-300 ${tokens.windowBg} ${tokens.windowBackdrop} ${tokens.windowBorder} ${tokens.windowShadow} ${posClasses} ${zIndex} ${isMax ? 'rounded-none' : tokens.windowBorderRadius} ${isActive ? '' : 'opacity-90'}`}
+      className={`absolute flex flex-col overflow-hidden os-window-enter transition-[opacity,transform,box-shadow,border-radius] duration-300 ease-out ${tokens.windowBg} ${tokens.windowBackdrop} ${tokens.windowBorder} ${tokens.windowShadow} ${posClasses} ${zIndex} ${isMax ? 'rounded-none' : tokens.windowBorderRadius} ${isActive ? 'opacity-100' : 'opacity-90'}`}
     >
       {/* Title Bar */}
       <div
-        className={`${tokens.titleBarHeight} flex-none flex items-center justify-between px-4 select-none ${tokens.titleBarClass} ${isActive ? '' : stylePreset === 'macos' ? 'opacity-60' : 'opacity-50 grayscale'}`}
+        className={`${tokens.titleBarHeight} flex-none flex items-center justify-between px-4 select-none transition-[opacity,filter] duration-300 ease-out ${tokens.titleBarClass} ${isActive ? 'opacity-100' : stylePreset === 'macos' ? 'opacity-60' : 'opacity-50 grayscale'}`}
       >
         <WindowControls
           stylePreset={stylePreset}

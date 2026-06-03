@@ -28,7 +28,7 @@ export function BlogSection() {
         {blogs.map((blog) => (
           <div
             key={blog.id}
-            className={`${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} p-4 transition-all hover:opacity-90`}
+            className={`${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:opacity-95`}
           >
             {/* Log header: timestamp + level */}
             <div className="flex items-center gap-2 mb-2">

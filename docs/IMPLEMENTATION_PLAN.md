@@ -110,7 +110,7 @@
 - Status bar toggle hover colors fully unified (previous 5.1 fix completed for theme/lang buttons)
 - No component duplication, no structural changes, no new features
 
-### Phase 5.3: light / dark Theme Polish IN PROGRESS
+### Phase 5.3: light / dark Theme Polish COMPLETED
 - macOS light card borders: `border-white/60` → `border-zinc-200/40` for visible card boundaries on light backgrounds
 - macOS light nested card borders: `border-white/50` → `border-zinc-200/30` for visible nested panel boundaries
 - macOS dark nested card background: `bg-slate-950/55` → `bg-slate-950/70` to fix overly transparent nested panels in dark mode
@@ -121,7 +121,7 @@
 - Vercel dark status bar border: `border-zinc-800` → `border-zinc-700` for clearer top bar separation
 - No component changes, no structural changes, no new features
 
-### Phase 5.4: Responsive / Mobile Optimization IN PROGRESS
+### Phase 5.4: Responsive / Mobile Optimization COMPLETED
 - System Status Bar: added mobile-visible Portfolio/Console entry buttons (xs text, compact layout)
 - Console prompt shortened on mobile: `dev-os:~ $` instead of `visitor@dev-os:~ $`
 - Console output history prompt also shortened on mobile
@@ -132,6 +132,21 @@
 - Main content sections: grid layouts already collapse to single column on mobile
 - Contact section endpoint labels already hidden on mobile (`hidden sm:block`)
 - No structural changes, no window behavior changes, no CLI changes
+
+### Phase 5.5: Motion & Interaction Feedback COMPLETED
+- Window open/close/minimize/maximize: subtle fade-in-scale mount animation (`os-window-enter`, 200ms ease-out)
+- Active window switching: smoother `transition-[opacity,transform,box-shadow,border-radius]` with `ease-out`
+- Inactive window title bar: `transition-[opacity,filter]` for graceful fade-to-gray
+- Window control buttons: `hover:scale-110 active:scale-95` tactile feedback (150ms)
+- Console output lines: framer-motion `opacity + translateY` fade-in for new lines (120ms)
+- Desktop icons: `hover:-translate-y-1` lift effect alongside existing scale
+- Content cards (Projects, Blog, Contact, About, Skills): `hover:-translate-y-0.5 hover:shadow-md` on hover
+- System Status Bar buttons: `active:scale-95` on all interactive buttons
+- MainAppNav buttons: `active:scale-95` on all nav items
+- Settings toggles: `active:scale-95` on theme/lang/preset switches
+- Hero CTA buttons: `active:scale-95` click feedback
+- Global `prefers-reduced-motion` support: CSS media query disables all animations/transitions
+- No window behavior changes, no CLI changes, no new features, no new dependencies
 
 ## Phase 6: SEO & Deployment Prep
 - metadata

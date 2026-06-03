@@ -51,7 +51,7 @@ export function AboutSection() {
         {profileFields.map((field) => (
           <div
             key={field.label}
-            className={`flex items-center gap-3 p-3 ${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius}`}
+            className={`flex items-center gap-3 p-3 ${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm`}
           >
             <field.icon size={isMacos ? 16 : 14} className={tokens.textMuted} />
             <div className="flex-1 min-w-0">

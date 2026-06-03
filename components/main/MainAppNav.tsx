@@ -38,14 +38,14 @@ export function MainAppNav({ activeSection, onNavigate }: MainAppNavProps) {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`shrink-0 px-3 py-1.5 text-xs transition-all ${
+              className={`shrink-0 px-3 py-1.5 text-xs transition-all active:scale-95 ${
                 isMacos
                   ? `rounded-full font-medium ${
                       isActive
                         ? 'bg-white/70 dark:bg-white/15 text-zinc-900 dark:text-white shadow-sm'
                         : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
                     }`
-                  : `font-mono font-medium uppercase tracking-wider ${
+                  : `font-mono font-medium uppercase tracking-wider transition-all duration-150 active:scale-95 ${
                       isActive
                         ? 'text-zinc-900 dark:text-zinc-100 border-b-2 border-zinc-900 dark:border-zinc-100'
                         : 'text-zinc-400 dark:text-zinc-600 hover:text-zinc-600 dark:hover:text-zinc-400'

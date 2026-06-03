@@ -46,7 +46,7 @@ export function Desktop({
           onClick={handleOpenMain}
           className="flex flex-col items-center gap-1.5 w-24 group outline-none"
         >
-          <div className={`${tokens.desktopIconSize} ${isMacos ? 'bg-white/20 dark:bg-black/20 border border-white/40 dark:border-white/10 backdrop-blur-md shadow-lg' : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm'} flex items-center justify-center group-hover:scale-105 transition-all`}>
+          <div className={`${tokens.desktopIconSize} ${isMacos ? 'bg-white/20 dark:bg-black/20 border border-white/40 dark:border-white/10 backdrop-blur-md shadow-lg' : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm'} flex items-center justify-center group-hover:scale-105 group-hover:-translate-y-1 transition-all duration-200 ease-out`}>
             <Layout size={isMacos ? 32 : 20} className={`${isMacos ? 'text-zinc-800 dark:text-zinc-200 drop-shadow-md' : 'text-zinc-600 dark:text-zinc-400'}`} />
           </div>
           <span className={`${tokens.desktopIconLabel} ${isMacos ? 'text-zinc-900 dark:text-zinc-100 drop-shadow-md' : 'text-zinc-600 dark:text-zinc-400'}`}>
@@ -57,7 +57,7 @@ export function Desktop({
           onClick={handleOpenConsole}
           className="flex flex-col items-center gap-1.5 w-24 group outline-none"
         >
-          <div className={`${tokens.desktopIconSize} ${isMacos ? 'bg-white/20 dark:bg-black/20 border border-white/40 dark:border-white/10 backdrop-blur-md shadow-lg' : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm'} flex items-center justify-center group-hover:scale-105 transition-all`}>
+          <div className={`${tokens.desktopIconSize} ${isMacos ? 'bg-white/20 dark:bg-black/20 border border-white/40 dark:border-white/10 backdrop-blur-md shadow-lg' : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm'} flex items-center justify-center group-hover:scale-105 group-hover:-translate-y-1 transition-all duration-200 ease-out`}>
             <Terminal size={isMacos ? 32 : 20} className={`${isMacos ? 'text-zinc-800 dark:text-zinc-200 drop-shadow-md' : 'text-zinc-600 dark:text-zinc-400'}`} />
           </div>
           <span className={`${tokens.desktopIconLabel} ${isMacos ? 'text-zinc-900 dark:text-zinc-100 drop-shadow-md' : 'text-zinc-600 dark:text-zinc-400'}`}>

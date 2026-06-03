@@ -63,7 +63,7 @@ export function ContactSection() {
             href={channel.disabled ? undefined : channel.href}
             target={channel.href.startsWith('http') ? '_blank' : undefined}
             rel={channel.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            className={`group flex items-center gap-3 p-4 ${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} transition-all ${
+            className={`group flex items-center gap-3 p-4 ${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} transition-all duration-200 hover:-translate-y-0.5 ${
               channel.disabled
                 ? 'opacity-60 cursor-not-allowed'
                 : isMacos

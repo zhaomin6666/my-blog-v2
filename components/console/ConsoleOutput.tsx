@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { useSettings } from '@/lib/settings-context';
 import { ConsoleOutputLine } from '@/lib/types';
 import { getStyleTokens } from '@/lib/stylePresets';
@@ -47,8 +48,11 @@ export function ConsoleOutput({ lines }: ConsoleOutputProps) {
     >
       <div className="max-w-4xl mx-auto space-y-1 pb-4">
         {lines.map((line) => (
-          <div
+          <motion.div
             key={line.id}
+            initial={{ opacity: 0, y: 3 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.12, ease: 'easeOut' }}
             className={`whitespace-pre-wrap break-words ${
               line.type === 'input'
                 ? isMacos
@@ -67,7 +71,7 @@ export function ConsoleOutput({ lines }: ConsoleOutputProps) {
           >
             {line.type === 'input' && <TerminalPrompt isMacos={isMacos} />}
             {line.content}
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
