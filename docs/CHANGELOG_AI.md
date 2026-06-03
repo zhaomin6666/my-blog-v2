@@ -1,6 +1,44 @@
 # AI Development Changelog
 
 ### 2026-06-03 — Claude Code
+**Summary:** Phase 5.3 only. Refined light / dark theme borders and backgrounds for clearer hierarchy and readability across both presets.
+
+**Phase 5.3 deliverables:**
+
+**macOS light improvements:**
+- Card border changed: `border-white/60` → `border-zinc-200/40` — cards now have visible boundaries against the light background instead of invisible white-on-white borders.
+- Nested card border changed: `border-white/50` → `border-zinc-200/30` — nested panels now have subtle but visible edges.
+
+**macOS dark improvements:**
+- Nested card background opacity increased: `bg-slate-950/55` → `bg-slate-950/70` — fixes the most impactful readability issue where nested panels were nearly see-through in dark mode.
+- Status bar background opacity increased: `dark:bg-black/50` → `dark:bg-black/60` — more solid toolbar feel in dark mode.
+
+**Vercel dark improvements:**
+- Card border changed: `dark:border-zinc-800` → `dark:border-zinc-700` — panel edges are now visible against dark backgrounds.
+- Nested card border changed: `dark:border-zinc-800` → `dark:border-zinc-700` — nested panel edges clearer.
+- Title bar background changed: `dark:bg-zinc-900/50` → `dark:bg-zinc-900` (solid) — title bar no longer semi-transparent, crisper window chrome.
+- Title bar border changed: `dark:border-zinc-800` → `dark:border-zinc-700` — cleaner separation from window content.
+- Status bar border changed: `dark:border-zinc-800` → `dark:border-zinc-700` — top bar separation more visible.
+
+**Files changed:**
+- `lib/stylePresets.ts`
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- Light mode cards and nested panels now have visible boundaries, preventing the "white-on-white" invisible border problem.
+- Dark mode nested panels are no longer distractingly transparent.
+- Vercel dark mode window chrome (title bar, status bar, borders) is crisper and more structured.
+- All four combinations (macOS+light, macOS+dark, vercel+light, vercel+dark) have improved visual hierarchy.
+
+**Follow-up notes:**
+- Phase 5 remains in progress. Further polish (e.g. individual section hover states, responsive micro-adjustments) may follow.
+- No Phase 6 work has started.
+
+### 2026-06-03 — Claude Code
+**Summary:** Phase 5.2 only. Refined macOS and Vercel preset visual tokens for clearer style boundary and improved readability.
+
+### 2026-06-03 — Claude Code
 **Summary:** Phase 5.2 only. Refined macOS and Vercel preset visual tokens for clearer style boundary and improved readability.
 
 **Phase 5.2 deliverables:**

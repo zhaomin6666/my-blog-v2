@@ -72,7 +72,7 @@ export interface StyleTokens {
 const macosTokens: StyleTokens = {
   statusBarHeight: 'h-7',
   statusBarClass:
-    'bg-white/70 dark:bg-black/50 backdrop-blur-xl border-b border-zinc-200/60 dark:border-white/10 text-zinc-800 dark:text-zinc-100 text-[13px] font-medium',
+    'bg-white/70 dark:bg-black/60 backdrop-blur-xl border-b border-zinc-200/60 dark:border-white/10 text-zinc-800 dark:text-zinc-100 text-[13px] font-medium',
   statusBarFont: 'font-sans',
 
   windowBorderRadius: 'rounded-2xl',
@@ -106,12 +106,12 @@ const macosTokens: StyleTokens = {
   contentPadding: 'p-4 md:p-8',
 
   cardBg: 'bg-white/[0.98] dark:bg-slate-950/[0.98]',
-  cardBorder: 'border border-white/60 dark:border-white/10',
+  cardBorder: 'border border-zinc-200/40 dark:border-white/10',
   cardBorderRadius: 'rounded-2xl',
   cardShadow: 'shadow-[0_4px_16px_rgba(15,23,42,0.05)] dark:shadow-[0_18px_40px_rgba(0,0,0,0.24)]',
 
-  nestedCardBg: 'bg-white/75 dark:bg-slate-950/55',
-  nestedCardBorder: 'border border-white/50 dark:border-white/10',
+  nestedCardBg: 'bg-white/75 dark:bg-slate-950/70',
+  nestedCardBorder: 'border border-zinc-200/30 dark:border-white/10',
   nestedCardBorderRadius: 'rounded-xl',
 
   headingFont: 'font-sans',
@@ -132,7 +132,7 @@ const macosTokens: StyleTokens = {
 const vercelTokens: StyleTokens = {
   statusBarHeight: 'h-8',
   statusBarClass:
-    'bg-white dark:bg-black border-b border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 text-xs font-medium',
+    'bg-white dark:bg-black border-b border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 text-xs font-medium',
   statusBarFont: 'font-mono',
 
   windowBorderRadius: 'rounded-md',
@@ -143,7 +143,7 @@ const vercelTokens: StyleTokens = {
 
   titleBarHeight: 'h-9',
   titleBarClass:
-    'border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50',
+    'border-b border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900',
   titleBarFont: 'text-[11px] font-mono tracking-wider font-semibold uppercase',
 
   controlSize: 'w-2.5 h-2.5',
@@ -165,12 +165,12 @@ const vercelTokens: StyleTokens = {
   contentPadding: 'p-4 md:p-6',
 
   cardBg: 'bg-zinc-50 dark:bg-zinc-950',
-  cardBorder: 'border border-zinc-200 dark:border-zinc-800',
+  cardBorder: 'border border-zinc-200 dark:border-zinc-700',
   cardBorderRadius: 'rounded-md',
   cardShadow: '',
 
   nestedCardBg: 'bg-zinc-100 dark:bg-zinc-900',
-  nestedCardBorder: 'border border-zinc-200 dark:border-zinc-800',
+  nestedCardBorder: 'border border-zinc-200 dark:border-zinc-700',
   nestedCardBorderRadius: 'rounded',
 
   headingFont: 'font-mono',

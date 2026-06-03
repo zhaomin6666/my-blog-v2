@@ -96,7 +96,7 @@
 - Settings toggle hover backgrounds unified with subtle opacity
 - No functional changes, no new features, no token expansion
 
-### Phase 5.2: macOS / Vercel Preset Polish IN PROGRESS
+### Phase 5.2: macOS / Vercel Preset Polish COMPLETED
 - macOS window background opacity increased (88% → 92%) for stronger window presence
 - macOS window shadow strengthened in light mode for better floating effect
 - macOS content background opacity increased (80% → 92%) for clearer content readability
@@ -109,6 +109,17 @@
 - Vercel window shadow refined to ultra-subtle 1px depth
 - Status bar toggle hover colors fully unified (previous 5.1 fix completed for theme/lang buttons)
 - No component duplication, no structural changes, no new features
+
+### Phase 5.3: light / dark Theme Polish IN PROGRESS
+- macOS light card borders: `border-white/60` → `border-zinc-200/40` for visible card boundaries on light backgrounds
+- macOS light nested card borders: `border-white/50` → `border-zinc-200/30` for visible nested panel boundaries
+- macOS dark nested card background: `bg-slate-950/55` → `bg-slate-950/70` to fix overly transparent nested panels in dark mode
+- macOS dark status bar: `dark:bg-black/50` → `dark:bg-black/60` for more solid toolbar in dark mode
+- Vercel dark card borders: `border-zinc-800` → `border-zinc-700` for clearer panel edges in dark mode
+- Vercel dark nested card borders: `border-zinc-800` → `border-zinc-700` for clearer nested panel edges
+- Vercel dark title bar: `bg-zinc-900/50` → `bg-zinc-900` (solid) and border `zinc-800` → `zinc-700` for crisper window chrome
+- Vercel dark status bar border: `border-zinc-800` → `border-zinc-700` for clearer top bar separation
+- No component changes, no structural changes, no new features
 
 ## Phase 6: SEO & Deployment Prep
 - metadata
