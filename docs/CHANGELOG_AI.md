@@ -1,6 +1,54 @@
 # AI Development Changelog
 
 ### 2026-06-03 - Codex
+**Summary:** Phase 3.5 Step 4.1 only. Fixed the Portfolio activation edge case when Console App is maximized.
+
+**Step 4.1 deliverables:**
+- Updated the shared `openMain()` window manager action to cancel Console `maximized` state before activating Main App.
+- Status bar and Desktop Portfolio entries now restore Console to its normal open dock state when switching away from a maximized Console.
+- Kept user-triggered Console maximize behavior unchanged.
+- Kept Main App internal Open Terminal behavior unchanged.
+- Did not enter Phase 4 or add CLI command-system work.
+
+**Files changed:**
+- `hooks/useWindowManager.ts`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- Portfolio activation now takes priority over a fullscreen Console presentation.
+- Active app stacking remains governed by the existing active `z-index` rule.
+
+**Follow-up notes:**
+- This is only Phase 3.5 Step 4.1.
+- Do not mark Phase 3.5 completed from this change alone.
+
+### 2026-06-03 - Codex
+**Summary:** Phase 3.5 Step 4 only. Optimized app open and active-window rules so Portfolio and Console entries behave more like a lightweight OS launcher.
+
+**Step 4 deliverables:**
+- Added `openMain()` for Portfolio entry points to open or restore Main App without changing Console App state.
+- Kept status bar and Desktop Console entry points as normal Console open / restore actions that do not force Main App out of maximized state.
+- Split Main App internal Open Terminal into a dedicated action that preserves the Step 2 behavior: Main exits maximized, Console opens as the bottom dock, and Console becomes active.
+- Let active app state decide window stacking through the existing active `z-index` rule.
+- Did not add extra maximized stacking special cases or enter Phase 4 CLI work.
+
+**Files changed:**
+- `hooks/useWindowManager.ts`
+- `components/os/DeveloperOS.tsx`
+- `components/os/SystemStatusBar.tsx`
+- `components/os/Desktop.tsx`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- Status bar and Desktop app entries now behave as OS launchers/focus controls instead of forcing a dual-window workflow.
+- Main and Console can naturally move above each other based on active app state.
+- The Personal Developer OS shell, status bar, Desktop fallback, presets, theme switching, and language switching are preserved.
+
+**Follow-up notes:**
+- This is only Phase 3.5 Step 4.
+- Do not mark Phase 3.5 completed from this change alone.
+
+### 2026-06-03 - Codex
 **Summary:** Refactored the current macos Main App visual treatment back into the style token system while preserving the existing rendered look as closely as possible.
 
 **Refactor deliverables:**

@@ -4,6 +4,8 @@ import { useState, useCallback } from 'react';
 import { WindowManagerState, WindowState, ActiveWindow } from '@/lib/types';
 import { DEFAULT_WINDOW_STATE } from '@/lib/constants';
 
+const isVisibleWindow = (s: WindowState) => s === 'open' || s === 'maximized';
+
 export function useWindowManager() {
   const [state, setState] = useState<WindowManagerState>(DEFAULT_WINDOW_STATE);
 
@@ -11,7 +13,9 @@ export function useWindowManager() {
     setState(prev => ({
       ...prev,
       main: s,
-      active: s === 'open' || s === 'maximized' ? 'main' : prev.active,
+      active: isVisibleWindow(s)
+        ? 'main'
+        : (isVisibleWindow(prev.console) ? 'console' : null),
     }));
   }, []);
 
@@ -19,13 +23,30 @@ export function useWindowManager() {
     setState(prev => ({
       ...prev,
       console: s,
-      active: s === 'open' || s === 'maximized'
+      active: isVisibleWindow(s)
         ? 'console'
-        : (prev.main === 'open' || prev.main === 'maximized' ? 'main' : prev.active),
+        : (isVisibleWindow(prev.main) ? 'main' : null),
+    }));
+  }, []);
+
+  const openMain = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      main: isVisibleWindow(prev.main) ? prev.main : 'open',
+      console: prev.console === 'maximized' ? 'open' : prev.console,
+      active: 'main',
     }));
   }, []);
 
   const openConsole = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      console: isVisibleWindow(prev.console) ? prev.console : 'open',
+      active: 'console',
+    }));
+  }, []);
+
+  const openConsoleFromMain = useCallback(() => {
     setState(prev => ({
       ...prev,
       main: prev.main === 'maximized' ? 'open' : prev.main,
@@ -44,7 +65,9 @@ export function useWindowManager() {
     ...state,
     setMainState,
     setConsoleState,
+    openMain,
     openConsole,
+    openConsoleFromMain,
     focusWindow,
     bothClosed,
   };

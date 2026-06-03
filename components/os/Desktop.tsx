@@ -1,29 +1,25 @@
 'use client';
 
 import { Layout, Terminal } from 'lucide-react';
-import { WindowState } from '@/lib/types';
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
 
 interface DesktopProps {
-  setMainState: (s: WindowState) => void;
+  openMain: () => void;
   openConsole: () => void;
-  focusWindow: (win: 'main' | 'console') => void;
 }
 
 export function Desktop({
-  setMainState,
+  openMain,
   openConsole,
-  focusWindow,
 }: DesktopProps) {
   const { lang, stylePreset } = useSettings();
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
 
   const handleOpenMain = () => {
-    setMainState('open');
-    focusWindow('main');
+    openMain();
   };
 
   const handleOpenConsole = () => {
@@ -47,7 +43,7 @@ export function Desktop({
       {/* Desktop Icons */}
       <div className={`absolute top-8 ${tokens.desktopIconPosition === 'top-right' ? 'left-8 sm:left-auto sm:right-8' : 'left-8'} flex flex-col gap-6 z-10`}>
         <button
-          onDoubleClick={handleOpenMain}
+          onClick={handleOpenMain}
           className="flex flex-col items-center gap-1.5 w-24 group outline-none"
         >
           <div className={`${tokens.desktopIconSize} ${isMacos ? 'bg-white/20 dark:bg-black/20 border border-white/40 dark:border-white/10 backdrop-blur-md shadow-lg' : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm'} flex items-center justify-center group-hover:scale-105 transition-all`}>
@@ -58,7 +54,7 @@ export function Desktop({
           </span>
         </button>
         <button
-          onDoubleClick={handleOpenConsole}
+          onClick={handleOpenConsole}
           className="flex flex-col items-center gap-1.5 w-24 group outline-none"
         >
           <div className={`${tokens.desktopIconSize} ${isMacos ? 'bg-white/20 dark:bg-black/20 border border-white/40 dark:border-white/10 backdrop-blur-md shadow-lg' : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm'} flex items-center justify-center group-hover:scale-105 transition-all`}>

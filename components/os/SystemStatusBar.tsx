@@ -2,22 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import { Wifi, Battery, Search, Hash } from 'lucide-react';
-import { WindowState } from '@/lib/types';
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { formatTime } from '@/lib/utils';
 import { t } from '@/lib/translations';
 
 interface SystemStatusBarProps {
-  setMainState: (s: WindowState) => void;
+  openMain: () => void;
   openConsole: () => void;
-  focusWindow: (win: 'main' | 'console') => void;
 }
 
 export function SystemStatusBar({
-  setMainState,
+  openMain,
   openConsole,
-  focusWindow,
 }: SystemStatusBarProps) {
   const [time, setTime] = useState<Date | null>(null);
   const { theme, toggleTheme, lang, toggleLang, stylePreset, toggleStylePreset } = useSettings();
@@ -31,8 +28,7 @@ export function SystemStatusBar({
   }, []);
 
   const handleOpenMain = () => {
-    setMainState('open');
-    focusWindow('main');
+    openMain();
   };
 
   const handleOpenConsole = () => {
