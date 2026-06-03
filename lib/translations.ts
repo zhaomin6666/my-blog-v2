@@ -42,9 +42,9 @@ const translations = {
     // Console
     'console.welcome': 'Personal DevOS Terminal v1.0.0',
     'console.help': '输入 "help" 查看可用命令。',
-    'console.prompt': 'DevOS:~ visitor$',
+    'console.prompt': 'visitor@dev-os:~ $',
     'console.notFound': '命令未找到。输入 `help` 查看可用命令。',
-    'console.macosWelcome': (...args: string[]) => `Last login: ${args[0]} on ttys001\nDevOS:~ visitor$ welcome`,
+    'console.macosWelcome': (...args: string[]) => `Last login: ${args[0]} on ttys001\nvisitor@dev-os:~ $ welcome`,
 
     // Nav — App module navigation (not normal website nav)
     'nav.overview': 'Overview',
@@ -180,9 +180,9 @@ const translations = {
     // Console
     'console.welcome': 'Personal DevOS Terminal v1.0.0',
     'console.help': 'Type "help" to see available commands.',
-    'console.prompt': 'DevOS:~ visitor$',
+    'console.prompt': 'visitor@dev-os:~ $',
     'console.notFound': 'Command not found. Type `help` to see available commands.',
-    'console.macosWelcome': (...args: string[]) => `Last login: ${args[0]} on ttys001\nDevOS:~ visitor$ welcome`,
+    'console.macosWelcome': (...args: string[]) => `Last login: ${args[0]} on ttys001\nvisitor@dev-os:~ $ welcome`,
 
     // Nav — App module navigation (not normal website nav)
     'nav.overview': 'Overview',

@@ -9,6 +9,22 @@ interface ConsoleOutputProps {
   lines: ConsoleOutputLine[];
 }
 
+function TerminalPrompt({ isMacos }: { isMacos: boolean }) {
+  const accentClass = isMacos
+    ? '!text-emerald-500 dark:!text-emerald-400'
+    : '!text-emerald-600 dark:!text-emerald-400';
+
+  return (
+    <span className="select-none">
+      <span className={accentClass}>visitor</span>
+      <span className="!text-zinc-500 dark:!text-zinc-400">@dev-os</span>
+      <span className="!text-zinc-400 dark:!text-zinc-500">:~</span>
+      <span className={accentClass}>{' $'}</span>
+      <span>{' '}</span>
+    </span>
+  );
+}
+
 export function ConsoleOutput({ lines }: ConsoleOutputProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { stylePreset } = useSettings();
@@ -46,9 +62,7 @@ export function ConsoleOutput({ lines }: ConsoleOutputProps) {
                 : 'text-zinc-900 dark:text-zinc-100'
             }`}
           >
-            {line.type === 'input' && (
-              <span>{tokens.consolePrompt} </span>
-            )}
+            {line.type === 'input' && <TerminalPrompt isMacos={isMacos} />}
             {line.content}
           </div>
         ))}

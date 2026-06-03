@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
-import { ChevronRight } from 'lucide-react';
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 
@@ -54,36 +53,33 @@ export function ConsoleInput({
     }
   };
 
+  const accentClass = isMacos
+    ? 'text-emerald-500 dark:text-emerald-400'
+    : 'text-emerald-600 dark:text-emerald-400';
+
   return (
     <div className={`flex-none px-4 py-3 border-t ${isMacos ? 'border-zinc-800/50' : 'border-zinc-200 dark:border-zinc-800'} ${tokens.consoleFont}`}>
       <div className="max-w-4xl mx-auto flex items-center gap-2">
-        {isMacos ? (
-          <span className="text-green-500 dark:text-green-400 shrink-0">{tokens.consolePrompt}</span>
-        ) : (
-          <ChevronRight size={14} className="text-zinc-400 shrink-0" />
-        )}
-        <div className="relative flex-1 flex min-h-5 items-center leading-5">
-          <input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className={`w-full bg-transparent outline-none absolute inset-0 h-full leading-5 ${
-              isMacos ? 'text-zinc-100' : 'text-zinc-900 dark:text-zinc-100'
-            }`}
-            autoFocus
-            spellCheck={false}
-            autoComplete="off"
-            autoCapitalize="off"
-          />
-          <div className="pointer-events-none flex whitespace-pre items-center h-full">
-            <span>{input}</span>
-            <span
-              className={`inline-block animate-pulse ml-[1px] ${tokens.consoleCursor}`}
-            />
-          </div>
-        </div>
+        <span className="shrink-0 select-none">
+          <span className={accentClass}>visitor</span>
+          <span className="text-zinc-500 dark:text-zinc-400">@dev-os</span>
+          <span className="text-zinc-400 dark:text-zinc-500">:~</span>
+          <span className={accentClass}>{' $'}</span>
+        </span>
+        <input
+          ref={inputRef}
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className={`flex-1 min-h-5 leading-5 bg-transparent border-0 outline-none shadow-none focus:ring-0 p-0 m-0 caret-emerald-500 dark:caret-emerald-300 ${
+            isMacos ? 'text-zinc-100' : 'text-zinc-900 dark:text-zinc-100'
+          }`}
+          autoFocus
+          spellCheck={false}
+          autoComplete="off"
+          autoCapitalize="off"
+        />
       </div>
     </div>
   );

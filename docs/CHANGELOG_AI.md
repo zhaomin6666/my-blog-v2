@@ -1,5 +1,37 @@
 # AI Development Changelog
 
+### 2026-06-03 - Claude Code
+**Summary:** Phase 4.4.1 only. Polished Console input prompt and caret for a more authentic terminal aesthetic.
+
+**Phase 4.4.1 deliverables:**
+- Console input line now displays a structured terminal prompt: `visitor@dev-os:~ $`.
+- Prompt segments use distinct semantic colors:
+  - `visitor` — accent (emerald)
+  - `@dev-os` — secondary text (zinc)
+  - `:~` — muted text (zinc)
+  - `$` — accent (emerald)
+- Input field stripped of default form styling: no border, no background, no outline, no shadow, no ring.
+- Native caret color set to `caret-emerald-500 dark:caret-emerald-300` for a terminal-like cursor in both themes.
+- Command history output now renders the same `visitor@dev-os:~ $` prompt prefix before each user-typed command.
+- Removed the legacy custom block-cursor overlay; caret is now the browser-native caret only.
+- Static prompt — no real filesystem, no `cd`/`ls`/`pwd`, no dynamic path changes.
+- All command logic, CLI-to-Main-App linkage, window behavior, and settings context remain untouched.
+
+**Files changed:**
+- `components/console/ConsoleInput.tsx`
+- `components/console/ConsoleOutput.tsx`
+- `lib/translations.ts`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- Console input now reads as a real terminal prompt rather than a styled form field.
+- Light and dark modes both present the prompt and caret clearly.
+- `macos` and `vercel` presets both keep a restrained terminal aesthetic.
+
+**Follow-up notes:**
+- Full Phase 4 remains in progress, not completed.
+- Real filesystem navigation and dynamic path updates remain deferred to a later phase.
+
 ### 2026-06-03 - Codex
 **Summary:** Phase 4.4 only. Added lightweight CLI experience improvements for Console App without adding AI parsing or structured output.
 
