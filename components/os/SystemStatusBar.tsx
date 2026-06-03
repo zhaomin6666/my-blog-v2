@@ -85,7 +85,7 @@ export function SystemStatusBar({
         </button>
         <button
           onClick={toggleTheme}
-          className="hover:text-black dark:hover:text-white transition-colors"
+          className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
         >
           {isMacos
             ? (theme === 'dark' ? t('theme.light', lang) : t('theme.dark', lang))
@@ -93,7 +93,7 @@ export function SystemStatusBar({
         </button>
         <button
           onClick={toggleLang}
-          className="hover:text-black dark:hover:text-white transition-colors"
+          className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
         >
           {t(lang === 'zh' ? 'lang.en' : 'lang.zh', lang)}
         </button>

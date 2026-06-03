@@ -87,7 +87,7 @@
 
 ## Phase 5: Visual Polish 🔄 IN PROGRESS
 
-### Phase 5.1: Visual Consistency Audit & Fixes IN PROGRESS
+### Phase 5.1: Visual Consistency Audit & Fixes COMPLETED
 - System Status Bar hover colors softened (black/white → zinc-900/zinc-100)
 - System Status Bar time display dark variant added
 - AppWindow maximized state retains border for visual hierarchy
@@ -95,6 +95,20 @@
 - MainAppNav WebKit scrollbar hidden for cross-browser consistency
 - Settings toggle hover backgrounds unified with subtle opacity
 - No functional changes, no new features, no token expansion
+
+### Phase 5.2: macOS / Vercel Preset Polish IN PROGRESS
+- macOS window background opacity increased (88% → 92%) for stronger window presence
+- macOS window shadow strengthened in light mode for better floating effect
+- macOS content background opacity increased (80% → 92%) for clearer content readability
+- macOS card background opacity increased (94% → 98%) for crisper cards
+- macOS nested card background opacity increased (58% → 75%) to fix excessive transparency
+- macOS card shadow softened and reduced for subtler depth
+- macOS status bar background opacity increased (60% → 70%) for more solid toolbar feel
+- Vercel card background changed to zinc-50/zinc-950 for subtle hierarchy against window
+- Vercel nested card background changed to solid zinc-100/zinc-900 for flatter panel look
+- Vercel window shadow refined to ultra-subtle 1px depth
+- Status bar toggle hover colors fully unified (previous 5.1 fix completed for theme/lang buttons)
+- No component duplication, no structural changes, no new features
 
 ## Phase 6: SEO & Deployment Prep
 - metadata

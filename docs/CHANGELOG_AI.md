@@ -1,6 +1,46 @@
 # AI Development Changelog
 
 ### 2026-06-03 — Claude Code
+**Summary:** Phase 5.2 only. Refined macOS and Vercel preset visual tokens for clearer style boundary and improved readability.
+
+**Phase 5.2 deliverables:**
+
+**macOS preset polish:**
+- Window background opacity increased: `bg-white/88` → `bg-white/92`, `dark:bg-slate-950/86` → `dark:bg-slate-950/90` — stronger window presence without losing glass character.
+- Window shadow strengthened in light mode: `shadow-[0_8px_32px_rgba(0,0,0,0.08)]` → `shadow-[0_16px_48px_rgba(0,0,0,0.10)]` — better floating depth against the desktop.
+- Content background opacity increased: `bg-white/[0.80]` → `bg-white/[0.92]` — content no longer affected by desktop background bleed-through.
+- Card background opacity increased: `bg-white/[0.94]` → `bg-white/[0.98]` — crisper cards inside the window.
+- Nested card background opacity increased: `bg-white/58` → `bg-white/75`, `dark:bg-slate-950/38` → `dark:bg-slate-950/55` — fixes the most impactful transparency issue where nested panels were nearly see-through.
+- Card shadow softened: `shadow-[0_12px_30px_...]` → `shadow-[0_4px_16px_...]` — subtler depth, less visual noise.
+- Status bar background opacity increased: `bg-white/60` → `bg-white/70` — more solid system toolbar feel.
+
+**Vercel preset polish:**
+- Card background changed: `bg-white dark:bg-black` → `bg-zinc-50 dark:bg-zinc-950` — creates subtle hierarchy against the window background (`bg-white dark:bg-black`).
+- Nested card background changed: `bg-zinc-50 dark:bg-zinc-900/20` → `bg-zinc-100 dark:bg-zinc-900` — solid flat panels instead of semi-transparent layers.
+- Window shadow refined: `shadow-sm` → `shadow-[0_1px_3px_rgba(0,0,0,0.06)]` — ultra-subtle depth, consistent with minimal tool aesthetic.
+
+**Cross-cutting fix:**
+- SystemStatusBar theme and language toggle hover colors now use `zinc-900/zinc-100` (completing the 5.1 fix that only covered app launcher buttons).
+
+**Files changed:**
+- `lib/stylePresets.ts`
+- `components/os/SystemStatusBar.tsx`
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- macOS preset now reads as a denser, more refined desktop application window. Nested panels are no longer distractingly transparent.
+- Vercel preset now reads as a flatter, more structured SaaS/developer tool dashboard. Cards have clear层级 against their container.
+- Both presets maintain their distinct identity: macOS keeps glass/blur, Vercel stays flat and solid.
+
+**Follow-up notes:**
+- Phase 5 remains in progress. Further preset-specific polish (e.g. individual section styling, responsive tweaks) may follow.
+- No Phase 6 work has started.
+
+### 2026-06-03 — Claude Code
+**Summary:** Phase 5.1 only. Visual consistency audit and targeted fixes across the OS shell.
+
+### 2026-06-03 — Claude Code
 **Summary:** Phase 5.1 only. Visual consistency audit and targeted fixes across the OS shell.
 
 **Phase 5.1 deliverables:**

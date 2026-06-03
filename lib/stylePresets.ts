@@ -72,14 +72,14 @@ export interface StyleTokens {
 const macosTokens: StyleTokens = {
   statusBarHeight: 'h-7',
   statusBarClass:
-    'bg-white/60 dark:bg-black/40 backdrop-blur-xl border-b border-zinc-200/60 dark:border-white/10 text-zinc-800 dark:text-zinc-100 text-[13px] font-medium',
+    'bg-white/70 dark:bg-black/50 backdrop-blur-xl border-b border-zinc-200/60 dark:border-white/10 text-zinc-800 dark:text-zinc-100 text-[13px] font-medium',
   statusBarFont: 'font-sans',
 
   windowBorderRadius: 'rounded-2xl',
   windowShadow:
-    'shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]',
+    'shadow-[0_16px_48px_rgba(0,0,0,0.10)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]',
   windowBorder: 'border border-white/70 dark:border-white/10',
-  windowBg: 'bg-white/88 dark:bg-slate-950/86',
+  windowBg: 'bg-white/92 dark:bg-slate-950/90',
   windowBackdrop: 'backdrop-blur-2xl',
 
   titleBarHeight: 'h-11',
@@ -102,15 +102,15 @@ const macosTokens: StyleTokens = {
   consolePrompt: 'text-green-500 dark:text-green-400',
   consoleCursor: 'w-[8px] h-[15px] bg-zinc-500 dark:bg-zinc-400',
 
-  contentBg: 'bg-white/[0.80] dark:bg-slate-950/[0.80]',
+  contentBg: 'bg-white/[0.92] dark:bg-slate-950/[0.92]',
   contentPadding: 'p-4 md:p-8',
 
-  cardBg: 'bg-white/[0.94] dark:bg-slate-950/[0.94]',
+  cardBg: 'bg-white/[0.98] dark:bg-slate-950/[0.98]',
   cardBorder: 'border border-white/60 dark:border-white/10',
   cardBorderRadius: 'rounded-2xl',
-  cardShadow: 'shadow-[0_12px_30px_rgba(15,23,42,0.08)] dark:shadow-[0_18px_40px_rgba(0,0,0,0.24)]',
+  cardShadow: 'shadow-[0_4px_16px_rgba(15,23,42,0.05)] dark:shadow-[0_18px_40px_rgba(0,0,0,0.24)]',
 
-  nestedCardBg: 'bg-white/58 dark:bg-slate-950/38',
+  nestedCardBg: 'bg-white/75 dark:bg-slate-950/55',
   nestedCardBorder: 'border border-white/50 dark:border-white/10',
   nestedCardBorderRadius: 'rounded-xl',
 
@@ -136,7 +136,7 @@ const vercelTokens: StyleTokens = {
   statusBarFont: 'font-mono',
 
   windowBorderRadius: 'rounded-md',
-  windowShadow: 'shadow-sm',
+  windowShadow: 'shadow-[0_1px_3px_rgba(0,0,0,0.06)]',
   windowBorder: 'border border-zinc-200 dark:border-zinc-800',
   windowBg: 'bg-white dark:bg-black',
   windowBackdrop: '',
@@ -164,12 +164,12 @@ const vercelTokens: StyleTokens = {
   contentBg: 'bg-transparent',
   contentPadding: 'p-4 md:p-6',
 
-  cardBg: 'bg-white dark:bg-black',
+  cardBg: 'bg-zinc-50 dark:bg-zinc-950',
   cardBorder: 'border border-zinc-200 dark:border-zinc-800',
   cardBorderRadius: 'rounded-md',
   cardShadow: '',
 
-  nestedCardBg: 'bg-zinc-50 dark:bg-zinc-900/20',
+  nestedCardBg: 'bg-zinc-100 dark:bg-zinc-900',
   nestedCardBorder: 'border border-zinc-200 dark:border-zinc-800',
   nestedCardBorderRadius: 'rounded',
 
