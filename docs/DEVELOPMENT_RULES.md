@@ -60,7 +60,16 @@ data/               → Mock data
 - Console App must remain a plain-text terminal in both docked and maximized states.
 - Console maximized mode stays pure terminal with no Main App linkage.
 
-## 8. Quality Rules
+## 8. Blog Architecture Rules
+- Pages, components, and Console commands must NOT read `content/blog/*.md` directly.
+- All blog data access must go through `BlogService` (`@/lib/blog`).
+- `BlogService` delegates to a `BlogRepository` implementation; upper layers do not know the storage mechanism.
+- Current implementation: `FileBlogRepository` (reads Markdown files, server-side only).
+- Future implementations: `DbBlogRepository`, `CmsBlogRepository` — swap at `BlogService` constructor.
+- Markdown frontmatter fields must stay close to a future database model for easy migration.
+- `data/blogs.ts` remains for backward compatibility; Phase 6.3 will migrate consumers to `BlogService`.
+
+## 9. Quality Rules
 - Run `pnpm lint` after meaningful changes.
 - Run `pnpm build` when possible.
 - Fix TypeScript errors.

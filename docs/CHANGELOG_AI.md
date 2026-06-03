@@ -921,6 +921,50 @@ The project baseline is **Personal Developer OS**:
 - All future dependency operations must use `pnpm` only.
 - Do not reintroduce `package-lock.json`, `yarn.lock`, or `bun.lockb`.
 
+### 2026-06-03 — Claude Code
+**Summary:** Phase 6.1 started. CMS-ready blog content architecture established.
+
+**Phase 6.1 deliverables:**
+- Created `content/blog/` directory with 2 sample Markdown posts:
+  - `building-personal-developer-os.md` — project design rationale and architecture
+  - `ai-agent-learning-log.md` — AI Agent learning path and tool chain
+- Created `lib/blog/blog-types.ts` — type definitions for `BlogPost`, `BlogPostMeta`, `BlogPostFrontmatter`, `BlogPostStatus`, `BlogPostLanguage`, `BlogPostQueryOptions`
+- Created `lib/blog/blog-repository.ts` — `BlogRepository` interface abstracting storage mechanism (file, DB, CMS)
+- Created `lib/blog/file-blog-repository.ts` — server-only implementation reading `content/blog/*.md`, parsing frontmatter with `gray-matter`, filtering drafts, sorting by date descending
+- Created `lib/blog/blog-service.ts` — `BlogService` class providing unified API: `getPublishedPosts`, `getAllPosts`, `getPostBySlug`, `getPostsByTag`, `getAllTags`, `getPostsByLang`, `getPostsBySeries`
+- Created `lib/blog/markdown.ts` — `extractExcerpt` and `formatBlogDate` utilities for Phase 6.2 rendering
+- Created `lib/blog/index.ts` — barrel export for clean imports
+- Installed `gray-matter` dependency via pnpm
+- Updated `docs/IMPLEMENTATION_PLAN.md` — Phase 6 marked as in progress, Phase 6.1–6.4 defined
+- Updated `docs/CHANGELOG_AI.md` — this entry
+- Updated `docs/DEVELOPMENT_RULES.md` — added Blog Architecture rules section
+
+**Architecture impact:**
+- Pages, components, and Console commands are no longer allowed to read `content/blog/*.md` directly.
+- All blog data access must go through `BlogService`, which delegates to a `BlogRepository` implementation.
+- Current `FileBlogRepository` can be swapped for `DbBlogRepository` or `CmsBlogRepository` in the future without touching pages or components.
+- `data/blogs.ts` is preserved for backward compatibility; Phase 6.3 will migrate Main App and CLI to use `BlogService`.
+
+**Files changed:**
+- `content/blog/building-personal-developer-os.md` — new
+- `content/blog/ai-agent-learning-log.md` — new
+- `lib/blog/blog-types.ts` — new
+- `lib/blog/blog-repository.ts` — new
+- `lib/blog/file-blog-repository.ts` — new
+- `lib/blog/blog-service.ts` — new
+- `lib/blog/markdown.ts` — new
+- `lib/blog/index.ts` — new
+- `package.json` — added `gray-matter`
+- `pnpm-lock.yaml` — updated
+- `docs/IMPLEMENTATION_PLAN.md` — updated
+- `docs/CHANGELOG_AI.md` — updated
+- `docs/DEVELOPMENT_RULES.md` — updated
+
+**Follow-up notes:**
+- Phase 6.1 is complete. Ready for Phase 6.2 (blog pages) when explicitly requested.
+- Phase 6.3 will integrate BlogService into Main App Blog section and Console `blog` command.
+- Phase 6.4 will handle SEO, RSS, sitemap, and deployment.
+
 ## Previous Entries
 
 ### 2026-05-31 — Claude Code

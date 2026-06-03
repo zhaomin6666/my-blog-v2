@@ -154,10 +154,33 @@
 - Global `prefers-reduced-motion` support: CSS media query disables all animations/transitions
 - No window behavior changes, no CLI changes, no new features, no new dependencies
 
-## Phase 6: SEO & Deployment Prep
-- metadata
-- openGraph
-- twitter card
+## Phase 6: Blog Publishing System + SEO + Deployment 🚧 IN PROGRESS
+
+### Phase 6.1: CMS-ready Blog Content Architecture 🚧 IN PROGRESS
+- File-based Markdown blog (`content/blog/*.md`)
+- `BlogPost` / `BlogPostMeta` / `BlogPostFrontmatter` types
+- `BlogRepository` interface (abstracts storage mechanism)
+- `FileBlogRepository` (server-side Markdown parser)
+- `BlogService` (unified API for pages, components, CLI)
+- Future-ready: swapping repository enables DB / CMS migration
+- Not yet connected to Main App Blog section or Console blog command
+
+### Phase 6.2: Blog Pages (Deferred)
+- `/blog` listing page
+- `/blog/[slug]` detail page
+- Markdown rendering (remark / remark-html)
+- Blog layout with OS shell
+
+### Phase 6.3: Main App & Console Integration (Deferred)
+- Replace `data/blogs.ts` mock data with `BlogService` calls
+- CLI `blog` command reads from `BlogService`
+- Blog section in Main App uses real blog metadata
+
+### Phase 6.4: SEO & Deployment (Deferred)
+- metadata / openGraph / twitter card
+- RSS feed
+- sitemap.xml
+- robots.txt
 - favicon / icons
 - build check
 - deployment check

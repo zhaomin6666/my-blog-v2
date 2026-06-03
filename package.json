@@ -12,6 +12,7 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "framer-motion": "^12.10.4",
+    "gray-matter": "^4.0.3",
     "lucide-react": "^0.509.0",
     "next": "15.4.1",
     "react": "^19.0.0",
