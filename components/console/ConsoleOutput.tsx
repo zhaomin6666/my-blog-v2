@@ -16,8 +16,11 @@ function TerminalPrompt({ isMacos }: { isMacos: boolean }) {
 
   return (
     <span className="select-none">
-      <span className={accentClass}>visitor</span>
-      <span className="!text-zinc-500 dark:!text-zinc-400">@dev-os</span>
+      <span className={accentClass}>
+        <span className="hidden sm:inline">visitor</span>
+        <span className="sm:hidden">dev-os</span>
+      </span>
+      <span className="hidden sm:inline !text-zinc-500 dark:!text-zinc-400">@dev-os</span>
       <span className="!text-zinc-400 dark:!text-zinc-500">:~</span>
       <span className={accentClass}>{' $'}</span>
       <span>{' '}</span>

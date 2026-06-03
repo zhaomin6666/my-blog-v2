@@ -121,6 +121,18 @@
 - Vercel dark status bar border: `border-zinc-800` → `border-zinc-700` for clearer top bar separation
 - No component changes, no structural changes, no new features
 
+### Phase 5.4: Responsive / Mobile Optimization IN PROGRESS
+- System Status Bar: added mobile-visible Portfolio/Console entry buttons (xs text, compact layout)
+- Console prompt shortened on mobile: `dev-os:~ $` instead of `visitor@dev-os:~ $`
+- Console output history prompt also shortened on mobile
+- AppWindow title bar: added `truncate` and `min-w-0` to prevent title overflow on small screens
+- HeroOverview title: added `sm:` breakpoint so mobile uses smaller font (`text-2xl` macOS, `text-xl` vercel)
+- Desktop icons: preserved left-side layout on mobile for macOS preset
+- MainAppNav: already had `overflow-x-auto` and `scrollbar-hide` for mobile scrolling
+- Main content sections: grid layouts already collapse to single column on mobile
+- Contact section endpoint labels already hidden on mobile (`hidden sm:block`)
+- No structural changes, no window behavior changes, no CLI changes
+
 ## Phase 6: SEO & Deployment Prep
 - metadata
 - openGraph

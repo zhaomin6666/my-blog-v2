@@ -61,8 +61,11 @@ export function ConsoleInput({
     <div className={`flex-none px-4 py-3 border-t ${isMacos ? 'border-zinc-800/50' : 'border-zinc-200 dark:border-zinc-800'} ${tokens.consoleFont}`}>
       <div className="max-w-4xl mx-auto flex items-center gap-2">
         <span className="shrink-0 select-none">
-          <span className={accentClass}>visitor</span>
-          <span className="text-zinc-500 dark:text-zinc-400">@dev-os</span>
+          <span className={accentClass}>
+            <span className="hidden sm:inline">visitor</span>
+            <span className="sm:hidden">dev-os</span>
+          </span>
+          <span className="hidden sm:inline text-zinc-500 dark:text-zinc-400">@dev-os</span>
           <span className="text-zinc-400 dark:text-zinc-500">:~</span>
           <span className={accentClass}>{' $'}</span>
         </span>

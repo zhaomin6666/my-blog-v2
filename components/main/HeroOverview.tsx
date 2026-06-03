@@ -28,7 +28,7 @@ export function HeroOverview({ onOpenTerminal, onNavigate }: HeroOverviewProps) 
         </div>
 
         {/* Title */}
-        <h1 className={`${isMacos ? 'text-3xl md:text-4xl font-bold tracking-tight' : 'text-2xl md:text-3xl font-mono font-bold tracking-tight'} ${tokens.textPrimary}`}>
+        <h1 className={`${isMacos ? 'text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight' : 'text-xl sm:text-2xl md:text-3xl font-mono font-bold tracking-tight'} ${tokens.textPrimary}`}>
           {t('hero.title', lang)}
         </h1>
 

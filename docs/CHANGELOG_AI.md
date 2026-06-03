@@ -1,6 +1,58 @@
 # AI Development Changelog
 
 ### 2026-06-03 — Claude Code
+**Summary:** Phase 5.4 only. Responsive and mobile optimization for the Personal Developer OS shell.
+
+**Phase 5.4 deliverables:**
+
+**System Status Bar mobile:**
+- Added mobile-visible Portfolio/Console entry buttons (`flex md:hidden`) with compact `text-xs` styling — app launchers are no longer hidden on small screens.
+- Left section gap tightened on mobile: `gap-3 sm:gap-5`.
+
+**Console mobile:**
+- Input prompt shortened on mobile (`sm:hidden`): `dev-os:~ $` instead of `visitor@dev-os:~ $`.
+- Full prompt preserved on desktop (`hidden sm:inline`): `visitor@dev-os:~ $`.
+- Output history prompt also shortened on mobile for consistency.
+- Input field kept `flex-1` with `min-w-0` so it never pushes the prompt out of the container.
+
+**AppWindow mobile:**
+- Title bar text now uses `truncate` + `min-w-0` to prevent long window titles from breaking the title bar layout on small screens.
+- Icon wrapper given `shrink-0` to prevent squishing.
+
+**HeroOverview mobile:**
+- macOS title: `text-3xl md:text-4xl` → `text-2xl sm:text-3xl md:text-4xl` — avoids oversized heading on 360px screens.
+- Vercel title: `text-2xl md:text-3xl` → `text-xl sm:text-2xl md:text-3xl` — same treatment for minimal preset.
+
+**Already-responsive areas verified:**
+- MainAppNav: `overflow-x-auto` + `scrollbar-hide` enables horizontal scroll for nav tabs on mobile.
+- Main content grids: `grid-cols-1 md:grid-cols-*` already collapses to single column on mobile.
+- Contact endpoint labels: `hidden sm:block` hides API-style labels on mobile.
+- Desktop icons: `sm:left-auto sm:right-8` keeps icons left-aligned on mobile to avoid overlap.
+- Console dock height: `h-[240px] md:h-[300px]` is already mobile-first.
+
+**Files changed:**
+- `components/os/SystemStatusBar.tsx`
+- `components/os/AppWindow.tsx`
+- `components/console/ConsoleInput.tsx`
+- `components/console/ConsoleOutput.tsx`
+- `components/main/HeroOverview.tsx`
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- 360px–430px screens no longer hide critical app entry points.
+- Console prompt no longer squeezes the input field on narrow screens.
+- Window titles no longer overflow the title bar on mobile.
+- Desktop layout, Main App grids, and section cards remain single-column and readable on mobile.
+
+**Follow-up notes:**
+- Phase 5 remains in progress.
+- No Phase 6 work has started.
+
+### 2026-06-03 — Claude Code
+**Summary:** Phase 5.3 only. Refined light / dark theme borders and backgrounds for clearer hierarchy and readability across both presets.
+
+### 2026-06-03 — Claude Code
 **Summary:** Phase 5.3 only. Refined light / dark theme borders and backgrounds for clearer hierarchy and readability across both presets.
 
 **Phase 5.3 deliverables:**

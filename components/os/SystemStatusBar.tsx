@@ -40,7 +40,7 @@ export function SystemStatusBar({
       className={`${tokens.statusBarHeight} flex-none px-4 flex items-center justify-between z-50 select-none ${tokens.statusBarClass} ${tokens.statusBarFont}`}
     >
       {/* Left */}
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-3 sm:gap-5">
         <div className="font-bold flex items-center gap-2 cursor-default">
           {isMacos ? (
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -64,6 +64,21 @@ export function SystemStatusBar({
             onClick={handleOpenConsole}
           >
             {isMacos ? t('status.terminal', lang) : `[${t('status.terminal', lang)}]`}
+          </button>
+        </div>
+        {/* Mobile app entry buttons */}
+        <div className="flex md:hidden items-center gap-2 text-xs">
+          <button
+            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            onClick={handleOpenMain}
+          >
+            {t('status.portfolio', lang)}
+          </button>
+          <button
+            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            onClick={handleOpenConsole}
+          >
+            {t('status.terminal', lang)}
           </button>
         </div>
       </div>

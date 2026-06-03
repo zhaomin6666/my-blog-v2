@@ -56,9 +56,9 @@ export function AppWindow({
           onMaximize={() => setState(isMax ? 'open' : 'maximized')}
           isMaximized={isMax}
         />
-        <div className={`flex-1 text-center flex items-center justify-center gap-2 ${tokens.titleBarFont} text-zinc-700 dark:text-zinc-300`}>
-          <span className="opacity-60">{icon}</span>
-          <span>{title}</span>
+        <div className={`flex-1 text-center flex items-center justify-center gap-2 min-w-0 ${tokens.titleBarFont} text-zinc-700 dark:text-zinc-300`}>
+          <span className="opacity-60 shrink-0">{icon}</span>
+          <span className="truncate">{title}</span>
         </div>
         <div className="w-20" />
       </div>
