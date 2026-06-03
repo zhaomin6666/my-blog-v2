@@ -34,6 +34,16 @@
 - Stable section ids: overview, about, skills, projects, blog, contact
 - Awaiting user review before marking completed
 
+## Phase 3.5: Developer OS Window Behavior Calibration COMPLETED
+- User manually reviewed and accepted Phase 3.5.
+- Main App opens maximized by default on first load.
+- Console App is closed by default on first load.
+- Main App Open Terminal enters the Main + Console dual-window working state.
+- macos Main App background readability was improved while preserving the glass OS concept.
+- Top status bar and Desktop entries can open, restore, and activate the corresponding app.
+- Active app state determines foreground window stacking.
+- Switching to Portfolio while Console is maximized restores Console to its dock state so Main App is visible.
+
 ## Phase 4: CLI Command System
 - Command parser
 - Command history

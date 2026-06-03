@@ -1,5 +1,29 @@
 # AI Development Changelog
 
+### 2026-06-03 - User Acceptance
+**Summary:** Phase 3.5 was manually reviewed and accepted by the user. Marked Phase 3.5 as completed in the implementation plan.
+
+**Completed Phase 3.5 scope:**
+- Main App opens maximized by default on first load.
+- Console App is closed by default on first load.
+- Main App Open Terminal enters the Main + Console dual-window working state.
+- macos Main App background readability was improved while preserving the Personal Developer OS concept.
+- Top status bar and Desktop entries support opening, restoring, and activating Portfolio / Console.
+- Active app state determines which app is shown in the foreground.
+- Fixed the edge case where switching to Portfolio while Console is maximized failed to reveal Main App.
+
+**Files changed:**
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- Phase 3.5 now has an accepted OS-window behavior baseline.
+- No feature, code, CLI command, data, translation, or visual implementation changes were made in this update.
+
+**Follow-up notes:**
+- Phase 4 remains not started.
+- Future work may proceed to Phase 4 only when explicitly requested.
+
 ### 2026-06-03 - Codex
 **Summary:** Phase 3.5 Step 4.1 only. Fixed the Portfolio activation edge case when Console App is maximized.
 
