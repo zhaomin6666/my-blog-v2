@@ -79,7 +79,7 @@ const macosTokens: StyleTokens = {
   windowShadow:
     'shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]',
   windowBorder: 'border border-white/70 dark:border-white/10',
-  windowBg: 'bg-white/80 dark:bg-[#1e1e1e]/80',
+  windowBg: 'bg-white/88 dark:bg-slate-950/86',
   windowBackdrop: 'backdrop-blur-2xl',
 
   titleBarHeight: 'h-11',
@@ -102,16 +102,16 @@ const macosTokens: StyleTokens = {
   consolePrompt: 'text-green-500 dark:text-green-400',
   consoleCursor: 'w-[8px] h-[15px] bg-zinc-500 dark:bg-zinc-400',
 
-  contentBg: 'bg-transparent',
+  contentBg: 'bg-white/[0.80] dark:bg-slate-950/[0.80]',
   contentPadding: 'p-4 md:p-8',
 
-  cardBg: 'bg-white/50 dark:bg-black/30',
-  cardBorder: 'border border-white/50 dark:border-white/5',
+  cardBg: 'bg-white/[0.94] dark:bg-slate-950/[0.94]',
+  cardBorder: 'border border-white/60 dark:border-white/10',
   cardBorderRadius: 'rounded-2xl',
-  cardShadow: 'shadow-sm',
+  cardShadow: 'shadow-[0_12px_30px_rgba(15,23,42,0.08)] dark:shadow-[0_18px_40px_rgba(0,0,0,0.24)]',
 
-  nestedCardBg: 'bg-white/40 dark:bg-black/20',
-  nestedCardBorder: 'border border-white/40 dark:border-white/5',
+  nestedCardBg: 'bg-white/58 dark:bg-slate-950/38',
+  nestedCardBorder: 'border border-white/50 dark:border-white/10',
   nestedCardBorderRadius: 'rounded-xl',
 
   headingFont: 'font-sans',

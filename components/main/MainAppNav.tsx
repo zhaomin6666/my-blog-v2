@@ -25,7 +25,7 @@ export function MainAppNav({ activeSection, onNavigate }: MainAppNavProps) {
 
   return (
     <div
-      className={`sticky top-0 z-10 flex items-center gap-1 overflow-x-auto ${tokens.contentBg} py-2 ${tokens.contentPadding} ${isMacos ? '' : ''}`}
+      className={`sticky top-0 z-10 flex items-center gap-1 overflow-x-auto py-2 ${tokens.contentPadding}`}
       style={{ scrollbarWidth: 'none' }}
     >
       <div

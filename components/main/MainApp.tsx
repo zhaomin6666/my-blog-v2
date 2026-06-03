@@ -40,7 +40,10 @@ export function MainApp({ onOpenTerminal }: MainAppProps) {
   }, []);
 
   return (
-    <div ref={scrollContainerRef} className={`h-full overflow-y-auto os-scrollbar`}>
+    <div
+      ref={scrollContainerRef}
+      className={`h-full overflow-y-auto os-scrollbar relative ${tokens.contentBg}`}
+    >
       <MainAppNav onNavigate={scrollToSection} />
 
       <div className={`${tokens.contentPadding} pt-0`}>

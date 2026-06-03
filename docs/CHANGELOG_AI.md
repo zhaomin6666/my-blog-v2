@@ -1,5 +1,56 @@
 # AI Development Changelog
 
+### 2026-06-03 - Codex
+**Summary:** Refactored the current macos Main App visual treatment back into the style token system while preserving the existing rendered look as closely as possible.
+
+**Refactor deliverables:**
+- Moved the Main App body background back to `tokens.contentBg`.
+- Moved the section panel backgrounds back to `tokens.cardBg`.
+- Removed duplicated preset-specific background classes from individual Main App sections.
+- Preserved the current Step 3 visual intent while making future maintenance easier.
+
+**Files changed:**
+- `lib/stylePresets.ts`
+- `components/main/MainApp.tsx`
+- `components/main/HeroOverview.tsx`
+- `components/main/AboutSection.tsx`
+- `components/main/SkillsSection.tsx`
+- `components/main/ProjectsSection.tsx`
+- `components/main/BlogSection.tsx`
+- `components/main/ContactSection.tsx`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- No intended product or interaction change.
+- The current macos look is now primarily token-driven again instead of being scattered across section components.
+
+**Follow-up notes:**
+- Verify in-browser that the refactored token values still match the current accepted macos visual result.
+
+### 2026-06-02 - Codex
+**Summary:** Phase 3.5 Step 3 only. Increased the macos Main App surface density so the window keeps a glass character without letting desktop icons noticeably interfere with reading.
+
+**Step 3 deliverables:**
+- Thickened the macos window background with higher-opacity light and dark translucent surfaces.
+- Increased macos section card and nested card opacity to improve readability inside the window.
+- Kept the existing window structure and behavior unchanged.
+- Left the vercel / minimal preset untouched.
+
+**Files changed:**
+- `lib/stylePresets.ts`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- macos Main App now reads as a denser app window instead of a nearly transparent sheet.
+- Light mode remains a pale glass surface; dark mode remains a dark glass surface without turning into a white panel.
+- Maximized and windowed Main App states continue to share the same macos visual language because the change is token-based.
+
+**Follow-up notes:**
+- This is only Phase 3.5 Step 3.
+- Do not mark Phase 3.5 completed from this change alone.
+- A later step should separately evaluate active app z-index / focus stacking so the selected app can visually sit on top when Main and Console are both open.
+- After browser verification feedback, moved the macos Main App surface emphasis onto the Main App content container itself and removed that surface from the internal nav wrapper so the background reads at app-body scope rather than only around the nav strip.
+
 ### 2026-06-02 - Codex
 **Summary:** Phase 3.5 Step 2 only. Unified the user-triggered Console open behavior so opening Terminal enters the dual-window working state without changing the existing visual system.
 
