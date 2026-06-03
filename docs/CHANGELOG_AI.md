@@ -1,6 +1,92 @@
 # AI Development Changelog
 
 ### 2026-06-03 — Claude Code
+**Summary:** Phase 5 completed. Final acceptance and documentation archive for the entire Visual Polish phase.
+
+**Phase 5 completed scope:**
+
+**Phase 5.1 — Visual Consistency Audit & Fixes:**
+- System Status Bar hover colors softened across all buttons.
+- AppWindow maximized state retains border for visual hierarchy.
+- AppWindow dark content background respects preset (macOS slate vs vercel transparent).
+- MainAppNav WebKit scrollbar hidden for cross-browser consistency.
+- Settings toggle hover backgrounds unified.
+
+**Phase 5.2 — macOS / Vercel Preset Refinement:**
+- macOS window background opacity increased (88% → 92%) for stronger glass window presence.
+- macOS card and nested card opacity increased to fix excessive transparency.
+- macOS window shadow strengthened in light mode for floating depth.
+- Vercel card background changed to zinc-50/zinc-950 for subtle hierarchy.
+- Vercel nested card changed to solid zinc-100/zinc-900 for flatter panel look.
+- Both presets maintain clear visual identity through the same component set.
+
+**Phase 5.3 — light / dark Theme Refinement:**
+- macOS light card borders changed to `border-zinc-200/40` for visible boundaries.
+- macOS dark nested card background increased to `bg-slate-950/70` for readability.
+- Vercel dark borders upgraded to `border-zinc-700` for clearer panel edges.
+- Vercel dark title bar changed to solid `bg-zinc-900` for crisper window chrome.
+
+**Phase 5.4 — Responsive / Mobile Optimization:**
+- Mobile-visible Portfolio/Console entry buttons added to System Status Bar.
+- Console prompt shortened on mobile (`dev-os:~ $` vs full `visitor@dev-os:~ $`).
+- AppWindow title bar uses `truncate` to prevent overflow.
+- Hero title sizes use `sm:` breakpoints for mobile-safe font scaling.
+- All grid layouts collapse to single column on mobile.
+
+**Phase 5.5 — Motion & Interaction Feedback:**
+- Window mount animation: subtle fade-in-scale (`os-window-enter`, 200ms).
+- Active/inactive window transitions smoothed.
+- Window control buttons: `hover:scale-110 active:scale-95`.
+- Console output lines: framer-motion fade-in (120ms).
+- Desktop icons: hover lift effect.
+- Content cards: `hover:-translate-y-0.5 hover:shadow-md`.
+- Global `active:scale-95` on all interactive buttons.
+- `prefers-reduced-motion` fully supported via CSS media query and framer-motion auto-detection.
+
+**Cross-phase invariants preserved:**
+- No functional changes.
+- No CLI command system changes.
+- No window behavior logic changes.
+- No new dependencies.
+- `macos` / `vercel`, `light` / `dark`, `zh` / `en` all verified.
+- Desktop / tablet / mobile all verified.
+- Console docked and maximized states both verified.
+- `pnpm lint` and `pnpm build` pass.
+
+**Files changed in Phase 5 (cumulative):**
+- `lib/stylePresets.ts`
+- `app/globals.css`
+- `components/os/AppWindow.tsx`
+- `components/os/WindowControls.tsx`
+- `components/os/SystemStatusBar.tsx`
+- `components/os/Desktop.tsx`
+- `components/console/ConsoleInput.tsx`
+- `components/console/ConsoleOutput.tsx`
+- `components/main/MainAppNav.tsx`
+- `components/main/HeroOverview.tsx`
+- `components/main/AboutSection.tsx`
+- `components/main/SkillsSection.tsx`
+- `components/main/ProjectsSection.tsx`
+- `components/main/BlogSection.tsx`
+- `components/main/ContactSection.tsx`
+- `components/settings/ThemeToggle.tsx`
+- `components/settings/LanguageToggle.tsx`
+- `components/settings/StylePresetToggle.tsx`
+- `docs/DEVELOPMENT_RULES.md`
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- The Personal Developer OS now has a refined, consistent visual system across all four preset/theme combinations.
+- Mobile experience is fully functional down to 360px.
+- Subtle motion reinforces the OS feel without being distracting.
+- Reduced-motion users experience a static but fully functional interface.
+
+**Follow-up notes:**
+- Phase 5 is now completed. Ready to proceed to Phase 6 (SEO & Deployment Prep) when explicitly requested.
+- No further Phase 5 work unless critical visual bugs are found.
+
+### 2026-06-03 — Claude Code
 **Summary:** Phase 5.5 only. Added restrained motion and interaction feedback animations across the Personal Developer OS shell.
 
 **Phase 5.5 deliverables:**

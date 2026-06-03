@@ -67,3 +67,12 @@ data/               → Mock data
 - Avoid `any`.
 - Avoid unnecessary third-party libraries.
 - Use animations sparingly.
+
+## 9. Visual Maintenance Rules
+- Any visual change must be verified under **both** `macos` and `vercel` presets.
+- Any color or background change must be verified under **both** `light` and `dark` themes.
+- Any layout change must be checked on **desktop, tablet (768px), and mobile (360px–430px)**.
+- Do NOT weaken the Personal Developer OS into a generic portfolio page or normal blog template.
+- Prefer style-token-driven changes in `lib/stylePresets.ts` over hardcoding preset-specific classes in components.
+- Hover and active feedback should be subtle (scale ≤ 1.1, translate ≤ 4px, duration ≤ 250ms).
+- All animations must respect `prefers-reduced-motion`.

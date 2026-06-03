@@ -85,7 +85,13 @@
 - Input field stripped of default border, background, outline, and shadow.
 - Command history output renders the same prompt prefix.
 
-## Phase 5: Visual Polish 🔄 IN PROGRESS
+## Phase 5: Visual Polish ✅ COMPLETED
+- Visual consistency audit and targeted fixes
+- macOS / Vercel preset refinement for clearer style boundary
+- light / dark theme refinement for readable hierarchy across all combinations
+- Responsive optimization for 360px / 390px / 430px / 768px
+- Subtle motion and interaction feedback (window enter, active switching, hover/focus, Console output, reduced motion support)
+- No functional changes, no CLI changes, no window behavior changes
 
 ### Phase 5.1: Visual Consistency Audit & Fixes COMPLETED
 - System Status Bar hover colors softened (black/white → zinc-900/zinc-100)
