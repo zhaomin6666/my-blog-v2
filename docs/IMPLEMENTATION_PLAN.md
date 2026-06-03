@@ -85,12 +85,16 @@
 - Input field stripped of default border, background, outline, and shadow.
 - Command history output renders the same prompt prefix.
 
-## Phase 5: Visual Polish
-- macos preset visual optimization
-- vercel preset visual optimization
-- light / dark individual optimization
-- Responsive optimization
-- Animation optimization
+## Phase 5: Visual Polish 🔄 IN PROGRESS
+
+### Phase 5.1: Visual Consistency Audit & Fixes IN PROGRESS
+- System Status Bar hover colors softened (black/white → zinc-900/zinc-100)
+- System Status Bar time display dark variant added
+- AppWindow maximized state retains border for visual hierarchy
+- AppWindow dark content background respects preset (macOS slate vs vercel transparent)
+- MainAppNav WebKit scrollbar hidden for cross-browser consistency
+- Settings toggle hover backgrounds unified with subtle opacity
+- No functional changes, no new features, no token expansion
 
 ## Phase 6: SEO & Deployment Prep
 - metadata

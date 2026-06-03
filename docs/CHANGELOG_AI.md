@@ -1,5 +1,38 @@
 # AI Development Changelog
 
+### 2026-06-03 — Claude Code
+**Summary:** Phase 5.1 only. Visual consistency audit and targeted fixes across the OS shell.
+
+**Phase 5.1 deliverables:**
+- System Status Bar hover colors softened: `hover:text-black dark:hover:text-white` → `hover:text-zinc-900 dark:hover:text-zinc-100` for less jarring transitions.
+- System Status Bar time display now uses `text-zinc-500 dark:text-zinc-400` for dark-mode consistency.
+- AppWindow maximized state no longer strips border (`border-0` removed); rounded corners are removed but border stays for visual hierarchy against the desktop.
+- AppWindow `isDarkContent` background now respects the style preset: macOS uses `bg-slate-950/90`, vercel lets ConsoleApp handle its own `bg-white dark:bg-black`.
+- MainAppNav WebKit scrollbar hidden via `.scrollbar-hide` utility in `globals.css` for cross-browser consistency.
+- Settings toggles (Theme, Language, StylePreset) unified with `hover:bg-zinc-100/70 dark:hover:bg-zinc-800/70` for subtler hover feedback.
+- No functional changes. No new features. No CLI modifications. No token expansion.
+
+**Files changed:**
+- `components/os/SystemStatusBar.tsx`
+- `components/os/AppWindow.tsx`
+- `components/main/MainAppNav.tsx`
+- `components/settings/ThemeToggle.tsx`
+- `components/settings/LanguageToggle.tsx`
+- `components/settings/StylePresetToggle.tsx`
+- `app/globals.css`
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- Hover states are less visually aggressive across light and dark themes.
+- Maximizing a window no longer causes it to visually merge with the desktop background.
+- Cross-browser scrollbar behavior is now consistent in the Main App nav strip.
+- The macOS / vercel style boundary remains intact; vercel does not gain glass effects, macOS does not lose its windowed aesthetic.
+
+**Follow-up notes:**
+- Phase 5 remains in progress; further preset-specific or theme-specific polish may follow.
+- No Phase 6 (SEO / deployment) work has started.
+
 ### 2026-06-03 - Claude Code
 **Summary:** Phase 4 completion & acceptance. Full CLI command system accepted and documented.
 

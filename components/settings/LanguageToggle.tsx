@@ -9,7 +9,7 @@ export function LanguageToggle() {
   return (
     <button
       onClick={toggleLang}
-      className="flex items-center gap-1.5 px-2 py-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-sm"
+      className="flex items-center gap-1.5 px-2 py-1.5 rounded-md hover:bg-zinc-100/70 dark:hover:bg-zinc-800/70 transition-colors text-sm"
       aria-label="Toggle language"
     >
       <Globe size={14} />

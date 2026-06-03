@@ -43,7 +43,7 @@ export function AppWindow({
   return (
     <div
       onMouseDown={onFocus}
-      className={`absolute flex flex-col overflow-hidden transition-all duration-300 ${tokens.windowBg} ${tokens.windowBackdrop} ${tokens.windowBorder} ${tokens.windowShadow} ${posClasses} ${zIndex} ${isMax ? 'rounded-none border-0' : tokens.windowBorderRadius} ${isActive ? '' : 'opacity-90'}`}
+      className={`absolute flex flex-col overflow-hidden transition-all duration-300 ${tokens.windowBg} ${tokens.windowBackdrop} ${tokens.windowBorder} ${tokens.windowShadow} ${posClasses} ${zIndex} ${isMax ? 'rounded-none' : tokens.windowBorderRadius} ${isActive ? '' : 'opacity-90'}`}
     >
       {/* Title Bar */}
       <div
@@ -64,7 +64,7 @@ export function AppWindow({
       </div>
 
       {/* Content */}
-      <div className={`flex-1 overflow-hidden relative ${isDarkContent ? 'bg-black/90' : 'bg-transparent'}`}>
+      <div className={`flex-1 overflow-hidden relative ${isDarkContent ? (stylePreset === 'macos' ? 'bg-slate-950/90' : 'bg-black dark:bg-black') : 'bg-transparent'}`}>
         {children}
       </div>
     </div>

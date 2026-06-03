@@ -54,13 +54,13 @@ export function SystemStatusBar({
         </div>
         <div className="hidden md:flex gap-4">
           <button
-            className={`hover:text-black dark:hover:text-white transition-colors ${isMacos ? 'font-semibold' : ''}`}
+            className={`hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors ${isMacos ? 'font-semibold' : ''}`}
             onClick={handleOpenMain}
           >
             {isMacos ? t('status.portfolio', lang) : `[${t('status.portfolio', lang)}]`}
           </button>
           <button
-            className="hover:text-black dark:hover:text-white transition-colors"
+            className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
             onClick={handleOpenConsole}
           >
             {isMacos ? t('status.terminal', lang) : `[${t('status.terminal', lang)}]`}
@@ -104,7 +104,7 @@ export function SystemStatusBar({
             <Battery size={14} />
           </div>
         )}
-        <div className={`text-right ml-1 sm:ml-2 ${isMacos ? 'w-14 sm:w-24 drop-shadow-sm' : 'w-12 text-zinc-500'}`}>
+        <div className={`text-right ml-1 sm:ml-2 ${isMacos ? 'w-14 sm:w-24 drop-shadow-sm' : 'w-12 text-zinc-500 dark:text-zinc-400'}`}>
           {time ? formatTime(time) : '--:--'}
         </div>
       </div>

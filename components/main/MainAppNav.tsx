@@ -26,8 +26,8 @@ export function MainAppNav({ activeSection, onNavigate }: MainAppNavProps) {
 
   return (
     <div
-      className={`sticky top-0 z-10 flex items-center gap-1 overflow-x-auto py-2 ${tokens.contentPadding}`}
-      style={{ scrollbarWidth: 'none' }}
+      className={`sticky top-0 z-10 flex items-center gap-1 overflow-x-auto py-2 scrollbar-hide ${tokens.contentPadding}`}
+      style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
     >
       <div
         className={`flex items-center gap-1 ${isMacos ? 'bg-white/40 dark:bg-black/30 backdrop-blur-md rounded-full px-2 py-1 border border-white/30 dark:border-white/5' : 'border-b border-zinc-200 dark:border-zinc-800 pb-1'}`}
