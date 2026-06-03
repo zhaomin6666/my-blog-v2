@@ -44,12 +44,21 @@
 - Active app state determines foreground window stacking.
 - Switching to Portfolio while Console is maximized restores Console to its dock state so Main App is visible.
 
-## Phase 4: CLI Command System
+## Phase 4: CLI Command System IN PROGRESS
 - Command parser
 - Command history
 - Implement: help, about, skills, projects, blog, contact, resume, clear, classic, whoami, sudo hire me
 - Link to Main App scroll or highlight
 - Console maximized pure terminal mode
+
+### Phase 4.1 / 4.2: Basic CLI Skeleton & Text Outputs COMPLETED
+- Console App accepts typed commands and executes on Enter.
+- Console App renders command history and plain-text command output.
+- Basic parser supports: help, about, skills, projects, blog, contact, resume, clear, classic, whoami, sudo hire me.
+- Command outputs support zh / en.
+- skills / projects / blog commands reuse local mock data.
+- clear and unknown command handling are implemented.
+- Main App linkage remains deferred to a later Phase 4 step.
 
 ## Phase 5: Visual Polish
 - macos preset visual optimization

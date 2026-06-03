@@ -24,7 +24,7 @@ export function ConsoleOutput({ lines }: ConsoleOutputProps) {
   return (
     <div
       ref={scrollRef}
-      className={`flex-1 overflow-y-auto os-scrollbar p-4 ${tokens.consoleFont}`}
+      className={`min-h-0 flex-1 overflow-y-auto os-scrollbar p-4 ${tokens.consoleFont}`}
     >
       <div className="max-w-4xl mx-auto space-y-1 pb-4">
         {lines.map((line) => (
@@ -32,7 +32,9 @@ export function ConsoleOutput({ lines }: ConsoleOutputProps) {
             key={line.id}
             className={`whitespace-pre-wrap break-words ${
               line.type === 'input'
-                ? `${tokens.consolePrompt}`
+                ? isMacos
+                  ? 'text-green-400'
+                  : 'text-zinc-700 dark:text-zinc-300'
                 : line.type === 'error'
                 ? 'text-red-400'
                 : line.type === 'system'

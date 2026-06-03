@@ -10,11 +10,7 @@ import { getStyleTokens } from '@/lib/stylePresets';
 import { ConsoleOutput } from './ConsoleOutput';
 import { ConsoleInput } from './ConsoleInput';
 
-interface ConsoleAppProps {
-  onNavigate?: (target: string) => void;
-}
-
-export function ConsoleApp({ onNavigate }: ConsoleAppProps) {
+export function ConsoleApp() {
   const { lang, stylePreset } = useSettings();
   const [input, setInput] = useState('');
   const [lines, setLines] = useState<ConsoleOutputLine[]>(() => {
@@ -42,7 +38,7 @@ export function ConsoleApp({ onNavigate }: ConsoleAppProps) {
     const trimmed = input.trim();
     if (!trimmed) return;
 
-    const newLines: ConsoleOutputLine[] = [
+    const nextLines: ConsoleOutputLine[] = [
       { id: generateId(), type: 'input', content: trimmed },
     ];
 
@@ -55,23 +51,19 @@ export function ConsoleApp({ onNavigate }: ConsoleAppProps) {
     }
 
     if (result.output) {
-      newLines.push({
+      nextLines.push({
         id: generateId(),
-        type: result.action === 'none' && trimmed.toLowerCase() === 'help' ? 'system' : 'output',
+        type: result.isError ? 'error' : 'output',
         content: result.output,
       });
     }
 
-    if (result.action === 'scroll' && result.target && onNavigate) {
-      onNavigate(result.target);
-    }
-
-    setLines((prev) => [...prev, ...newLines]);
+    setLines((prev) => [...prev, ...nextLines]);
     setInput('');
-  }, [input, lang, onNavigate]);
+  }, [input, lang]);
 
   return (
-    <div className={`h-full w-full flex flex-col ${tokens.consoleFont} ${
+    <div className={`h-full w-full min-h-0 overflow-hidden flex flex-col ${tokens.consoleFont} ${
       stylePreset === 'macos' ? 'text-zinc-100' : 'bg-white dark:bg-black text-zinc-900 dark:text-zinc-100'
     }`}>
       <ConsoleOutput lines={lines} />

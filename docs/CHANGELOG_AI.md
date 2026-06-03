@@ -1,5 +1,36 @@
 # AI Development Changelog
 
+### 2026-06-03 - Codex
+**Summary:** Phase 4.1 / 4.2 only. Added the basic CLI command skeleton and plain-text command output for Console App.
+
+**Phase 4.1 / 4.2 deliverables:**
+- Console App now accepts typed commands and executes them with Enter.
+- Console output now records command history and command results.
+- Added basic command parsing for help, about, skills, projects, blog, contact, resume, clear, classic, whoami, and sudo hire me.
+- Command output supports zh / en through centralized translation keys.
+- skills, projects, and blog command output reuse `data/skills.ts`, `data/projects.ts`, and `data/blogs.ts`.
+- clear clears the Console output.
+- Unknown commands render the configured not-found prompt.
+
+**Files changed:**
+- `lib/commands.ts`
+- `lib/translations.ts`
+- `components/console/ConsoleApp.tsx`
+- `components/console/ConsoleInput.tsx`
+- `components/console/ConsoleOutput.tsx`
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- Console App now behaves like a basic terminal while preserving the Personal Developer OS shell.
+- Console remains a pure terminal in docked and maximized states.
+- No Main App content cards, window behavior, settings context, or large visual structure were rewritten.
+
+**Follow-up notes:**
+- Full Phase 4 is not completed.
+- Main App scroll / highlight linkage remains deferred to Phase 4.3.
+- Autocomplete, command aliases, arrow-key history, real AI command parsing, backend APIs, and structured card output remain out of scope for this step.
+
 ### 2026-06-03 - User Acceptance
 **Summary:** Phase 3.5 was manually reviewed and accepted by the user. Marked Phase 3.5 as completed in the implementation plan.
 

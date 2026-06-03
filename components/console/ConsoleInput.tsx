@@ -35,14 +35,14 @@ export function ConsoleInput({ input, setInput, onSubmit }: ConsoleInputProps) {
         ) : (
           <ChevronRight size={14} className="text-zinc-400 shrink-0" />
         )}
-        <div className="relative flex-1 flex items-center">
+        <div className="relative flex-1 flex min-h-5 items-center leading-5">
           <input
             ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className={`w-full bg-transparent outline-none absolute inset-0 ${
+            className={`w-full bg-transparent outline-none absolute inset-0 h-full leading-5 ${
               isMacos ? 'text-zinc-100' : 'text-zinc-900 dark:text-zinc-100'
             }`}
             autoFocus
