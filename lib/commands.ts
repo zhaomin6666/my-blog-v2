@@ -171,10 +171,19 @@ const commandDefinitions: CommandDefinition[] = [
   },
 ];
 
+const commandAliases = new Map<string, string>([
+  ['stack', 'skills'],
+  ['logs', 'blog'],
+  ['articles', 'blog'],
+  ['mail', 'contact'],
+  ['hire', 'sudo hire me'],
+]);
+
 const commandMap = new Map(commandDefinitions.map((item) => [item.name, item]));
 
 export function executeCommand(input: string, lang: Lang): CommandResult {
-  const normalized = input.trim().toLowerCase().replace(/\s+/g, ' ');
+  const normalizedInput = input.trim().toLowerCase().replace(/\s+/g, ' ');
+  const normalized = commandAliases.get(normalizedInput) ?? normalizedInput;
 
   if (!normalized) {
     return command('');

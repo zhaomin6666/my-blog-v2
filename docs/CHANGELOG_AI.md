@@ -1,6 +1,32 @@
 # AI Development Changelog
 
 ### 2026-06-03 - Codex
+**Summary:** Phase 4.4 only. Added lightweight CLI experience improvements for Console App without adding AI parsing or structured output.
+
+**Phase 4.4 deliverables:**
+- Console command execution keeps trimming input before running commands.
+- Command recognition is case-insensitive, so `HELP`, `Help`, and `help` resolve to the same command.
+- Added aliases: `stack -> skills`, `logs -> blog`, `articles -> blog`, `mail -> contact`, and `hire -> sudo hire me`.
+- Added keyboard command history navigation with Up / Down arrows.
+- Console input focuses on mount and refocuses after command submission as much as the browser allows.
+- Console output continues to auto-scroll to the bottom whenever command output changes.
+- `clear` still clears Console output normally.
+
+**Files changed:**
+- `lib/commands.ts`
+- `components/console/ConsoleApp.tsx`
+- `components/console/ConsoleInput.tsx`
+- `docs/CHANGELOG_AI.md`
+
+**Design impact:**
+- Console remains a plain-text terminal dock / maximized terminal.
+- Phase 4.3 Main App section linkage rules remain unchanged.
+- No Main App content modules, settings context, window dragging, backend APIs, real blog system, AI natural language parsing, autocomplete, or structured cards were added.
+
+**Follow-up notes:**
+- Full Phase 4 remains in progress, not completed.
+
+### 2026-06-03 - Codex
 **Summary:** Phase 4.3 only. Added conditional CLI-to-Main-App section linkage while preserving Console pure terminal behavior.
 
 **Phase 4.3 deliverables:**

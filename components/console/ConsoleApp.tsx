@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useSettings } from '@/lib/settings-context';
 import { ConsoleOutputLine } from '@/lib/types';
 import { generateId } from '@/lib/utils';
@@ -17,6 +17,9 @@ interface ConsoleAppProps {
 export function ConsoleApp({ onCommandResult }: ConsoleAppProps) {
   const { lang, stylePreset } = useSettings();
   const [input, setInput] = useState('');
+  const [history, setHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState<number | null>(null);
+  const draftInputRef = useRef('');
   const [lines, setLines] = useState<ConsoleOutputLine[]>(() => {
     const isMacos = stylePreset === 'macos';
     const welcomeLines: ConsoleOutputLine[] = [
@@ -41,6 +44,10 @@ export function ConsoleApp({ onCommandResult }: ConsoleAppProps) {
   const handleSubmit = useCallback(() => {
     const trimmed = input.trim();
     if (!trimmed) return;
+
+    setHistory((prev) => [...prev, trimmed]);
+    setHistoryIndex(null);
+    draftInputRef.current = '';
 
     const nextLines: ConsoleOutputLine[] = [
       { id: generateId(), type: 'input', content: trimmed },
@@ -67,6 +74,38 @@ export function ConsoleApp({ onCommandResult }: ConsoleAppProps) {
     setInput('');
   }, [input, lang, onCommandResult]);
 
+  const handleHistoryPrevious = useCallback(() => {
+    if (history.length === 0) return;
+
+    setHistoryIndex((currentIndex) => {
+      if (currentIndex === null) {
+        draftInputRef.current = input;
+        const nextIndex = history.length - 1;
+        setInput(history[nextIndex]);
+        return nextIndex;
+      }
+
+      const nextIndex = Math.max(0, currentIndex - 1);
+      setInput(history[nextIndex]);
+      return nextIndex;
+    });
+  }, [history, input]);
+
+  const handleHistoryNext = useCallback(() => {
+    if (history.length === 0 || historyIndex === null) return;
+
+    const nextIndex = historyIndex + 1;
+
+    if (nextIndex >= history.length) {
+      setHistoryIndex(null);
+      setInput(draftInputRef.current);
+      return;
+    }
+
+    setHistoryIndex(nextIndex);
+    setInput(history[nextIndex]);
+  }, [history, historyIndex]);
+
   return (
     <div className={`h-full w-full min-h-0 overflow-hidden flex flex-col ${tokens.consoleFont} ${
       stylePreset === 'macos' ? 'text-zinc-100' : 'bg-white dark:bg-black text-zinc-900 dark:text-zinc-100'
@@ -76,6 +115,8 @@ export function ConsoleApp({ onCommandResult }: ConsoleAppProps) {
         input={input}
         setInput={setInput}
         onSubmit={handleSubmit}
+        onHistoryPrevious={handleHistoryPrevious}
+        onHistoryNext={handleHistoryNext}
       />
     </div>
   );

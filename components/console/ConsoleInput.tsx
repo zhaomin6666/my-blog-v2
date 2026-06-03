@@ -9,21 +9,48 @@ interface ConsoleInputProps {
   input: string;
   setInput: (s: string) => void;
   onSubmit: () => void;
+  onHistoryPrevious: () => void;
+  onHistoryNext: () => void;
 }
 
-export function ConsoleInput({ input, setInput, onSubmit }: ConsoleInputProps) {
+export function ConsoleInput({
+  input,
+  setInput,
+  onSubmit,
+  onHistoryPrevious,
+  onHistoryNext,
+}: ConsoleInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { stylePreset } = useSettings();
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
 
   useEffect(() => {
-    inputRef.current?.focus();
+    const focusInput = window.setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
+
+    return () => window.clearTimeout(focusInput);
   }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       onSubmit();
+      window.setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+      return;
+    }
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      onHistoryPrevious();
+      return;
+    }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      onHistoryNext();
     }
   };
 
