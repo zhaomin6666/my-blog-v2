@@ -1,6 +1,47 @@
 # AI Development Changelog
 
 ### 2026-06-03 - Claude Code
+**Summary:** Phase 4 completion & acceptance. Full CLI command system accepted and documented.
+
+**Phase 4 completed scope:**
+- Console App accepts typed commands and executes them on Enter.
+- Command parser supports: help, about, skills, projects, blog, contact, resume, clear, classic, whoami, sudo hire me.
+- Command input is trimmed and case-insensitive (`HELP`, `Help`, and `help` all resolve).
+- Command aliases: `stack → skills`, `logs → blog`, `articles → blog`, `mail → contact`, `hire → sudo hire me`.
+- Unknown commands render a localized not-found prompt.
+- Command outputs support zh / en via centralized `lib/translations.ts`.
+- skills, projects, and blog command outputs reuse local mock data.
+- clear clears Console output.
+- CLI-to-Main-App linkage scrolls or highlights matching sections when Main App is open and Console is not maximized.
+- Console maximized mode stays pure terminal with no Main App linkage.
+- Command history navigation with Up / Down arrows.
+- Console input focuses on mount and refocuses after submission.
+- Console output auto-scrolls to bottom.
+- Terminal prompt format: `visitor@dev-os:~ $` with semantic segment colors.
+- Native caret color (emerald) in both light and dark themes.
+- Input field stripped of default form styling.
+
+**Deferred to future phases:**
+- Real filesystem navigation (`cd`, `ls`, `pwd`, etc.)
+- Dynamic path changes in the terminal prompt
+- AI natural language command parsing
+- Autocomplete / tab completion
+- Structured card output in Console
+
+**Files changed:**
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+- `docs/DEVELOPMENT_RULES.md`
+
+**Design impact:**
+- Console App now functions as a complete lightweight terminal within the Personal Developer OS.
+- Phase 4 CLI system is accepted as the current command-line baseline.
+
+**Follow-up notes:**
+- Phase 4 is now completed. Ready to proceed to Phase 5 when explicitly requested.
+- No further Phase 4 work unless bugs are found.
+
+### 2026-06-03 - Claude Code
 **Summary:** Phase 4.4.1 only. Polished Console input prompt and caret for a more authentic terminal aesthetic.
 
 **Phase 4.4.1 deliverables:**

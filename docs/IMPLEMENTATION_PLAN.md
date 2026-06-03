@@ -44,21 +44,24 @@
 - Active app state determines foreground window stacking.
 - Switching to Portfolio while Console is maximized restores Console to its dock state so Main App is visible.
 
-## Phase 4: CLI Command System IN PROGRESS
-- Command parser
-- Command history
+## Phase 4: CLI Command System ✅ COMPLETED
+- Command parser with trim and case-insensitive matching
+- Command history with Up / Down arrow navigation
 - Implement: help, about, skills, projects, blog, contact, resume, clear, classic, whoami, sudo hire me
+- Command aliases: stack → skills, logs → blog, articles → blog, mail → contact, hire → sudo hire me
+- Unknown command handling with localized not-found prompt
 - Link to Main App scroll or highlight
-- Console maximized pure terminal mode
+- Console maximized pure terminal mode (no linkage)
+- Terminal prompt: visitor@dev-os:~ $
+- Input caret polish (native caret, no custom block cursor)
 
 ### Phase 4.1 / 4.2: Basic CLI Skeleton & Text Outputs COMPLETED
 - Console App accepts typed commands and executes on Enter.
 - Console App renders command history and plain-text command output.
 - Basic parser supports: help, about, skills, projects, blog, contact, resume, clear, classic, whoami, sudo hire me.
-- Command outputs support zh / en.
+- Command outputs support zh / en via centralized translations.
 - skills / projects / blog commands reuse local mock data.
 - clear and unknown command handling are implemented.
-- Main App linkage remains deferred to a later Phase 4 step.
 
 ### Phase 4.3: CLI-to-Main-App Section Linkage COMPLETED
 - about / skills / projects / blog / contact / sudo hire me can scroll Main App to the matching section when linkage conditions are met.
@@ -66,6 +69,21 @@
 - Linkage only runs when Main App is open and not minimized, and Console App is not maximized.
 - Console maximized mode remains pure terminal output with no Main App linkage.
 - Linked sections receive a brief lightweight highlight.
+
+### Phase 4.4: CLI Experience Polish COMPLETED
+- Command input is trimmed before execution.
+- Command recognition is case-insensitive.
+- Added command aliases: stack, logs, articles, mail, hire.
+- Added keyboard command history navigation with Up / Down arrows.
+- Console input focuses on mount and refocuses after command submission.
+- Console output auto-scrolls to bottom on new output.
+
+### Phase 4.4.1: Console Prompt & Cursor Polish COMPLETED
+- Replaced generic prefix with structured terminal prompt: `visitor@dev-os:~ $`.
+- Prompt segments use semantic colors (accent for user/host, secondary for path).
+- Removed custom block cursor; using native caret with emerald color.
+- Input field stripped of default border, background, outline, and shadow.
+- Command history output renders the same prompt prefix.
 
 ## Phase 5: Visual Polish
 - macos preset visual optimization

@@ -53,7 +53,14 @@ data/               → Mock data
 - `pnpm-lock.yaml` is the single source of truth for lockfile.
 - Always run `pnpm install` after pulling changes that may update dependencies.
 
-## 7. Quality Rules
+## 7. CLI / Console Rules
+- All CLI command outputs must support zh / en through `lib/translations.ts`.
+- CLI prompt is currently static: `visitor@dev-os:~ $`.
+- Dynamic path changes, real filesystem commands (`cd`, `ls`, `pwd`), and AI natural language parsing are deferred to future phases.
+- Console App must remain a plain-text terminal in both docked and maximized states.
+- Console maximized mode stays pure terminal with no Main App linkage.
+
+## 8. Quality Rules
 - Run `pnpm lint` after meaningful changes.
 - Run `pnpm build` when possible.
 - Fix TypeScript errors.
