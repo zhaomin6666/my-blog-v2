@@ -2,6 +2,7 @@
 
 import { useCallback, useRef } from 'react';
 import { Layout, Terminal } from 'lucide-react';
+import type { BlogPostMeta } from '@/lib/blog/blog-types';
 import { useSettings } from '@/lib/settings-context';
 import { useWindowManager } from '@/hooks/useWindowManager';
 import { t } from '@/lib/translations';
@@ -12,7 +13,11 @@ import { AppWindow } from './AppWindow';
 import { MainApp, MainAppHandle } from '@/components/main/MainApp';
 import { ConsoleApp } from '@/components/console/ConsoleApp';
 
-export function DeveloperOS() {
+interface DeveloperOSProps {
+  blogPosts: BlogPostMeta[];
+}
+
+export function DeveloperOS({ blogPosts }: DeveloperOSProps) {
   const { lang, stylePreset, mounted } = useSettings();
   const {
     main,
@@ -80,6 +85,7 @@ export function DeveloperOS() {
             <MainApp
               ref={mainAppRef}
               onOpenTerminal={openConsoleFromMain}
+              blogPosts={blogPosts}
             />
           </AppWindow>
         )}

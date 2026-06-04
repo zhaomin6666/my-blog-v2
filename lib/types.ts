@@ -41,6 +41,8 @@ export interface Blog {
   summary: LocalizedText;
   tags: string[];
   link?: string;
+  /** Slug for linking to /blog/[slug]. Must match a content/blog/*.md file. */
+  slug?: string;
 }
 
 export interface SkillCategory {

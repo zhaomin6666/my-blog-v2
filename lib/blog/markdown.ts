@@ -2,8 +2,11 @@
  * Markdown rendering utilities.
  *
  * Phase 6.1 scope: basic helpers for frontmatter parsing and raw content access.
- * Phase 6.2 will add HTML rendering (remark / remark-html).
+ * Phase 6.2 scope: HTML rendering via remark / remark-html.
  */
+
+import { remark } from 'remark';
+import remarkHtml from 'remark-html';
 
 /**
  * Extract a plain-text excerpt from Markdown content.
@@ -70,4 +73,39 @@ export function formatBlogDate(dateStr: string, lang: 'zh' | 'en' = 'zh'): strin
     month: 'long',
     day: 'numeric',
   });
+}
+
+/**
+ * Render Markdown content to sanitized HTML string.
+ *
+ * Uses remark + remark-html. In a future CMS phase, additional
+ * sanitization (e.g. DOMPurify) should be added for untrusted content.
+ *
+ * @param content Raw Markdown content
+ * @returns HTML string
+ */
+export async function renderMarkdownToHtml(content: string): Promise<string> {
+  const result = await remark().use(remarkHtml).process(content);
+  return String(result);
+}
+
+/**
+ * Calculate estimated reading time in minutes.
+ *
+ * Assumes ~250 CJK characters or ~200 English words per minute.
+ */
+export function estimateReadingTime(content: string): number {
+  const trimmed = content.trim();
+  if (!trimmed) return 1;
+
+  // Count CJK characters
+  const cjkCount = (trimmed.match(/[一-鿿　-〿＀-￯]/g) || []).length;
+  // Count words (non-CJK sequences)
+  const wordCount = trimmed.replace(/[一-鿿　-〿＀-￯]/g, ' ').split(/\s+/).filter(Boolean).length;
+
+  const cjkWpm = 400;
+  const enWpm = 200;
+
+  const minutes = Math.ceil(cjkCount / cjkWpm + wordCount / enWpm);
+  return Math.max(1, minutes);
 }

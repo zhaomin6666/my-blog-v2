@@ -2,7 +2,6 @@ import { Lang } from './types';
 
 const translations = {
   zh: {
-    // Status Bar
     'status.portfolio': 'Portfolio',
     'status.terminal': '终端',
     'status.switchToMinimal': '切换极简',
@@ -10,43 +9,35 @@ const translations = {
     'status.stylePresetAbbrevMacos': 'A',
     'status.stylePresetAbbrevVercel': 'B',
 
-    // Theme
-    'theme.light': 'Light',
-    'theme.dark': 'Dark',
+    'theme.light': '浅色',
+    'theme.dark': '深色',
     'theme.lightAbbrev': 'LGT',
     'theme.darkAbbrev': 'DRK',
 
-    // Language
     'lang.en': 'EN',
     'lang.zh': 'ZH',
 
-    // Style Preset
     'stylePreset.macos': 'macOS',
     'stylePreset.vercel': 'Vercel',
 
-    // Window Titles
     'window.main.title': 'Portfolio.app',
     'window.console.title.macos': 'visitor@DevOS: ~',
     'window.console.title.vercel': 'Terminal.app',
 
-    // Window ARIA
     'window.aria.close': '关闭',
     'window.aria.minimize': '最小化',
     'window.aria.maximize': '最大化',
 
-    // Desktop
     'desktop.openMain': 'Portfolio',
     'desktop.openConsole': '终端',
     'desktop.welcome': 'Personal Dev OS',
 
-    // Console
     'console.welcome': 'Personal DevOS Terminal v1.0.0',
     'console.help': '输入 "help" 查看可用命令。',
     'console.prompt': 'visitor@dev-os:~ $',
     'console.notFound': '命令未找到。输入 `help` 查看可用命令。',
     'console.macosWelcome': (...args: string[]) => `Last login: ${args[0]} on ttys001\nvisitor@dev-os:~ $ welcome`,
 
-    // Nav — App module navigation (not normal website nav)
     'nav.overview': 'Overview',
     'nav.profile': 'Profile',
     'nav.stack': 'Stack',
@@ -54,47 +45,59 @@ const translations = {
     'nav.logs': 'Logs',
     'nav.contact': 'Contact',
 
-    // Hero — Dashboard widget style
     'hero.title': '面向 AI 时代构建产品的后端开发者',
     'hero.subtitle': '我专注于构建可靠的后端系统、AI 驱动的应用，以及独立数字产品。这个网站既是我的作品集，也是我的技术笔记与产品实验室。',
     'hero.badge': '后端开发者 · AI 构建者 · 独立开发者',
-    'hero.cta.projects': 'View Projects',
-    'hero.cta.terminal': 'Open Terminal',
+    'hero.cta.projects': '查看项目',
+    'hero.cta.terminal': '打开终端',
 
-    // About — Profile panel
-    'about.description': '我是一名后端开发者，专注于构建稳定可靠的业务系统，并持续探索 AI 原生应用。我关注架构设计、工程实践、产品思维，以及如何借助 AI 工具更高效地完成独立交付。',
+    'about.description': '我是后端开发者，专注于构建稳定可靠的业务系统，并持续探索 AI 原生应用。我关注架构设计、工程实践、产品思维，以及如何借助 AI 工具更高效地完成独立交付。',
     'about.role': '后端开发者',
     'about.location': 'Location',
     'about.focus': 'Focus',
 
-    // Skills — Skill matrix / system config
     'skills.title': 'System Stack',
     'skills.module': '模块',
 
-    // Projects — Service modules / app cards
     'projects.title': 'Services',
-    'projects.status.building': 'Building',
-    'projects.status.production': 'Production',
+    'projects.status.building': '构建中',
+    'projects.status.production': '生产运行',
     'projects.status.mvp': 'MVP',
     'projects.techStack': 'Tech Stack',
     'projects.viewProject': '查看项目',
 
-    // Blog — Engineering logs
     'blog.title': 'Engineering Logs',
     'blog.logLevel': 'INFO',
     'blog.readMore': '查看详情',
     'blog.tags': 'Tags',
+    'blog.viewAll': '查看全部日志',
+    'blog.empty': '暂无已发布的日志。',
+    'blog.home': '首页',
+    'blog.logs': '日志',
+    'blog.subtitle': '技术日志、工程笔记和开发洞察。',
+    'blog.count': '篇',
+    'blog.updated': '更新',
+    'blog.back': '返回',
+    'blog.backToLogs': '返回日志列表',
+    'blog.minRead': '分钟阅读',
+    'blog.notFoundTitle': '日志不存在',
+    'blog.notFoundDescription': '未找到该日志条目，或该文章未公开可见。',
+    'blog.returnToLogs': '返回工程日志',
+    'blog.footer': 'Personal Dev OS · Engineering Logs',
+    'blog.ariaBackHome': '返回首页',
+    'blog.ariaToggleThemeToLight': '切换到浅色模式',
+    'blog.ariaToggleThemeToDark': '切换到深色模式',
+    'blog.ariaToggleLanguage': '切换语言',
+    'blog.ariaToggleStyle': '切换风格预设',
 
-    // Contact — Contact channels / endpoint panel
     'contact.title': 'Contact Channels',
     'contact.email': 'Email',
     'contact.github': 'GitHub',
     'contact.linkedin': 'LinkedIn',
     'contact.resume': 'Resume',
-    'contact.comingSoon': 'Coming Soon',
+    'contact.comingSoon': '即将补充',
     'contact.endpoint': 'Endpoint',
 
-    // Sections (legacy, kept for compatibility)
     'section.hero': '面向 AI 时代构建产品的后端开发者',
     'section.about': '关于',
     'section.skills': '技能',
@@ -102,11 +105,9 @@ const translations = {
     'section.blog': '博客',
     'section.contact': '联系',
 
-    // Contact (legacy)
     'contact.resumeLabel': '简历',
     'contact.downloadPdf': '下载 PDF',
 
-    // Commands descriptions
     'cmd.help.desc': '显示帮助信息',
     'cmd.about.desc': '关于我',
     'cmd.skills.desc': '技能栈',
@@ -119,7 +120,6 @@ const translations = {
     'cmd.whoami.desc': '当前用户',
     'cmd.sudo.desc': 'sudo hire me',
 
-    // Command outputs
     'cmd.help.header': '可用命令：',
     'cmd.about.output': '后端开发者，专注于构建稳定可靠的业务系统，并持续探索 AI 原生应用。',
     'cmd.skills.output': 'Java, Spring Boot, React, Next.js, LLM Apps, RAG, Docker...',
@@ -128,7 +128,7 @@ const translations = {
     'cmd.contact.output': 'Email, GitHub, LinkedIn',
     'cmd.resume.output': 'Resume download coming soon.',
     'cmd.classic.output': '正在切换焦点到 Portfolio...',
-    'cmd.whoami.output': '你是一位好奇的访问者。我是一个正在构建 AI 时代产品的后端开发者。',
+    'cmd.whoami.output': '你是一位好奇的访问者。我是一名正在构建 AI 时代产品的后端开发者。',
     'cmd.sudo.hireMe': '权限已授予。正在打开联系通道...',
     'cmd.sudo.error': 'sudo: 命令未找到或权限不足',
     'cmd.skills.header': '技能清单：',
@@ -140,7 +140,6 @@ const translations = {
     'cmd.contact.statusComingSoon': '即将补充',
   },
   en: {
-    // Status Bar
     'status.portfolio': 'Portfolio',
     'status.terminal': 'Terminal',
     'status.switchToMinimal': 'Switch to Minimal',
@@ -148,43 +147,35 @@ const translations = {
     'status.stylePresetAbbrevMacos': 'A',
     'status.stylePresetAbbrevVercel': 'B',
 
-    // Theme
     'theme.light': 'Light',
     'theme.dark': 'Dark',
     'theme.lightAbbrev': 'LGT',
     'theme.darkAbbrev': 'DRK',
 
-    // Language
     'lang.en': 'EN',
     'lang.zh': 'ZH',
 
-    // Style Preset
     'stylePreset.macos': 'macOS',
     'stylePreset.vercel': 'Vercel',
 
-    // Window Titles
     'window.main.title': 'Portfolio.app',
     'window.console.title.macos': 'visitor@DevOS: ~',
     'window.console.title.vercel': 'Terminal.app',
 
-    // Window ARIA
     'window.aria.close': 'Close',
     'window.aria.minimize': 'Minimize',
     'window.aria.maximize': 'Maximize',
 
-    // Desktop
     'desktop.openMain': 'Portfolio',
     'desktop.openConsole': 'Terminal',
     'desktop.welcome': 'Personal Dev OS',
 
-    // Console
     'console.welcome': 'Personal DevOS Terminal v1.0.0',
     'console.help': 'Type "help" to see available commands.',
     'console.prompt': 'visitor@dev-os:~ $',
     'console.notFound': 'Command not found. Type `help` to see available commands.',
     'console.macosWelcome': (...args: string[]) => `Last login: ${args[0]} on ttys001\nvisitor@dev-os:~ $ welcome`,
 
-    // Nav — App module navigation (not normal website nav)
     'nav.overview': 'Overview',
     'nav.profile': 'Profile',
     'nav.stack': 'Stack',
@@ -192,24 +183,20 @@ const translations = {
     'nav.logs': 'Logs',
     'nav.contact': 'Contact',
 
-    // Hero — Dashboard widget style
     'hero.title': 'Backend Developer building AI-era products.',
     'hero.subtitle': 'I build reliable backend systems, AI-powered applications, and independent digital products. This site is my portfolio, technical notebook, and product lab.',
     'hero.badge': 'Backend Developer · AI Builder · Indie Hacker',
     'hero.cta.projects': 'View Projects',
     'hero.cta.terminal': 'Open Terminal',
 
-    // About — Profile panel
     'about.description': 'I am a backend developer focused on building reliable business systems and exploring AI-native applications. I care about clean architecture, practical engineering, product thinking, and using AI tools to ship faster as an independent builder.',
     'about.role': 'Backend Developer',
     'about.location': 'Location',
     'about.focus': 'Focus',
 
-    // Skills — Skill matrix / system config
     'skills.title': 'System Stack',
     'skills.module': 'Module',
 
-    // Projects — Service modules / app cards
     'projects.title': 'Services',
     'projects.status.building': 'Building',
     'projects.status.production': 'Production',
@@ -217,13 +204,30 @@ const translations = {
     'projects.techStack': 'Tech Stack',
     'projects.viewProject': 'View Project',
 
-    // Blog — Engineering logs
     'blog.title': 'Engineering Logs',
     'blog.logLevel': 'INFO',
     'blog.readMore': 'Read More',
     'blog.tags': 'Tags',
+    'blog.viewAll': 'View all logs',
+    'blog.empty': 'No published logs found.',
+    'blog.home': 'Home',
+    'blog.logs': 'Logs',
+    'blog.subtitle': 'Technical logs, engineering notes, and development insights.',
+    'blog.count': 'entries',
+    'blog.updated': 'Updated',
+    'blog.back': 'Back',
+    'blog.backToLogs': 'Back to logs',
+    'blog.minRead': 'min read',
+    'blog.notFoundTitle': 'Log entry not found',
+    'blog.notFoundDescription': 'The requested log entry could not be found or is not publicly available.',
+    'blog.returnToLogs': 'Back to Engineering Logs',
+    'blog.footer': 'Personal Dev OS · Engineering Logs',
+    'blog.ariaBackHome': 'Back home',
+    'blog.ariaToggleThemeToLight': 'Switch to light',
+    'blog.ariaToggleThemeToDark': 'Switch to dark',
+    'blog.ariaToggleLanguage': 'Toggle language',
+    'blog.ariaToggleStyle': 'Toggle style preset',
 
-    // Contact — Contact channels / endpoint panel
     'contact.title': 'Contact Channels',
     'contact.email': 'Email',
     'contact.github': 'GitHub',
@@ -232,7 +236,6 @@ const translations = {
     'contact.comingSoon': 'Coming Soon',
     'contact.endpoint': 'Endpoint',
 
-    // Sections (legacy, kept for compatibility)
     'section.hero': 'Backend Developer building AI-era products.',
     'section.about': 'About',
     'section.skills': 'Skills',
@@ -240,11 +243,9 @@ const translations = {
     'section.blog': 'Blog',
     'section.contact': 'Contact',
 
-    // Contact (legacy)
     'contact.resumeLabel': 'Resume',
     'contact.downloadPdf': 'Download PDF',
 
-    // Commands descriptions
     'cmd.help.desc': 'Show help information',
     'cmd.about.desc': 'About me',
     'cmd.skills.desc': 'Skills stack',
@@ -257,7 +258,6 @@ const translations = {
     'cmd.whoami.desc': 'Current user',
     'cmd.sudo.desc': 'sudo hire me',
 
-    // Command outputs
     'cmd.help.header': 'Available commands:',
     'cmd.about.output': 'Backend developer focused on building reliable business systems and exploring AI-native applications.',
     'cmd.skills.output': 'Java, Spring Boot, React, Next.js, LLM Apps, RAG, Docker...',
@@ -289,6 +289,8 @@ export function t(key: TranslationKey, lang: Lang, ...args: string[]): string {
   return value ?? key;
 }
 
-export function getAllTranslations(lang: Lang): Record<TranslationKey, string | ((...args: string[]) => string)> {
+export function getAllTranslations(
+  lang: Lang,
+): Record<TranslationKey, string | ((...args: string[]) => string)> {
   return translations[lang];
 }

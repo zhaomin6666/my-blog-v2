@@ -2,17 +2,32 @@ import { Blog } from '@/lib/types';
 
 export const blogs: Blog[] = [
   {
-    id: 'java-to-ai',
+    id: 'building-dev-os',
+    slug: 'building-personal-developer-os',
     title: {
-      zh: '从 Java 后端到 AI Agent 开发的学习路线',
-      en: 'Learning Path: From Java Backend to AI Agent Development',
+      zh: 'Building a Personal Developer OS',
+      en: 'Building a Personal Developer OS',
     },
-    date: '2024-12-15',
+    date: '2026-06-01',
     summary: {
-      zh: '记录从传统后端开发转向 AI 应用开发的完整学习路径，包括关键技术和实践建议。',
-      en: 'Documenting the complete learning path from traditional backend dev to AI application development, including key technologies and practical advice.',
+      zh: '记录 Personal Developer OS 的设计思路、架构拆分和阶段演进，以及为什么选择浏览器内的 OS 形态而非传统作品集。',
+      en: 'Documenting the design rationale, architecture breakdown, and phase evolution of the Personal Developer OS.',
     },
-    tags: ['AI', 'Java', 'Career'],
+    tags: ['Personal Site', 'Developer OS', 'Next.js'],
+  },
+  {
+    id: 'ai-agent-log',
+    slug: 'ai-agent-learning-log',
+    title: {
+      zh: 'AI Agent 开发学习记录',
+      en: 'AI Agent Development Learning Log',
+    },
+    date: '2026-05-20',
+    summary: {
+      zh: '记录从传统后端开发转向 AI Agent 开发过程中的关键技术点、工具链和学习路径。',
+      en: 'Key concepts, toolchains, and learning paths from traditional backend dev to AI Agent development.',
+    },
+    tags: ['AI', 'Agent', 'LangChain', 'LLM'],
   },
   {
     id: 'langchain-langgraph',
@@ -23,22 +38,9 @@ export const blogs: Blog[] = [
     date: '2025-01-20',
     summary: {
       zh: '深入理解两者的架构差异、适用场景，以及如何在项目中选择合适的方案。',
-      en: 'Deep dive into architectural differences, use cases, and how to choose the right approach for your project.',
+      en: 'Deep dive into architectural differences, use cases, and how to choose the right approach.',
     },
     tags: ['LangChain', 'LangGraph', 'AI'],
-  },
-  {
-    id: 'design-personal-site',
-    title: {
-      zh: '如何设计一个程序员的个人网站',
-      en: 'How to Design a Developer Personal Website',
-    },
-    date: '2025-03-10',
-    summary: {
-      zh: '从概念到实现，构建一个独特的开发者 OS，而非普通模板站。',
-      en: 'From concept to implementation, building a unique developer OS instead of a generic template site.',
-    },
-    tags: ['Design', 'Next.js', 'Portfolio'],
   },
   {
     id: 'rag-practice',

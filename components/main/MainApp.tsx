@@ -1,6 +1,7 @@
 'use client';
 
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
+import type { BlogPostMeta } from '@/lib/blog/blog-types';
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { MainSectionId } from '@/lib/types';
@@ -14,6 +15,7 @@ import { ContactSection } from './ContactSection';
 
 interface MainAppProps {
   onOpenTerminal?: () => void;
+  blogPosts: BlogPostMeta[];
 }
 
 export interface MainAppHandle {
@@ -21,7 +23,7 @@ export interface MainAppHandle {
 }
 
 export const MainApp = forwardRef<MainAppHandle, MainAppProps>(function MainApp(
-  { onOpenTerminal },
+  { onOpenTerminal, blogPosts },
   ref
 ) {
   const { stylePreset } = useSettings();
@@ -114,7 +116,7 @@ export const MainApp = forwardRef<MainAppHandle, MainAppProps>(function MainApp(
 
           {/* Blog */}
           <div ref={setSectionRef('blog')} className={sectionClassName('blog')}>
-            <BlogSection />
+            <BlogSection posts={blogPosts} />
           </div>
 
           {/* Contact */}

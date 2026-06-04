@@ -4,6 +4,10 @@ import type {
   BlogPostQueryOptions,
 } from './blog-types';
 
+export interface BlogPostLookupOptions {
+  includeDrafts?: boolean;
+}
+
 /**
  * BlogRepository interface.
  *
@@ -25,7 +29,10 @@ export interface BlogRepository {
    * Get a single full post by its unique slug.
    * Returns null if not found.
    */
-  getPostBySlug(slug: string): Promise<BlogPost | null>;
+  getPostBySlug(
+    slug: string,
+    options?: BlogPostLookupOptions,
+  ): Promise<BlogPost | null>;
 
   /**
    * Get all posts that include the given tag.

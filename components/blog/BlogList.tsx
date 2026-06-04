@@ -1,0 +1,45 @@
+import { FileText } from 'lucide-react';
+import type { BlogPostMeta } from '@/lib/blog/blog-types';
+import { getStyleTokens } from '@/lib/stylePresets';
+import { t } from '@/lib/translations';
+import type { StylePreset, Lang } from '@/lib/types';
+import { BlogCard } from './BlogCard';
+
+interface BlogListProps {
+  posts: BlogPostMeta[];
+  stylePreset: StylePreset;
+  lang: Lang;
+}
+
+export function BlogList({ posts, stylePreset, lang }: BlogListProps) {
+  const tokens = getStyleTokens(stylePreset);
+
+  if (posts.length === 0) {
+    return (
+      <div className={`flex flex-col items-center justify-center py-20 ${tokens.textSecondary}`}>
+        <FileText size={40} className="mb-4 opacity-40" />
+        <p className="text-sm">{t('blog.empty', lang)}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4 md:space-y-5">
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <h1 className={`text-xl md:text-2xl font-bold ${tokens.textPrimary}`}>
+            {t('blog.title', lang)}
+          </h1>
+        </div>
+        <span className={`text-xs ${tokens.textMuted}`}>
+          {posts.length} {t('blog.count', lang)}
+        </span>
+      </div>
+
+      {posts.map((post) => (
+        <BlogCard key={post.slug} post={post} stylePreset={stylePreset} lang={lang} />
+      ))}
+    </div>
+  );
+}

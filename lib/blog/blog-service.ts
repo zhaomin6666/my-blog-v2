@@ -1,4 +1,7 @@
-import type { BlogRepository } from './blog-repository';
+import type {
+  BlogPostLookupOptions,
+  BlogRepository,
+} from './blog-repository';
 import type {
   BlogPost,
   BlogPostLanguage,
@@ -39,9 +42,23 @@ export class BlogService {
 
   /**
    * Get a single full post by slug.
+   * By default this includes drafts for future preview/admin contexts.
    */
-  async getPostBySlug(slug: string): Promise<BlogPost | null> {
-    return this.repository.getPostBySlug(slug);
+  async getPostBySlug(
+    slug: string,
+    options?: BlogPostLookupOptions,
+  ): Promise<BlogPost | null> {
+    return this.repository.getPostBySlug(slug, {
+      includeDrafts: options?.includeDrafts ?? true,
+    });
+  }
+
+  /**
+   * Get a single published post by slug for public pages.
+   * Drafts are never returned.
+   */
+  async getPublishedPostBySlug(slug: string): Promise<BlogPost | null> {
+    return this.repository.getPostBySlug(slug, { includeDrafts: false });
   }
 
   /**

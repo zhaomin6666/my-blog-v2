@@ -10,7 +10,10 @@ import type {
   BlogPostQueryOptions,
   BlogPostStatus,
 } from './blog-types';
-import type { BlogRepository } from './blog-repository';
+import type {
+  BlogPostLookupOptions,
+  BlogRepository,
+} from './blog-repository';
 
 const BLOG_DIR = path.join(process.cwd(), 'content', 'blog');
 
@@ -175,7 +178,10 @@ export class FileBlogRepository implements BlogRepository {
     });
   }
 
-  async getPostBySlug(slug: string): Promise<BlogPost | null> {
+  async getPostBySlug(
+    slug: string,
+    options?: BlogPostLookupOptions,
+  ): Promise<BlogPost | null> {
     const filePath = path.join(BLOG_DIR, `${slug}.md`);
     const post = await this.parseFile(filePath, slug);
 
@@ -184,6 +190,10 @@ export class FileBlogRepository implements BlogRepository {
     // If the file exists but its frontmatter declares a different slug,
     // trust the frontmatter slug for lookup.
     if (post.slug !== slug) {
+      return null;
+    }
+
+    if (!options?.includeDrafts && post.status !== 'published') {
       return null;
     }
 

@@ -163,13 +163,24 @@
 - `FileBlogRepository` (server-side Markdown parser)
 - `BlogService` (unified API for pages, components, CLI)
 - Future-ready: swapping repository enables DB / CMS migration
-- Not yet connected to Main App Blog section or Console blog command
+- Homepage Main App Blog section now uses real blog metadata via `BlogService`
+- Console blog command remains deferred to Phase 6.3
 
-### Phase 6.2: Blog Pages (Deferred)
-- `/blog` listing page
-- `/blog/[slug]` detail page
-- Markdown rendering (remark / remark-html)
-- Blog layout with OS shell
+### Phase 6.2: Blog List / Article Reader ✅ COMPLETED
+- `/blog` listing page with Engineering Logs aesthetic
+- `/blog/[slug]` detail page with Markdown rendering
+- `BlogLayout` — OS-style top bar with theme/lang/preset toggles
+- `BlogList` / `BlogCard` — log entry cards with date, tags, series, lang
+- `BlogArticle` — article reader with meta info and reading time
+- Markdown rendering via `remark` + `remark-html`
+- Article typography styles in `globals.css`
+- `generateStaticParams` + `generateMetadata`
+- `notFound()` for missing slugs
+- Public article detail route is published-only; draft slugs return 404
+- Blog page UI copy and aria labels are localized through `lib/translations.ts`
+- Preserves light/dark, macos/vercel, mobile responsive
+- Homepage Main App Blog section integration completed in Phase 6.2.1
+- Console blog command remains deferred to Phase 6.3
 
 ### Phase 6.3: Main App & Console Integration (Deferred)
 - Replace `data/blogs.ts` mock data with `BlogService` calls

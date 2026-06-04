@@ -1,5 +1,78 @@
 # AI Development Changelog
 
+### 2026-06-04 - Codex
+**Summary:** Phase 6.2.2.2 completed. Fixed public draft visibility and blog-page localization gaps blocking Phase 6.2 acceptance.
+
+**Phase 6.2.2.2 deliverables:**
+- Updated `BlogRepository.getPostBySlug()` to accept lookup options with `includeDrafts`.
+- Updated `FileBlogRepository.getPostBySlug()` so public lookups return `null` for non-published posts unless `includeDrafts: true` is explicitly requested.
+- Updated `BlogService` with a public-safe `getPublishedPostBySlug()` method for blog pages.
+- Updated `app/blog/[slug]/page.tsx` so the detail page and `generateMetadata()` both read published-only posts.
+- Preserved `generateStaticParams()` as published-only.
+- Rebuilt blog page UI copy to use centralized translation keys in `lib/translations.ts`.
+- Updated `BlogLayout`, `BlogList`, `BlogCard`, `BlogArticle`, and blog not-found UI to consume translations instead of hardcoded visible copy and aria labels.
+- Added `BlogNotFoundClient` so the not-found page also respects `zh / en` via `useSettings()`.
+- Did not enter Phase 6.3 and did not modify the Console `blog` command.
+- Verified `pnpm lint` and `pnpm build` both pass.
+
+**Files changed:**
+- `app/blog/BlogPageClient.tsx`
+- `app/blog/[slug]/page.tsx`
+- `app/blog/[slug]/BlogArticlePageClient.tsx`
+- `app/blog/[slug]/not-found.tsx`
+- `components/blog/BlogLayout.tsx`
+- `components/blog/BlogList.tsx`
+- `components/blog/BlogCard.tsx`
+- `components/blog/BlogArticle.tsx`
+- `components/blog/BlogNotFoundClient.tsx`
+- `components/blog/index.ts`
+- `lib/blog/blog-repository.ts`
+- `lib/blog/blog-service.ts`
+- `lib/blog/file-blog-repository.ts`
+- `lib/translations.ts`
+- `docs/CHANGELOG_AI.md`
+
+**Architecture impact:**
+- Public blog pages now use a published-only lookup path, preventing direct access to draft slugs and preventing draft metadata leakage from `generateMetadata()`.
+- Repository layering is preserved; pages still do not read `content/blog` directly.
+- Preview/admin-style draft access remains extensible through `includeDrafts: true`, but is not exposed through public pages.
+
+**Follow-up notes:**
+- Console `blog` command remains unchanged and still uses legacy mock data until Phase 6.3.
+- Phase 6 remains in progress; do not mark it completed yet.
+
+### 2026-06-04 - Codex
+**Summary:** Phase 6.2.1 completed. Aligned the homepage Main App blog section with `BlogService` so it now renders the same published Markdown posts as `/blog`.
+
+**Phase 6.2.1 deliverables:**
+- Updated `app/page.tsx` to remain a Server Component and fetch published posts via `blogService.getPublishedPosts()`.
+- Updated `components/os/DeveloperOS.tsx` to accept serializable `blogPosts` props from the server page and pass them into the Main App.
+- Updated `components/main/MainApp.tsx` to pass real blog metadata into `BlogSection`.
+- Rebuilt `components/main/BlogSection.tsx` to render `BlogPostMeta[]` instead of `data/blogs.ts`.
+- Homepage blog cards now render published post metadata from `content/blog` through `BlogService`: title, summary, date, tags, series, and lang.
+- Homepage blog cards now link to `/blog/[slug]` with Next.js `Link`.
+- Preserved the existing Engineering Logs / Developer OS visual style while adding a localized empty state.
+- Preserved the homepage `View all logs` entry linking to `/blog`.
+- Left `data/blogs.ts` in place for backward compatibility because the Console `blog` command still depends on the legacy mock; that migration remains deferred to Phase 6.3.
+- Verified `pnpm lint` and `pnpm build` both pass.
+
+**Files changed:**
+- `app/page.tsx`
+- `components/os/DeveloperOS.tsx`
+- `components/main/MainApp.tsx`
+- `components/main/BlogSection.tsx`
+- `lib/translations.ts`
+- `docs/CHANGELOG_AI.md`
+
+**Architecture impact:**
+- Homepage Main App blog content now uses the same `BlogService -> FileBlogRepository -> content/blog` data flow as the `/blog` page.
+- Client components still do not read `fs`, `path`, `FileBlogRepository`, or `content/blog` directly.
+- The homepage no longer depends on `data/blogs.ts` for its blog list, eliminating the prior mismatch where `/blog` showed 2 published posts but the homepage still showed 4 mock entries.
+
+**Follow-up notes:**
+- Console `blog` command intentionally remains unchanged in this phase.
+- Phase 6 remains in progress; do not mark it completed yet.
+
 ### 2026-06-03 — Claude Code
 **Summary:** Phase 5 completed. Final acceptance and documentation archive for the entire Visual Polish phase.
 
@@ -963,6 +1036,79 @@ The project baseline is **Personal Developer OS**:
 **Follow-up notes:**
 - Phase 6.1 is complete. Ready for Phase 6.2 (blog pages) when explicitly requested.
 - Phase 6.3 will integrate BlogService into Main App Blog section and Console `blog` command.
+- Phase 6.4 will handle SEO, RSS, sitemap, and deployment.
+
+### 2026-06-03 — Claude Code
+**Summary:** Phase 6.2.1 completed. Added homepage blog entry links to connect Main App with blog pages.
+
+**Phase 6.2.1 deliverables:**
+- Updated `data/blogs.ts` — added `slug` field to `Blog` type and aligned first two entries with `content/blog/*.md` articles (`building-personal-developer-os`, `ai-agent-learning-log`).
+- Updated `lib/types.ts` — added optional `slug?: string` to `Blog` interface with documentation.
+- Updated `lib/translations.ts` — added `blog.viewAll` key (`查看全部日志` / `View all logs`).
+- Updated `components/main/BlogSection.tsx`:
+  - Each blog card with a `slug` is now wrapped in a Next.js `Link` to `/blog/[slug]`.
+  - Cards without a `slug` remain as static divs (no broken links).
+  - Hover state: subtle lift (`hover:-translate-y-0.5 hover:shadow-md`), arrow icon appears on hover for linked cards.
+  - Added "View all logs" footer link that navigates to `/blog`.
+  - Preserved existing Engineering Logs visual style (log viewer aesthetic).
+
+**Files changed:**
+- `data/blogs.ts` — updated
+- `lib/types.ts` — updated
+- `lib/translations.ts` — updated
+- `components/main/BlogSection.tsx` — updated
+- `docs/CHANGELOG_AI.md` — updated
+
+**Follow-up notes:**
+- Phase 6.2.1 is complete. Main App now has natural entry points into the blog system.
+- Phase 6.3 will formally integrate Main App Blog section with `BlogService` and update Console `blog` command.
+
+### 2026-06-03 — Claude Code
+**Summary:** Phase 6.2 completed. Blog list and article reader pages implemented.
+
+**Phase 6.2 deliverables:**
+- Created `app/blog/page.tsx` — blog listing page (Server Component), fetches data via `blogService.getPublishedPosts()`
+- Created `app/blog/BlogPageClient.tsx` — client wrapper reading `useSettings()` and rendering `BlogList`
+- Created `app/blog/[slug]/page.tsx` — article detail page with `generateStaticParams`, `generateMetadata`, and `notFound()`
+- Created `app/blog/[slug]/BlogArticlePageClient.tsx` — client wrapper for article rendering
+- Created `app/blog/[slug]/not-found.tsx` — 404 page for missing articles
+- Created `components/blog/BlogLayout.tsx` — OS-style layout with top bar, home link, theme/lang/preset toggles, footer
+- Created `components/blog/BlogList.tsx` — engineering logs list with entry count and empty state
+- Created `components/blog/BlogCard.tsx` — log entry card: title, summary, date, updatedAt, tags, series, lang badge
+- Created `components/blog/BlogArticle.tsx` — article reader: back link, title, summary, meta (date, reading time, lang), tags, series, rendered HTML body
+- Created `components/blog/index.ts` — barrel export for blog components
+- Updated `lib/blog/markdown.ts` — added `renderMarkdownToHtml()` via `remark` + `remark-html`, added `estimateReadingTime()`
+- Updated `lib/blog/index.ts` — exports `renderMarkdownToHtml` and `estimateReadingTime`
+- Updated `app/globals.css` — added `.blog-article-body` typography styles: h1/h2/h3, paragraphs, lists, blockquotes, code blocks, inline code, links, tables, images
+- Installed `remark` and `remark-html` dependencies via pnpm
+- Fixed `server-only` import chain issue by having client components import types from `blog-types` directly instead of through the barrel export
+
+**Architecture impact:**
+- Blog pages strictly use `BlogService` for data access; no direct file system reads in pages or components.
+- Server Components (`page.tsx`) fetch data; Client Components (`*Client.tsx`) read settings and render UI.
+- Static generation pre-renders all blog pages at build time.
+
+**Files changed:**
+- `app/blog/page.tsx` — new
+- `app/blog/BlogPageClient.tsx` — new
+- `app/blog/[slug]/page.tsx` — new
+- `app/blog/[slug]/BlogArticlePageClient.tsx` — new
+- `app/blog/[slug]/not-found.tsx` — new
+- `components/blog/BlogLayout.tsx` — new
+- `components/blog/BlogList.tsx` — new
+- `components/blog/BlogCard.tsx` — new
+- `components/blog/BlogArticle.tsx` — new
+- `components/blog/index.ts` — new
+- `lib/blog/markdown.ts` — updated
+- `lib/blog/index.ts` — updated
+- `app/globals.css` — updated
+- `package.json` — added `remark`, `remark-html`
+- `pnpm-lock.yaml` — updated
+- `docs/IMPLEMENTATION_PLAN.md` — updated
+- `docs/CHANGELOG_AI.md` — updated
+
+**Follow-up notes:**
+- Phase 6.2 is complete. Ready for Phase 6.3 (Main App / Console integration) when explicitly requested.
 - Phase 6.4 will handle SEO, RSS, sitemap, and deployment.
 
 ## Previous Entries
