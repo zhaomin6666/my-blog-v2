@@ -154,9 +154,16 @@
 - Global `prefers-reduced-motion` support: CSS media query disables all animations/transitions
 - No window behavior changes, no CLI changes, no new features, no new dependencies
 
-## Phase 6: Blog Publishing System + SEO + Deployment 🚧 IN PROGRESS
+## Phase 6: Blog Publishing System + SEO + Deployment COMPLETED
+- Blog Publishing System
+- CMS-ready Blog Architecture
+- Blog Pages
+- Main App / Console Blog Data Alignment
+- SEO metadata
+- sitemap / robots / RSS
+- Deployment readiness
 
-### Phase 6.1: CMS-ready Blog Content Architecture 🚧 IN PROGRESS
+### Phase 6.1: CMS-ready Blog Content Architecture COMPLETED
 - File-based Markdown blog (`content/blog/*.md`)
 - `BlogPost` / `BlogPostMeta` / `BlogPostFrontmatter` types
 - `BlogRepository` interface (abstracts storage mechanism)
@@ -211,6 +218,9 @@
 - Confirmed public SEO outputs exclude drafts
 - No business feature, CMS, DB, search, Console, CLI, or window-system changes
 
-### Phase 6.6: Final Production Polish (Deferred)
-- favicon / icons
-- final deployment smoke check
+### Phase 6.6: Final Phase 6 Archive COMPLETED
+- Confirmed Phase 6.1 through Phase 6.5 are complete
+- Archived Phase 6 as completed
+- Re-ran `pnpm lint` and `pnpm build`
+- Rechecked public blog routes, sitemap, robots, RSS, and draft safety
+- No business feature, CMS, DB, search, Console, CLI, or window-system changes

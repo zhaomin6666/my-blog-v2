@@ -1,6 +1,37 @@
 # AI Development Changelog
 
 ### 2026-06-04 - Codex
+**Summary:** Phase 6 completed. Final archive for the Blog Publishing System, SEO, RSS, sitemap, and deployment-readiness work.
+
+**Phase 6 completed scope:**
+- Phase 6.1 established the CMS-ready blog content architecture with `content/blog/*.md`, `BlogRepository`, `FileBlogRepository`, `BlogService`, and future DB / CMS repository swap points.
+- Phase 6.2 added `/blog`, `/blog/[slug]`, Markdown rendering, blog page localization cleanup, published-only article routing, homepage Blog section alignment, article links, and the "View all logs" entry.
+- Phase 6.3 connected Console `blog`, `logs`, and `articles` commands to the same server-provided published blog metadata used by `/blog` and the homepage.
+- Phase 6.4 added site-wide metadata, homepage metadata, blog metadata, article metadata, `sitemap.xml`, `robots.txt`, and `rss.xml`.
+- Phase 6.5 added `.env.example`, README, `docs/DEPLOYMENT.md`, production `NEXT_PUBLIC_SITE_URL` guidance, and deployment-prep checks.
+
+**Architecture archive:**
+- Current blog source: `content/blog/*.md`.
+- Upper layers consume blog data through `BlogService`.
+- `FileBlogRepository` remains the current storage implementation.
+- Future CMS / DB upgrades should add or swap a repository implementation, such as `DbBlogRepository`, without rewriting page, Console, or SEO consumers.
+- Public pages, homepage Blog section, Console blog commands, sitemap, and RSS all use published posts only.
+- Draft posts do not appear in public pages, Console output, sitemap, RSS, static params, or public metadata.
+
+**Files touched for final archive:**
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/DEVELOPMENT_RULES.md`
+- `docs/CHANGELOG_AI.md`
+
+**Verification:**
+- `README.md`, `docs/DEPLOYMENT.md`, and `.env.example` are present and complete for Phase 6 deployment readiness.
+- `pnpm lint` passed.
+- `pnpm build` passed.
+- Static export generated `/`, `/blog`, two published article pages, `/sitemap.xml`, `/robots.txt`, and `/rss.xml`.
+- Sitemap and RSS contain the two published posts and do not contain `draft`.
+- No CMS, DB, search, pagination, tag detail page, comments, analytics, Console/CLI core changes, or window-system changes were added.
+
+### 2026-06-04 - Codex
 **Summary:** Phase 6.5 completed. Added deployment-prep documentation and production configuration guidance for the Personal Developer OS.
 
 **Phase 6.5 deliverables:**

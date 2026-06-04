@@ -76,6 +76,7 @@ data/               → Mock data
 - Sitemap and RSS must fetch blog entries through `BlogService.getPublishedPosts()`.
 - Article metadata must fetch entries through `BlogService.getPublishedPostBySlug()` or another published-only service method.
 - Site URL and default SEO copy must be centralized in `lib/seo.ts`; production deployments should set `NEXT_PUBLIC_SITE_URL`.
+- Future CMS / DB upgrades should add or swap a `BlogRepository` implementation instead of rewriting page, Console, or SEO consumers.
 
 ## 10. Quality Rules
 - Run `pnpm lint` after meaningful changes.
