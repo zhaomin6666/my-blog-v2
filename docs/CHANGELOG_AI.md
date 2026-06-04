@@ -1,6 +1,34 @@
 # AI Development Changelog
 
 ### 2026-06-04 - Codex
+**Summary:** Phase 6.5 completed. Added deployment-prep documentation and production configuration guidance for the Personal Developer OS.
+
+**Phase 6.5 deliverables:**
+- Added `.env.example` with `NEXT_PUBLIC_SITE_URL=http://localhost:3000`.
+- Added `README.md` with project positioning, tech stack, local commands, blog content location, BlogService architecture summary, environment variable notes, and deployment-doc link.
+- Added `docs/DEPLOYMENT.md` with local development, local checks, static export notes, `NEXT_PUBLIC_SITE_URL` guidance, pre-deployment checklist, and platform-neutral deployment notes.
+- Confirmed `lib/seo.ts` centralizes `siteUrl` from `process.env.NEXT_PUBLIC_SITE_URL` with `http://localhost:3000` fallback.
+- Confirmed sitemap, robots, RSS, canonical URLs, and Open Graph URLs reuse the shared site URL config.
+- Re-ran deployment-prep checks with `pnpm lint` and `pnpm build`.
+- Rechecked public outputs for draft safety.
+- Did not add business features, CMS, DB, search, comments, analytics, Console/CLI changes, or window-system changes.
+
+**Files changed:**
+- `.env.example`
+- `README.md`
+- `docs/DEPLOYMENT.md`
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+- Static export generated `/`, `/blog`, published article pages, `/sitemap.xml`, `/robots.txt`, and `/rss.xml`.
+- Sitemap and RSS include the two published posts and do not contain `draft`.
+- `BlogService.getPublishedPosts()` remains the source for homepage, `/blog`, sitemap, RSS, and Console blog metadata.
+- `BlogService.getPublishedPostBySlug()` remains the published-only article lookup for public article pages and metadata.
+
+### 2026-06-04 - Codex
 **Summary:** Phase 6.4 completed. Added foundational SEO metadata and site discovery outputs for the Personal Developer OS and published blog system.
 
 **Phase 6.4 deliverables:**

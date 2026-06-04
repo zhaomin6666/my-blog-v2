@@ -201,6 +201,16 @@
 - Production deployments should set `NEXT_PUBLIC_SITE_URL`; local fallback is `http://localhost:3000`
 - No deployment, CMS, DB, search, Console, or window-system changes
 
-### Phase 6.5: Deployment Prep (Deferred)
+### Phase 6.5: Deployment Prep / Production Configuration COMPLETED
+- Added `.env.example` with `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
+- Added README with project positioning, tech stack, local commands, blog architecture, and deployment-doc link
+- Added `docs/DEPLOYMENT.md` with environment variable guidance and pre-deployment checklist
+- Confirmed site URL is centralized in `lib/seo.ts`
+- Confirmed sitemap / robots / RSS use the shared site URL config
+- Confirmed `pnpm lint` and `pnpm build` pass
+- Confirmed public SEO outputs exclude drafts
+- No business feature, CMS, DB, search, Console, CLI, or window-system changes
+
+### Phase 6.6: Final Production Polish (Deferred)
 - favicon / icons
-- deployment check
+- final deployment smoke check
