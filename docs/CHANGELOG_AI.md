@@ -1,6 +1,47 @@
 # AI Development Changelog
 
 ### 2026-06-04 - Codex
+**Summary:** Phase 6.4 completed. Added foundational SEO metadata and site discovery outputs for the Personal Developer OS and published blog system.
+
+**Phase 6.4 deliverables:**
+- Added centralized SEO config in `lib/seo.ts` with `siteName`, `siteUrl`, default title/description, author, `getAbsoluteUrl()`, and metadata helpers.
+- Added site-wide metadata in `app/layout.tsx`: `metadataBase`, title template, default description, authors, creator, robots, Open Graph, and Twitter card.
+- Added homepage metadata in `app/page.tsx`.
+- Rebuilt `/blog` metadata around Engineering Logs.
+- Expanded `/blog/[slug]` metadata to use `post.seoTitle || post.title`, `post.seoDescription || post.summary`, canonical URL, article Open Graph fields, published/modified time, and tags.
+- Added `app/sitemap.ts` for `/`, `/blog`, and all published blog posts.
+- Added `app/robots.ts` allowing public pages, reserving `/admin` and `/api/preview`, and pointing to `sitemap.xml`.
+- Added `app/rss.xml/route.ts` for published-post RSS with absolute post URLs, summaries, dates, and categories.
+- RSS and sitemap fetch posts through `BlogService.getPublishedPosts()`; article metadata uses `BlogService.getPublishedPostBySlug()`.
+- Draft posts are excluded from sitemap, RSS, article static params, public article pages, and public metadata.
+- Did not enter deployment, CMS, DB, search, comments, Console, CLI, or window-system work.
+
+**Files changed:**
+- `app/layout.tsx`
+- `app/page.tsx`
+- `app/blog/page.tsx`
+- `app/blog/[slug]/page.tsx`
+- `app/sitemap.ts`
+- `app/robots.ts`
+- `app/rss.xml/route.ts`
+- `lib/seo.ts`
+- `docs/DEVELOPMENT_RULES.md`
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+
+**Architecture impact:**
+- Site URL is centralized through `NEXT_PUBLIC_SITE_URL` with a local fallback of `http://localhost:3000`; production deployments should set the real domain.
+- Public SEO outputs remain layered through `BlogService` and do not read `content/blog` directly.
+- Phase 6 remains in progress because deployment prep is still deferred.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+- Static export generated `/sitemap.xml`, `/robots.txt`, and `/rss.xml`.
+- UTF-8 XML parsing passed for sitemap and RSS.
+- Sitemap and RSS contain the two published posts and do not contain `draft`.
+
+### 2026-06-04 - Codex
 **Summary:** Phase 6.3 completed. Console blog commands now use the same published Markdown blog metadata as `/blog` and the Main App Blog section.
 
 **Phase 6.3 deliverables:**

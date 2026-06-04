@@ -189,11 +189,18 @@
 - Legacy `data/blogs.ts` mock data removed because no runtime consumers remain
 - Client components still do not read `content/blog`, `fs`, `path`, or `FileBlogRepository`
 
-### Phase 6.4: SEO & Deployment (Deferred)
-- metadata / openGraph / twitter card
-- RSS feed
-- sitemap.xml
-- robots.txt
+### Phase 6.4: SEO Metadata / Sitemap / Robots / RSS COMPLETED
+- Centralized SEO config in `lib/seo.ts`
+- Site-wide metadata with title template, description, authors, robots, Open Graph, and Twitter card
+- Homepage metadata aligned with Personal Developer OS positioning
+- `/blog` metadata for Engineering Logs
+- `/blog/[slug]` metadata uses published-only article data with seoTitle / seoDescription fallbacks
+- `sitemap.xml` includes `/`, `/blog`, and published blog posts only
+- `robots.txt` allows public pages, reserves `/admin` and `/api/preview`, and points to sitemap
+- `rss.xml` includes published blog posts only with absolute URLs
+- Production deployments should set `NEXT_PUBLIC_SITE_URL`; local fallback is `http://localhost:3000`
+- No deployment, CMS, DB, search, Console, or window-system changes
+
+### Phase 6.5: Deployment Prep (Deferred)
 - favicon / icons
-- build check
 - deployment check

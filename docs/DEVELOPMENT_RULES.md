@@ -71,7 +71,13 @@ data/               → Mock data
 - Blog metadata displayed by the Console must come from `BlogService` and be passed into client components as serializable props.
 - Client components may consume server-provided `BlogPostMeta[]`, but must not import `fs`, `path`, `FileBlogRepository`, or Markdown files directly.
 
-## 9. Quality Rules
+## 9. SEO / Site Discovery Rules
+- Public SEO outputs (`metadata`, `sitemap.xml`, `robots.txt`, `rss.xml`) must not expose draft content.
+- Sitemap and RSS must fetch blog entries through `BlogService.getPublishedPosts()`.
+- Article metadata must fetch entries through `BlogService.getPublishedPostBySlug()` or another published-only service method.
+- Site URL and default SEO copy must be centralized in `lib/seo.ts`; production deployments should set `NEXT_PUBLIC_SITE_URL`.
+
+## 10. Quality Rules
 - Run `pnpm lint` after meaningful changes.
 - Run `pnpm build` when possible.
 - Fix TypeScript errors.
@@ -79,7 +85,7 @@ data/               → Mock data
 - Avoid unnecessary third-party libraries.
 - Use animations sparingly.
 
-## 9. Visual Maintenance Rules
+## 11. Visual Maintenance Rules
 - Any visual change must be verified under **both** `macos` and `vercel` presets.
 - Any color or background change must be verified under **both** `light` and `dark` themes.
 - Any layout change must be checked on **desktop, tablet (768px), and mobile (360px–430px)**.
