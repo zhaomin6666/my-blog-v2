@@ -34,17 +34,6 @@ export interface Project {
   link?: string;
 }
 
-export interface Blog {
-  id: string;
-  title: LocalizedText;
-  date: string;
-  summary: LocalizedText;
-  tags: string[];
-  link?: string;
-  /** Slug for linking to /blog/[slug]. Must match a content/blog/*.md file. */
-  slug?: string;
-}
-
 export interface SkillCategory {
   category: LocalizedText;
   items: string[];

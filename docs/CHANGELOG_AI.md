@@ -1,6 +1,38 @@
 # AI Development Changelog
 
 ### 2026-06-04 - Codex
+**Summary:** Phase 6.3 completed. Console blog commands now use the same published Markdown blog metadata as `/blog` and the Main App Blog section.
+
+**Phase 6.3 deliverables:**
+- Passed `blogPosts` from `app/page.tsx` / `DeveloperOS` into `ConsoleApp`.
+- Updated `executeCommand()` to accept a serializable command context with `lang` and `blogPosts`.
+- Updated the `blog` command to render real `BlogPostMeta[]` entries: title, summary, date, tags, series, and `/blog/[slug]` route.
+- Kept `logs` and `articles` aliases mapped to the same `blog` command output.
+- Preserved existing command behavior for `help`, `clear`, `whoami`, `skills`, `projects`, `contact`, `resume`, `classic`, and `sudo hire me`.
+- Removed the legacy `data/blogs.ts` mock file because no runtime consumers remained.
+- Did not add CMS, DB, RSS, sitemap, search, pagination, terminal routing, or new open-post commands.
+
+**Files changed:**
+- `components/os/DeveloperOS.tsx`
+- `components/console/ConsoleApp.tsx`
+- `lib/commands.ts`
+- `lib/types.ts`
+- `docs/DEVELOPMENT_RULES.md`
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+- `data/blogs.ts` (removed)
+
+**Architecture impact:**
+- The Console now follows the same data flow as the homepage: Server Component reads via `BlogService`, client components receive serializable blog metadata, and command execution only consumes that context.
+- Client components still do not import `fs`, `path`, `FileBlogRepository`, or `content/blog` directly.
+- `commands.ts` does not read Markdown files and no longer imports legacy blog mock data.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+- Local homepage and `/blog` responses both include the two published routes: `/blog/building-personal-developer-os` and `/blog/ai-agent-learning-log`.
+
+### 2026-06-04 - Codex
 **Summary:** Phase 6.2.2.2 completed. Fixed public draft visibility and blog-page localization gaps blocking Phase 6.2 acceptance.
 
 **Phase 6.2.2.2 deliverables:**

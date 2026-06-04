@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
+import type { BlogPostMeta } from '@/lib/blog/blog-types';
 import { useSettings } from '@/lib/settings-context';
 import { ConsoleOutputLine } from '@/lib/types';
 import { generateId } from '@/lib/utils';
@@ -11,10 +12,11 @@ import { ConsoleOutput } from './ConsoleOutput';
 import { ConsoleInput } from './ConsoleInput';
 
 interface ConsoleAppProps {
+  blogPosts: BlogPostMeta[];
   onCommandResult?: (result: CommandResult) => void;
 }
 
-export function ConsoleApp({ onCommandResult }: ConsoleAppProps) {
+export function ConsoleApp({ blogPosts, onCommandResult }: ConsoleAppProps) {
   const { lang, stylePreset } = useSettings();
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>([]);
@@ -53,7 +55,7 @@ export function ConsoleApp({ onCommandResult }: ConsoleAppProps) {
       { id: generateId(), type: 'input', content: trimmed },
     ];
 
-    const result = executeCommand(trimmed, lang);
+    const result = executeCommand(trimmed, { lang, blogPosts });
 
     if (result.action === 'clear') {
       setLines([]);
@@ -72,7 +74,7 @@ export function ConsoleApp({ onCommandResult }: ConsoleAppProps) {
     setLines((prev) => [...prev, ...nextLines]);
     onCommandResult?.(result);
     setInput('');
-  }, [input, lang, onCommandResult]);
+  }, [blogPosts, input, lang, onCommandResult]);
 
   const handleHistoryPrevious = useCallback(() => {
     if (history.length === 0) return;

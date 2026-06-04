@@ -1,6 +1,6 @@
-import { blogs } from '@/data/blogs';
 import { projects } from '@/data/projects';
 import { skills } from '@/data/skills';
+import type { BlogPostMeta } from './blog/blog-types';
 import { Lang, MainSectionId, ProjectStatus } from './types';
 import { t } from './translations';
 
@@ -17,7 +17,12 @@ export type CommandResult = {
 type CommandDefinition = {
   name: string;
   descriptionKey: CommandDescriptionKey;
-  run: (lang: Lang) => CommandResult;
+  run: (context: CommandContext) => CommandResult;
+};
+
+export type CommandContext = {
+  lang: Lang;
+  blogPosts: BlogPostMeta[];
 };
 
 type CommandDescriptionKey =
@@ -85,13 +90,26 @@ function formatProjects(lang: Lang) {
   ].join('\n');
 }
 
-function formatBlogs(lang: Lang) {
+function formatBlogs(lang: Lang, posts: BlogPostMeta[]) {
+  if (posts.length === 0) {
+    return [t('cmd.blog.header', lang), t('blog.empty', lang)].join('\n');
+  }
+
   return [
     t('cmd.blog.header', lang),
-    ...blogs.map((blog) => {
-      return `- ${blog.date}  ${blog.title[lang]} [${blog.tags.join(', ')}]`;
+    ...posts.map((post, index) => {
+      const meta = [post.date, post.series].filter(Boolean).join(' - ');
+      const tags = post.tags.length > 0 ? post.tags.join(', ') : '-';
+
+      return [
+        `${index + 1}. ${post.title}`,
+        `   ${post.summary}`,
+        `   ${meta}`,
+        `   ${t('blog.tags', lang)}: ${tags}`,
+        `   /blog/${post.slug}`,
+      ].join('\n');
     }),
-  ].join('\n');
+  ].join('\n\n');
 }
 
 function formatContact(lang: Lang) {
@@ -108,7 +126,7 @@ const commandDefinitions: CommandDefinition[] = [
   {
     name: 'help',
     descriptionKey: 'cmd.help.desc',
-    run: (lang) => {
+    run: ({ lang }) => {
       const rows = commandDefinitions.map((item) => {
         return `  ${item.name.padEnd(12)} ${t(item.descriptionKey, lang)}`;
       });
@@ -119,32 +137,32 @@ const commandDefinitions: CommandDefinition[] = [
   {
     name: 'about',
     descriptionKey: 'cmd.about.desc',
-    run: (lang) => command(t('cmd.about.output', lang), { navigationTarget: 'about' }),
+    run: ({ lang }) => command(t('cmd.about.output', lang), { navigationTarget: 'about' }),
   },
   {
     name: 'skills',
     descriptionKey: 'cmd.skills.desc',
-    run: (lang) => command(formatSkills(lang), { navigationTarget: 'skills' }),
+    run: ({ lang }) => command(formatSkills(lang), { navigationTarget: 'skills' }),
   },
   {
     name: 'projects',
     descriptionKey: 'cmd.projects.desc',
-    run: (lang) => command(formatProjects(lang), { navigationTarget: 'projects' }),
+    run: ({ lang }) => command(formatProjects(lang), { navigationTarget: 'projects' }),
   },
   {
     name: 'blog',
     descriptionKey: 'cmd.blog.desc',
-    run: (lang) => command(formatBlogs(lang), { navigationTarget: 'blog' }),
+    run: ({ lang, blogPosts }) => command(formatBlogs(lang, blogPosts), { navigationTarget: 'blog' }),
   },
   {
     name: 'contact',
     descriptionKey: 'cmd.contact.desc',
-    run: (lang) => command(formatContact(lang), { navigationTarget: 'contact' }),
+    run: ({ lang }) => command(formatContact(lang), { navigationTarget: 'contact' }),
   },
   {
     name: 'resume',
     descriptionKey: 'cmd.resume.desc',
-    run: (lang) => command(t('cmd.resume.output', lang)),
+    run: ({ lang }) => command(t('cmd.resume.output', lang)),
   },
   {
     name: 'clear',
@@ -154,7 +172,7 @@ const commandDefinitions: CommandDefinition[] = [
   {
     name: 'classic',
     descriptionKey: 'cmd.classic.desc',
-    run: (lang) => command(t('cmd.classic.output', lang), {
+    run: ({ lang }) => command(t('cmd.classic.output', lang), {
       navigationTarget: 'overview',
       activateMain: true,
     }),
@@ -162,12 +180,12 @@ const commandDefinitions: CommandDefinition[] = [
   {
     name: 'whoami',
     descriptionKey: 'cmd.whoami.desc',
-    run: (lang) => command(t('cmd.whoami.output', lang)),
+    run: ({ lang }) => command(t('cmd.whoami.output', lang)),
   },
   {
     name: 'sudo hire me',
     descriptionKey: 'cmd.sudo.desc',
-    run: (lang) => command(t('cmd.sudo.hireMe', lang), { navigationTarget: 'contact' }),
+    run: ({ lang }) => command(t('cmd.sudo.hireMe', lang), { navigationTarget: 'contact' }),
   },
 ];
 
@@ -181,7 +199,7 @@ const commandAliases = new Map<string, string>([
 
 const commandMap = new Map(commandDefinitions.map((item) => [item.name, item]));
 
-export function executeCommand(input: string, lang: Lang): CommandResult {
+export function executeCommand(input: string, context: CommandContext): CommandResult {
   const normalizedInput = input.trim().toLowerCase().replace(/\s+/g, ' ');
   const normalized = commandAliases.get(normalizedInput) ?? normalizedInput;
 
@@ -193,13 +211,13 @@ export function executeCommand(input: string, lang: Lang): CommandResult {
 
   if (!handler) {
     return {
-      output: t('console.notFound', lang),
+      output: t('console.notFound', context.lang),
       action: 'none',
       isError: true,
     };
   }
 
-  return handler.run(lang);
+  return handler.run(context);
 }
 
 export const AVAILABLE_COMMANDS = commandDefinitions.map((item) => item.name);

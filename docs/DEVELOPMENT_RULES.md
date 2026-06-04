@@ -67,7 +67,9 @@ data/               → Mock data
 - Current implementation: `FileBlogRepository` (reads Markdown files, server-side only).
 - Future implementations: `DbBlogRepository`, `CmsBlogRepository` — swap at `BlogService` constructor.
 - Markdown frontmatter fields must stay close to a future database model for easy migration.
-- `data/blogs.ts` remains for backward compatibility; Phase 6.3 will migrate consumers to `BlogService`.
+- Console blog commands must not maintain independent mock blog data.
+- Blog metadata displayed by the Console must come from `BlogService` and be passed into client components as serializable props.
+- Client components may consume server-provided `BlogPostMeta[]`, but must not import `fs`, `path`, `FileBlogRepository`, or Markdown files directly.
 
 ## 9. Quality Rules
 - Run `pnpm lint` after meaningful changes.

@@ -110,7 +110,10 @@ export function DeveloperOS({ blogPosts }: DeveloperOSProps) {
           maxClasses="inset-0"
           isDarkContent={stylePreset === 'macos'}
         >
-          <ConsoleApp onCommandResult={handleConsoleCommandResult} />
+          <ConsoleApp
+            blogPosts={blogPosts}
+            onCommandResult={handleConsoleCommandResult}
+          />
         </AppWindow>
       </div>
     </div>

@@ -164,7 +164,7 @@
 - `BlogService` (unified API for pages, components, CLI)
 - Future-ready: swapping repository enables DB / CMS migration
 - Homepage Main App Blog section now uses real blog metadata via `BlogService`
-- Console blog command remains deferred to Phase 6.3
+- Console blog command now uses server-provided published metadata via Phase 6.3
 
 ### Phase 6.2: Blog List / Article Reader ✅ COMPLETED
 - `/blog` listing page with Engineering Logs aesthetic
@@ -180,12 +180,14 @@
 - Blog page UI copy and aria labels are localized through `lib/translations.ts`
 - Preserves light/dark, macos/vercel, mobile responsive
 - Homepage Main App Blog section integration completed in Phase 6.2.1
-- Console blog command remains deferred to Phase 6.3
+- Console blog command integration completed in Phase 6.3
 
-### Phase 6.3: Main App & Console Integration (Deferred)
-- Replace `data/blogs.ts` mock data with `BlogService` calls
-- CLI `blog` command reads from `BlogService`
-- Blog section in Main App uses real blog metadata
+### Phase 6.3: Console Blog Command Integration COMPLETED
+- Console `blog` command now consumes server-provided `BlogPostMeta[]`
+- `logs` / `articles` aliases resolve to the same real published post output
+- Console blog output is aligned with `/blog` and the Main App Blog section
+- Legacy `data/blogs.ts` mock data removed because no runtime consumers remain
+- Client components still do not read `content/blog`, `fs`, `path`, or `FileBlogRepository`
 
 ### Phase 6.4: SEO & Deployment (Deferred)
 - metadata / openGraph / twitter card
