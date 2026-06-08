@@ -295,3 +295,15 @@
 - Kept the same series name, `published` status, `zh` language, and complete frontmatter for all four articles.
 - The series now has seven published articles.
 - No blog-system code, Console / CLI code, window system, UI, sitemap / RSS code, or deployment configuration changes.
+
+### Phase 8.2.3: Blog Reading Experience Fix COMPLETED
+- Fixed `/blog/[slug]` long-article scrolling by giving the standalone blog layout its own vertical scroll container while preserving the global Developer OS overflow model.
+- Added build-time static reading stats from Markdown body content:
+  - `wordCount`
+  - `readingTimeMinutes`
+- Reading time uses mixed-content estimation: CJK characters / 450 + English / number units / 220, rounded up with a 1-minute minimum.
+- Article detail pages now show localized reading stats:
+  - zh: `约 X 分钟阅读 · Y 字`
+  - en: `X min read · Y words`
+- Blog list cards and homepage Blog section show a lightweight reading-time hint.
+- No reading views, database, analytics service, Console / CLI changes, window-system changes, deployment configuration changes, search, comments, tags page, or series page were added.

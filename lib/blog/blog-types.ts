@@ -44,6 +44,8 @@ export interface BlogPostMeta {
   cover: string | null;
   seoTitle: string | null;
   seoDescription: string | null;
+  wordCount: number;
+  readingTimeMinutes: number;
 }
 
 /**

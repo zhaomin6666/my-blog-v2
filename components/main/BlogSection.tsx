@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowUpRight, BookOpen, Globe } from 'lucide-react';
+import { ArrowUpRight, BookOpen, Clock, Globe } from 'lucide-react';
 import type { BlogPostMeta } from '@/lib/blog/blog-types';
 import { formatBlogDate } from '@/lib/blog/markdown';
 import { useSettings } from '@/lib/settings-context';
@@ -45,6 +45,10 @@ export function BlogSection({ posts }: BlogSectionProps) {
                 <div className="min-w-0 flex flex-wrap items-center gap-2">
                   <span className={`text-[10px] ${tokens.textMuted} ${isMacos ? '' : 'font-mono'}`}>
                     [{formatBlogDate(post.date, lang)}]
+                  </span>
+                  <span className={`inline-flex items-center gap-1 text-[10px] ${tokens.textMuted} ${isMacos ? '' : 'font-mono'}`}>
+                    <Clock size={10} />
+                    {t('blog.readingTimeShort', lang, String(post.readingTimeMinutes))}
                   </span>
                   <span className={`text-[10px] px-1.5 py-0.5 rounded ${isMacos ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400 font-mono'}`}>
                     {t('blog.logLevel', lang)}

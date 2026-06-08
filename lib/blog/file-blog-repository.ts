@@ -10,6 +10,7 @@ import type {
   BlogPostQueryOptions,
   BlogPostStatus,
 } from './blog-types';
+import { calculateReadingStats } from './reading-stats';
 import type {
   BlogPostLookupOptions,
   BlogRepository,
@@ -40,7 +41,7 @@ function toLang(value: unknown): BlogPostLanguage {
 function normalizeFrontmatter(
   raw: BlogPostFrontmatter,
   fileSlug: string,
-): BlogPostMeta {
+): Omit<BlogPostMeta, 'wordCount' | 'readingTimeMinutes'> {
   const slug = raw.slug?.trim() || fileSlug;
   const title = raw.title?.trim() || slug;
   const summary = raw.summary?.trim() || '';
@@ -107,9 +108,11 @@ export class FileBlogRepository implements BlogRepository {
         parsed.data as BlogPostFrontmatter,
         fileSlug,
       );
+      const readingStats = calculateReadingStats(parsed.content);
 
       return {
         ...meta,
+        ...readingStats,
         content: parsed.content,
         rawContent: raw,
       };
@@ -173,8 +176,8 @@ export class FileBlogRepository implements BlogRepository {
     const posts = await this.getAllParsedPosts();
     const filtered = this.applyOptions(posts, options);
     return filtered.map((post) => {
-      const { slug, title, summary, date, updatedAt, tags, series, status, lang, cover, seoTitle, seoDescription } = post;
-      return { slug, title, summary, date, updatedAt, tags, series, status, lang, cover, seoTitle, seoDescription };
+      const { slug, title, summary, date, updatedAt, tags, series, status, lang, cover, seoTitle, seoDescription, wordCount, readingTimeMinutes } = post;
+      return { slug, title, summary, date, updatedAt, tags, series, status, lang, cover, seoTitle, seoDescription, wordCount, readingTimeMinutes };
     });
   }
 

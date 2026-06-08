@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Calendar, Clock, Tag, BookOpen, Globe, ArrowLeft } from 'lucide-react';
 import type { BlogPost } from '@/lib/blog/blog-types';
-import { estimateReadingTime, formatBlogDate } from '@/lib/blog/markdown';
+import { formatBlogDate } from '@/lib/blog/markdown';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
 import type { StylePreset, Lang } from '@/lib/types';
@@ -15,10 +15,9 @@ interface BlogArticleProps {
 
 export function BlogArticle({ post, htmlContent, stylePreset, lang }: BlogArticleProps) {
   const tokens = getStyleTokens(stylePreset);
-  const readingTime = estimateReadingTime(post.content);
 
   return (
-    <article className={`${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow} overflow-hidden`}>
+    <article className={`${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow}`}>
       <div className="border-b border-zinc-200/60 p-5 dark:border-zinc-800/60 md:p-8">
         <Link
           href="/blog"
@@ -51,7 +50,12 @@ export function BlogArticle({ post, htmlContent, stylePreset, lang }: BlogArticl
           )}
           <span className="inline-flex items-center gap-1">
             <Clock size={12} />
-            {readingTime} {t('blog.minRead', lang)}
+            {t(
+              'blog.readingStats',
+              lang,
+              String(post.readingTimeMinutes),
+              String(post.wordCount),
+            )}
           </span>
           <span className="inline-flex items-center gap-1">
             <Globe size={12} />

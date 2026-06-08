@@ -1,6 +1,32 @@
 # AI Development Changelog
 
 ### 2026-06-08 - Codex
+**Summary:** Phase 8.2.3 completed. Fixed blog article reading scroll and added static reading stats.
+
+**Phase 8.2.3 scope:**
+- Fixed `/blog/[slug]` long-form article scrolling by giving `BlogLayout` an independent vertical scroll container.
+- Preserved the global Developer OS `html/body overflow-hidden` behavior used by the homepage window system.
+- Added static build-time reading stats to blog metadata:
+  - `wordCount`
+  - `readingTimeMinutes`
+- Added `calculateReadingStats()` for Markdown body content. It strips common Markdown syntax, counts CJK characters plus English / numeric units, and estimates reading time as CJK / 450 + English / numeric units / 220 with a 1-minute minimum.
+- Article detail pages now show localized stats:
+  - zh: `约 X 分钟阅读 · Y 字`
+  - en: `X min read · Y words`
+- Blog list cards and the homepage Blog section show lightweight reading-time hints.
+
+**Scope guard:**
+- No reading views were added.
+- No database, analytics service, comments, search, tag page, or series page was added.
+- No Console / CLI logic was modified.
+- No window-system behavior was modified.
+- No deployment configuration was modified.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-08 - Codex
 **Summary:** Phase 8.2.2 completed. Added the back half of the "从 Hexo 到 Personal Developer OS" article series.
 
 **Phase 8.2.2 content scope:**

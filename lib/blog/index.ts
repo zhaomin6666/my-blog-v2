@@ -14,3 +14,5 @@ export type { BlogRepository } from './blog-repository';
 export { BlogService, blogService } from './blog-service';
 export { FileBlogRepository } from './file-blog-repository';
 export { extractExcerpt, formatBlogDate, renderMarkdownToHtml, estimateReadingTime } from './markdown';
+export { calculateReadingStats } from './reading-stats';
+export type { ReadingStats } from './reading-stats';

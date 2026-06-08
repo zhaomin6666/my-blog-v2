@@ -23,7 +23,7 @@ export function BlogLayout({ children, backHref = '/', backLabel }: BlogLayoutPr
   const backText = backLabel || t('blog.back', lang);
 
   return (
-    <div className={`min-h-screen transition-colors duration-200 ${tokens.desktopBg} ${tokens.bodyFont}`}>
+    <div className={`h-screen overflow-y-auto overscroll-contain transition-colors duration-200 ${tokens.desktopBg} ${tokens.bodyFont}`}>
       <header className={`sticky top-0 z-50 ${tokens.statusBarHeight} ${tokens.statusBarClass} ${tokens.statusBarFont} flex items-center justify-between px-3 md:px-5`}>
         <div className="flex items-center gap-2 md:gap-3">
           <Link

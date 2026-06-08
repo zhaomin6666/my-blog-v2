@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Calendar, Tag, BookOpen, Globe } from 'lucide-react';
+import { Calendar, Clock, Tag, BookOpen, Globe } from 'lucide-react';
 import type { BlogPostMeta } from '@/lib/blog/blog-types';
 import { formatBlogDate } from '@/lib/blog/markdown';
 import { getStyleTokens } from '@/lib/stylePresets';
@@ -21,10 +21,14 @@ export function BlogCard({ post, stylePreset, lang }: BlogCardProps) {
     >
       <Link href={`/blog/${post.slug}`} className="block p-5 md:p-6">
         <div className="mb-3 flex items-start justify-between gap-3">
-          <div className="flex items-center gap-2 text-[11px] text-zinc-400 dark:text-zinc-500">
+          <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-zinc-400 dark:text-zinc-500">
             <span className="inline-flex items-center gap-1">
               <Calendar size={11} />
               {formatBlogDate(post.date, lang)}
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Clock size={11} />
+              {t('blog.readingTimeShort', lang, String(post.readingTimeMinutes))}
             </span>
             {post.updatedAt !== post.date && (
               <span className="hidden sm:inline text-zinc-300 dark:text-zinc-600">
