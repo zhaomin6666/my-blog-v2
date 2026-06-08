@@ -118,7 +118,7 @@ Server directory layout:
 
 ## CentOS 9 + Docker Deployment
 
-This is the Phase 7 production path for the self-owned cloud server. The app container only binds to localhost, and Docker Nginx proxies public traffic to `127.0.0.1:3000`.
+This is the Phase 7 production path for the self-owned cloud server. The app container is attached to the external Docker network `web-proxy` and exposes port `3000` only inside that network. Docker Nginx proxies public traffic to the app service, usually with an upstream such as `http://personal-dev-os:3000`.
 
 ### 1. Check Docker
 
@@ -175,11 +175,19 @@ EOF
 docker compose --env-file .env.production up -d --build
 ```
 
-The Compose service is named `personal-dev-os` and maps the container to localhost only:
+The Compose service is named `personal-dev-os`. It does not publish port `3000` directly to the public host. Instead, it exposes port `3000` to the external Docker network:
 
 ```text
-127.0.0.1:3000:3000
+web-proxy -> personal-dev-os:3000
 ```
+
+The external Docker network must exist before startup:
+
+```bash
+docker network create web-proxy
+```
+
+If the network already exists, Docker will report that and you can continue.
 
 `NEXT_PUBLIC_SITE_URL` is passed to Docker build args and is also loaded into the running container from `.env.production`.
 
@@ -246,21 +254,27 @@ This can be added to a cron job later for scheduled renewal.
 
 ### 9. Local Server Checks
 
-Run these on the server:
+Run these on the server from the app directory to check the app container itself:
 
 ```bash
-curl http://127.0.0.1:3000
-curl http://127.0.0.1:3000/blog
-curl http://127.0.0.1:3000/sitemap.xml
-curl http://127.0.0.1:3000/rss.xml
+docker compose exec personal-dev-os wget -qO- http://127.0.0.1:3000
+docker compose exec personal-dev-os wget -qO- http://127.0.0.1:3000/blog
+docker compose exec personal-dev-os wget -qO- http://127.0.0.1:3000/sitemap.xml
+docker compose exec personal-dev-os wget -qO- http://127.0.0.1:3000/rss.xml
+```
+
+You can also check from the shared proxy network:
+
+```bash
+docker run --rm --network web-proxy curlimages/curl http://personal-dev-os:3000
 ```
 
 ### 10. Nginx Reverse Proxy
 
-Docker Nginx proxies the public domain to:
+Docker Nginx should be on the same `web-proxy` network and proxy the public domain to:
 
 ```text
-http://127.0.0.1:3000
+http://personal-dev-os:3000
 ```
 
 Do not expose the Next.js container directly to the public internet.

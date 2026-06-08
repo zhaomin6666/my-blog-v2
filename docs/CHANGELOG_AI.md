@@ -1,5 +1,31 @@
 # AI Development Changelog
 
+### 2026-06-08 - Codex
+**Summary:** Added Chinese documentation companions under `docs`, with special focus on the production deployment manual.
+
+**Documentation scope:**
+- Added `docs/README.zh-CN.md` as the Chinese docs entry point.
+- Added `docs/DESIGN_BRIEF.zh-CN.md`.
+- Added `docs/IMPLEMENTATION_PLAN.zh-CN.md`.
+- Added `docs/DEVELOPMENT_RULES.zh-CN.md`.
+- Added `docs/DEPLOYMENT.zh-CN.md`.
+- Added `docs/CHANGELOG_AI.zh-CN.md`.
+
+**Deployment documentation focus:**
+- Rewrote the deployment guide in Chinese as an operational release manual.
+- Highlighted that `NEXT_PUBLIC_SITE_URL` is required at both Docker build time and runtime.
+- Documented the current Docker Compose topology: app service on the external `web-proxy` network, with Nginx proxying to `personal-dev-os:3000`.
+- Added Chinese release, no-cache rebuild, log check, Nginx reload, certificate renewal, online validation, and rollback guidance.
+- Corrected the English deployment guide to match the current `docker-compose.yml` network topology.
+
+**Scope guard:**
+- Documentation-only change.
+- No application code, UI, blog system, Console / CLI, window system, or deployment config was changed.
+
+**Verification:**
+- Reviewed docs against `docker-compose.yml`, `Dockerfile`, `next.config.ts`, and `.env.example`.
+- No lint/build run because this was documentation-only.
+
 ### 2026-06-08 - Claude Code
 **Summary:** Phase 8.2.1 completed. Polished the first three blog articles in the "从 Hexo 到 Personal Developer OS" series to reduce AI-generated phrasing.
 
