@@ -1,0 +1,11 @@
+services:
+  personal-dev-os:
+    build: .
+    container_name: personal-dev-os
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    env_file:
+      - .env.production
+    environment:
+      NODE_ENV: production

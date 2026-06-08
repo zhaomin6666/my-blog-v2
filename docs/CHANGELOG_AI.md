@@ -1,5 +1,29 @@
 # AI Development Changelog
 
+### 2026-06-08 - Codex
+**Summary:** Phase 7.1.1 started. Added Docker self-hosting preparation for the Personal Developer OS on a CentOS 9 server.
+
+**Phase 7.1.1 deliverables:**
+- Added a multi-stage `Dockerfile` using Node LTS, Corepack, pnpm frozen lockfile install, `pnpm build`, and Next.js standalone runtime output.
+- Added `.dockerignore` to keep dependencies, build outputs, git data, debug logs, and local env files out of the Docker build context while preserving `content/blog`.
+- Added `docker-compose.yml` with the `personal-dev-os` service bound to `127.0.0.1:3000:3000`, `restart: unless-stopped`, and `.env.production` support for `NEXT_PUBLIC_SITE_URL`.
+- Switched `next.config.ts` from static export to standalone output for Docker / Node server deployment.
+- Included `content/blog` in Next output tracing so the Markdown-backed BlogService can read published posts inside the standalone container.
+- Added `.npmrc` with hoisted pnpm linking so standalone tracing can complete reliably on Windows and in Docker.
+- Added `public/.gitkeep` so the Docker runner can consistently copy the required `public` directory.
+- Updated `.gitignore` to prevent committing `.env.production`.
+- Updated `docs/DEPLOYMENT.md` with CentOS 9 + Docker Compose deployment steps, env setup, localhost checks, Nginx reverse-proxy notes, and rollback guidance.
+
+**Scope guard:**
+- No business feature, blog content, Console / CLI, window-system, or UI changes were added.
+- Nginx configuration and HTTPS certificate setup remain deferred to Phase 7.2.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed with standalone output.
+- Standalone output includes `content/blog` Markdown files for the current `FileBlogRepository`.
+- Local `docker build` could not run in this Windows workspace because the `docker` command is not installed.
+
 ### 2026-06-04 - Codex
 **Summary:** Phase 6 completed. Final archive for the Blog Publishing System, SEO, RSS, sitemap, and deployment-readiness work.
 
