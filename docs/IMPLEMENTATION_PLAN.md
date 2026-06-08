@@ -272,11 +272,13 @@
 - Phase 1-7 completed before content launch work
 
 ### Phase 8.2: Real Blog Content Series COMPLETED
-- Established the series: `从 Hexo 到 Personal Developer OS`
-- Added the first three published articles under `content/blog`
-- Covered the site rebuild motivation, Developer OS design decision, and Phase 1-3 implementation process
-- Replaced previous short sample blog posts with real series content
-- Preserved the existing Markdown blog architecture, Main App, Console / CLI, window system, UI, sitemap/RSS code, and deployment configuration
+- Established and completed the seven-article series: `从 Hexo 到 Personal Developer OS`.
+- Published the full series covering site rebuild motivation, Developer OS design, Phase 1-7 implementation, Markdown blog architecture, SEO/RSS, deployment, and production operations.
+- Polished the first three articles to reduce AI-generated phrasing while preserving the personal developer voice.
+- Fixed the blog reading experience with long-form article scrolling plus static word count / reading time metadata.
+- Organized the series under `content/blog/personal-developer-os/` with stable public slugs.
+- Added `/blog/series` and `/blog/series/[seriesSlug]` for published-only series discovery.
+- Preserved homepage Blog section, `/blog`, `/blog/[slug]`, Console blog metadata, sitemap, RSS, Main App, Console / CLI, window system, and deployment configuration.
 
 ### Phase 8.2.1: Blog Copywriting Polish / 去 AI 味文字润色 COMPLETED
 - Polished the first three articles in the `从 Hexo 到 Personal Developer OS` series
@@ -307,3 +309,18 @@
   - en: `X min read · Y words`
 - Blog list cards and homepage Blog section show a lightweight reading-time hint.
 - No reading views, database, analytics service, Console / CLI changes, window-system changes, deployment configuration changes, search, comments, tags page, or series page were added.
+
+### Phase 8.2.4: Blog Series & Content Organization COMPLETED
+- Moved the seven `从 Hexo 到 Personal Developer OS` series articles into `content/blog/personal-developer-os/` with numbered filenames.
+- Kept public article URLs unchanged by continuing to resolve `/blog/[slug]` from `frontmatter.slug`.
+- Updated `FileBlogRepository` to recursively scan Markdown files under `content/blog`.
+- Added optional series metadata fields:
+  - `seriesSlug`
+  - `seriesOrder`
+- Added published-only series APIs through BlogService:
+  - `getAllSeries()`
+  - `getPostsBySeries(seriesSlug)`
+- Added `/blog/series` and `/blog/series/[seriesSlug]` pages using the existing Engineering Logs / Developer OS style.
+- Added a lightweight series entry point from `/blog`.
+- Added sitemap entries for series pages while keeping RSS article-only.
+- No Console / CLI logic, window-system behavior, deployment configuration, database, CMS, search, comments, reading views, or tag detail page changes.

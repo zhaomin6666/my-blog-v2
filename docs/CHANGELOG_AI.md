@@ -1,6 +1,58 @@
 # AI Development Changelog
 
 ### 2026-06-08 - Codex
+**Summary:** Phase 8.2 fully completed. Archived the finished "从 Hexo 到 Personal Developer OS" blog series and reading experience work.
+
+**Phase 8.2 final scope:**
+- Published and polished the complete seven-article `从 Hexo 到 Personal Developer OS` series.
+- Fixed long-form article reading scroll and added static word count / reading time metadata.
+- Organized the series under `content/blog/personal-developer-os/`.
+- Added published-only series discovery pages and sitemap entries.
+- Confirmed `/blog`, `/blog/[slug]`, homepage Blog section, Console-provided blog metadata, sitemap, and RSS remain aligned through `BlogService`.
+
+**Scope guard:**
+- No Console / CLI logic was modified.
+- No window-system behavior was modified.
+- No deployment configuration was modified.
+- No database, CMS, comments, search, reading views, or analytics were added.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-08 - Codex
+**Summary:** Phase 8.2.4 completed. Organized blog content into a series directory and added public series pages.
+
+**Phase 8.2.4 scope:**
+- Moved the seven "从 Hexo 到 Personal Developer OS" articles into `content/blog/personal-developer-os/` with numbered filenames.
+- Kept every public article URL unchanged by continuing to use `frontmatter.slug` for `/blog/[slug]`.
+- Updated `FileBlogRepository` to recursively scan Markdown files under `content/blog`.
+- Added series metadata fields to blog types and published series articles:
+  - `seriesSlug`
+  - `seriesOrder`
+- Added published-only series query capabilities through `BlogRepository` / `BlogService`:
+  - `getAllSeries()`
+  - `getPostsBySeries(seriesSlug)`
+- Added public series pages:
+  - `/blog/series`
+  - `/blog/series/[seriesSlug]`
+- Added a lightweight `/blog` entry to the series index and linked article detail series chips to the series page.
+- Added sitemap entries for the series index and series detail pages.
+- Kept RSS article-only.
+
+**Scope guard:**
+- No reading views, comments, search, tag detail page, CMS, database, or analytics were added.
+- No Console / CLI logic was modified.
+- No window-system behavior was modified.
+- No deployment configuration was modified.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+- Local route checks passed for `/`, `/blog`, `/blog/[slug]`, `/blog/series`, `/blog/series/personal-developer-os`, `/sitemap.xml`, and `/rss.xml`.
+- RSS still contains article items only.
+
+### 2026-06-08 - Codex
 **Summary:** Phase 8.2.3 completed. Fixed blog article reading scroll and added static reading stats.
 
 **Phase 8.2.3 scope:**

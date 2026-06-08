@@ -6,6 +6,8 @@ date: "2026-06-08"
 updatedAt: "2026-06-08"
 tags: ["Next.js", "Docker", "Nginx", "Deployment"]
 series: "从 Hexo 到 Personal Developer OS"
+seriesSlug: "personal-developer-os"
+seriesOrder: 7
 status: "published"
 lang: "zh"
 cover: ""
@@ -162,4 +164,3 @@ Phase 7 最后补的是发布后运维归档。
 Personal Developer OS 到这里算是从本地项目变成了一个真实在线系统。前面几篇写的是设计和实现，这一篇更像把它放到现实环境里跑一遍。很多问题只有上线时才会出现，也只有处理过一次，后面才不会慌。
 
 从 Hexo 到 Personal Developer OS 的第一轮建设，到这里基本闭合了。后面要做的，不是继续堆功能，而是持续写内容，让这个系统真的成为个人技术记录和作品展示的入口。
-

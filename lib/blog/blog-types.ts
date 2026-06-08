@@ -20,6 +20,8 @@ export interface BlogPostFrontmatter {
   updatedAt?: string;
   tags?: string[] | string;
   series?: string;
+  seriesSlug?: string;
+  seriesOrder?: number;
   status?: string;
   lang?: string;
   cover?: string;
@@ -39,6 +41,8 @@ export interface BlogPostMeta {
   updatedAt: string;
   tags: string[];
   series: string | null;
+  seriesSlug: string | null;
+  seriesOrder: number | null;
   status: BlogPostStatus;
   lang: BlogPostLanguage;
   cover: string | null;
@@ -57,6 +61,17 @@ export interface BlogPost extends BlogPostMeta {
 }
 
 /**
+ * Aggregated metadata for a published blog series.
+ */
+export interface BlogSeries {
+  title: string;
+  slug: string;
+  count: number;
+  latestUpdatedAt: string;
+  posts: BlogPostMeta[];
+}
+
+/**
  * Query options for listing posts.
  */
 export interface BlogPostQueryOptions {
@@ -66,6 +81,8 @@ export interface BlogPostQueryOptions {
   lang?: BlogPostLanguage;
   /** Filter by series name. */
   series?: string;
+  /** Filter by series slug. */
+  seriesSlug?: string;
   /** Maximum number of posts to return. */
   limit?: number;
   /** Number of posts to skip (for future pagination). */

@@ -8,6 +8,7 @@ import type {
   BlogPostLanguage,
   BlogPostMeta,
   BlogPostQueryOptions,
+  BlogSeries,
   BlogPostStatus,
 } from './blog-types';
 import { calculateReadingStats } from './reading-stats';
@@ -38,6 +39,17 @@ function toLang(value: unknown): BlogPostLanguage {
   return 'zh';
 }
 
+function toNumberOrNull(value: unknown): number | null {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value;
+  }
+  if (typeof value === 'string') {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
+}
+
 function normalizeFrontmatter(
   raw: BlogPostFrontmatter,
   fileSlug: string,
@@ -49,6 +61,8 @@ function normalizeFrontmatter(
   const updatedAt = raw.updatedAt?.trim() || date;
   const tags = toStringArray(raw.tags);
   const series = raw.series?.trim() || null;
+  const seriesSlug = raw.seriesSlug?.trim() || null;
+  const seriesOrder = toNumberOrNull(raw.seriesOrder);
   const status = toStatus(raw.status);
   const lang = toLang(raw.lang);
   const cover = raw.cover?.trim() || null;
@@ -63,6 +77,8 @@ function normalizeFrontmatter(
     updatedAt,
     tags,
     series,
+    seriesSlug,
+    seriesOrder,
     status,
     lang,
     cover,
@@ -74,7 +90,7 @@ function normalizeFrontmatter(
 /**
  * File-based blog repository.
  *
- * ONLY runs on the server. Reads Markdown files from content/blog/*.md,
+ * ONLY runs on the server. Reads Markdown files recursively from content/blog,
  * parses frontmatter, and filters/sorts results.
  *
  * This is the current implementation. In the future it can be swapped
@@ -84,14 +100,32 @@ export class FileBlogRepository implements BlogRepository {
   private async readPostFiles(): Promise<
     Array<{ slug: string; filePath: string }>
   > {
+    const walk = async (dir: string): Promise<Array<{ slug: string; filePath: string }>> => {
+      const entries = await fs.readdir(dir, { withFileTypes: true });
+      const files = await Promise.all(
+        entries.map(async (entry) => {
+          const entryPath = path.join(dir, entry.name);
+
+          if (entry.isDirectory()) {
+            return walk(entryPath);
+          }
+
+          if (entry.isFile() && entry.name.endsWith('.md')) {
+            return [{
+              slug: entry.name.replace(/\.md$/, ''),
+              filePath: entryPath,
+            }];
+          }
+
+          return [];
+        }),
+      );
+
+      return files.flat();
+    };
+
     try {
-      const entries = await fs.readdir(BLOG_DIR, { withFileTypes: true });
-      return entries
-        .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
-        .map((entry) => ({
-          slug: entry.name.replace(/\.md$/, ''),
-          filePath: path.join(BLOG_DIR, entry.name),
-        }));
+      return walk(BLOG_DIR);
     } catch {
       return [];
     }
@@ -136,6 +170,7 @@ export class FileBlogRepository implements BlogRepository {
     const includeDrafts = options?.includeDrafts ?? false;
     const lang = options?.lang;
     const series = options?.series;
+    const seriesSlug = options?.seriesSlug;
     const limit = options?.limit;
     const offset = options?.offset ?? 0;
 
@@ -151,6 +186,10 @@ export class FileBlogRepository implements BlogRepository {
 
     if (series) {
       result = result.filter((p) => p.series === series);
+    }
+
+    if (seriesSlug) {
+      result = result.filter((p) => p.seriesSlug === seriesSlug);
     }
 
     // Sort by date descending
@@ -176,8 +215,8 @@ export class FileBlogRepository implements BlogRepository {
     const posts = await this.getAllParsedPosts();
     const filtered = this.applyOptions(posts, options);
     return filtered.map((post) => {
-      const { slug, title, summary, date, updatedAt, tags, series, status, lang, cover, seoTitle, seoDescription, wordCount, readingTimeMinutes } = post;
-      return { slug, title, summary, date, updatedAt, tags, series, status, lang, cover, seoTitle, seoDescription, wordCount, readingTimeMinutes };
+      const { slug, title, summary, date, updatedAt, tags, series, seriesSlug, seriesOrder, status, lang, cover, seoTitle, seoDescription, wordCount, readingTimeMinutes } = post;
+      return { slug, title, summary, date, updatedAt, tags, series, seriesSlug, seriesOrder, status, lang, cover, seoTitle, seoDescription, wordCount, readingTimeMinutes };
     });
   }
 
@@ -185,16 +224,10 @@ export class FileBlogRepository implements BlogRepository {
     slug: string,
     options?: BlogPostLookupOptions,
   ): Promise<BlogPost | null> {
-    const filePath = path.join(BLOG_DIR, `${slug}.md`);
-    const post = await this.parseFile(filePath, slug);
+    const posts = await this.getAllParsedPosts();
+    const post = posts.find((candidate) => candidate.slug === slug) ?? null;
 
     if (!post) return null;
-
-    // If the file exists but its frontmatter declares a different slug,
-    // trust the frontmatter slug for lookup.
-    if (post.slug !== slug) {
-      return null;
-    }
 
     if (!options?.includeDrafts && post.status !== 'published') {
       return null;
@@ -224,4 +257,81 @@ export class FileBlogRepository implements BlogRepository {
     }
     return Array.from(tagSet).sort();
   }
+
+  async getPostsBySeries(seriesSlug: string): Promise<BlogPostMeta[]> {
+    const posts = await this.getAllPosts({
+      includeDrafts: false,
+      seriesSlug,
+    });
+
+    return sortSeriesPosts(posts);
+  }
+
+  async getAllSeries(): Promise<BlogSeries[]> {
+    const posts = await this.getAllPosts({ includeDrafts: false });
+    const seriesMap = new Map<string, BlogPostMeta[]>();
+
+    for (const post of posts) {
+      if (!post.series || !post.seriesSlug) {
+        continue;
+      }
+
+      const current = seriesMap.get(post.seriesSlug) || [];
+      current.push(post);
+      seriesMap.set(post.seriesSlug, current);
+    }
+
+    return Array.from(seriesMap.entries())
+      .map(([slug, seriesPosts]) => {
+        const sortedPosts = sortSeriesPosts(seriesPosts);
+        const latestUpdatedAt = sortedPosts.reduce((latest, post) => {
+          const latestTime = new Date(latest).getTime();
+          const postTime = new Date(post.updatedAt || post.date).getTime();
+
+          if (Number.isNaN(postTime)) {
+            return latest;
+          }
+
+          if (Number.isNaN(latestTime) || postTime > latestTime) {
+            return post.updatedAt || post.date;
+          }
+
+          return latest;
+        }, sortedPosts[0]?.updatedAt || sortedPosts[0]?.date || '');
+
+        return {
+          title: sortedPosts[0]?.series || slug,
+          slug,
+          count: sortedPosts.length,
+          latestUpdatedAt,
+          posts: sortedPosts,
+        };
+      })
+      .sort((a, b) => {
+        const da = new Date(a.latestUpdatedAt).getTime();
+        const db = new Date(b.latestUpdatedAt).getTime();
+        if (Number.isNaN(da) && Number.isNaN(db)) return 0;
+        if (Number.isNaN(da)) return 1;
+        if (Number.isNaN(db)) return -1;
+        return db - da;
+      });
+  }
+}
+
+function sortSeriesPosts(posts: BlogPostMeta[]): BlogPostMeta[] {
+  return [...posts].sort((a, b) => {
+    if (a.seriesOrder !== null && b.seriesOrder !== null) {
+      return a.seriesOrder - b.seriesOrder;
+    }
+
+    if (a.seriesOrder !== null) return -1;
+    if (b.seriesOrder !== null) return 1;
+
+    const da = new Date(a.date).getTime();
+    const db = new Date(b.date).getTime();
+    if (Number.isNaN(da) && Number.isNaN(db)) return 0;
+    if (Number.isNaN(da)) return 1;
+    if (Number.isNaN(db)) return -1;
+    return da - db;
+  });
 }

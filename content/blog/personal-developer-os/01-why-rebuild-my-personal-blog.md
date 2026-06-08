@@ -6,6 +6,8 @@ date: "2026-05-20"
 updatedAt: "2026-05-20"
 tags: ["Personal Site", "Blog", "Vibe Coding"]
 series: "从 Hexo 到 Personal Developer OS"
+seriesSlug: "personal-developer-os"
+seriesOrder: 1
 status: "published"
 lang: "zh"
 cover: ""

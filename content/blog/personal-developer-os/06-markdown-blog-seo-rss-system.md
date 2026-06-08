@@ -6,6 +6,8 @@ date: "2026-06-03"
 updatedAt: "2026-06-03"
 tags: ["Markdown", "SEO", "RSS"]
 series: "从 Hexo 到 Personal Developer OS"
+seriesSlug: "personal-developer-os"
+seriesOrder: 6
 status: "published"
 lang: "zh"
 cover: ""
@@ -122,4 +124,3 @@ Phase 6 最后补了几份发布前资料。
 从 Hexo 到 Personal Developer OS，博客这部分其实是一个小迁移。以前是主题框架帮我处理内容，现在是我自己定义数据层、页面、SEO 和发布边界。工作变多了，但掌控感也更强。
 
 下一篇会进入真正的生产部署：Docker、Nginx、HTTPS，以及那些只有上线时才会冒出来的问题。
-

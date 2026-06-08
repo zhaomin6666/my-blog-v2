@@ -6,6 +6,8 @@ date: "2026-05-28"
 updatedAt: "2026-05-28"
 tags: ["CLI", "Console", "Developer OS"]
 series: "从 Hexo 到 Personal Developer OS"
+seriesSlug: "personal-developer-os"
+seriesOrder: 4
 status: "published"
 lang: "zh"
 cover: ""
@@ -113,4 +115,3 @@ Phase 4 做完后，Console App 终于不只是一个视觉符号。
 这也是这个项目里我一直想保留的节奏：不要为了显得完整而一次堆很多功能。先让一个小系统可用，再慢慢把细节补到舒服。
 
 下一篇会写 Phase 5。那一阶段没有加新功能，但对整个网站能不能作为作品展示，其实很关键。
-

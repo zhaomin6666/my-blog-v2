@@ -7,6 +7,7 @@ import type {
   BlogPostLanguage,
   BlogPostMeta,
   BlogPostQueryOptions,
+  BlogSeries,
 } from './blog-types';
 import { FileBlogRepository } from './file-blog-repository';
 
@@ -92,10 +93,16 @@ export class BlogService {
    * Get posts belonging to a specific series.
    */
   async getPostsBySeries(
-    series: string,
-    options?: Omit<BlogPostQueryOptions, 'series' | 'includeDrafts'>,
+    seriesSlug: string,
   ): Promise<BlogPostMeta[]> {
-    return this.repository.getAllPosts({ ...options, series, includeDrafts: false });
+    return this.repository.getPostsBySeries(seriesSlug);
+  }
+
+  /**
+   * Get all published series.
+   */
+  async getAllSeries(): Promise<BlogSeries[]> {
+    return this.repository.getAllSeries();
   }
 }
 

@@ -6,6 +6,8 @@ date: "2026-05-24"
 updatedAt: "2026-05-24"
 tags: ["Developer OS", "Next.js", "Frontend"]
 series: "从 Hexo 到 Personal Developer OS"
+seriesSlug: "personal-developer-os"
+seriesOrder: 3
 status: "published"
 lang: "zh"
 cover: ""

@@ -65,7 +65,16 @@ export function BlogArticle({ post, htmlContent, stylePreset, lang }: BlogArticl
 
         {(post.series || post.tags.length > 0) && (
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            {post.series && (
+            {post.series && post.seriesSlug && (
+              <Link
+                href={`/blog/series/${post.seriesSlug}`}
+                className={`inline-flex items-center gap-1 px-2 py-0.5 text-[11px] ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius} transition-colors hover:text-zinc-700 dark:hover:text-zinc-200`}
+              >
+                <BookOpen size={10} />
+                {post.series}
+              </Link>
+            )}
+            {post.series && !post.seriesSlug && (
               <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-[11px] ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius}`}>
                 <BookOpen size={10} />
                 {post.series}

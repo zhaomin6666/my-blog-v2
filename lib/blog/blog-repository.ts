@@ -2,6 +2,7 @@ import type {
   BlogPost,
   BlogPostMeta,
   BlogPostQueryOptions,
+  BlogSeries,
 } from './blog-types';
 
 export interface BlogPostLookupOptions {
@@ -46,4 +47,14 @@ export interface BlogRepository {
    * Get a list of all unique tags across published posts.
    */
   getAllTags(): Promise<string[]>;
+
+  /**
+   * Get all published series with their published posts.
+   */
+  getAllSeries(): Promise<BlogSeries[]>;
+
+  /**
+   * Get published posts belonging to a specific series slug.
+   */
+  getPostsBySeries(seriesSlug: string): Promise<BlogPostMeta[]>;
 }

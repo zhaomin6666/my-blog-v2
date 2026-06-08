@@ -6,6 +6,8 @@ date: "2026-05-21"
 updatedAt: "2026-05-21"
 tags: ["Developer OS", "Product Design", "Personal Site"]
 series: "从 Hexo 到 Personal Developer OS"
+seriesSlug: "personal-developer-os"
+seriesOrder: 2
 status: "published"
 lang: "zh"
 cover: ""

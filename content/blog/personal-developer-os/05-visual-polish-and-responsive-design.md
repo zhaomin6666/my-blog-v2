@@ -6,6 +6,8 @@ date: "2026-05-31"
 updatedAt: "2026-05-31"
 tags: ["UI", "Responsive", "Design Polish"]
 series: "从 Hexo 到 Personal Developer OS"
+seriesSlug: "personal-developer-os"
+seriesOrder: 5
 status: "published"
 lang: "zh"
 cover: ""
@@ -92,4 +94,3 @@ Phase 5 没有新增业务功能，却明显提高了网站的展示价值。
 对我来说，这一步还有一个提醒：AI 可以很快生成界面，但视觉一致性很难靠一次生成解决。它需要反复看、反复收口，尤其要保护已有行为。不能为了一个更漂亮的卡片，把窗口系统、Console 或 preset 切换改坏。
 
 Phase 5 结束后，Personal Developer OS 才更像一个可以公开展示的作品。下一步就可以放心进入内容系统：把博客从几条 mock 数据，变成真正可发布、可索引、可维护的 Markdown Blog。
-
