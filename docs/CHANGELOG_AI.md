@@ -1,6 +1,29 @@
 # AI Development Changelog
 
 ### 2026-06-08 - Codex
+**Summary:** Phase 7 completed. Archived the production release and post-release operations for the Personal Developer OS.
+
+**Phase 7 completed scope:**
+- Completed production release on a self-owned Korea cloud server running CentOS 9.
+- Deployed the Next.js standalone app with Docker and Docker Compose.
+- Added Docker Nginx reverse proxy for public traffic.
+- Brought `https://oli6666.top` online as the primary domain.
+- Configured `www.oli6666.top` to redirect to `oli6666.top`.
+- Configured Let's Encrypt HTTPS.
+- Confirmed sitemap, robots, and RSS are available online.
+- Confirmed production SEO outputs use `https://oli6666.top`.
+- Archived server directory layout, update flow, logs, Nginx reload, certificate renewal, rollback, and online validation checklist in `docs/DEPLOYMENT.md`.
+
+**Scope guard:**
+- No business feature, UI, blog-system, Console / CLI, or window-system changes were added.
+- No `.env.production`, certificate files, private keys, server IPs, or private deployment secrets were committed.
+
+**Verification:**
+- Production deployment was accepted by user review.
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-08 - Codex
 **Summary:** Phase 7.2 deployment fix. Passed `NEXT_PUBLIC_SITE_URL` into Docker build args so public SEO outputs use the production origin.
 
 **Fix details:**

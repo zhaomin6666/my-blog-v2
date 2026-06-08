@@ -78,7 +78,14 @@ data/               → Mock data
 - Site URL and default SEO copy must be centralized in `lib/seo.ts`; production deployments should set `NEXT_PUBLIC_SITE_URL`.
 - Future CMS / DB upgrades should add or swap a `BlogRepository` implementation instead of rewriting page, Console, or SEO consumers.
 
-## 10. Quality Rules
+## 10. Production Maintenance Rules
+- Changing `NEXT_PUBLIC_SITE_URL` requires a fresh production build because Next.js inlines `NEXT_PUBLIC_*` values at build time.
+- SEO, sitemap, RSS, or domain changes must be rechecked online after deployment.
+- Production updates use `git pull` plus `docker compose --env-file .env.production up -d --build`.
+- Run `pnpm lint` and `pnpm build` before release when possible.
+- Do not commit `.env.production`, `.env.local`, certificate files, private keys, server IPs, or private deployment secrets.
+
+## 11. Quality Rules
 - Run `pnpm lint` after meaningful changes.
 - Run `pnpm build` when possible.
 - Fix TypeScript errors.
@@ -86,7 +93,7 @@ data/               → Mock data
 - Avoid unnecessary third-party libraries.
 - Use animations sparingly.
 
-## 11. Visual Maintenance Rules
+## 12. Visual Maintenance Rules
 - Any visual change must be verified under **both** `macos` and `vercel` presets.
 - Any color or background change must be verified under **both** `light` and `dark` themes.
 - Any layout change must be checked on **desktop, tablet (768px), and mobile (360px–430px)**.

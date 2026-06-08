@@ -49,7 +49,7 @@ After `pnpm build`, the production server bundle is generated under `.next/stand
 Required public production setting:
 
 ```text
-NEXT_PUBLIC_SITE_URL=https://your-domain.example
+NEXT_PUBLIC_SITE_URL=https://oli6666.top
 ```
 
 Local fallback:
@@ -82,14 +82,43 @@ NEXT_PUBLIC_SITE_URL=http://your-server-ip
 After the domain is resolved and HTTPS is configured, change it to:
 
 ```text
-NEXT_PUBLIC_SITE_URL=https://your-domain.com
+NEXT_PUBLIC_SITE_URL=https://oli6666.top
 ```
 
 Do not commit `.env.production`.
 
+## Production Archive
+
+Production URL:
+
+```text
+https://oli6666.top
+```
+
+Current production stack:
+
+- Self-owned Korea cloud server
+- CentOS 9
+- Docker + Docker Compose
+- Next.js standalone output
+- Docker Nginx reverse proxy
+- Let's Encrypt HTTPS
+- Primary domain: `oli6666.top`
+- `www.oli6666.top` redirects to `oli6666.top`
+
+Server directory layout:
+
+```text
+/opt/apps/personal-dev-os
+/opt/infra/nginx
+/opt/infra/nginx/conf.d
+/opt/infra/nginx/certbot/www
+/etc/letsencrypt/live/oli6666.top
+```
+
 ## CentOS 9 + Docker Deployment
 
-This is the Phase 7.1.1 target path for a self-owned cloud server. The app container only binds to localhost, and the host Nginx will later proxy public traffic to `127.0.0.1:3000`.
+This is the Phase 7 production path for the self-owned cloud server. The app container only binds to localhost, and Docker Nginx proxies public traffic to `127.0.0.1:3000`.
 
 ### 1. Check Docker
 
@@ -109,9 +138,9 @@ sudo dnf install docker-compose-plugin
 Recommended deployment directory:
 
 ```bash
-sudo mkdir -p /var/www/personal-dev-os
-sudo chown -R "$USER":"$USER" /var/www/personal-dev-os
-cd /var/www/personal-dev-os
+sudo mkdir -p /opt/apps/personal-dev-os
+sudo chown -R "$USER":"$USER" /opt/apps/personal-dev-os
+cd /opt/apps/personal-dev-os
 ```
 
 Clone the repository:
@@ -136,7 +165,7 @@ After DNS and HTTPS are ready:
 
 ```bash
 cat > .env.production <<'EOF'
-NEXT_PUBLIC_SITE_URL=https://your-domain.com
+NEXT_PUBLIC_SITE_URL=https://oli6666.top
 EOF
 ```
 
@@ -169,11 +198,53 @@ docker compose --env-file .env.production up -d
 
 ### 5. View Logs
 
+Application logs:
+
 ```bash
+cd /opt/apps/personal-dev-os
 docker compose logs -f
 ```
 
-### 6. Local Server Checks
+Nginx logs:
+
+```bash
+cd /opt/infra/nginx
+docker compose logs -f
+```
+
+### 6. Update Deployment
+
+```bash
+cd /opt/apps/personal-dev-os
+git pull
+docker compose --env-file .env.production up -d --build
+```
+
+### 7. Reload Nginx
+
+Validate Nginx config before reload:
+
+```bash
+docker exec nginx-proxy nginx -t
+docker exec nginx-proxy nginx -s reload
+```
+
+### 8. Certificate Renewal
+
+Manual renewal:
+
+```bash
+docker run --rm \
+  -v /etc/letsencrypt:/etc/letsencrypt \
+  -v /opt/infra/nginx/certbot/www:/var/www/certbot \
+  certbot/certbot renew --webroot -w /var/www/certbot
+
+docker exec nginx-proxy nginx -s reload
+```
+
+This can be added to a cron job later for scheduled renewal.
+
+### 9. Local Server Checks
 
 Run these on the server:
 
@@ -184,24 +255,28 @@ curl http://127.0.0.1:3000/sitemap.xml
 curl http://127.0.0.1:3000/rss.xml
 ```
 
-### 7. Nginx Reverse Proxy
+### 10. Nginx Reverse Proxy
 
-Nginx should proxy the public domain to:
+Docker Nginx proxies the public domain to:
 
 ```text
 http://127.0.0.1:3000
 ```
 
-Full Nginx and HTTPS configuration is deferred to Phase 7.2, after domain DNS is ready. Do not expose the Next.js container directly to the public internet.
+Do not expose the Next.js container directly to the public internet.
 
-### 8. Rollback
+### 11. Rollback
 
 Check out the previous tag or commit, then rebuild the container:
 
 ```bash
+cd /opt/apps/personal-dev-os
+git log --oneline
 git checkout <previous-tag-or-commit>
 docker compose --env-file .env.production up -d --build
 ```
+
+Future releases should use Git tags for clearer rollback targets.
 
 ## Pre-Deployment Checklist
 
@@ -219,6 +294,20 @@ docker compose --env-file .env.production up -d --build
 - Confirm mobile layout still shows app entry points and does not overflow.
 - Confirm `light` / `dark` and `macos` / `vercel` still work.
 - Confirm Console commands still work, especially `blog`, `logs`, and `articles`.
+
+## Online Validation Checklist
+
+- `https://oli6666.top`
+- `https://oli6666.top/blog`
+- `https://oli6666.top/sitemap.xml`
+- `https://oli6666.top/robots.txt`
+- `https://oli6666.top/rss.xml`
+- HTTP redirects to HTTPS.
+- `www.oli6666.top` redirects to `oli6666.top`.
+- Sitemap and RSS use `https://oli6666.top`.
+- Draft posts are not public.
+- Console `blog` command works.
+- Mobile baseline check passes.
 
 ## Recommended Platforms
 

@@ -224,3 +224,39 @@
 - Re-ran `pnpm lint` and `pnpm build`
 - Rechecked public blog routes, sitemap, robots, RSS, and draft safety
 - No business feature, CMS, DB, search, Console, CLI, or window-system changes
+
+## Phase 7: Self-hosted Production Deployment COMPLETED
+- Docker deployment configuration
+- GitHub remote repository setup
+- Server Docker runtime on CentOS 9
+- Next.js standalone output in Docker
+- Docker Nginx reverse proxy
+- Domain DNS setup
+- Let's Encrypt HTTPS
+- Production validation
+- Post-release operations archive
+
+### Phase 7.1: Docker Deployment Configuration COMPLETED
+- Added multi-stage Dockerfile for Next.js standalone runtime
+- Added `.dockerignore`, `.npmrc`, `docker-compose.yml`, and stable `public` directory placeholder
+- Configured standalone output and traced `content/blog` for server-side Markdown access
+- Preserved published-only blog, Console, window system, and UI behavior
+
+### Phase 7.2: Production URL Build Args / SEO Output Fix COMPLETED
+- Passed `NEXT_PUBLIC_SITE_URL` into Docker build args before `pnpm build`
+- Kept `NEXT_PUBLIC_SITE_URL` available at container runtime
+- Ensured sitemap, RSS, robots, and metadata use the production origin after rebuild
+
+### Phase 7.3 - 7.6: Server Release Path COMPLETED
+- Set up GitHub remote repository flow for server clone / pull updates
+- Deployed on self-owned Korea cloud server with CentOS 9
+- Ran the app via Docker Compose and Next.js standalone server
+- Configured Docker Nginx reverse proxy
+- Connected `oli6666.top` DNS to production
+- Configured Let's Encrypt HTTPS
+- Redirected `www.oli6666.top` to `oli6666.top`
+- Validated production routes, SEO outputs, HTTPS redirects, and mobile baseline
+
+### Phase 7.7: Post-release Operations Archive COMPLETED
+- Archived production URL, directory layout, environment variable requirements, update flow, log checks, Nginx reload, certificate renewal, rollback, and online validation checklist
+- Phase 7 is completed with no business feature, UI, Console / CLI, window-system, or blog-system changes
