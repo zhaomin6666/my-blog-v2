@@ -260,3 +260,27 @@
 ### Phase 7.7: Post-release Operations Archive COMPLETED
 - Archived production URL, directory layout, environment variable requirements, update flow, log checks, Nginx reload, certificate renewal, rollback, and online validation checklist
 - Phase 7 is completed with no business feature, UI, Console / CLI, window-system, or blog-system changes
+
+## Phase 8: Content & Career Launch IN PROGRESS
+- Publish real blog content around the Personal Developer OS build process
+- Use the site as a personal brand, job-search showcase, and technical writing archive
+- Keep Phase 8 content-first: no blog-system, UI, Console / CLI, window-system, or deployment-config changes unless separately planned
+
+### Phase 8.1: Release Archive & Version Tag COMPLETED
+- Archived the v1.0.0 production release and version milestone
+- Production URL: `https://oli6666.top`
+- Phase 1-7 completed before content launch work
+
+### Phase 8.2: Real Blog Content Series COMPLETED
+- Established the series: `从 Hexo 到 Personal Developer OS`
+- Added the first three published articles under `content/blog`
+- Covered the site rebuild motivation, Developer OS design decision, and Phase 1-3 implementation process
+- Replaced previous short sample blog posts with real series content
+- Preserved the existing Markdown blog architecture, Main App, Console / CLI, window system, UI, sitemap/RSS code, and deployment configuration
+
+### Phase 8.2.1: Blog Copywriting Polish / 去 AI 味文字润色 IN PROGRESS
+- Polished the first three articles in the `从 Hexo 到 Personal Developer OS` series
+- Reduced AI-generated phrasing and template-style sentence patterns
+- Preserved personal developer voice: real reflection tone, no marketing language, no fabricated facts
+- Kept technical accuracy, phase structure, and frontmatter fields intact
+- No blog-system code, Console / CLI, window system, UI, or deployment configuration changes

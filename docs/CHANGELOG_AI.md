@@ -1,5 +1,56 @@
 # AI Development Changelog
 
+### 2026-06-08 - Claude Code
+**Summary:** Phase 8.2.1 completed. Polished the first three blog articles in the "从 Hexo 到 Personal Developer OS" series to reduce AI-generated phrasing.
+
+**Phase 8.2.1 scope:**
+- Polished Chinese copy in three published blog articles:
+  - `why-rebuild-my-personal-blog` — softened transitions, reduced template phrasing, made motivation narrative more personal.
+  - `designing-personal-developer-os` — reduced "不是A，而是B" patterns, made design decision narrative feel less structured-product-pitch, more personal reflection.
+  - `building-os-shell-and-main-app` — increased dev-log feel, reduced summarizing conclusions, kept phase-by-phase structure but with more natural transitions.
+- Key changes across all three articles:
+  - Removed overused AI patterns: "在这个过程中，我深刻认识到", "这不仅...更是...", "更重要的是", etc.
+  - Reduced over-neat parallel structures and abstract buzzwords.
+  - Kept technical expressions, phase names, component names, and project facts.
+  - Preserved slug, date, updatedAt, status, lang, series frontmatter fields.
+  - Made tone more like a real Java backend developer's development journal.
+
+**Scope guard:**
+- No blog-system code was modified.
+- No Main App code was modified.
+- No Console / CLI code was modified.
+- No window-system code was modified.
+- No UI or deployment configuration was modified.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-08 - Codex
+**Summary:** Phase 8.2 completed. Established the first real blog content series for the Personal Developer OS.
+
+**Phase 8.2 content scope:**
+- Established the series `从 Hexo 到 Personal Developer OS`.
+- Added three published Chinese blog articles:
+  - `why-rebuild-my-personal-blog` — why the old Hexo blog was rebuilt into a new personal site.
+  - `designing-personal-developer-os` — why the personal site uses the Developer OS product concept.
+  - `building-os-shell-and-main-app` — Phase 1-3 implementation record from OS Shell to Main App modules.
+- Replaced the previous short sample posts:
+  - `building-personal-developer-os`
+  - `ai-agent-learning-log`
+- Kept all new posts under the same series with complete frontmatter, `published` status, `zh` language, and requested backdated publication dates.
+
+**Scope guard:**
+- No blog-system code was modified.
+- No Main App code was modified.
+- No Console / CLI code was modified.
+- No window-system code was modified.
+- No UI or deployment configuration was modified.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
 ### 2026-06-08 - Codex
 **Summary:** Phase 7 completed. Archived the production release and post-release operations for the Personal Developer OS.
 
