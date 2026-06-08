@@ -1,6 +1,27 @@
 # AI Development Changelog
 
 ### 2026-06-08 - Codex
+**Summary:** Phase 8.2.2 completed. Added the back half of the "从 Hexo 到 Personal Developer OS" article series.
+
+**Phase 8.2.2 content scope:**
+- Added four published Chinese blog articles under `content/blog`:
+  - `building-cli-for-personal-developer-os` — Phase 4 Console App CLI implementation, command linkage, aliases, history, prompt, and AI command parsing deferral.
+  - `visual-polish-and-responsive-design` — Phase 5 visual consistency, macos / vercel preset polish, light / dark refinements, mobile responsiveness, and restrained interaction feedback.
+  - `markdown-blog-seo-rss-system` — Phase 6 Markdown blog architecture, BlogRepository / FileBlogRepository / BlogService layering, blog pages, homepage and Console data alignment, draft safety, SEO, sitemap, robots, RSS, and deployment prep.
+  - `nextjs-docker-nginx-https-deployment` — Phase 7 self-hosted deployment with Next.js standalone, Docker, Docker Compose, Nginx reverse proxy, shared Docker network, `NEXT_PUBLIC_SITE_URL`, domain DNS, Let's Encrypt HTTPS, online SEO checks, renewal, rollback, and deployment documentation.
+- The `从 Hexo 到 Personal Developer OS` series now has seven published articles.
+- All four new articles use complete frontmatter with unique slugs, `published` status, `zh` language, and the shared series name.
+- No old placeholder posts were present in `content/blog`, so none were deleted.
+
+**Scope guard:**
+- No blog-system code was modified.
+- No BlogService, BlogRepository, FileBlogRepository, `/blog`, `/blog/[slug]`, sitemap / RSS, homepage Main App, Console / CLI, window-system, UI, Docker, Nginx, or deployment configuration changes were made.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-08 - Codex
 **Summary:** Added Chinese documentation companions under `docs`, with special focus on the production deployment manual.
 
 **Documentation scope:**
