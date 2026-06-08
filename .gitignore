@@ -26,6 +26,7 @@ dist/
 .idea/
 *.swp
 *.swo
+.claude/settings.json
 
 # OS
 .DS_Store

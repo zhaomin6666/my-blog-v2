@@ -36,7 +36,7 @@ seoDescription: "从普通作品集页面的局限出发，解释 Personal Devel
 - 网站是活的，能长期迭代，不是做完就扔在那。
 - 博客、作品、终端入口和个人信息能放在同一个产品概念里。
 
-这些需求凑在一起之后，普通长页就有点不够用了。
+把这些需求放在一起看，普通长页就有点不够用了。
 
 ## 从 CLI 首页到 Developer OS
 
@@ -46,13 +46,13 @@ seoDescription: "从普通作品集页面的局限出发，解释 Personal Devel
 
 但往下想就觉得纯 CLI 有点问题。它对不熟悉终端的访问者不太友好，也不太适合展示完整内容。项目卡片、技能矩阵、博客列表这些东西用命令输出当然可以做，但阅读体验不一定好。而且求职场景下，很多人可能并不想先学一套命令才能看你的简历。
 
-所以这个想法后来变成了 Personal Developer OS。
+所以后来我把这个想法改成了 Personal Developer OS。
 
 终端不再只是唯一入口，而是变成了 Console App；主要内容放进 Main App。整个页面像一个跑在浏览器里的轻量桌面系统：有应用窗口，有状态栏，有桌面 fallback，也有可切换的视觉风格。这样既保留了 CLI 的开发者特征，又不会牺牲常规的浏览体验。
 
 ## 四个核心界面
 
-Personal Developer OS 的界面不是随便拼出来的，几个部分各有分工。
+Personal Developer OS 的界面各有分工，不是随便凑的。
 
 **Main App** 是主要内容窗口。它负责展示 Hero / Overview、About、Skills、Projects、Blog、Contact。内容还是个人网站该有的那些信息，但我把它们设计成 OS module / dashboard panel 的样子，不是普通网页 section。浏览的时候感觉更像是在用一个小应用，而不是在滚一张长页面。
 
