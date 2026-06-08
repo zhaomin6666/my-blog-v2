@@ -1,6 +1,23 @@
 # AI Development Changelog
 
 ### 2026-06-08 - Codex
+**Summary:** Phase 7.2 deployment fix. Passed `NEXT_PUBLIC_SITE_URL` into Docker build args so public SEO outputs use the production origin.
+
+**Fix details:**
+- Added `ARG NEXT_PUBLIC_SITE_URL` and matching `ENV` in the Docker build stage before `pnpm build`.
+- Changed Docker Compose build config to pass `NEXT_PUBLIC_SITE_URL` as a build arg.
+- Kept `.env.production` and runtime `NEXT_PUBLIC_SITE_URL` support for the running standalone server.
+- Updated deployment docs to explain build-time and runtime environment requirements, rebuild after `.env.production` changes, and no-cache rebuild commands.
+
+**Scope guard:**
+- No business feature, blog architecture, Console / CLI, window-system, or UI changes were made.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+- Docker Compose runtime verification should be performed on the server because this workspace does not have Docker installed.
+
+### 2026-06-08 - Codex
 **Summary:** Phase 7.1.1 started. Added Docker self-hosting preparation for the Personal Developer OS on a CentOS 9 server.
 
 **Phase 7.1.1 deliverables:**

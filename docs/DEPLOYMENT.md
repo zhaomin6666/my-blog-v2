@@ -66,7 +66,12 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 - `robots.txt`
 - `rss.xml`
 
-Production deployments must set this to the real site origin. Do not commit `.env.local` or any private deployment secrets.
+Production deployments must set this to the real site origin. In Docker deployments, the value is needed twice:
+
+- build time: Next.js inlines `NEXT_PUBLIC_*` values while running `pnpm build`, so sitemap, RSS, and metadata need the production URL during image build.
+- runtime: the standalone server should still receive the same environment variable when the container starts.
+
+Do not commit `.env.local` or any private deployment secrets.
 
 For Docker Compose deployments, create `.env.production` on the server:
 
@@ -138,7 +143,7 @@ EOF
 ### 4. Build And Start
 
 ```bash
-docker compose up -d --build
+docker compose --env-file .env.production up -d --build
 ```
 
 The Compose service is named `personal-dev-os` and maps the container to localhost only:
@@ -147,7 +152,20 @@ The Compose service is named `personal-dev-os` and maps the container to localho
 127.0.0.1:3000:3000
 ```
 
-`NEXT_PUBLIC_SITE_URL` is loaded into the container from `.env.production`.
+`NEXT_PUBLIC_SITE_URL` is passed to Docker build args and is also loaded into the running container from `.env.production`.
+
+If `.env.production` changes, rebuild and restart so the build-time metadata is regenerated:
+
+```bash
+docker compose --env-file .env.production up -d --build
+```
+
+If Docker cache keeps old sitemap, RSS, or metadata output, rebuild without cache:
+
+```bash
+docker compose --env-file .env.production build --no-cache
+docker compose --env-file .env.production up -d
+```
 
 ### 5. View Logs
 
@@ -182,7 +200,7 @@ Check out the previous tag or commit, then rebuild the container:
 
 ```bash
 git checkout <previous-tag-or-commit>
-docker compose up -d --build
+docker compose --env-file .env.production up -d --build
 ```
 
 ## Pre-Deployment Checklist
@@ -190,7 +208,7 @@ docker compose up -d --build
 - Set the production `NEXT_PUBLIC_SITE_URL`.
 - Run `pnpm lint`.
 - Run `pnpm build`.
-- Run `docker build -t personal-dev-os:test .` when Docker is available locally or on the server.
+- Run `docker compose --env-file .env.production build` when Docker is available locally or on the server.
 - Confirm `/` renders the Personal Developer OS shell.
 - Confirm `/blog` renders published posts.
 - Confirm a published article route renders, for example `/blog/building-personal-developer-os`.

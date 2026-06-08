@@ -1,6 +1,9 @@
 services:
   personal-dev-os:
-    build: .
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
     container_name: personal-dev-os
     restart: unless-stopped
     ports:
@@ -9,3 +12,4 @@ services:
       - .env.production
     environment:
       NODE_ENV: production
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
