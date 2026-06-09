@@ -1,5 +1,38 @@
 # AI Development Changelog
 
+### 2026-06-09 - Codex
+**Summary:** Phase 8.3.1 completed. Refactored Projects into a stronger career-facing portfolio module.
+
+**Phase 8.3.1 scope:**
+- Refactored project data from simple project cards into a richer portfolio structure:
+  - `subtitle`
+  - `type`
+  - `statusLabel`
+  - `highlights`
+  - `features`
+  - `role`
+  - `links`
+  - `relatedPosts`
+  - `featured`
+  - `order`
+- Promoted `Personal Developer OS` to the first featured project.
+- Added live site, GitHub, related series, and selected related article links for `Personal Developer OS`.
+- Added `AI Agent Demo` as the second featured project and clearly positioned it as an in-progress learning / showcase project.
+- Kept `Bidding System Platform` as supporting enterprise backend experience.
+- Updated the Projects section UI to render featured portfolio cards with tech stacks, engineering notes, current scope, project roles, links, and related logs.
+- Projects now better supports job-search portfolio presentation while staying inside the Main App / Developer OS model.
+
+**Scope guard:**
+- No Console / CLI logic was modified.
+- No window-system behavior was modified.
+- No deployment configuration was modified.
+- No blog core logic or existing blog article content was modified.
+- No project detail pages, search, filters, CMS, database, Agent API, or online chat feature was added.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
 ### 2026-06-08 - Codex
 **Summary:** Phase 8.2 fully completed. Archived the finished "从 Hexo 到 Personal Developer OS" blog series and reading experience work.
 

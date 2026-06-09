@@ -324,3 +324,16 @@
 - Added a lightweight series entry point from `/blog`.
 - Added sitemap entries for series pages while keeping RSS article-only.
 - No Console / CLI logic, window-system behavior, deployment configuration, database, CMS, search, comments, reading views, or tag detail page changes.
+
+### Phase 8.3: Projects / AI Agent Demo Showcase Strengthening IN PROGRESS
+- Strengthen Projects as a career-facing portfolio module inside the existing Main App.
+- Keep this phase focused on project information architecture and restrained presentation.
+- Do not add project detail pages, search, filters, CMS, database, Agent API, Console / CLI changes, window-system changes, or deployment configuration changes unless separately planned.
+
+### Phase 8.3.1: Projects Information Structure Refactor COMPLETED
+- Refactored `Project` data into a richer portfolio structure with subtitle, type, status label, highlights, features, role, links, related posts, featured flag, and order.
+- Promoted `Personal Developer OS` to the first featured project and connected it to the live site, GitHub repository, `/blog/series/personal-developer-os`, and selected existing series articles.
+- Added `AI Agent Demo` as the second featured project, clearly positioned as an in-progress learning / showcase project rather than a mature production product.
+- Kept `Bidding System Platform` as supporting backend enterprise-system experience.
+- Updated the Projects section to show featured portfolio cards with tech stack, engineering notes, current scope, roles, links, and related logs while keeping supporting projects compact.
+- No Console / CLI logic, window-system behavior, blog core logic, blog article content, deployment configuration, database, CMS, search, filters, or Agent API changes.

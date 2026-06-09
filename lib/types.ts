@@ -25,13 +25,33 @@ export interface LocalizedText {
 
 export type ProjectStatus = 'building' | 'production' | 'mvp';
 
+export interface ProjectLink {
+  label: LocalizedText;
+  href: string;
+  type: 'live' | 'github' | 'blog' | 'series';
+}
+
+export interface ProjectRelatedPost {
+  title: LocalizedText;
+  slug: string;
+}
+
 export interface Project {
   id: string;
   title: LocalizedText;
+  subtitle: LocalizedText;
   description: LocalizedText;
   status: ProjectStatus;
+  statusLabel?: LocalizedText;
+  type: LocalizedText;
   stack: string[];
-  link?: string;
+  highlights: LocalizedText[];
+  features?: LocalizedText[];
+  role: LocalizedText[];
+  links?: ProjectLink[];
+  relatedPosts?: ProjectRelatedPost[];
+  featured?: boolean;
+  order: number;
 }
 
 export interface SkillCategory {
