@@ -1,5 +1,38 @@
 # AI Development Changelog
 
+### 2026-06-10 - Codex
+**Summary:** Phase 8.3.2-fix completed. Refactored Projects data into a file-based content source.
+
+**Phase 8.3.2-fix scope:**
+- Moved Projects content out of code configuration and into `content/projects/**/*.md`.
+- Added Markdown files:
+  - `content/projects/personal-developer-os/index.md`
+  - `content/projects/ai-agent-demo/index.md`
+- Added Project content architecture:
+  - `ProjectRepository`
+  - `FileProjectRepository`
+  - `ProjectService`
+- Project metadata now comes from Markdown frontmatter and detail content comes from Markdown body.
+- Project URLs now come from `frontmatter.slug`, not folder names.
+- `FileProjectRepository` recursively scans `content/projects`, ignores non-Markdown files, filters unpublished projects from public pages, and throws on duplicate slugs.
+- Reused the existing `/projects` and `/projects/[slug]` pages instead of rebuilding the UI.
+- Homepage Projects now receives featured projects from `ProjectService`.
+- Console `projects` command now uses server-provided project metadata from the same content source.
+- `sitemap.xml` now gets published project pages through `ProjectService`.
+- RSS remains blog-article-only.
+
+**Scope guard:**
+- No Console / CLI behavior was modified.
+- No window-system behavior was modified.
+- No deployment configuration was modified.
+- No blog core logic or existing blog article content was modified.
+- No database, CMS, search, filters, online chat, or Agent API was added.
+- No fabricated project metrics, users, production adoption, or commercial results were added.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
 ### 2026-06-09 - Codex
 **Summary:** Phase 8.3.2 completed. Added project case study pages for the portfolio showcase.
 

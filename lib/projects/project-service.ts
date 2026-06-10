@@ -1,0 +1,41 @@
+import type { ProjectLookupOptions, ProjectRepository } from './project-repository';
+import type { Project, ProjectMeta, ProjectQueryOptions } from './project-types';
+import { FileProjectRepository } from './file-project-repository';
+
+export class ProjectService {
+  constructor(private readonly repository: ProjectRepository) {}
+
+  async getPublishedProjects(
+    options?: Omit<ProjectQueryOptions, 'includeDrafts'>,
+  ): Promise<ProjectMeta[]> {
+    return this.repository.getAllProjects({ ...options, includeDrafts: false });
+  }
+
+  async getFeaturedProjects(): Promise<ProjectMeta[]> {
+    return this.repository.getAllProjects({
+      includeDrafts: false,
+      featured: true,
+    });
+  }
+
+  async getAllProjects(
+    options?: Omit<ProjectQueryOptions, 'includeDrafts'>,
+  ): Promise<ProjectMeta[]> {
+    return this.repository.getAllProjects({ ...options, includeDrafts: true });
+  }
+
+  async getProjectBySlug(
+    slug: string,
+    options?: ProjectLookupOptions,
+  ): Promise<Project | null> {
+    return this.repository.getProjectBySlug(slug, {
+      includeDrafts: options?.includeDrafts ?? true,
+    });
+  }
+
+  async getPublishedProjectBySlug(slug: string): Promise<Project | null> {
+    return this.repository.getProjectBySlug(slug, { includeDrafts: false });
+  }
+}
+
+export const projectService = new ProjectService(new FileProjectRepository());

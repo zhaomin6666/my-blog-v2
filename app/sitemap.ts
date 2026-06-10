@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { blogService } from '@/lib/blog';
-import { projectCaseStudies } from '@/data/projects';
+import { projectService } from '@/lib/projects';
 import { getAbsoluteUrl } from '@/lib/seo';
 
 export const dynamic = 'force-static';
@@ -8,6 +8,7 @@ export const dynamic = 'force-static';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await blogService.getPublishedPosts();
   const series = await blogService.getAllSeries();
+  const projects = await projectService.getPublishedProjects();
 
   return [
     {
@@ -34,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
-    ...projectCaseStudies.map((project) => ({
+    ...projects.map((project) => ({
       url: getAbsoluteUrl(`/projects/${project.slug}`),
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,

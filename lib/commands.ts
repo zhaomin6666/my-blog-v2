@@ -1,6 +1,6 @@
-import { projects } from '@/data/projects';
 import { skills } from '@/data/skills';
 import type { BlogPostMeta } from './blog/blog-types';
+import type { ProjectMeta } from './projects';
 import { Lang, MainSectionId, ProjectStatus } from './types';
 import { t } from './translations';
 
@@ -23,6 +23,7 @@ type CommandDefinition = {
 export type CommandContext = {
   lang: Lang;
   blogPosts: BlogPostMeta[];
+  projects: ProjectMeta[];
 };
 
 type CommandDescriptionKey =
@@ -76,15 +77,15 @@ function formatSkills(lang: Lang) {
   ].join('\n');
 }
 
-function formatProjects(lang: Lang) {
+function formatProjects(lang: Lang, projects: ProjectMeta[]) {
   return [
     t('cmd.projects.header', lang),
     ...projects.map((project) => {
       const status = projectStatusLabels[project.status][lang];
       return [
-        `- ${project.title[lang]}`,
+        `- ${project.title}`,
         `  ${t('cmd.projects.statusLabel', lang)}: ${status}`,
-        `  ${t('cmd.projects.stackLabel', lang)}: ${project.stack.join(', ')}`,
+        `  ${t('cmd.projects.stackLabel', lang)}: ${project.techStack.join(', ')}`,
       ].join('\n');
     }),
   ].join('\n');
@@ -147,7 +148,7 @@ const commandDefinitions: CommandDefinition[] = [
   {
     name: 'projects',
     descriptionKey: 'cmd.projects.desc',
-    run: ({ lang }) => command(formatProjects(lang), { navigationTarget: 'projects' }),
+    run: ({ lang, projects }) => command(formatProjects(lang, projects), { navigationTarget: 'projects' }),
   },
   {
     name: 'blog',

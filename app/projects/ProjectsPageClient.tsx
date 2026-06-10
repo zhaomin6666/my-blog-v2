@@ -3,10 +3,10 @@
 import { ProjectLayout, ProjectListPage } from '@/components/projects';
 import { useSettings } from '@/lib/settings-context';
 import { t } from '@/lib/translations';
-import type { Project } from '@/lib/types';
+import type { ProjectMeta } from '@/lib/projects';
 
 interface ProjectsPageClientProps {
-  projects: Project[];
+  projects: ProjectMeta[];
 }
 
 export function ProjectsPageClient({ projects }: ProjectsPageClientProps) {

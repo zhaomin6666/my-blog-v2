@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { projects } from '@/data/projects';
+import { projectService } from '@/lib/projects';
 import { buildMetadata } from '@/lib/seo';
 import { ProjectsPageClient } from './ProjectsPageClient';
 
@@ -10,6 +10,8 @@ export const metadata: Metadata = buildMetadata({
   path: '/projects',
 });
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const projects = await projectService.getPublishedProjects();
+
   return <ProjectsPageClient projects={projects} />;
 }

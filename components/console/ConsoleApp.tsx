@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef } from 'react';
 import type { BlogPostMeta } from '@/lib/blog/blog-types';
+import type { ProjectMeta } from '@/lib/projects';
 import { useSettings } from '@/lib/settings-context';
 import { ConsoleOutputLine } from '@/lib/types';
 import { generateId } from '@/lib/utils';
@@ -13,10 +14,11 @@ import { ConsoleInput } from './ConsoleInput';
 
 interface ConsoleAppProps {
   blogPosts: BlogPostMeta[];
+  projects: ProjectMeta[];
   onCommandResult?: (result: CommandResult) => void;
 }
 
-export function ConsoleApp({ blogPosts, onCommandResult }: ConsoleAppProps) {
+export function ConsoleApp({ blogPosts, projects, onCommandResult }: ConsoleAppProps) {
   const { lang, stylePreset } = useSettings();
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>([]);
@@ -55,7 +57,7 @@ export function ConsoleApp({ blogPosts, onCommandResult }: ConsoleAppProps) {
       { id: generateId(), type: 'input', content: trimmed },
     ];
 
-    const result = executeCommand(trimmed, { lang, blogPosts });
+    const result = executeCommand(trimmed, { lang, blogPosts, projects });
 
     if (result.action === 'clear') {
       setLines([]);
@@ -74,7 +76,7 @@ export function ConsoleApp({ blogPosts, onCommandResult }: ConsoleAppProps) {
     setLines((prev) => [...prev, ...nextLines]);
     onCommandResult?.(result);
     setInput('');
-  }, [blogPosts, input, lang, onCommandResult]);
+  }, [blogPosts, input, lang, onCommandResult, projects]);
 
   const handleHistoryPrevious = useCallback(() => {
     if (history.length === 0) return;

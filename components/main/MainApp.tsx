@@ -2,6 +2,7 @@
 
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import type { BlogPostMeta } from '@/lib/blog/blog-types';
+import type { ProjectMeta } from '@/lib/projects';
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { MainSectionId } from '@/lib/types';
@@ -16,6 +17,7 @@ import { ContactSection } from './ContactSection';
 interface MainAppProps {
   onOpenTerminal?: () => void;
   blogPosts: BlogPostMeta[];
+  projects: ProjectMeta[];
 }
 
 export interface MainAppHandle {
@@ -23,7 +25,7 @@ export interface MainAppHandle {
 }
 
 export const MainApp = forwardRef<MainAppHandle, MainAppProps>(function MainApp(
-  { onOpenTerminal, blogPosts },
+  { onOpenTerminal, blogPosts, projects },
   ref
 ) {
   const { stylePreset } = useSettings();
@@ -111,7 +113,7 @@ export const MainApp = forwardRef<MainAppHandle, MainAppProps>(function MainApp(
 
           {/* Projects */}
           <div ref={setSectionRef('projects')} className={sectionClassName('projects')}>
-            <ProjectsSection />
+            <ProjectsSection projects={projects} />
           </div>
 
           {/* Blog */}

@@ -350,3 +350,14 @@
 - Added project list and detail pages to `sitemap.xml`.
 - Kept RSS blog-article-only.
 - No Console / CLI logic, window-system behavior, blog core logic, blog article content, deployment configuration, database, CMS, search, filters, online chat, or Agent API changes.
+
+#### Phase 8.3.2-fix: Projects Data Source Refactor COMPLETED
+- Refactored Projects data from code configuration into file-based Markdown content under `content/projects/**/*.md`.
+- Added `ProjectRepository`, `FileProjectRepository`, and `ProjectService` under `lib/projects`.
+- Project URLs now come from `frontmatter.slug`, not folder names.
+- `FileProjectRepository` recursively scans `content/projects`, ignores non-Markdown files, filters unpublished projects from public consumers, and fails early on duplicate slugs.
+- Homepage Projects, `/projects`, `/projects/[slug]`, Console project output, and sitemap now consume project data through `ProjectService` or server-provided `ProjectMeta[]`.
+- Project detail pages render Markdown body content by reusing the existing Markdown renderer.
+- Kept `/projects`, `/projects/personal-developer-os`, and `/projects/ai-agent-demo` paths unchanged.
+- Kept RSS blog-article-only.
+- No Console / CLI behavior, window-system behavior, blog core logic, blog article content, deployment configuration, database, CMS, search, filters, online chat, or Agent API changes.

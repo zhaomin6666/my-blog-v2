@@ -3,6 +3,7 @@
 import { useCallback, useRef } from 'react';
 import { Layout, Terminal } from 'lucide-react';
 import type { BlogPostMeta } from '@/lib/blog/blog-types';
+import type { ProjectMeta } from '@/lib/projects';
 import { useSettings } from '@/lib/settings-context';
 import { useWindowManager } from '@/hooks/useWindowManager';
 import { t } from '@/lib/translations';
@@ -15,9 +16,10 @@ import { ConsoleApp } from '@/components/console/ConsoleApp';
 
 interface DeveloperOSProps {
   blogPosts: BlogPostMeta[];
+  projects: ProjectMeta[];
 }
 
-export function DeveloperOS({ blogPosts }: DeveloperOSProps) {
+export function DeveloperOS({ blogPosts, projects }: DeveloperOSProps) {
   const { lang, stylePreset, mounted } = useSettings();
   const {
     main,
@@ -86,6 +88,7 @@ export function DeveloperOS({ blogPosts }: DeveloperOSProps) {
               ref={mainAppRef}
               onOpenTerminal={openConsoleFromMain}
               blogPosts={blogPosts}
+              projects={projects}
             />
           </AppWindow>
         )}
@@ -112,6 +115,7 @@ export function DeveloperOS({ blogPosts }: DeveloperOSProps) {
         >
           <ConsoleApp
             blogPosts={blogPosts}
+            projects={projects}
             onCommandResult={handleConsoleCommandResult}
           />
         </AppWindow>

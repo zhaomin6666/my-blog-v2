@@ -78,6 +78,16 @@ data/               → Mock data
 - Site URL and default SEO copy must be centralized in `lib/seo.ts`; production deployments should set `NEXT_PUBLIC_SITE_URL`.
 - Future CMS / DB upgrades should add or swap a `BlogRepository` implementation instead of rewriting page, Console, or SEO consumers.
 
+## 9.1 Project Content Architecture Rules
+- Pages and components must NOT read `content/projects/**/*.md` directly.
+- All project data access must go through `ProjectService` (`@/lib/projects`) on the server, then pass serializable project metadata/content into Client Components.
+- `ProjectService` delegates to a `ProjectRepository` implementation; upper layers do not know the storage mechanism.
+- Current implementation: `FileProjectRepository` (reads Markdown files, server-side only).
+- Future implementations: `DbProjectRepository`, `CmsProjectRepository` — swap at the service/repository boundary instead of rewriting pages.
+- Project public URLs must come from `frontmatter.slug`, not folder or file names.
+- Public pages and sitemap must use published-only project queries.
+- RSS remains blog-only and must not include project pages.
+
 ## 10. Production Maintenance Rules
 - Changing `NEXT_PUBLIC_SITE_URL` requires a fresh production build because Next.js inlines `NEXT_PUBLIC_*` values at build time.
 - SEO, sitemap, RSS, or domain changes must be rechecked online after deployment.

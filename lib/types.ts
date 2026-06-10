@@ -25,47 +25,6 @@ export interface LocalizedText {
 
 export type ProjectStatus = 'building' | 'production' | 'mvp';
 
-export interface ProjectLink {
-  label: LocalizedText;
-  href: string;
-  type: 'live' | 'github' | 'blog' | 'series';
-}
-
-export interface ProjectRelatedPost {
-  title: LocalizedText;
-  slug: string;
-}
-
-export interface Project {
-  id: string;
-  slug: string;
-  title: LocalizedText;
-  subtitle: LocalizedText;
-  description: LocalizedText;
-  status: ProjectStatus;
-  statusLabel?: LocalizedText;
-  type: LocalizedText;
-  timeline?: LocalizedText;
-  stack: string[];
-  highlights: LocalizedText[];
-  features?: LocalizedText[];
-  role: LocalizedText[];
-  overview?: LocalizedText[];
-  problems?: LocalizedText[];
-  solutions?: LocalizedText[];
-  architecture?: LocalizedText[];
-  developmentProcess?: LocalizedText[];
-  aiCollaboration?: LocalizedText[];
-  challenges?: LocalizedText[];
-  learnings?: LocalizedText[];
-  futurePlans?: LocalizedText[];
-  links?: ProjectLink[];
-  relatedPosts?: ProjectRelatedPost[];
-  relatedSeriesSlug?: string;
-  featured?: boolean;
-  order: number;
-}
-
 export interface SkillCategory {
   category: LocalizedText;
   items: string[];
