@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowUpRight, BookOpen, CheckCircle2, ExternalLink, Github } from 'lucide-react';
-import { projects } from '@/data/projects';
+import { hasProjectCaseStudy, projects } from '@/data/projects';
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { Project, ProjectLink, ProjectStatus } from '@/lib/types';
@@ -182,6 +182,16 @@ function FeaturedProjectCard({ project, isMacos, tokens, lang }: FeaturedProject
               {t('projects.links', lang)}
             </div>
             <div className="flex flex-wrap gap-2">
+              {hasProjectCaseStudy(project) && (
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className={`inline-flex min-h-8 items-center gap-1.5 px-2.5 py-1 text-[11px] transition-all duration-200 active:scale-95 ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius} hover:text-zinc-900 dark:hover:text-white ${isMacos ? '' : 'font-mono'}`}
+                >
+                  <BookOpen size={12} />
+                  <span>{t('projects.caseStudy', lang)}</span>
+                  <ArrowUpRight size={11} />
+                </Link>
+              )}
               {project.links.map((link) => (
                 <ProjectLinkItem
                   key={`${project.id}-${link.href}`}
@@ -275,6 +285,17 @@ function CompactProjectCard({ project, isMacos, tokens, lang }: CompactProjectCa
             ))}
           </div>
         </div>
+
+        {hasProjectCaseStudy(project) && (
+          <Link
+            href={`/projects/${project.slug}`}
+            className={`inline-flex min-h-8 w-fit items-center gap-1.5 px-2.5 py-1 text-[11px] transition-all duration-200 active:scale-95 ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius} hover:text-zinc-900 dark:hover:text-white ${isMacos ? '' : 'font-mono'}`}
+          >
+            <BookOpen size={12} />
+            <span>{t('projects.caseStudy', lang)}</span>
+            <ArrowUpRight size={11} />
+          </Link>
+        )}
       </div>
     </article>
   );

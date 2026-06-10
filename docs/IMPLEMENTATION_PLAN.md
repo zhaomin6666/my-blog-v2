@@ -337,3 +337,16 @@
 - Kept `Bidding System Platform` as supporting backend enterprise-system experience.
 - Updated the Projects section to show featured portfolio cards with tech stack, engineering notes, current scope, roles, links, and related logs while keeping supporting projects compact.
 - No Console / CLI logic, window-system behavior, blog core logic, blog article content, deployment configuration, database, CMS, search, filters, or Agent API changes.
+
+### Phase 8.3.2: Project Case Study Pages COMPLETED
+- Added public project routes:
+  - `/projects`
+  - `/projects/personal-developer-os`
+  - `/projects/ai-agent-demo`
+- Extended the shared `Project` data model with stable `slug`, timeline, overview, problem/background, solution/design, architecture, development process, AI collaboration, challenges, learnings, related series, and future plans.
+- Reused the same project data for the homepage Projects section, `/projects` list page, and `/projects/[slug]` case study pages.
+- Added restrained Developer OS / Engineering Logs style project list and detail pages with metadata, theme switching, language switching, and style preset switching.
+- Added homepage Projects card entry points for case studies.
+- Added project list and detail pages to `sitemap.xml`.
+- Kept RSS blog-article-only.
+- No Console / CLI logic, window-system behavior, blog core logic, blog article content, deployment configuration, database, CMS, search, filters, online chat, or Agent API changes.

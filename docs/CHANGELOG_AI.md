@@ -1,6 +1,32 @@
 # AI Development Changelog
 
 ### 2026-06-09 - Codex
+**Summary:** Phase 8.3.2 completed. Added project case study pages for the portfolio showcase.
+
+**Phase 8.3.2 scope:**
+- Added the project list page `/projects`.
+- Added `Personal Developer OS` case study page at `/projects/personal-developer-os`.
+- Added `AI Agent Demo` case study page at `/projects/ai-agent-demo`.
+- Extended the shared `Project` data model with stable `slug`, timeline, overview, problem/background, solution/design, architecture, development process, AI collaboration, challenges, learnings, related series, and future plans.
+- Reused the same project data across the homepage Projects section, `/projects`, and `/projects/[slug]`.
+- Added homepage Projects card entry points: `View case study` / `查看项目详情`.
+- Project detail pages now include tech stack, background, engineering highlights, AI-assisted development notes, related posts, and future plans.
+- Added project list/detail routes to `sitemap.xml`.
+- Kept RSS limited to blog posts.
+
+**Scope guard:**
+- No Console / CLI logic was modified.
+- No window-system behavior was modified.
+- No deployment configuration was modified.
+- No blog core logic or existing blog article content was modified.
+- No database, CMS, search, filters, online chat, or Agent API was added.
+- No fabricated project metrics, users, production adoption, or commercial results were added.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-09 - Codex
 **Summary:** Phase 8.3.1 completed. Refactored Projects into a stronger career-facing portfolio module.
 
 **Phase 8.3.1 scope:**
