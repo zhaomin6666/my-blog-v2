@@ -1,6 +1,47 @@
 # AI Development Changelog
 
 ### 2026-06-10 - Codex
+**Summary:** Phase 8.3.3 completed. Strengthened the AI Agent Demo project content for career-facing Agent learning showcase.
+
+**Phase 8.3.3 scope:**
+- Updated `content/projects/ai-agent-demo/index.md`.
+- Clarified `AI Agent Demo` as an `In Progress / Learning Project`, not a mature production product.
+- Repositioned the project as an AI Agent learning project for enterprise knowledge base and business workflow understanding.
+- Strengthened the Java backend-to-AI Agent background:
+  - enterprise system development
+  - bidding / supplier / expert / procurement workflow scenarios
+  - documents, interfaces, requirements communication, delivery context, and business process understanding
+- Expanded the learning route around:
+  - TypeScript
+  - LangChain.js
+  - LangGraph.js
+  - Zod
+  - Prompt Messages
+  - Structured Output
+  - Intent Classifier
+  - Tool Calling
+  - Agent Executor
+  - RAG
+  - Agent State
+  - Persistence
+  - future MCP / OAuth / enterprise system integration
+- Kept `relatedPosts` empty because no published AI Agent learning series exists yet.
+- Preserved `slug: ai-agent-demo`, `published: true`, `featured: true`, and `order: 2`.
+
+**Scope guard:**
+- No ProjectService or FileProjectRepository changes were made.
+- No Projects UI changes were made.
+- No Blog system changes were made.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No database, CMS, online chat, real Agent API, RAG online demo, or fabricated project outcomes were added.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-10 - Codex
 **Summary:** Phase 8.3.2-fix completed. Refactored Projects data into a file-based content source.
 
 **Phase 8.3.2-fix scope:**
