@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowUpRight, BookOpen, ExternalLink, Github } from 'lucide-react';
+import { ArrowUpRight, BookOpen, ExternalLink, FileText, Github } from 'lucide-react';
+import type { BlogPostMeta, BlogSeries } from '@/lib/blog/blog-types';
 import { getStyleTokens } from '@/lib/stylePresets';
 import type { Project, ProjectLinkData } from '@/lib/projects';
 import type { Lang } from '@/lib/types';
@@ -10,6 +11,8 @@ import { t } from '@/lib/translations';
 interface ProjectDetailPageProps {
   project: Project;
   htmlContent: string;
+  relatedSeries: BlogSeries | null;
+  relatedSeriesPosts: BlogPostMeta[];
   stylePreset: 'macos' | 'vercel';
   lang: Lang;
 }
@@ -57,7 +60,14 @@ function ProjectActionLink({ link, isMacos }: { link: ProjectLinkData; isMacos: 
   );
 }
 
-export function ProjectDetailPage({ project, htmlContent, stylePreset, lang }: ProjectDetailPageProps) {
+export function ProjectDetailPage({
+  project,
+  htmlContent,
+  relatedSeries,
+  relatedSeriesPosts,
+  stylePreset,
+  lang,
+}: ProjectDetailPageProps) {
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
 
@@ -142,19 +152,52 @@ export function ProjectDetailPage({ project, htmlContent, stylePreset, lang }: P
         </section>
       )}
 
-      {project.relatedSeriesSlug && (
+      {relatedSeries && (
         <section className={`${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow} p-5 md:p-6`}>
-          <h2 className={`${isMacos ? 'text-lg font-semibold' : 'font-mono text-sm font-bold uppercase'} ${tokens.textPrimary}`}>
-            {t('blog.seriesLabel', lang)}
-          </h2>
-          <Link
-            href={`/blog/series/${project.relatedSeriesSlug}`}
-            className={`mt-4 inline-flex items-center gap-2 rounded-md border border-zinc-200/60 px-3 py-2 text-xs transition-colors hover:bg-zinc-50 dark:border-zinc-800/70 dark:hover:bg-zinc-900 ${tokens.textSecondary}`}
-          >
-            <BookOpen size={13} className="shrink-0" />
-            <span className="min-w-0 flex-1 truncate">{project.relatedSeriesSlug}</span>
-            <ArrowUpRight size={11} className="shrink-0" />
-          </Link>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0">
+              <h2 className={`${isMacos ? 'text-lg font-semibold' : 'font-mono text-sm font-bold uppercase'} ${tokens.textPrimary}`}>
+                {t('projects.relatedWriting', lang)}
+              </h2>
+              <p className={`mt-2 text-sm leading-relaxed ${tokens.textSecondary}`}>
+                {relatedSeries.title}
+              </p>
+              <div className={`mt-2 inline-flex items-center gap-1 text-xs ${tokens.textMuted}`}>
+                <FileText size={12} />
+                {relatedSeries.count} {t('blog.count', lang)}
+              </div>
+            </div>
+
+            <Link
+              href={`/blog/series/${relatedSeries.slug}`}
+              className={`inline-flex min-h-9 shrink-0 items-center justify-center gap-2 rounded-md border border-zinc-200/60 px-3 py-2 text-xs transition-colors hover:bg-zinc-50 dark:border-zinc-800/70 dark:hover:bg-zinc-900 ${tokens.textSecondary}`}
+            >
+              <BookOpen size={13} className="shrink-0" />
+              <span>{t('projects.viewRelatedSeries', lang)}</span>
+              <ArrowUpRight size={11} className="shrink-0" />
+            </Link>
+          </div>
+
+          {relatedSeriesPosts.length > 0 && (
+            <div className="mt-5">
+              <div className={`mb-3 text-[10px] uppercase ${tokens.textMuted} ${isMacos ? 'tracking-wider' : 'font-mono'}`}>
+                {t('projects.articlesInSeries', lang)}
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                {relatedSeriesPosts.map((post) => (
+                  <Link
+                    key={post.slug}
+                    href={`/blog/${post.slug}`}
+                    className={`flex min-h-10 items-center gap-2 rounded-md border border-zinc-200/60 px-3 py-2 text-xs transition-colors hover:bg-zinc-50 dark:border-zinc-800/70 dark:hover:bg-zinc-900 ${tokens.textSecondary}`}
+                  >
+                    <BookOpen size={13} className="shrink-0" />
+                    <span className="min-w-0 flex-1 truncate">{post.title}</span>
+                    <ArrowUpRight size={11} className="shrink-0" />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
       )}
 

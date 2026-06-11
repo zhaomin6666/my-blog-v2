@@ -371,3 +371,12 @@
 - Kept `relatedPosts` empty because no published AI Agent learning series exists yet.
 - Preserved file-based Projects content architecture, `slug: ai-agent-demo`, `published: true`, `featured: true`, and `order: 2`.
 - No ProjectService / FileProjectRepository, Projects UI, Blog system, Console / CLI, window-system behavior, deployment configuration, database, CMS, online chat, or real Agent API changes.
+
+### Phase 8.3.4: Projects & Blog Content Linkage COMPLETED
+- Added lightweight content linkage between project case studies, blog series pages, and blog article pages.
+- `Personal Developer OS` project detail page now resolves `relatedSeriesSlug: personal-developer-os` through `BlogService` and displays the related series, article count, series link, and series article links.
+- Blog series detail pages now resolve published projects through `ProjectService.getProjectsByRelatedSeries(seriesSlug)` and show related project entries when available.
+- Blog article detail pages now show a lightweight related project entry when the article belongs to a series matched by a published project's `relatedSeriesSlug`.
+- Added centralized zh / en translation keys for related writing, related project, related series, project detail links, and series article labels.
+- `AI Agent Demo` still does not link to nonexistent blog posts or series.
+- No new routes, sitemap changes, RSS changes, Console / CLI changes, window-system behavior changes, deployment configuration changes, database, CMS, comments, search, online chat, or Agent API changes.

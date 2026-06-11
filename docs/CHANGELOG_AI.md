@@ -1,6 +1,35 @@
 # AI Development Changelog
 
 ### 2026-06-10 - Codex
+**Summary:** Phase 8.3.4 completed. Added lightweight Projects and Blog content linkage.
+
+**Phase 8.3.4 scope:**
+- Added Project-to-Blog linkage on project detail pages:
+  - `Personal Developer OS` resolves `relatedSeriesSlug: personal-developer-os` through `BlogService`.
+  - The project detail page now shows related writing, the series title, article count, a series page link, and series article links.
+- Added Blog Series-to-Project linkage:
+  - Blog series detail pages query published projects through `ProjectService.getProjectsByRelatedSeries(seriesSlug)`.
+  - `/blog/series/personal-developer-os` can show `Personal Developer OS` as the related project entry.
+- Added Blog Article-to-Project linkage:
+  - Blog article detail pages query related projects by the article `seriesSlug`.
+  - Articles in the `personal-developer-os` series can show a lightweight related project link.
+- Added centralized translation keys for related writing, related project, related series, project detail links, series article labels, and coming-soon copy.
+- Kept `AI Agent Demo` without fabricated blog links because no published AI Agent learning series exists yet.
+
+**Scope guard:**
+- No blog article body content was modified.
+- No nonexistent blog slugs were added.
+- No sitemap or RSS logic was modified.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No database, CMS, comments, project search, blog search, tag page, online chat, or real Agent API was added.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-10 - Codex
 **Summary:** Phase 8.3.3 completed. Strengthened the AI Agent Demo project content for career-facing Agent learning showcase.
 
 **Phase 8.3.3 scope:**

@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { Calendar, Clock, Tag, BookOpen, Globe, ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, BookOpen, Calendar, Clock, FolderKanban, Globe, Tag } from 'lucide-react';
 import type { BlogPost } from '@/lib/blog/blog-types';
 import { formatBlogDate } from '@/lib/blog/markdown';
+import type { ProjectMeta } from '@/lib/projects';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
 import type { StylePreset, Lang } from '@/lib/types';
@@ -9,11 +10,18 @@ import type { StylePreset, Lang } from '@/lib/types';
 interface BlogArticleProps {
   post: BlogPost;
   htmlContent: string;
+  relatedProjects: ProjectMeta[];
   stylePreset: StylePreset;
   lang: Lang;
 }
 
-export function BlogArticle({ post, htmlContent, stylePreset, lang }: BlogArticleProps) {
+export function BlogArticle({
+  post,
+  htmlContent,
+  relatedProjects,
+  stylePreset,
+  lang,
+}: BlogArticleProps) {
   const tokens = getStyleTokens(stylePreset);
 
   return (
@@ -99,6 +107,34 @@ export function BlogArticle({ post, htmlContent, stylePreset, lang }: BlogArticl
         // Future CMS phase should add sanitize step before rendering.
         dangerouslySetInnerHTML={{ __html: htmlContent }}
       />
+
+      {relatedProjects.length > 0 && (
+        <div className="border-t border-zinc-200/60 p-5 dark:border-zinc-800/60 md:p-8">
+          <h2 className={`mb-3 text-sm font-semibold ${tokens.textPrimary}`}>
+            {t('projects.relatedProject', lang)}
+          </h2>
+          <div className="grid grid-cols-1 gap-2">
+            {relatedProjects.map((project) => (
+              <Link
+                key={project.slug}
+                href={`/projects/${project.slug}`}
+                className={`flex min-h-11 items-center gap-3 rounded-md border border-zinc-200/60 px-3 py-2 text-xs transition-colors hover:bg-zinc-50 dark:border-zinc-800/70 dark:hover:bg-zinc-900 ${tokens.textSecondary}`}
+              >
+                <FolderKanban size={14} className="shrink-0" />
+                <span className="min-w-0 flex-1">
+                  <span className={`block truncate font-medium ${tokens.textPrimary}`}>
+                    {project.title}
+                  </span>
+                  <span className={`block truncate ${tokens.textMuted}`}>
+                    {t('projects.viewProjectDetail', lang)}
+                  </span>
+                </span>
+                <ArrowUpRight size={12} className="shrink-0" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </article>
   );
 }

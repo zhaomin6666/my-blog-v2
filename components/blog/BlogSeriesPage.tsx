@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { ArrowUpRight, BookOpen, Calendar, Clock, FileText } from 'lucide-react';
+import { ArrowUpRight, BookOpen, Calendar, Clock, FileText, FolderKanban } from 'lucide-react';
 import type { BlogPostMeta, BlogSeries } from '@/lib/blog/blog-types';
 import { formatBlogDate } from '@/lib/blog/markdown';
+import type { ProjectMeta } from '@/lib/projects';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
 import type { Lang, StylePreset } from '@/lib/types';
@@ -9,11 +10,18 @@ import type { Lang, StylePreset } from '@/lib/types';
 interface BlogSeriesPageProps {
   series: BlogSeries;
   posts: BlogPostMeta[];
+  relatedProjects: ProjectMeta[];
   stylePreset: StylePreset;
   lang: Lang;
 }
 
-export function BlogSeriesPage({ series, posts, stylePreset, lang }: BlogSeriesPageProps) {
+export function BlogSeriesPage({
+  series,
+  posts,
+  relatedProjects,
+  stylePreset,
+  lang,
+}: BlogSeriesPageProps) {
   const tokens = getStyleTokens(stylePreset);
 
   return (
@@ -41,6 +49,58 @@ export function BlogSeriesPage({ series, posts, stylePreset, lang }: BlogSeriesP
           {t('blog.seriesDetailSubtitle', lang)}
         </p>
       </section>
+
+      {relatedProjects.length > 0 && (
+        <section className={`${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow} p-5 md:p-6`}>
+          <h2 className={`mb-4 text-lg font-semibold ${tokens.textPrimary}`}>
+            {t('projects.relatedProject', lang)}
+          </h2>
+          <div className="grid grid-cols-1 gap-3">
+            {relatedProjects.map((project) => (
+              <article
+                key={project.slug}
+                className={`rounded-lg border border-zinc-200/60 p-4 dark:border-zinc-800/70 ${stylePreset === 'macos' ? 'bg-white/35 dark:bg-white/5' : 'bg-zinc-50 dark:bg-zinc-950'}`}
+              >
+                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                  <div className="min-w-0">
+                    <div className={`mb-2 flex flex-wrap items-center gap-2 text-[11px] ${tokens.textMuted}`}>
+                      <span className="inline-flex items-center gap-1">
+                        <FolderKanban size={12} />
+                        {project.statusLabel || t(`projects.status.${project.status}` as const, lang)}
+                      </span>
+                    </div>
+                    <h3 className={`text-base font-semibold ${tokens.textPrimary}`}>
+                      {project.title}
+                    </h3>
+                    <p className={`mt-2 text-sm leading-relaxed ${tokens.textSecondary}`}>
+                      {project.summary}
+                    </p>
+                    {project.techStack.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {project.techStack.slice(0, 5).map((tech) => (
+                          <span
+                            key={`${project.slug}-${tech}`}
+                            className={`px-2 py-1 text-[10px] ${tokens.projectTagBg} ${tokens.projectTagText} ${tokens.tagBorderRadius}`}
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <Link
+                    href={`/projects/${project.slug}`}
+                    className={`inline-flex min-h-9 shrink-0 items-center justify-center gap-2 rounded-md border border-zinc-200/60 px-3 py-2 text-xs transition-colors hover:bg-zinc-50 dark:border-zinc-800/70 dark:hover:bg-zinc-900 ${tokens.textSecondary}`}
+                  >
+                    {t('projects.viewProjectDetail', lang)}
+                    <ArrowUpRight size={12} />
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="space-y-3">
         {posts.map((post, index) => (

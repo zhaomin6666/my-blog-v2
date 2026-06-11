@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { blogService } from '@/lib/blog';
+import { projectService } from '@/lib/projects';
 import { buildMetadata } from '@/lib/seo';
 import { BlogSeriesDetailPageClient } from './BlogSeriesDetailPageClient';
 
@@ -43,6 +44,13 @@ export default async function BlogSeriesDetailPage({ params }: BlogSeriesDetailP
   }
 
   const posts = await blogService.getPostsBySeries(seriesSlug);
+  const relatedProjects = await projectService.getProjectsByRelatedSeries(seriesSlug);
 
-  return <BlogSeriesDetailPageClient series={series} posts={posts} />;
+  return (
+    <BlogSeriesDetailPageClient
+      series={series}
+      posts={posts}
+      relatedProjects={relatedProjects}
+    />
+  );
 }

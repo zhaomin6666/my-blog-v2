@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { renderMarkdownToHtml } from '@/lib/blog';
+import { blogService, renderMarkdownToHtml } from '@/lib/blog';
 import { projectService } from '@/lib/projects';
 import { buildMetadata } from '@/lib/seo';
 import { ProjectDetailPageClient } from './ProjectDetailPageClient';
@@ -49,6 +49,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   const htmlContent = await renderMarkdownToHtml(project.content);
+  const relatedSeries = project.relatedSeriesSlug
+    ? (await blogService.getAllSeries()).find((series) => series.slug === project.relatedSeriesSlug) ?? null
+    : null;
+  const relatedSeriesPosts = project.relatedSeriesSlug
+    ? await blogService.getPostsBySeries(project.relatedSeriesSlug)
+    : [];
 
-  return <ProjectDetailPageClient project={project} htmlContent={htmlContent} />;
+  return (
+    <ProjectDetailPageClient
+      project={project}
+      htmlContent={htmlContent}
+      relatedSeries={relatedSeries}
+      relatedSeriesPosts={relatedSeriesPosts}
+    />
+  );
 }

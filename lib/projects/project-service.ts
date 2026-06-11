@@ -36,6 +36,11 @@ export class ProjectService {
   async getPublishedProjectBySlug(slug: string): Promise<Project | null> {
     return this.repository.getProjectBySlug(slug, { includeDrafts: false });
   }
+
+  async getProjectsByRelatedSeries(seriesSlug: string): Promise<ProjectMeta[]> {
+    const projects = await this.getPublishedProjects();
+    return projects.filter((project) => project.relatedSeriesSlug === seriesSlug);
+  }
 }
 
 export const projectService = new ProjectService(new FileProjectRepository());
