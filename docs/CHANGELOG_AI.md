@@ -1,5 +1,46 @@
 # AI Development Changelog
 
+### 2026-06-11 - Codex
+**Summary:** Phase 8.3.5 completed. Final acceptance and documentation closure for the Projects showcase.
+
+**Phase 8.3.5 acceptance scope:**
+- Completed final acceptance for the Phase 8.3 Projects showcase work.
+- Confirmed Projects use the file-based content source under `content/projects/**/*.md`.
+- Confirmed Projects data access flows through `ProjectService` / `FileProjectRepository`.
+- Confirmed `/projects` and `/projects/[slug]` are backed by published project metadata/content.
+- Confirmed homepage Projects cards use server-provided project metadata.
+- Confirmed project ordering keeps `Personal Developer OS` before `AI Agent Demo`.
+- Confirmed `Personal Developer OS` presents:
+  - Production / v1.0 status
+  - Developer OS homepage concept
+  - Main App / Console App / Desktop / Status Bar
+  - CLI, Markdown Blog, Blog Series, SEO, sitemap, robots, RSS
+  - Docker / Nginx / HTTPS self-hosted deployment
+  - related `personal-developer-os` blog series
+- Confirmed `AI Agent Demo` remains an honest `In Progress / Learning Project` and does not claim mature production usage.
+- Confirmed Projects and Blog linkage works:
+  - Project detail to related series
+  - Blog series to related project
+  - Blog article to related project
+- Confirmed sitemap includes published project pages.
+- Confirmed RSS remains blog-article-only and does not include project pages.
+
+**Small fixes:**
+- Homepage project cards now always show the case-study entry even when a project has no extra links.
+- Removed the generic `/blog` link from `AI Agent Demo` until a real AI Agent blog series exists.
+
+**Scope guard:**
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No blog article body content was modified.
+- No database, CMS, search, online chat, or real Agent API was added.
+- No fabricated project results, production users, traffic, revenue, or enterprise adoption were added.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
 ### 2026-06-10 - Codex
 **Summary:** Phase 8.3.4 completed. Added lightweight Projects and Blog content linkage.
 

@@ -325,10 +325,17 @@
 - Added sitemap entries for series pages while keeping RSS article-only.
 - No Console / CLI logic, window-system behavior, deployment configuration, database, CMS, search, comments, reading views, or tag detail page changes.
 
-### Phase 8.3: Projects / AI Agent Demo Showcase Strengthening IN PROGRESS
+### Phase 8.3: Projects / AI Agent Demo Showcase Strengthening COMPLETED
 - Strengthen Projects as a career-facing portfolio module inside the existing Main App.
 - Keep this phase focused on project information architecture and restrained presentation.
 - Do not add project detail pages, search, filters, CMS, database, Agent API, Console / CLI changes, window-system changes, or deployment configuration changes unless separately planned.
+- Completed scope:
+  - Projects information structure refactor
+  - Project case study pages
+  - File-based Projects content source
+  - AI Agent Demo content strengthening
+  - Projects and Blog content linkage
+  - Projects showcase final acceptance
 
 ### Phase 8.3.1: Projects Information Structure Refactor COMPLETED
 - Refactored `Project` data into a richer portfolio structure with subtitle, type, status label, highlights, features, role, links, related posts, featured flag, and order.
@@ -380,3 +387,20 @@
 - Added centralized zh / en translation keys for related writing, related project, related series, project detail links, and series article labels.
 - `AI Agent Demo` still does not link to nonexistent blog posts or series.
 - No new routes, sitemap changes, RSS changes, Console / CLI changes, window-system behavior changes, deployment configuration changes, database, CMS, comments, search, online chat, or Agent API changes.
+
+### Phase 8.3.5: Projects Showcase Final Acceptance COMPLETED
+- Completed final acceptance for Phase 8.3 Projects showcase work.
+- Confirmed Projects data comes from `content/projects/**/*.md` through `ProjectService` and `FileProjectRepository`.
+- Confirmed adding a future project should only require adding a Markdown file with valid frontmatter and published status.
+- Confirmed `/projects`, `/projects/personal-developer-os`, and `/projects/ai-agent-demo` build normally.
+- Confirmed homepage Projects cards, project ordering, status labels, tech stacks, highlights, and detail links work from server-provided project metadata.
+- Confirmed `Personal Developer OS` is positioned as a production v1.0 project and linked to the `personal-developer-os` blog series.
+- Confirmed `AI Agent Demo` remains an honest `In Progress / Learning Project` with no fabricated users, production results, or nonexistent blog links.
+- Confirmed sitemap includes published project pages and RSS remains blog-article-only.
+- Small fix: homepage project case-study entry is always visible even when a project has no extra external links.
+- Small fix: removed the generic `/blog` link from `AI Agent Demo` until a real AI Agent blog series exists.
+- No Console / CLI, window-system behavior, Blog article body content, deployment configuration, database, CMS, search, online chat, or Agent API changes.
+
+### Phase 8.4: About / Resume / Contact 求职转化优化 READY
+- Next phase will focus on career conversion content: About, Resume, and Contact.
+- Phase 8 remains in progress.

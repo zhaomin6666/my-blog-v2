@@ -175,31 +175,29 @@ function FeaturedProjectCard({ project, isMacos, tokens, lang }: FeaturedProject
           </div>
         </div>
 
-        {project.links && project.links.length > 0 && (
-          <div>
-            <div className={`text-[10px] mb-1.5 ${tokens.textMuted} ${isMacos ? 'uppercase tracking-wider' : 'font-mono uppercase'}`}>
-              {t('projects.links', lang)}
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Link
-                href={`/projects/${project.slug}`}
-                className={`inline-flex min-h-8 items-center gap-1.5 px-2.5 py-1 text-[11px] transition-all duration-200 active:scale-95 ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius} hover:text-zinc-900 dark:hover:text-white ${isMacos ? '' : 'font-mono'}`}
-              >
-                <BookOpen size={12} />
-                <span>{t('projects.caseStudy', lang)}</span>
-                <ArrowUpRight size={11} />
-              </Link>
-              {project.links.map((link) => (
-                <ProjectLinkItem
-                  key={`${project.slug}-${link.href}`}
-                  link={link}
-                  isMacos={isMacos}
-                  tokens={tokens}
-                />
-              ))}
-            </div>
+        <div>
+          <div className={`text-[10px] mb-1.5 ${tokens.textMuted} ${isMacos ? 'uppercase tracking-wider' : 'font-mono uppercase'}`}>
+            {t('projects.links', lang)}
           </div>
-        )}
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href={`/projects/${project.slug}`}
+              className={`inline-flex min-h-8 items-center gap-1.5 px-2.5 py-1 text-[11px] transition-all duration-200 active:scale-95 ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius} hover:text-zinc-900 dark:hover:text-white ${isMacos ? '' : 'font-mono'}`}
+            >
+              <BookOpen size={12} />
+              <span>{t('projects.caseStudy', lang)}</span>
+              <ArrowUpRight size={11} />
+            </Link>
+            {project.links.map((link) => (
+              <ProjectLinkItem
+                key={`${project.slug}-${link.href}`}
+                link={link}
+                isMacos={isMacos}
+                tokens={tokens}
+              />
+            ))}
+          </div>
+        </div>
 
         {project.relatedPosts && project.relatedPosts.length > 0 && (
           <div className="border-t border-zinc-200/40 pt-3 dark:border-zinc-800/40">
