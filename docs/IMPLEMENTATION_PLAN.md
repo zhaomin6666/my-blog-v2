@@ -401,6 +401,19 @@
 - Small fix: removed the generic `/blog` link from `AI Agent Demo` until a real AI Agent blog series exists.
 - No Console / CLI, window-system behavior, Blog article body content, deployment configuration, database, CMS, search, online chat, or Agent API changes.
 
-### Phase 8.4: About / Resume / Contact 求职转化优化 READY
-- Next phase will focus on career conversion content: About, Resume, and Contact.
+### Phase 8.4: About / Resume / Contact 求职转化优化 IN PROGRESS
 - Phase 8 remains in progress.
+- Started career conversion content work around About, Resume, and Contact.
+- Keep this phase content-first: no Console / CLI, window-system, deployment-config, database, CMS, online chat, or fake resume-download changes unless separately planned.
+
+### Phase 8.4.1: About Content Structure Optimization COMPLETED
+- Optimized the homepage About / Profile section to clarify the author's positioning as a Java backend developer transitioning into AI Agent and TypeScript full-stack development.
+- Added structured About content for current focus, enterprise-system background, what is being built, work style, and career direction.
+- Extracted the main About content into `lib/profile.ts` as centralized bilingual profile data for easier maintenance.
+- Linked the About section to real existing entries:
+  - `/projects/personal-developer-os`
+  - `/projects/ai-agent-demo`
+  - `/blog`
+  - `/blog/series/personal-developer-os`
+- Preserved the Personal Developer OS shell, Main App / Console App model, Desktop fallback, System Status Bar, Blog system, Projects system, and deployment configuration.
+- No Resume download, database, CMS, Agent API, online chat, Console / CLI behavior, window-system behavior, or deployment config changes.

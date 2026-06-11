@@ -1,6 +1,38 @@
 # AI Development Changelog
 
 ### 2026-06-11 - Codex
+**Summary:** Phase 8.4.1 completed. Optimized the About / Profile content structure for career-facing positioning.
+
+**Phase 8.4.1 scope:**
+- Optimized the homepage About / Profile section content structure.
+- Clarified the personal positioning as a Java backend developer transitioning into AI Agent and TypeScript full-stack development.
+- Added concise bilingual content for:
+  - current focus
+  - enterprise-system background
+  - what is being built
+  - work style
+  - career direction
+- Added real entry links from About to:
+  - `Personal Developer OS` project: `/projects/personal-developer-os`
+  - `AI Agent Demo` project: `/projects/ai-agent-demo`
+  - Blog: `/blog`
+  - `Personal Developer OS` series: `/blog/series/personal-developer-os`
+- Extracted the main About content into `lib/profile.ts` as centralized bilingual profile data.
+- Kept UI restrained inside the existing Developer OS / Main App card style.
+
+**Scope guard:**
+- No Console / CLI behavior changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No Blog core logic changes were made.
+- No Projects core logic changes were made.
+- No Resume download, database, CMS, Agent API, online chat, fake metrics, or fabricated experience was added.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-11 - Codex
 **Summary:** Phase 8.3.5 completed. Final acceptance and documentation closure for the Projects showcase.
 
 **Phase 8.3.5 acceptance scope:**
