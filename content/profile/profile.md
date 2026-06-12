@@ -150,4 +150,85 @@ published: true
 lang: "zh"
 ---
 
+<!--
+Profile content mapping:
+
+This file is the source for the public Profile section in the Main App.
+It is a privacy-friendly public profile, not a full resume.
+
+Frontmatter fields:
+- title:
+  Internal content title. The Main App section heading currently uses the shared
+  translation key nav.profile instead of rendering this field directly.
+- slug:
+  Stable content identifier for the Profile repository.
+- summary:
+  Parsed into publicProfile.profile.summary. It is not rendered directly on the
+  current homepage to avoid repeating intro/body copy. Keep it as content
+  metadata, CMS/admin preview text, and a future card or SEO summary candidate.
+- role:
+  Parsed into publicProfile.profile.role. Reserved for a future compact hero,
+  badge, or metadata display. Current homepage uses fields/intro instead.
+- status:
+  Displayed in the Profile section resume/status note.
+- intro:
+  Displayed as the short opening paragraph in the Profile section.
+- fields:
+  Displayed as the three Profile info cards. labelKey must match existing
+  translation keys such as about.role, about.direction, and about.status.
+- focus:
+  Displayed as Current Focus tags in the Profile section.
+- background:
+  Displayed in the Background list in the Profile section.
+- building:
+  Displayed as linked entries in the Building area of the Profile section.
+- workStyle:
+  Displayed in the How I Work area of the Profile section.
+- coreSkills:
+  Parsed for future profile metadata/CMS use. The current visible Stack section
+  comes from content/profile/system-stack.md instead.
+- aiFocus:
+  Parsed for future detailed resume/profile views. Not displayed directly on the
+  current homepage to keep Profile compact.
+- enterpriseExperience:
+  Parsed for future detailed resume/profile views. Not displayed directly on the
+  current homepage because background already provides the public summary.
+- featuredProjects:
+  Parsed for future CMS/project cross-linking. Current visible project cards come
+  from content/projects through ProjectService.
+- careerDirection:
+  Displayed as Career Direction tags in the Profile section.
+- privacyNote:
+  Displayed in the Profile privacy note. Contact also has its own privacy note in
+  contact-channels.md.
+- published:
+  Controls whether ProfileService returns this public profile.
+- lang:
+  Source content language marker.
+
+Markdown body:
+- Parsed into publicProfile.profile.content and rawContent.
+- The current Main App does not render the markdown body directly. Keep it as an
+  editor-facing narrative/metadata reserve for a future detail view or CMS
+  preview. Do not put private resume details here.
+
+Frontend display mapping:
+- Main App / Profile:
+  Reads publicProfile.profile intro, fields, focus, background, building,
+  workStyle, careerDirection, status, and privacyNote.
+- Main App / Stack:
+  Reads publicProfile.systemStack.groups from system-stack.md.
+- Main App / Contact:
+  Reads publicProfile.contactChannels visible channels plus privacyNote and
+  resumeNote from contact-channels.md.
+- Career Snapshot:
+  No longer exists as a separate homepage module. Career information is merged
+  into Profile.
+
+Privacy guard:
+- Do not add phone number, WeChat ID, address, ID number, birthday, real employer
+  name, real client name, buyer name, or sensitive project details.
+- Do not add a real resume PDF link here.
+-->
+
 这是一份公开网站上的脱敏个人档案，不是完整在线简历，也不包含真实单位、客户、甲方名称或个人隐私信息。

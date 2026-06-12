@@ -38,12 +38,12 @@ const translations = {
     'console.notFound': '命令未找到。输入 `help` 查看可用命令。',
     'console.macosWelcome': (...args: string[]) => `Last login: ${args[0]} on ttys001\nvisitor@dev-os:~ $ welcome`,
 
-    'nav.overview': 'Overview',
-    'nav.profile': 'Profile',
-    'nav.stack': 'Stack',
-    'nav.services': 'Services',
-    'nav.logs': 'Logs',
-    'nav.contact': 'Contact',
+    'nav.overview': '概览',
+    'nav.profile': '个人档案',
+    'nav.stack': '技术栈',
+    'nav.services': '服务',
+    'nav.logs': '日志',
+    'nav.contact': '联系',
 
     'hero.title': '面向 AI 时代构建产品的后端开发者',
     'hero.subtitle': '我专注于构建可靠的后端系统、AI 驱动的应用，以及独立数字产品。这个网站既是我的作品集，也是我的技术笔记与产品实验室。',
@@ -61,10 +61,10 @@ const translations = {
     'about.workStyle': '工作方式',
     'about.careerDirection': '求职方向',
 
-    'skills.title': 'System Stack',
+    'skills.title': '技术栈',
     'skills.module': '模块',
 
-    'projects.title': 'Services',
+    'projects.title': '服务',
     'projects.pageTitle': 'Project Case Studies',
     'projects.pageSubtitle': '围绕个人开发者 OS、AI Agent 学习项目和企业系统经验整理的项目案例。',
     'projects.count': '个项目',
@@ -104,7 +104,7 @@ const translations = {
     'projects.articlesInSeries': '本系列文章',
     'projects.comingSoon': '后续补充',
 
-    'blog.title': 'Engineering Logs',
+    'blog.title': '日志',
     'blog.logLevel': 'INFO',
     'blog.readMore': '查看详情',
     'blog.tags': 'Tags',
@@ -139,7 +139,7 @@ const translations = {
     'blog.ariaToggleLanguage': '切换语言',
     'blog.ariaToggleStyle': '切换风格预设',
 
-    'contact.title': 'Contact Channels',
+    'contact.title': '联系',
     'contact.email': 'Email',
     'contact.github': 'GitHub',
     'contact.linkedin': 'LinkedIn',

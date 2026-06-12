@@ -59,4 +59,36 @@ published: true
 lang: "zh"
 ---
 
+<!--
+Contact channels content mapping:
+
+- title:
+  Internal content title. The Main App Contact section heading currently uses the
+  shared translation key contact.title.
+- summary:
+  Parsed for content metadata, CMS/admin preview text, and future card summaries.
+  It is not rendered directly on the current homepage.
+- channels:
+  Drives the Contact section channel cards.
+- channels.visible:
+  Only channels with visible=true are shown in the public Contact section.
+- channels.href:
+  If href is empty, the channel is not rendered as an active clickable link.
+  A disabled channel may still be shown as a status/availability note.
+- channels.disabled:
+  Shows the channel as unavailable/coming soon and prevents navigation.
+- channels.privacyNote:
+  Channel-level note reserved for future detailed views. It is not rendered in
+  the current Contact card list.
+- privacyNote:
+  Displayed under the Contact cards.
+- resumeNote:
+  Displayed after privacyNote in the Contact section.
+
+Privacy guard:
+- Do not add phone number, WeChat ID, address, ID number, birthday, private email,
+  real employer name, real client name, buyer name, or sensitive project details.
+- Do not add a public resume PDF download link unless the privacy policy changes.
+-->
+
 公开联系入口仅保留站内可访问内容和正式沟通说明，不包含私人联系方式。

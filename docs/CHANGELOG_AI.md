@@ -1,6 +1,35 @@
 # AI Development Changelog
 
 ### 2026-06-12 - Codex
+**Summary:** Phase 8.4.3-fix completed. Polished Profile i18n and documented Profile content-to-frontend mapping.
+
+**Phase 8.4.3-fix scope:**
+- Fixed Main App labels that were English-only in Chinese mode.
+- Localized the Main App labels through the existing `lib/translations.ts` i18n system:
+  - Overview / 概览
+  - Profile / 个人档案
+  - Stack / 技术栈
+  - Services / 服务
+  - Logs / 日志
+  - Contact / 联系
+- Added non-rendered HTML maintenance comments to `content/profile/profile.md` explaining the mapping between frontmatter fields, Markdown body, and current frontend modules.
+- Clarified that `summary` is currently reserved as content metadata / CMS preview / future card or SEO summary text and is not directly rendered on the homepage.
+- Clarified that Career Snapshot remains merged into Profile and is not restored as a standalone module.
+- Added maintenance comments to `content/profile/contact-channels.md` and `content/profile/system-stack.md`.
+
+**Scope guard:**
+- No Console / CLI command system changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No Blog core logic changes were made.
+- No Projects core logic changes were made.
+- No ProfileService or PublicProfile shape changes were made.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-12 - Codex
 **Summary:** Phase 8.4.3-fix completed. Merged Career Snapshot into the Profile section to remove repeated public-facing content.
 
 **Phase 8.4.3-fix scope:**

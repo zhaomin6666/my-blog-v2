@@ -454,3 +454,12 @@
 - Updated ProfileService semantics from `getCareerSnapshot()` to `getProfile()` while preserving `getPublicProfile()`.
 - Preserved System Stack, Contact Channels, Projects, Blog, Main App, Console App, Desktop fallback, and System Status Bar.
 - No real resume PDF, resume download link, phone number, WeChat, address, real employer name, real client name, buyer name, Console / CLI, window-system behavior, or deployment config changes.
+
+#### Phase 8.4.3-fix: Profile i18n & Content Mapping Polish COMPLETED
+- Fixed Main App navigation labels that were still English in Chinese mode.
+- Overview / Profile / Stack / Services / Logs / Contact now display localized labels through the existing `lib/translations.ts` i18n system.
+- Added non-rendered HTML maintenance comments to `content/profile/profile.md` explaining how frontmatter fields and the Markdown body map to the current frontend.
+- Clarified that `summary` is currently reserved as content metadata / CMS preview / future card or SEO summary text, not directly rendered on the homepage.
+- Clarified that Career Snapshot remains merged into Profile and is not restored as a standalone module.
+- Added maintenance comments to `content/profile/contact-channels.md` and `content/profile/system-stack.md` for visible channels, privacy rules, stack groups, and Learning / Exploring semantics.
+- No ProfileService, PublicProfile shape, Console / CLI command system, window system, Blog core logic, Projects core logic, or deployment configuration changes.
