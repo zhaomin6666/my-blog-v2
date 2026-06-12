@@ -1,6 +1,44 @@
 # AI Development Changelog
 
 ### 2026-06-12 - Codex
+**Summary:** Phase 8.6 completed. Final acceptance and closure for Phase 8 Content & Career Launch.
+
+**Phase 8.6 acceptance scope:**
+- Completed final review for Phase 8.
+- Confirmed Blog content work is complete for the current phase:
+  - Seven published articles in the `从 Hexo 到 Personal Developer OS` series.
+  - Series pages and article detail pages are available.
+  - Article detail pages include reading stats and related project links where applicable.
+- Confirmed Projects portfolio work is complete for the current phase:
+  - `Personal Developer OS` project case study is published and linked to the related blog series.
+  - `AI Agent Demo` remains positioned as an in-progress learning project, not a mature production product.
+  - Projects are loaded through the file-based ProjectService architecture.
+- Confirmed Profile / Contact career-conversion work is complete for the current phase:
+  - Profile / Contact Channels / System Stack are loaded through ProfileService.
+  - Career Snapshot remains merged into Profile.
+  - Contact stays privacy-friendly and does not expose private channels.
+- Confirmed bilingual Content Workflow documentation is complete and linked from README / docs index.
+- Confirmed sitemap, RSS, and robots outputs are available and aligned with published-only content rules.
+- Confirmed public content does not include real resume PDF, phone number, WeChat ID, address, real employer names, real client names, buyer names, deployment secrets, or fabricated metrics.
+- Updated `docs/IMPLEMENTATION_PLAN.md` to mark Phase 8 and Phase 8.6 as completed and add Phase 9 as planned.
+
+**Scope guard:**
+- No Console / CLI command system changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No Blog, Projects, or Profile core logic changes were made.
+- No new feature, CMS, database, admin, search, comments, online chat, or Agent API was added.
+
+**Verification:**
+- `pnpm build` passed.
+- Local standalone route checks passed for `/`, `/blog`, `/blog/series`, `/blog/series/personal-developer-os`, `/blog/why-rebuild-my-personal-blog`, `/projects`, `/projects/personal-developer-os`, `/projects/ai-agent-demo`, `/sitemap.xml`, `/rss.xml`, and `/robots.txt`.
+- Sitemap contains the published blog series and project pages.
+- RSS contains published blog posts and does not contain project pages.
+- Robots output points to sitemap.
+- `pnpm lint` passed.
+- `pnpm build` passed after documentation updates.
+
+### 2026-06-12 - Codex
 **Summary:** Phase 8.5 completed. Added bilingual Blog / Projects / Profile content workflow documentation.
 
 **Phase 8.5 scope:**

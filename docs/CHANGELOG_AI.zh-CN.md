@@ -3,6 +3,35 @@
 本文件是 `docs/CHANGELOG_AI.md` 的中文摘要版，用于快速了解项目历史和当前状态。完整逐条归档仍以 `docs/CHANGELOG_AI.md` 为准。
 
 
+
+## 2026-06-12 - Phase 8.6 最终验收与收口
+
+Codex 完成 Phase 8 的最终验收，并将 Phase 8 标记为 completed。
+
+验收内容：
+
+- 确认 Blog 内容建设完成，`从 Hexo 到 Personal Developer OS` 系列包含 7 篇已发布文章。
+- 确认 `/blog`、`/blog/series`、`/blog/series/personal-developer-os` 和文章详情页正常。
+- 确认 Projects 作品集展示完成，`Personal Developer OS` 和 `AI Agent Demo` 项目页正常。
+- 确认 `AI Agent Demo` 仍然定位为 In Progress / Learning Project，没有夸大为成熟生产产品。
+- 确认 Profile / Contact / System Stack 通过 `ProfileService` 读取，且 Career Snapshot 已合并进 Profile。
+- 确认中英文 Content Workflow 文档正常，并已在 README / docs 入口中链接。
+- 确认 sitemap、RSS、robots 输出正常；RSS 只包含博客文章，不包含项目页。
+- 确认公开内容没有真实简历 PDF、手机号、微信、住址、真实单位、真实客户、真实甲方、部署密钥或编造指标。
+
+范围约束：
+
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改部署配置。
+- 未修改 Blog / Projects / Profile 核心逻辑。
+- 未新增 CMS、数据库、后台、搜索、评论、在线聊天或 Agent API。
+
+验证：
+
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
+- 本地 standalone 路由检查通过：`/`、`/blog`、`/blog/series`、`/blog/series/personal-developer-os`、`/blog/why-rebuild-my-personal-blog`、`/projects`、`/projects/personal-developer-os`、`/projects/ai-agent-demo`、`/sitemap.xml`、`/rss.xml`、`/robots.txt`。
 ## 2026-06-12 - Phase 8.5 内容发布流程文档
 
 Codex 补充了中英文内容发布流程文档，用于长期维护 Blog、Projects、Profile 三类文件型内容源。

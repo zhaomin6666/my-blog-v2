@@ -261,10 +261,20 @@
 - Archived production URL, directory layout, environment variable requirements, update flow, log checks, Nginx reload, certificate renewal, rollback, and online validation checklist
 - Phase 7 is completed with no business feature, UI, Console / CLI, window-system, or blog-system changes
 
-## Phase 8: Content & Career Launch IN PROGRESS
+## Phase 8: Content & Career Launch COMPLETED
 - Publish real blog content around the Personal Developer OS build process
 - Use the site as a personal brand, job-search showcase, and technical writing archive
 - Keep Phase 8 content-first: no blog-system, UI, Console / CLI, window-system, or deployment-config changes unless separately planned
+- Completed scope:
+  - Blog content and the Personal Developer OS article series
+  - Blog reading experience and content organization
+  - Projects portfolio and project case studies
+  - File-based Projects content source
+  - Projects and Blog content linkage
+  - Profile content system
+  - Contact / CTA optimization
+  - Content workflow documentation
+  - Final Phase 8 acceptance
 
 ### Phase 8.1: Release Archive & Version Tag COMPLETED
 - Archived the v1.0.0 production release and version milestone
@@ -402,7 +412,7 @@
 - No Console / CLI, window-system behavior, Blog article body content, deployment configuration, database, CMS, search, online chat, or Agent API changes.
 
 ### Phase 8.4: About / Resume / Contact 求职转化优化 COMPLETED
-- Phase 8 remains in progress.
+- Phase 8 was still in progress at this subphase; it is now closed by Phase 8.6.
 - Completed the career conversion content work around About, Resume, Contact, and System Stack.
 - Completed scope:
   - About content structure optimization
@@ -444,7 +454,7 @@
 ### Phase 8.4.3: Contact / CTA 联系入口优化 COMPLETED
 - Contact / CTA optimization is treated as completed before the current fix.
 - Keep contact entry points privacy-friendly and avoid public resume PDF download links.
-- Phase 8 remains in progress.
+- Phase 8 was still in progress at this subphase; it is now closed by Phase 8.6.
 
 #### Phase 8.4.3-fix: Merge Career Snapshot into Profile COMPLETED
 - Removed the independent Career Snapshot / Resume Summary homepage module.
@@ -500,8 +510,26 @@
 - Documented how `published`, `draft`, `featured`, `order`, `seriesSlug`, and `seriesOrder` affect public output.
 - Documented local validation, commit workflow, production deployment, sitemap / RSS checks, privacy rules, and future CMS / DB repository migration direction.
 - Added README and docs index links to the English and Chinese workflow documents.
-- Phase 8 remains in progress; do not mark Phase 8 itself as completed yet.
+- Phase 8.5 was completed before the final Phase 8.6 acceptance.
 
-### Phase 8.6: Phase 8 Final Review / Content & Career Launch Acceptance PLANNED
-- Next phase: final review and closure for Phase 8 content and career-launch work.
-- Keep this as a review/acceptance phase unless a separate scope is explicitly planned.
+### Phase 8.6: Phase 8 Final Review / Content & Career Launch Acceptance COMPLETED
+- Completed final acceptance for Phase 8 content and career-launch work.
+- Confirmed the `从 Hexo 到 Personal Developer OS` series exists with seven published articles ordered by `seriesOrder`.
+- Confirmed `/blog`, `/blog/series`, `/blog/series/personal-developer-os`, and published article pages are available.
+- Confirmed blog article pages include reading stats and can link to related projects.
+- Confirmed Projects use `content/projects` through `ProjectService`, and `/projects`, `/projects/personal-developer-os`, and `/projects/ai-agent-demo` are available.
+- Confirmed `Personal Developer OS` links to the related blog series and `AI Agent Demo` remains an honest in-progress learning project.
+- Confirmed Profile / Contact / System Stack use `content/profile` through `ProfileService`.
+- Confirmed Career Snapshot remains merged into Profile and no standalone duplicate module is shown.
+- Confirmed bilingual Content Workflow documentation exists and is linked from README / docs index.
+- Confirmed sitemap includes published blog posts, series pages, and published project pages.
+- Confirmed RSS includes published blog posts only and does not include project pages.
+- Confirmed robots.txt points to sitemap.
+- Confirmed privacy boundaries remain intact: no real resume PDF, phone number, WeChat ID, address, real employer names, real client names, buyer names, secrets, or fabricated metrics were added.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+
+## Phase 9: Blog System Enhancement PLANNED
+- Future phase for possible blog-system improvements.
+- Do not start implementation until a separate scope is explicitly planned.
