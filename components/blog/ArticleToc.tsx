@@ -77,7 +77,7 @@ export function ArticleToc({
 
   const containerClass =
     variant === 'sidebar'
-      ? `sticky top-14 max-h-[calc(100vh-7rem)] overflow-y-auto rounded-xl p-3 ${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius}`
+      ? `h-full max-h-full overflow-y-auto rounded-xl p-3 ${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius}`
       : 'border-b border-zinc-200/60 p-5 dark:border-zinc-800/60 md:p-8';
 
   return (

@@ -20,7 +20,12 @@ export function BlogCard({ post, stylePreset, lang }: BlogCardProps) {
     <article
       className={`group relative ${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow} transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md`}
     >
-      <Link href={`/blog/${post.slug}`} className="block p-5 md:p-6">
+      <Link
+        href={`/blog/${post.slug}`}
+        aria-label={post.title}
+        className="absolute inset-0 z-10 rounded-[inherit] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+      />
+      <div className="p-5 md:p-6">
         <div className="mb-3 flex items-start justify-between gap-3">
           <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-zinc-400 dark:text-zinc-500">
             <span className="inline-flex items-center gap-1">
@@ -62,15 +67,14 @@ export function BlogCard({ post, stylePreset, lang }: BlogCardProps) {
             <Link
               key={tag}
               href={`/blog/tags/${tagToSlug(tag)}`}
-              onClick={(e) => e.stopPropagation()}
-              className={`inline-flex items-center gap-1 px-2 py-0.5 text-[11px] ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius} transition-colors hover:text-zinc-700 dark:hover:text-zinc-200`}
+              className={`relative z-20 inline-flex items-center gap-1 px-2 py-0.5 text-[11px] ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius} transition-colors hover:text-zinc-700 dark:hover:text-zinc-200`}
             >
               <Tag size={10} />
               {tag}
             </Link>
           ))}
         </div>
-      </Link>
+      </div>
     </article>
   );
 }

@@ -3,6 +3,27 @@
 本文件是 `docs/CHANGELOG_AI.md` 的中文摘要版，用于快速了解项目历史和当前状态。完整逐条归档仍以 `docs/CHANGELOG_AI.md` 为准。
 
 ### 2026-06-12 - Codex
+**摘要：** Phase 9.2-fix-2 完成，将桌面端文章 TOC 调整为 fixed floating sidebar。
+
+**Phase 9.2-fix-2 范围：**
+- 将 `/blog/[slug]` 桌面端文章 TOC 从 sticky 左侧栏改为真正的 `position: fixed` 悬浮侧栏。
+- TOC 固定在左侧可视区域，并设置顶部与底部偏移，文章滚动时目录始终可见。
+- 从 `ArticleToc` 内部移除 sticky 定位，让组件只负责目录渲染、内部滚动和 active heading 状态。
+- 为文章正文区域增加桌面端左侧预留空间，避免 fixed TOC 遮挡阅读列。
+- 移动端继续使用正文前的 in-flow TOC，小于宽屏断点时隐藏 fixed 侧栏，避免横向溢出。
+- 保留 active heading 高亮、当前项加粗、h2 / h3 缩进和 TOC 点击跳转。
+- 样式继续复用现有 style tokens，适配 light / dark 与 macos / vercel preset。
+
+**范围约束：**
+- 未重写 TOC 生成逻辑。
+- 未修改 BlogService / BlogRepository / content/blog 结构。
+- 未修改博客文章正文。
+- sitemap / RSS 未修改。
+- 未修改 Console / CLI、窗口系统或部署配置。
+- 未修改 Projects / Profile 核心逻辑。
+- 未引入大型依赖。
+
+### 2026-06-12 - Codex
 **摘要：** Phase 9.2-fix 完成，优化文章目录布局与当前阅读状态。
 
 **Phase 9.2-fix 范围：**

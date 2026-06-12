@@ -151,9 +151,9 @@ export function BlogArticle({
   );
 
   return (
-    <div className={shouldShowToc ? 'lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start lg:gap-6' : undefined}>
+    <div className={shouldShowToc ? 'relative xl:pl-72' : undefined}>
       {shouldShowToc && (
-        <aside className="hidden lg:block">
+        <aside className="fixed bottom-10 left-6 top-20 z-40 hidden w-60 xl:block">
           <ArticleToc toc={toc} stylePreset={stylePreset} lang={lang} />
         </aside>
       )}

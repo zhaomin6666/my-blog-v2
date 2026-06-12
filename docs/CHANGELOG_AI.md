@@ -1,6 +1,29 @@
 # AI Development Changelog
 
 ### 2026-06-12 - Codex
+**Summary:** Phase 9.2-fix-2 completed. Converted the desktop Article TOC into a fixed floating sidebar.
+
+**Phase 9.2-fix-2 scope:**
+- Replaced the desktop article TOC's sticky sidebar with a true `position: fixed` floating sidebar on `/blog/[slug]`.
+- Fixed the TOC to the left side of the viewport with top and bottom offsets so it stays visible while the article scrolls.
+- Removed sticky positioning from `ArticleToc`; the component now focuses on TOC rendering, internal scrolling, and active heading state.
+- Added desktop left-side spacing around the article content so the fixed TOC does not cover the reading column.
+- Kept the existing mobile in-flow TOC and hid the fixed sidebar below the wide desktop breakpoint to avoid horizontal overflow.
+- Preserved active heading highlighting, semibold active text, h2 / h3 indentation, and TOC anchor jumping.
+- Kept light / dark and macos / vercel preset compatibility through the existing style tokens.
+
+**Scope guard:**
+- TOC generation logic was not rewritten.
+- BlogService, BlogRepository, and `content/blog` structure were not changed.
+- Blog article body content was not modified.
+- Sitemap and RSS were not changed.
+- No Console / CLI command system changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No Projects or Profile core logic was changed.
+- No large dependencies were introduced.
+
+### 2026-06-12 - Codex
 **Summary:** Phase 9.2-fix completed. Improved Article TOC layout and active reading state.
 
 **Phase 9.2-fix scope:**
