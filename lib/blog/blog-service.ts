@@ -3,6 +3,7 @@ import type {
   BlogRepository,
 } from './blog-repository';
 import type {
+  BlogAdjacentPosts,
   BlogPost,
   BlogPostLanguage,
   BlogPostMeta,
@@ -134,6 +135,39 @@ export class BlogService {
     seriesSlug: string,
   ): Promise<BlogPostMeta[]> {
     return this.repository.getPostsBySeries(seriesSlug);
+  }
+
+  /**
+   * Get adjacent published posts for the public article reader.
+   *
+   * Series posts use the series reading order first. Non-series posts use
+   * the published post list sorted by date descending.
+   */
+  async getAdjacentPosts(slug: string): Promise<BlogAdjacentPosts> {
+    const post = await this.getPublishedPostBySlug(slug);
+    if (!post) return {};
+
+    if (post.seriesSlug) {
+      const seriesPosts = await this.getPostsBySeries(post.seriesSlug);
+      const currentIndex = seriesPosts.findIndex((item) => item.slug === slug);
+
+      if (currentIndex >= 0) {
+        return {
+          previous: seriesPosts[currentIndex - 1],
+          next: seriesPosts[currentIndex + 1],
+        };
+      }
+    }
+
+    const posts = await this.getPublishedPosts();
+    const currentIndex = posts.findIndex((item) => item.slug === slug);
+
+    if (currentIndex < 0) return {};
+
+    return {
+      previous: posts[currentIndex + 1],
+      next: posts[currentIndex - 1],
+    };
   }
 
   /**

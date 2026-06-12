@@ -53,6 +53,14 @@ export interface BlogPostMeta {
 }
 
 /**
+ * Adjacent posts for article navigation.
+ */
+export interface BlogAdjacentPosts {
+  previous?: BlogPostMeta;
+  next?: BlogPostMeta;
+}
+
+/**
  * Full blog post including rendered / raw content.
  */
 export interface BlogPost extends BlogPostMeta {

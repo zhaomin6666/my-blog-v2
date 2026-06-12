@@ -1,5 +1,34 @@
 # AI Development Changelog
 
+### 2026-06-13 - Codex
+**Summary:** Phase 9.3 completed. Added previous / next navigation for blog article detail pages.
+
+**Phase 9.3 scope:**
+- Added `BlogAdjacentPosts` and `BlogService.getAdjacentPosts(slug)` for public article navigation.
+- Series articles now resolve adjacent posts through published `getPostsBySeries(seriesSlug)` results, preserving `seriesOrder` reading order.
+- If series entries lack `seriesOrder`, the existing series sorting falls back to ascending post date.
+- Non-series articles fall back to global published-post date order.
+- Draft posts are excluded from adjacent navigation.
+- Added `components/blog/BlogAdjacentNav.tsx` and rendered it after the article body on `/blog/[slug]`, before related project links.
+- The first series article shows only the next post, middle articles show previous and next, and the last article shows only the previous post.
+- Desktop renders adjacent navigation in two columns; mobile stacks the cards vertically without affecting the fixed floating TOC.
+- Added zh / en translation keys for previous, next, continue-series, back-to-blog, and no-adjacent labels.
+
+**Scope guard:**
+- Sitemap and RSS were not changed.
+- Article URLs and metadata were not changed.
+- Blog series pages and tag pages were not changed.
+- No Console / CLI command system changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No Projects or Profile core logic was changed.
+- No large dependencies were introduced.
+
+**Verification:**
+- `pnpm lint` passed with zero warnings or errors.
+- `pnpm build` passed. Static pages generated for `/blog/[slug]`, `/blog`, `/blog/series`, `/blog/tags`, `/projects`, `/sitemap.xml`, and `/rss.xml`.
+- Local production route checks passed for `/`, `/blog`, `/blog/why-rebuild-my-personal-blog`, `/blog/series`, `/blog/series/personal-developer-os`, `/blog/tags`, `/projects`, `/sitemap.xml`, and `/rss.xml`.
+
 ### 2026-06-12 - Codex
 **Summary:** Phase 9.2-fix-2 completed. Converted the desktop Article TOC into a fixed floating sidebar.
 

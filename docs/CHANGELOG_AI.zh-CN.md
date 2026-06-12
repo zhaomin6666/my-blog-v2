@@ -2,6 +2,35 @@
 
 本文件是 `docs/CHANGELOG_AI.md` 的中文摘要版，用于快速了解项目历史和当前状态。完整逐条归档仍以 `docs/CHANGELOG_AI.md` 为准。
 
+### 2026-06-13 - Codex
+**摘要：** Phase 9.3 完成，为博客文章详情页新增上一篇 / 下一篇导航。
+
+**Phase 9.3 范围：**
+- 新增 `BlogAdjacentPosts` 类型和 `BlogService.getAdjacentPosts(slug)`，统一计算公开文章的上下篇。
+- 系列文章优先通过已发布的 `getPostsBySeries(seriesSlug)` 结果计算上下篇，保持 `seriesOrder` 阅读顺序。
+- 如果系列文章缺少 `seriesOrder`，沿用现有系列排序的 date 升序兜底。
+- 普通非系列文章按全站 published posts 的日期顺序兜底。
+- draft 文章不参与上下篇导航。
+- 新增 `components/blog/BlogAdjacentNav.tsx`，并在 `/blog/[slug]` 正文结束后、相关项目入口前展示。
+- 系列第一篇只显示下一篇，中间篇显示上一篇和下一篇，最后一篇只显示上一篇。
+- 桌面端使用左右两栏，移动端上下堆叠，不影响左侧 fixed floating TOC。
+- 补充上一篇、下一篇、继续阅读本系列、返回博客、暂无上下篇等 zh / en 翻译 key。
+
+**范围约束：**
+- sitemap / RSS 未修改。
+- 文章 URL 和 metadata 未修改。
+- Blog series pages 和 tag pages 未修改。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改部署配置。
+- 未修改 Projects / Profile 核心逻辑。
+- 未引入大型依赖。
+
+**验证：**
+- `pnpm lint` 通过，零警告零错误。
+- `pnpm build` 通过，静态生成 `/blog/[slug]`、`/blog`、`/blog/series`、`/blog/tags`、`/projects`、`/sitemap.xml` 和 `/rss.xml`。
+- 本地生产服务路由检查通过：`/`、`/blog`、`/blog/why-rebuild-my-personal-blog`、`/blog/series`、`/blog/series/personal-developer-os`、`/blog/tags`、`/projects`、`/sitemap.xml`、`/rss.xml`。
+
 ### 2026-06-12 - Codex
 **摘要：** Phase 9.2-fix-2 完成，将桌面端文章 TOC 调整为 fixed floating sidebar。
 

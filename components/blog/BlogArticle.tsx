@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { ArrowLeft, ArrowUpRight, BookOpen, Calendar, Clock, FolderKanban, Globe, Tag } from 'lucide-react';
 import { ArticleToc } from './ArticleToc';
-import type { BlogPost, BlogTocItem } from '@/lib/blog/blog-types';
+import { BlogAdjacentNav } from './BlogAdjacentNav';
+import type { BlogAdjacentPosts, BlogPost, BlogTocItem } from '@/lib/blog/blog-types';
 import { formatBlogDate } from '@/lib/blog/markdown';
 import { tagToSlug } from '@/lib/blog/tag-slug';
 import type { ProjectMeta } from '@/lib/projects';
@@ -13,6 +14,7 @@ interface BlogArticleProps {
   post: BlogPost;
   htmlContent: string;
   toc: BlogTocItem[];
+  adjacentPosts: BlogAdjacentPosts;
   relatedProjects: ProjectMeta[];
   stylePreset: StylePreset;
   lang: Lang;
@@ -22,12 +24,20 @@ export function BlogArticle({
   post,
   htmlContent,
   toc,
+  adjacentPosts,
   relatedProjects,
   stylePreset,
   lang,
 }: BlogArticleProps) {
   const tokens = getStyleTokens(stylePreset);
   const shouldShowToc = toc.length >= 2;
+  const isSeriesNavigation = Boolean(
+    post.seriesSlug
+      && (
+        adjacentPosts.previous?.seriesSlug === post.seriesSlug
+        || adjacentPosts.next?.seriesSlug === post.seriesSlug
+      ),
+  );
   const articleCardClass = `${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow}`;
   const articleContent = (
     <article className={articleCardClass}>
@@ -118,6 +128,13 @@ export function BlogArticle({
         // Content originates from local Markdown files.
         // Future CMS phase should add sanitize step before rendering.
         dangerouslySetInnerHTML={{ __html: htmlContent }}
+      />
+
+      <BlogAdjacentNav
+        adjacentPosts={adjacentPosts}
+        isSeriesNavigation={isSeriesNavigation}
+        stylePreset={stylePreset}
+        lang={lang}
       />
 
       {relatedProjects.length > 0 && (

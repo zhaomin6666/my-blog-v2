@@ -535,6 +535,7 @@
 - Completed scope:
   - Blog Tag Pages
   - Article TOC
+  - Previous / Next Navigation
 
 ### Phase 9.1: Blog Tag Pages COMPLETED
 - Added `BlogTag` type and `tagToSlug()` utility for stable tag-to-slug conversion.
@@ -585,9 +586,18 @@
 - Styling continues to reuse existing tokens and supports light / dark plus macos / vercel presets.
 - No TOC generation logic rewrite, BlogService, BlogRepository, content source, Console / CLI, window-system, deployment, Projects core logic, or Profile core logic changes.
 
-### Phase 9.3: Previous / Next Navigation PLANNED
-- Previous / next article navigation on blog detail pages.
-- Do not start implementation until a separate scope is explicitly planned.
+### Phase 9.3: Previous / Next Navigation COMPLETED
+- Added previous / next article navigation on `/blog/[slug]` detail pages after the article body.
+- Added `BlogAdjacentPosts` and `BlogService.getAdjacentPosts(slug)` for published-only adjacent-post lookup.
+- Series posts use the same published `getPostsBySeries(seriesSlug)` order, so `seriesOrder` controls reading sequence.
+- Series navigation falls back to date ordering only when individual series entries lack `seriesOrder`.
+- Non-series posts fall back to the global published-post date order.
+- Draft posts are excluded from adjacent navigation.
+- First series article shows only the next post, middle articles show previous and next, and the last article shows only the previous post.
+- Added a lightweight `BlogAdjacentNav` component with desktop two-column layout and mobile stacked layout.
+- Added zh / en translation keys for previous, next, continue-series, back-to-blog, and empty labels.
+- Sitemap, RSS, article URLs, metadata, tag pages, and series pages remain unchanged.
+- No Console / CLI, window-system, deployment, Projects core logic, or Profile core logic changes.
 
 ### Phase 9.4: Blog Search PLANNED
 - Blog search functionality.

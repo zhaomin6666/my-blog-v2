@@ -49,6 +49,7 @@ export default async function BlogArticlePage({ params }: BlogArticlePageProps) 
 
   const htmlContent = await renderMarkdownToHtml(post.content);
   const toc = extractBlogToc(post.content);
+  const adjacentPosts = await blogService.getAdjacentPosts(post.slug);
   const relatedProjects = post.seriesSlug
     ? await projectService.getProjectsByRelatedSeries(post.seriesSlug)
     : [];
@@ -58,6 +59,7 @@ export default async function BlogArticlePage({ params }: BlogArticlePageProps) 
       post={post}
       htmlContent={htmlContent}
       toc={toc}
+      adjacentPosts={adjacentPosts}
       relatedProjects={relatedProjects}
     />
   );
