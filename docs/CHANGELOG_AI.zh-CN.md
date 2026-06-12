@@ -2,6 +2,38 @@
 
 本文件是 `docs/CHANGELOG_AI.md` 的中文摘要版，用于快速了解项目历史和当前状态。完整逐条归档仍以 `docs/CHANGELOG_AI.md` 为准。
 
+
+## 2026-06-12 - Phase 8.5 内容发布流程文档
+
+Codex 补充了中英文内容发布流程文档，用于长期维护 Blog、Projects、Profile 三类文件型内容源。
+
+新增：
+
+- `docs/CONTENT_WORKFLOW.md`
+- `docs/CONTENT_WORKFLOW.zh-CN.md`
+
+覆盖内容：
+
+- Blog 文章和系列文章发布流程。
+- Project case study 新增与维护流程。
+- Profile、Contact Channels、System Stack 维护流程。
+- Blog / Project / Profile frontmatter 字段说明。
+- `published`、`draft`、`featured`、`order`、`seriesSlug`、`seriesOrder` 对公开展示的影响。
+- 本地验证、提交流程、生产部署、sitemap / RSS 检查流程。
+- 隐私规则和未来 CMS / DB Repository 替换方向。
+
+范围约束：
+
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改部署配置。
+- 未修改 Blog / Projects / Profile 核心逻辑。
+- 未新增真实联系方式或真实简历 PDF。
+
+验证：
+
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
 ## 2026-06-08 - 中文文档补充
 
 Codex 为 docs 添加中文工作文档。

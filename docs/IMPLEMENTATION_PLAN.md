@@ -488,6 +488,20 @@
 - No Blog or Projects core logic changes were made.
 - No deployment configuration changes were made.
 
-### Phase 8.5: Blog & Content Workflow Documentation PLANNED
-- Next phase: solidify the content publishing workflow for blog posts, project case studies, and profile content.
+### Phase 8.5: Blog & Content Workflow Documentation COMPLETED
+- Added bilingual content workflow documentation:
+  - `docs/CONTENT_WORKFLOW.md`
+  - `docs/CONTENT_WORKFLOW.zh-CN.md`
+- Documented the maintenance workflow for the three file-based content sources:
+  - Blog content in `content/blog`
+  - Project content in `content/projects`
+  - Profile content in `content/profile`
+- Documented frontmatter usage for Blog, Project, and Profile content.
+- Documented how `published`, `draft`, `featured`, `order`, `seriesSlug`, and `seriesOrder` affect public output.
+- Documented local validation, commit workflow, production deployment, sitemap / RSS checks, privacy rules, and future CMS / DB repository migration direction.
+- Added README and docs index links to the English and Chinese workflow documents.
 - Phase 8 remains in progress; do not mark Phase 8 itself as completed yet.
+
+### Phase 8.6: Phase 8 Final Review / Content & Career Launch Acceptance PLANNED
+- Next phase: final review and closure for Phase 8 content and career-launch work.
+- Keep this as a review/acceptance phase unless a separate scope is explicitly planned.

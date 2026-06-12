@@ -64,3 +64,8 @@ Do not commit `.env.local` or real secret values.
 ## Deployment
 
 See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the deployment checklist and production configuration notes.
+
+## Documentation
+
+- [Content Workflow](docs/CONTENT_WORKFLOW.md) / [内容发布流程](docs/CONTENT_WORKFLOW.zh-CN.md)
+- [Deployment Guide](docs/DEPLOYMENT.md) / [部署手册](docs/DEPLOYMENT.zh-CN.md)

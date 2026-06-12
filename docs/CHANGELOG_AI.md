@@ -1,6 +1,32 @@
 # AI Development Changelog
 
 ### 2026-06-12 - Codex
+**Summary:** Phase 8.5 completed. Added bilingual Blog / Projects / Profile content workflow documentation.
+
+**Phase 8.5 scope:**
+- Added `docs/CONTENT_WORKFLOW.md`.
+- Added `docs/CONTENT_WORKFLOW.zh-CN.md`.
+- Documented content maintenance workflows for:
+  - Blog content under `content/blog`
+  - Project content under `content/projects`
+  - Profile content under `content/profile`
+- Documented frontmatter fields and public-output behavior for `published`, `draft`, `featured`, `order`, `seriesSlug`, and `seriesOrder`.
+- Documented local validation, commit workflow, production deployment, sitemap / RSS checks, privacy rules, and future CMS / DB repository migration direction.
+- Added documentation entry links in `README.md` and `docs/README.zh-CN.md`.
+- Updated `docs/IMPLEMENTATION_PLAN.md` to mark Phase 8.5 as completed and add Phase 8.6 as the next planned review phase.
+
+**Scope guard:**
+- No Console / CLI command system changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No Blog, Projects, or Profile core logic changes were made.
+- No private contact information or real resume PDF was added.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-12 - Codex
 **Summary:** Phase 8.4.4 completed. Final acceptance for About / Profile / Contact / System Stack and closed Phase 8.4.
 
 **Phase 8.4.4 acceptance scope:**

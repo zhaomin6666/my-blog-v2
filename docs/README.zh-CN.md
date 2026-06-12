@@ -4,6 +4,7 @@
 
 ## 优先阅读
 
+- [内容发布流程](CONTENT_WORKFLOW.zh-CN.md) / [Content Workflow](CONTENT_WORKFLOW.md)：维护 Blog、Projects、Profile 三类文件型内容源时优先阅读。
 - [部署手册](DEPLOYMENT.zh-CN.md)：每次发布前优先看这份，特别注意 `NEXT_PUBLIC_SITE_URL` 的构建期和运行期要求。
 - [开发规则](DEVELOPMENT_RULES.zh-CN.md)：编码、架构、博客、SEO、生产维护规则。
 - [设计简报](DESIGN_BRIEF.zh-CN.md)：Personal Developer OS 的产品概念和设计底线。
