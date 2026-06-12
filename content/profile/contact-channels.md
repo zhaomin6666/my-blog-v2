@@ -1,0 +1,62 @@
+---
+title: "Contact Channels"
+slug: "contact-channels"
+summary:
+  zh: "公开联系入口。"
+  en: "Public contact entry points."
+channels:
+  - label:
+      zh: "Blog"
+      en: "Blog"
+    type: "blog"
+    href: "/blog"
+    value:
+      zh: "工程日志与学习记录"
+      en: "Engineering logs and learning notes"
+    endpoint: "GET /blog"
+    visible: true
+  - label:
+      zh: "Projects"
+      en: "Projects"
+    type: "projects"
+    href: "/projects"
+    value:
+      zh: "项目案例与作品集"
+      en: "Project case studies and portfolio"
+    endpoint: "GET /projects"
+    visible: true
+  - label:
+      zh: "Email"
+      en: "Email"
+    type: "email"
+    href: ""
+    value:
+      zh: "正式沟通时提供"
+      en: "Available during formal communication"
+    endpoint: "GET /email"
+    visible: false
+    privacyNote:
+      zh: "邮箱暂不在公开网站展示。"
+      en: "Email is not displayed publicly for now."
+  - label:
+      zh: "Resume"
+      en: "Resume"
+    type: "resume"
+    href: ""
+    value:
+      zh: "完整简历：正式沟通时提供"
+      en: "Full resume: available on request"
+    endpoint: "GET /resume"
+    visible: true
+    disabled: true
+privacyNote:
+  zh: "不在公开网站展示手机号、微信、住址、身份证、生日等个人敏感信息。"
+  en: "Phone number, WeChat, address, ID number, birthday, and other sensitive personal information are not shown publicly."
+resumeNote:
+  zh: "完整简历可在正式沟通时提供。"
+  en: "The full resume can be shared during formal communication."
+published: true
+lang: "zh"
+---
+
+公开联系入口仅保留站内可访问内容和正式沟通说明，不包含私人联系方式。

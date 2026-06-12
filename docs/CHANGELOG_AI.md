@@ -1,5 +1,88 @@
 # AI Development Changelog
 
+### 2026-06-12 - Codex
+**Summary:** Phase 8.4.3-fix completed. Merged Career Snapshot into the Profile section to remove repeated public-facing content.
+
+**Phase 8.4.3-fix scope:**
+- Removed the independent Career Snapshot / Resume Summary module from the homepage Main App.
+- Kept Profile as the unified public personal profile entry.
+- Merged the required career information into Profile:
+  - Java backend background
+  - AI Agent / TypeScript full-stack direction
+  - anonymized enterprise-system experience
+  - active project direction
+  - career direction
+  - resume privacy note
+- Renamed the profile content source:
+  - from `content/profile/career-snapshot.md`
+  - to `content/profile/profile.md`
+- Updated Profile repository/service semantics:
+  - `getProfile()`
+  - `getContactChannels()`
+  - `getSystemStack()`
+  - `getPublicProfile()`
+- Removed UI translation keys for the deleted Career Snapshot module.
+- Preserved System Stack and Contact Channels as separate profile-backed sections.
+
+**Privacy guard:**
+- No real resume PDF was uploaded.
+- No real resume download link was added.
+- No phone number, WeChat ID, address, birthday, ID number, real employer name, real client name, buyer name, or sensitive project details were added.
+- Enterprise experience remains anonymized.
+
+**Scope guard:**
+- No Console / CLI behavior changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No Blog core logic changes were made.
+- No Projects core logic changes were made.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-12 - Codex
+**Summary:** Phase 8.4.2 completed. Established a file-based Profile content system for career, contact, and stack content.
+
+**Phase 8.4.2 scope:**
+- Added `content/profile` as the file-based public profile content source.
+- Added Profile Markdown files:
+  - `content/profile/profile.md`
+  - `content/profile/contact-channels.md`
+  - `content/profile/system-stack.md`
+- Added Profile repository architecture:
+  - `lib/profile/profile-types.ts`
+  - `lib/profile/profile-repository.ts`
+  - `lib/profile/file-profile-repository.ts`
+  - `lib/profile/profile-service.ts`
+  - `lib/profile/index.ts`
+- Homepage `app/page.tsx` now reads `PublicProfile` through `ProfileService`.
+- Main App receives server-provided profile content and passes it into:
+  - About / Profile section
+  - System Stack section
+  - Contact Channels section
+- Removed the transitional hardcoded `lib/profile.ts` data file and replaced it with the repository-backed `lib/profile` module directory.
+- Preserved the existing Developer OS UI structure while moving career/contact/stack content out of components.
+- Kept future CMS / database / admin replacement path open through the repository boundary.
+
+**Privacy guard:**
+- No real resume PDF was uploaded.
+- No real resume download link was added.
+- No phone number, WeChat ID, address, birthday, ID number, real employer name, real client name, buyer name, or sensitive project details were added.
+- Enterprise experience is described with anonymized project categories such as bidding, e-procurement, supplier management, expert management, procurement planning, and enterprise system integration.
+
+**Scope guard:**
+- No Console / CLI behavior changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No Blog repository or core logic changes were made.
+- No Project repository or core logic changes were made.
+- No database, CMS, admin page, online editor, Agent API, fake metrics, or fabricated experience was added.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
 ### 2026-06-11 - Codex
 **Summary:** Phase 8.4.1 completed. Optimized the About / Profile content structure for career-facing positioning.
 

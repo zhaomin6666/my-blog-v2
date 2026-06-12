@@ -3,6 +3,7 @@
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import type { BlogPostMeta } from '@/lib/blog/blog-types';
 import type { ProjectMeta } from '@/lib/projects';
+import type { PublicProfile } from '@/lib/profile';
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { MainSectionId } from '@/lib/types';
@@ -18,6 +19,7 @@ interface MainAppProps {
   onOpenTerminal?: () => void;
   blogPosts: BlogPostMeta[];
   projects: ProjectMeta[];
+  profile: PublicProfile;
 }
 
 export interface MainAppHandle {
@@ -25,7 +27,7 @@ export interface MainAppHandle {
 }
 
 export const MainApp = forwardRef<MainAppHandle, MainAppProps>(function MainApp(
-  { onOpenTerminal, blogPosts, projects },
+  { onOpenTerminal, blogPosts, projects, profile },
   ref
 ) {
   const { stylePreset } = useSettings();
@@ -104,10 +106,10 @@ export const MainApp = forwardRef<MainAppHandle, MainAppProps>(function MainApp(
           {/* About + Skills */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div ref={setSectionRef('about')} className={sectionClassName('about', 'md:col-span-2')}>
-              <AboutSection />
+              <AboutSection profile={profile.profile} />
             </div>
             <div ref={setSectionRef('skills')} className={sectionClassName('skills')}>
-              <SkillsSection />
+              <SkillsSection systemStack={profile.systemStack} />
             </div>
           </div>
 
@@ -123,7 +125,7 @@ export const MainApp = forwardRef<MainAppHandle, MainAppProps>(function MainApp(
 
           {/* Contact */}
           <div ref={setSectionRef('contact')} className={sectionClassName('contact')}>
-            <ContactSection />
+            <ContactSection contactChannels={profile.contactChannels} />
           </div>
         </div>
       </div>

@@ -3,9 +3,13 @@
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
-import { skills } from '@/data/skills';
+import type { SystemStack } from '@/lib/profile';
 
-export function SkillsSection() {
+interface SkillsSectionProps {
+  systemStack: SystemStack;
+}
+
+export function SkillsSection({ systemStack }: SkillsSectionProps) {
   const { lang, stylePreset } = useSettings();
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
@@ -25,9 +29,9 @@ export function SkillsSection() {
 
       {/* Skill modules like config sections */}
       <div className="space-y-3">
-        {skills.map((skill) => (
+        {systemStack.groups.map((skill) => (
           <div
-            key={skill.category.en}
+            key={skill.name.en}
             className={`${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm`}
           >
             {/* Module header */}
@@ -36,7 +40,7 @@ export function SkillsSection() {
                 {t('skills.module', lang)}
               </span>
               <span className={`text-xs ${isMacos ? 'font-semibold' : 'font-mono font-bold'} ${tokens.textPrimary}`}>
-                {skill.category[lang]}
+                {skill.name[lang]}
               </span>
             </div>
             {/* Config entries */}

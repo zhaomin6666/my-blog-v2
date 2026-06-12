@@ -1,46 +1,44 @@
 'use client';
 
-import { Mail, Github, Linkedin, FileDown } from 'lucide-react';
+import { BookOpen, BriefcaseBusiness, FileText, Github, Linkedin, Mail } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import type { ContactChannelData, ContactChannels, ContactChannelType } from '@/lib/profile';
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
 
-export function ContactSection() {
+interface ContactSectionProps {
+  contactChannels: ContactChannels;
+}
+
+function getContactIcon(type: ContactChannelType): LucideIcon {
+  switch (type) {
+    case 'github':
+      return Github;
+    case 'linkedin':
+      return Linkedin;
+    case 'blog':
+      return BookOpen;
+    case 'projects':
+      return BriefcaseBusiness;
+    case 'resume':
+      return FileText;
+    case 'email':
+    default:
+      return Mail;
+  }
+}
+
+function isExternalLink(href: string) {
+  return href.startsWith('http://') || href.startsWith('https://');
+}
+
+export function ContactSection({ contactChannels }: ContactSectionProps) {
   const { lang, stylePreset } = useSettings();
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
 
-  const channels = [
-    {
-      icon: Mail,
-      key: 'contact.email' as const,
-      value: 'placeholder@example.com',
-      href: 'mailto:placeholder@example.com',
-      endpoint: 'GET /email',
-    },
-    {
-      icon: Github,
-      key: 'contact.github' as const,
-      value: 'github.com/',
-      href: 'https://github.com/',
-      endpoint: 'GET /github',
-    },
-    {
-      icon: Linkedin,
-      key: 'contact.linkedin' as const,
-      value: 'linkedin.com/',
-      href: 'https://linkedin.com/',
-      endpoint: 'GET /linkedin',
-    },
-    {
-      icon: FileDown,
-      key: 'contact.resume' as const,
-      value: t('contact.comingSoon', lang),
-      href: '#',
-      endpoint: 'GET /resume',
-      disabled: true,
-    },
-  ];
+  const channels = contactChannels.channels.filter((channel) => channel.visible);
 
   return (
     <div className={`p-6 ${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow}`}>
@@ -57,12 +55,16 @@ export function ContactSection() {
 
       {/* Contact channels like API endpoints */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {channels.map((channel) => (
+        {channels.map((channel: ContactChannelData) => {
+          const Icon = getContactIcon(channel.type);
+          const href = channel.disabled || !channel.href ? undefined : channel.href;
+
+          return (
           <a
-            key={channel.key}
-            href={channel.disabled ? undefined : channel.href}
-            target={channel.href.startsWith('http') ? '_blank' : undefined}
-            rel={channel.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            key={`${channel.type}-${channel.endpoint}`}
+            href={href}
+            target={href && isExternalLink(href) ? '_blank' : undefined}
+            rel={href && isExternalLink(href) ? 'noopener noreferrer' : undefined}
             className={`group flex items-center gap-3 p-4 ${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} transition-all duration-200 hover:-translate-y-0.5 ${
               channel.disabled
                 ? 'opacity-60 cursor-not-allowed'
@@ -71,11 +73,11 @@ export function ContactSection() {
                   : 'hover:border-zinc-400 dark:hover:border-zinc-600'
             }`}
           >
-            <channel.icon size={isMacos ? 18 : 16} className={tokens.textSecondary} />
+            <Icon size={isMacos ? 18 : 16} className={tokens.textSecondary} />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <span className={`${isMacos ? 'text-sm font-medium' : 'text-xs font-mono font-bold'} ${tokens.textPrimary}`}>
-                  {t(channel.key, lang)}
+                  {channel.label[lang]}
                 </span>
                 {channel.disabled && (
                   <span className={`text-[9px] px-1.5 py-0.5 ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius}`}>
@@ -84,7 +86,7 @@ export function ContactSection() {
                 )}
               </div>
               <div className={`truncate ${isMacos ? 'text-xs' : 'text-[11px] font-mono'} ${tokens.textMuted}`}>
-                {channel.value}
+                {channel.value[lang]}
               </div>
             </div>
             {/* Endpoint label */}
@@ -92,8 +94,13 @@ export function ContactSection() {
               {channel.endpoint}
             </span>
           </a>
-        ))}
+          );
+        })}
       </div>
+
+      <p className={`mt-4 ${isMacos ? 'text-xs leading-relaxed' : 'text-[11px] font-mono leading-relaxed'} ${tokens.textMuted}`}>
+        {contactChannels.privacyNote[lang]} {contactChannels.resumeNote[lang]}
+      </p>
     </div>
   );
 }

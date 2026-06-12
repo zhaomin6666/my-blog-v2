@@ -154,9 +154,6 @@ const translations = {
     'section.blog': '博客',
     'section.contact': '联系',
 
-    'contact.resumeLabel': '简历',
-    'contact.downloadPdf': '下载 PDF',
-
     'cmd.help.desc': '显示帮助信息',
     'cmd.about.desc': '关于我',
     'cmd.skills.desc': '技能栈',
@@ -340,9 +337,6 @@ const translations = {
     'section.projects': 'Projects',
     'section.blog': 'Blog',
     'section.contact': 'Contact',
-
-    'contact.resumeLabel': 'Resume',
-    'contact.downloadPdf': 'Download PDF',
 
     'cmd.help.desc': 'Show help information',
     'cmd.about.desc': 'About me',

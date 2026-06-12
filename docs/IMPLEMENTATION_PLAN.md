@@ -417,3 +417,40 @@
   - `/blog/series/personal-developer-os`
 - Preserved the Personal Developer OS shell, Main App / Console App model, Desktop fallback, System Status Bar, Blog system, Projects system, and deployment configuration.
 - No Resume download, database, CMS, Agent API, online chat, Console / CLI behavior, window-system behavior, or deployment config changes.
+
+### Phase 8.4.2: Profile Content System COMPLETED
+- Added a lightweight file-based Profile content system under `content/profile`.
+- Added Profile content source files:
+  - `content/profile/profile.md`
+  - `content/profile/contact-channels.md`
+  - `content/profile/system-stack.md`
+- Added Profile content architecture:
+  - `ProfileRepository`
+  - `FileProfileRepository`
+  - `ProfileService`
+- Homepage data assembly now fetches `PublicProfile` through `ProfileService` and passes serializable data into the Main App client components.
+- About / Profile, Contact Channels, and System Stack homepage sections now render from ProfileService-provided content instead of maintaining full content in components.
+- Kept Profile as a public, privacy-friendly personal profile rather than a full online resume or PDF download feature.
+- Preserved anonymized enterprise-system experience, Java backend positioning, AI Agent / full-stack direction, Personal Developer OS and AI Agent Demo project links, and resume privacy note.
+- Future CMS / database / admin sources can replace the repository implementation without rewriting page or component rendering.
+- No real resume PDF, phone number, WeChat, address, real employer name, real client name, buyer name, sensitive project details, database, CMS, admin, Console / CLI behavior, window-system behavior, or deployment config changes.
+
+### Phase 8.4.3: Contact / CTA 联系入口优化 COMPLETED
+- Contact / CTA optimization is treated as completed before the current fix.
+- Keep contact entry points privacy-friendly and avoid public resume PDF download links.
+- Phase 8 remains in progress.
+
+#### Phase 8.4.3-fix: Merge Career Snapshot into Profile COMPLETED
+- Removed the independent Career Snapshot / Resume Summary homepage module.
+- Kept Profile as the unified public personal profile entry.
+- Merged required career information into the Profile display:
+  - Java backend background
+  - AI Agent / TypeScript full-stack direction
+  - anonymized enterprise-system experience
+  - active project direction
+  - career direction
+  - resume privacy note
+- Renamed the Profile content source from `content/profile/career-snapshot.md` to `content/profile/profile.md`.
+- Updated ProfileService semantics from `getCareerSnapshot()` to `getProfile()` while preserving `getPublicProfile()`.
+- Preserved System Stack, Contact Channels, Projects, Blog, Main App, Console App, Desktop fallback, and System Status Bar.
+- No real resume PDF, resume download link, phone number, WeChat, address, real employer name, real client name, buyer name, Console / CLI, window-system behavior, or deployment config changes.
