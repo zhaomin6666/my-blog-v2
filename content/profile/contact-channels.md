@@ -26,6 +26,26 @@ channels:
     endpoint: "GET /projects"
     visible: true
   - label:
+      zh: "Personal Developer OS"
+      en: "Personal Developer OS"
+    type: "projects"
+    href: "/projects/personal-developer-os"
+    value:
+      zh: "已上线的个人开发者 OS 项目"
+      en: "Live Personal Developer OS project"
+    endpoint: "GET /projects/personal-developer-os"
+    visible: true
+  - label:
+      zh: "AI Agent Demo"
+      en: "AI Agent Demo"
+    type: "projects"
+    href: "/projects/ai-agent-demo"
+    value:
+      zh: "AI Agent 学习项目与案例说明"
+      en: "AI Agent learning project and case study"
+    endpoint: "GET /projects/ai-agent-demo"
+    visible: true
+  - label:
       zh: "Email"
       en: "Email"
     type: "email"
@@ -72,6 +92,10 @@ Contact channels content mapping:
   Drives the Contact section channel cards.
 - channels.visible:
   Only channels with visible=true are shown in the public Contact section.
+- channels for /blog, /projects, /projects/personal-developer-os, and
+  /projects/ai-agent-demo:
+  These are the current public CTAs. Keep the list focused and avoid turning
+  Contact into a marketing link wall.
 - channels.href:
   If href is empty, the channel is not rendered as an active clickable link.
   A disabled channel may still be shown as a status/availability note.

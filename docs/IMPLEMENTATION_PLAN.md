@@ -401,9 +401,15 @@
 - Small fix: removed the generic `/blog` link from `AI Agent Demo` until a real AI Agent blog series exists.
 - No Console / CLI, window-system behavior, Blog article body content, deployment configuration, database, CMS, search, online chat, or Agent API changes.
 
-### Phase 8.4: About / Resume / Contact 求职转化优化 IN PROGRESS
+### Phase 8.4: About / Resume / Contact 求职转化优化 COMPLETED
 - Phase 8 remains in progress.
-- Started career conversion content work around About, Resume, and Contact.
+- Completed the career conversion content work around About, Resume, Contact, and System Stack.
+- Completed scope:
+  - About content structure optimization
+  - Profile Content System
+  - Contact / CTA contact entry optimization
+  - Profile i18n & content mapping polish
+  - About / Profile / Contact final acceptance
 - Keep this phase content-first: no Console / CLI, window-system, deployment-config, database, CMS, online chat, or fake resume-download changes unless separately planned.
 
 ### Phase 8.4.1: About Content Structure Optimization COMPLETED
@@ -463,3 +469,25 @@
 - Clarified that Career Snapshot remains merged into Profile and is not restored as a standalone module.
 - Added maintenance comments to `content/profile/contact-channels.md` and `content/profile/system-stack.md` for visible channels, privacy rules, stack groups, and Learning / Exploring semantics.
 - No ProfileService, PublicProfile shape, Console / CLI command system, window system, Blog core logic, Projects core logic, or deployment configuration changes.
+
+### Phase 8.4.4: About / Profile / Contact Final Acceptance COMPLETED
+- Completed final acceptance for Phase 8.4 About / Profile / Contact / System Stack work.
+- Confirmed Profile / Contact Channels / System Stack are loaded through `ProfileService` and passed into the Main App as serializable `PublicProfile` data.
+- Confirmed the independent Career Snapshot / Resume Summary module remains removed; career positioning is merged into Profile.
+- Confirmed Profile naturally covers Java backend background, anonymized enterprise-system experience, AI Agent / TypeScript full-stack direction, Personal Developer OS, AI Agent Demo, career direction, and resume privacy note.
+- Confirmed Main App tabs support bilingual labels: Overview / Profile / Stack / Services / Logs / Contact and the corresponding zh labels.
+- Confirmed `content/profile/profile.md`, `content/profile/contact-channels.md`, and `content/profile/system-stack.md` include non-rendered maintenance comments for content-to-frontend mapping.
+- Confirmed `summary` fields are reserved for metadata / CMS preview / future card or SEO summary use and are not rendered directly on the homepage.
+- Confirmed Contact CTAs stay focused on public routes: `/blog`, `/projects`, `/projects/personal-developer-os`, and `/projects/ai-agent-demo`.
+- Confirmed no real resume PDF was uploaded or linked.
+- Confirmed phone number, WeChat ID, address, birthday, ID number, real employer names, real client names, buyer names, and sensitive project details are not publicly displayed.
+- Confirmed unit / client / buyer information remains anonymized.
+- Confirmed Learning / Exploring stack items are represented as learning areas rather than mature production expertise.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No Blog or Projects core logic changes were made.
+- No deployment configuration changes were made.
+
+### Phase 8.5: Blog & Content Workflow Documentation PLANNED
+- Next phase: solidify the content publishing workflow for blog posts, project case studies, and profile content.
+- Phase 8 remains in progress; do not mark Phase 8 itself as completed yet.

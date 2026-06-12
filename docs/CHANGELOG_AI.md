@@ -1,6 +1,36 @@
 # AI Development Changelog
 
 ### 2026-06-12 - Codex
+**Summary:** Phase 8.4.4 completed. Final acceptance for About / Profile / Contact / System Stack and closed Phase 8.4.
+
+**Phase 8.4.4 acceptance scope:**
+- Completed final acceptance for About / Profile / Contact / System Stack.
+- Confirmed Career Snapshot / Resume Summary remains merged into Profile and is not shown as an independent homepage module.
+- Confirmed Profile / Contact Channels / System Stack are all loaded through `ProfileService`.
+- Confirmed Main App tabs support bilingual labels through `lib/translations.ts`.
+- Confirmed `content/profile` includes non-rendered maintenance comments for field-to-frontend mapping.
+- Confirmed the full resume is available on request only; no real resume PDF was uploaded or linked.
+- Confirmed phone number, WeChat ID, address, birthday, ID number, real employer names, real client names, buyer names, and sensitive project details are not publicly displayed.
+- Confirmed unit / client / buyer information remains anonymized.
+
+**Small fix:**
+- Added focused Contact CTA entries for `/projects/personal-developer-os` and `/projects/ai-agent-demo` in `content/profile/contact-channels.md`.
+- Kept Contact privacy-friendly and did not add private email, phone, WeChat, address, or resume PDF links.
+
+**Scope guard:**
+- No Console / CLI command system changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No Blog core logic changes were made.
+- No Projects core logic changes were made.
+- No ProfileService or PublicProfile shape changes were made.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+- Local route checks passed for `/`, `/projects`, `/projects/personal-developer-os`, `/projects/ai-agent-demo`, `/blog`, `/blog/series`, `/blog/series/personal-developer-os`, `/sitemap.xml`, and `/rss.xml`.
+
+### 2026-06-12 - Codex
 **Summary:** Phase 8.4.3-fix completed. Polished Profile i18n and documented Profile content-to-frontend mapping.
 
 **Phase 8.4.3-fix scope:**
