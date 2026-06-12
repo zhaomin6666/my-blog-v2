@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Calendar, Clock, Tag, BookOpen, Globe } from 'lucide-react';
 import type { BlogPostMeta } from '@/lib/blog/blog-types';
 import { formatBlogDate } from '@/lib/blog/markdown';
+import { tagToSlug } from '@/lib/blog/tag-slug';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
 import type { StylePreset, Lang } from '@/lib/types';
@@ -58,13 +59,15 @@ export function BlogCard({ post, stylePreset, lang }: BlogCardProps) {
             </span>
           )}
           {post.tags.map((tag) => (
-            <span
+            <Link
               key={tag}
-              className={`inline-flex items-center gap-1 px-2 py-0.5 text-[11px] ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius}`}
+              href={`/blog/tags/${tagToSlug(tag)}`}
+              onClick={(e) => e.stopPropagation()}
+              className={`inline-flex items-center gap-1 px-2 py-0.5 text-[11px] ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius} transition-colors hover:text-zinc-700 dark:hover:text-zinc-200`}
             >
               <Tag size={10} />
               {tag}
-            </span>
+            </Link>
           ))}
         </div>
       </Link>

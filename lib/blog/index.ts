@@ -16,3 +16,4 @@ export { FileBlogRepository } from './file-blog-repository';
 export { extractExcerpt, formatBlogDate, renderMarkdownToHtml, estimateReadingTime } from './markdown';
 export { calculateReadingStats } from './reading-stats';
 export type { ReadingStats } from './reading-stats';
+export { tagToSlug } from './tag-slug';

@@ -5,3 +5,5 @@ export { BlogArticle } from './BlogArticle';
 export { BlogNotFoundClient } from './BlogNotFoundClient';
 export { BlogSeriesList } from './BlogSeriesList';
 export { BlogSeriesPage } from './BlogSeriesPage';
+export { BlogTagList } from './BlogTagList';
+export { BlogTagPage } from './BlogTagPage';

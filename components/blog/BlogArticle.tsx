@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowUpRight, BookOpen, Calendar, Clock, FolderKanban, Globe, Tag } from 'lucide-react';
 import type { BlogPost } from '@/lib/blog/blog-types';
 import { formatBlogDate } from '@/lib/blog/markdown';
+import { tagToSlug } from '@/lib/blog/tag-slug';
 import type { ProjectMeta } from '@/lib/projects';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
@@ -89,13 +90,14 @@ export function BlogArticle({
               </span>
             )}
             {post.tags.map((tag) => (
-              <span
+              <Link
                 key={tag}
-                className={`inline-flex items-center gap-1 px-2 py-0.5 text-[11px] ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius}`}
+                href={`/blog/tags/${tagToSlug(tag)}`}
+                className={`inline-flex items-center gap-1 px-2 py-0.5 text-[11px] ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius} transition-colors hover:text-zinc-700 dark:hover:text-zinc-200`}
               >
                 <Tag size={10} />
                 {tag}
-              </span>
+              </Link>
             ))}
           </div>
         )}

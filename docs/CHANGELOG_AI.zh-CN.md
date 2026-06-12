@@ -2,6 +2,37 @@
 
 本文件是 `docs/CHANGELOG_AI.md` 的中文摘要版，用于快速了解项目历史和当前状态。完整逐条归档仍以 `docs/CHANGELOG_AI.md` 为准。
 
+### 2026-06-12 - Claude Code
+**摘要：** Phase 9.1 完成。新增博客标签页，读者可按主题浏览已发布文章。
+
+**Phase 9.1 范围：**
+- 新增 `BlogTag` 类型（name、slug、count、latestUpdatedAt）。
+- 新增 `tagToSlug()` 工具函数，稳定生成 URL 友好标签 slug（如 "Next.js" → "next-js"）。
+- `BlogRepository` 新增 `getAllTagsDetailed()` 接口方法。
+- `FileBlogRepository` 实现 `getAllTagsDetailed()`，按文章数量降序、名称升序排列。
+- `BlogService` 新增 `getAllTagsDetailed()`、`getTagBySlug()`、`getPostsByTagSlug()` 方法。
+- 新增 `/blog/tags` 标签总览页，展示所有标签名称、文章数量、最近更新时间。
+- 新增 `/blog/tags/[tagSlug]` 标签详情页，展示该标签下所有已发布文章。
+- 标签 slug 不存在时返回 `notFound()`。
+- `/blog` 页面新增"查看标签"入口（在"查看系列"旁边）。
+- `BlogCard` 和 `BlogArticle` 中标签可点击进入标签详情页。
+- 新增 12 个标签相关中英文翻译 key。
+- `sitemap.xml` 包含 `/blog/tags` 及所有标签详情页。
+- RSS 保持只包含博客文章，不包含标签页。
+- draft 文章不进入标签页。
+
+**未修改范围：**
+- 未修改 Console / CLI 命令系统。
+- 未修改窗口系统。
+- 未修改部署配置。
+- 未修改已发布文章正文。
+- 未修改 Projects / Profile 核心逻辑。
+- 未引入大型依赖。
+
+**验证：**
+- `pnpm lint` 通过，零警告零错误。
+- `pnpm build` 通过，生成 18 个标签详情页。
+
 
 
 ## 2026-06-12 - Phase 8.6 最终验收与收口

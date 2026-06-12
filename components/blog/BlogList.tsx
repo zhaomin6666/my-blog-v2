@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BookOpen, FileText } from 'lucide-react';
+import { BookOpen, FileText, Tags } from 'lucide-react';
 import type { BlogPostMeta } from '@/lib/blog/blog-types';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
@@ -34,6 +34,13 @@ export function BlogList({ posts, stylePreset, lang }: BlogListProps) {
           </h1>
         </div>
         <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href="/blog/tags"
+            className={`inline-flex items-center gap-1.5 text-xs ${tokens.textMuted} transition-colors hover:text-zinc-700 dark:hover:text-zinc-300`}
+          >
+            <Tags size={12} />
+            {t('blog.viewTags', lang)}
+          </Link>
           <Link
             href="/blog/series"
             className={`inline-flex items-center gap-1.5 text-xs ${tokens.textMuted} transition-colors hover:text-zinc-700 dark:hover:text-zinc-300`}

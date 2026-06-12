@@ -1,5 +1,66 @@
 # AI Development Changelog
 
+### 2026-06-12 - Claude Code
+**Summary:** Phase 9.1 completed. Added Blog Tag Pages for browsing published posts by topic.
+
+**Phase 9.1 scope:**
+- Added `BlogTag` type to `lib/blog/blog-types.ts` with `name`, `slug`, `count`, and `latestUpdatedAt` fields.
+- Added `tagToSlug()` utility in `lib/blog/tag-slug.ts` for stable tag-to-slug conversion (e.g., "Next.js" → "next-js", "AI Agent" → "ai-agent").
+- Extended `BlogRepository` interface with `getAllTagsDetailed()` returning `BlogTag[]`.
+- Implemented `getAllTagsDetailed()` in `FileBlogRepository` with count aggregation and latest-updated-at tracking. Tags are sorted by count descending, then name ascending.
+- Extended `BlogService` with `getAllTagsDetailed()`, `getTagBySlug(tagSlug)`, and `getPostsByTagSlug(tagSlug)` methods.
+- Added public tag listing page at `/blog/tags` with tag name, post count, latest updated date, and links to tag detail pages.
+- Added public tag detail page at `/blog/tags/[tagSlug]` with tag name, post count, and the list of published posts under that tag.
+- Added `generateStaticParams` for tag detail pages, generating all tag slugs from published posts.
+- Added `generateMetadata` for both tag listing and tag detail pages using `buildMetadata` from `lib/seo.ts`.
+- Tag pages use `notFound()` when a tag slug does not match any published tag.
+- Added "View tags" / "查看标签" entry link on the `/blog` page (next to the existing "View series" link).
+- Made tags clickable in `BlogCard` and `BlogArticle` components, linking to `/blog/tags/[tagSlug]`. Tags use `stopPropagation` in `BlogCard` to avoid triggering the parent card link.
+- Added 12 new translation keys for tag pages in both `zh` and `en` (tagTitle, tagSubtitle, viewTags, tagCount, tagPosts, tagLatest, tagOpen, backToTags, tagEmpty, tagDetailSubtitle).
+- Added `/blog/tags` index and all `/blog/tags/[tagSlug]` detail pages to `sitemap.xml`.
+- RSS remains blog-article-only and does not include tag pages.
+- Draft posts do not appear in tag pages.
+
+**Files changed:**
+- `lib/blog/blog-types.ts` — added `BlogTag` interface
+- `lib/blog/tag-slug.ts` — new: `tagToSlug()` and `buildTagSlugMap()`
+- `lib/blog/blog-repository.ts` — added `getAllTagsDetailed()` to interface
+- `lib/blog/file-blog-repository.ts` — implemented `getAllTagsDetailed()`
+- `lib/blog/blog-service.ts` — added `getAllTagsDetailed()`, `getTagBySlug()`, `getPostsByTagSlug()`
+- `lib/blog/index.ts` — added `tagToSlug` export
+- `lib/translations.ts` — added 12 tag-related translation keys for zh and en
+- `app/blog/tags/page.tsx` — new: tag listing page
+- `app/blog/tags/BlogTagListPageClient.tsx` — new: client wrapper for tag listing
+- `app/blog/tags/[tagSlug]/page.tsx` — new: tag detail page with static params and metadata
+- `app/blog/tags/[tagSlug]/BlogTagDetailPageClient.tsx` — new: client wrapper for tag detail
+- `components/blog/BlogTagList.tsx` — new: tag listing component
+- `components/blog/BlogTagPage.tsx` — new: tag detail component
+- `components/blog/index.ts` — added `BlogTagList` and `BlogTagPage` exports
+- `components/blog/BlogList.tsx` — added "View tags" link with `Tags` icon
+- `components/blog/BlogCard.tsx` — tags are now clickable links to `/blog/tags/[tagSlug]`
+- `components/blog/BlogArticle.tsx` — tags are now clickable links to `/blog/tags/[tagSlug]`
+- `app/sitemap.ts` — added `/blog/tags` and all tag detail pages
+- `docs/IMPLEMENTATION_PLAN.md` — updated Phase 9 status
+- `docs/CHANGELOG_AI.md` — this entry
+- `docs/CHANGELOG_AI.zh-CN.md` — Chinese companion entry
+
+**Scope guard:**
+- No Console / CLI command system changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No blog article body content was modified.
+- No blog content source structure was changed.
+- No Projects or Profile core logic was changed.
+- No database, CMS, search, comments, or Agent API was added.
+- No large dependencies were introduced.
+
+**Verification:**
+- `pnpm lint` passed with zero warnings or errors.
+- `pnpm build` passed. Static pages generated for `/blog/tags`, all 18 tag detail pages, `/blog/series`, `/blog`, `/blog/[slug]`, `/projects`, and `/`.
+- Sitemap contains `/blog/tags`, `/blog/tags/[tagSlug]` for all 18 tags, series pages, project pages, and blog post pages.
+- RSS does not contain tag pages.
+- Tag slug generation produces stable slugs: "Next.js" → "next-js", "Developer OS" → "developer-os", "Vibe Coding" → "vibe-coding", etc.
+
 ### 2026-06-12 - Codex
 **Summary:** Phase 8.6 completed. Final acceptance and closure for Phase 8 Content & Career Launch.
 

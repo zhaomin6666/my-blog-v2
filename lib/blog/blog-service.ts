@@ -8,6 +8,7 @@ import type {
   BlogPostMeta,
   BlogPostQueryOptions,
   BlogSeries,
+  BlogTag,
 } from './blog-types';
 import { FileBlogRepository } from './file-blog-repository';
 
@@ -77,6 +78,43 @@ export class BlogService {
    */
   async getAllTags(): Promise<string[]> {
     return this.repository.getAllTags();
+  }
+
+  /**
+   * Get all tags with aggregated metadata (slug, count, latestUpdatedAt).
+   * Sorted by count descending, then name ascending.
+   */
+  async getAllTagsDetailed(): Promise<BlogTag[]> {
+    return this.repository.getAllTagsDetailed();
+  }
+
+  /**
+   * Get a single tag by its slug.
+   * Returns null if no tag produces this slug.
+   */
+  async getTagBySlug(tagSlug: string): Promise<BlogTag | null> {
+    const tags = await this.repository.getAllTagsDetailed();
+    return tags.find((tag) => tag.slug === tagSlug) ?? null;
+  }
+
+  /**
+   * Get published posts that have a tag matching the given slug.
+   * Returns null if no tag produces this slug.
+   */
+  async getPostsByTagSlug(
+    tagSlug: string,
+    options?: Omit<BlogPostQueryOptions, 'includeDrafts'>,
+  ): Promise<{ tag: BlogTag; posts: BlogPostMeta[] } | null> {
+    const tags = await this.repository.getAllTagsDetailed();
+    const tag = tags.find((t) => t.slug === tagSlug);
+    if (!tag) return null;
+
+    const posts = await this.repository.getPostsByTag(tag.name, {
+      ...options,
+      includeDrafts: false,
+    });
+
+    return { tag, posts };
   }
 
   /**

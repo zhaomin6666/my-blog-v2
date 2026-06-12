@@ -3,6 +3,7 @@ import type {
   BlogPostMeta,
   BlogPostQueryOptions,
   BlogSeries,
+  BlogTag,
 } from './blog-types';
 
 export interface BlogPostLookupOptions {
@@ -47,6 +48,12 @@ export interface BlogRepository {
    * Get a list of all unique tags across published posts.
    */
   getAllTags(): Promise<string[]>;
+
+  /**
+   * Get all tags with aggregated metadata (slug, count, latestUpdatedAt).
+   * Sorted by count descending, then name ascending.
+   */
+  getAllTagsDetailed(): Promise<BlogTag[]>;
 
   /**
    * Get all published series with their published posts.

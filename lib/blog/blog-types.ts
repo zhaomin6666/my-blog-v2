@@ -72,6 +72,16 @@ export interface BlogSeries {
 }
 
 /**
+ * Aggregated metadata for a published tag.
+ */
+export interface BlogTag {
+  name: string;
+  slug: string;
+  count: number;
+  latestUpdatedAt: string;
+}
+
+/**
  * Query options for listing posts.
  */
 export interface BlogPostQueryOptions {

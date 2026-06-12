@@ -10,8 +10,10 @@ import type {
   BlogPostQueryOptions,
   BlogSeries,
   BlogPostStatus,
+  BlogTag,
 } from './blog-types';
 import { calculateReadingStats } from './reading-stats';
+import { tagToSlug } from './tag-slug';
 import type {
   BlogPostLookupOptions,
   BlogRepository,
@@ -256,6 +258,44 @@ export class FileBlogRepository implements BlogRepository {
       }
     }
     return Array.from(tagSet).sort();
+  }
+
+  async getAllTagsDetailed(): Promise<BlogTag[]> {
+    const posts = await this.getAllPosts();
+    const tagMap = new Map<string, { count: number; latestUpdatedAt: string }>();
+
+    for (const post of posts) {
+      for (const tag of post.tags) {
+        const existing = tagMap.get(tag);
+        const postTime = new Date(post.updatedAt || post.date).getTime();
+
+        if (existing) {
+          existing.count++;
+          const existingTime = new Date(existing.latestUpdatedAt).getTime();
+          if (!Number.isNaN(postTime) && (Number.isNaN(existingTime) || postTime > existingTime)) {
+            existing.latestUpdatedAt = post.updatedAt || post.date;
+          }
+        } else {
+          tagMap.set(tag, {
+            count: 1,
+            latestUpdatedAt: post.updatedAt || post.date,
+          });
+        }
+      }
+    }
+
+    return Array.from(tagMap.entries())
+      .map(([name, data]) => ({
+        name,
+        slug: tagToSlug(name),
+        count: data.count,
+        latestUpdatedAt: data.latestUpdatedAt,
+      }))
+      .sort((a, b) => {
+        // Sort by count descending, then name ascending for stability
+        if (b.count !== a.count) return b.count - a.count;
+        return a.name.localeCompare(b.name);
+      });
   }
 
   async getPostsBySeries(seriesSlug: string): Promise<BlogPostMeta[]> {

@@ -530,6 +530,36 @@
 - No window-system behavior changes were made.
 - No deployment configuration changes were made.
 
-## Phase 9: Blog System Enhancement PLANNED
-- Future phase for possible blog-system improvements.
+## Phase 9: Blog System Enhancement IN PROGRESS
+- Blog system improvements for better content discovery and reading experience.
+- Completed scope:
+  - Blog Tag Pages
+
+### Phase 9.1: Blog Tag Pages COMPLETED
+- Added `BlogTag` type and `tagToSlug()` utility for stable tag-to-slug conversion.
+- Extended `BlogRepository` with `getAllTagsDetailed()` and `BlogService` with `getAllTagsDetailed()`, `getTagBySlug()`, `getPostsByTagSlug()`.
+- Added public tag listing page at `/blog/tags` with tag name, post count, latest updated date.
+- Added public tag detail page at `/blog/tags/[tagSlug]` with post list sorted by date descending.
+- Tags in `BlogCard` and `BlogArticle` are now clickable links to `/blog/tags/[tagSlug]`.
+- Added "View tags" / "查看标签" entry on the `/blog` page.
+- Sitemap includes `/blog/tags` and all tag detail pages.
+- RSS remains blog-article-only.
+- Draft posts are excluded from tag pages.
+- Tag slug not found returns `notFound()`.
+- No Console / CLI, window-system, deployment, Projects, or Profile changes.
+
+### Phase 9.2: Article TOC PLANNED
+- Table of contents for long-form blog articles.
+- Do not start implementation until a separate scope is explicitly planned.
+
+### Phase 9.3: Previous / Next Navigation PLANNED
+- Previous / next article navigation on blog detail pages.
+- Do not start implementation until a separate scope is explicitly planned.
+
+### Phase 9.4: Blog Search PLANNED
+- Blog search functionality.
+- Do not start implementation until a separate scope is explicitly planned.
+
+### Phase 9.5: Blog UX Final Polish PLANNED
+- Final blog UX polish and refinements.
 - Do not start implementation until a separate scope is explicitly planned.

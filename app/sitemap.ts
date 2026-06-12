@@ -8,6 +8,7 @@ export const dynamic = 'force-static';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await blogService.getPublishedPosts();
   const series = await blogService.getAllSeries();
+  const tags = await blogService.getAllTagsDetailed();
   const projects = await projectService.getPublishedProjects();
 
   return [
@@ -30,6 +31,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
+      url: getAbsoluteUrl('/blog/tags'),
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+    {
       url: getAbsoluteUrl('/projects'),
       lastModified: new Date(),
       changeFrequency: 'weekly',
@@ -44,6 +51,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...series.map((item) => ({
       url: getAbsoluteUrl(`/blog/series/${item.slug}`),
       lastModified: new Date(item.latestUpdatedAt),
+      changeFrequency: 'monthly' as const,
+      priority: 0.65,
+    })),
+    ...tags.map((tag) => ({
+      url: getAbsoluteUrl(`/blog/tags/${tag.slug}`),
+      lastModified: new Date(tag.latestUpdatedAt),
       changeFrequency: 'monthly' as const,
       priority: 0.65,
     })),
