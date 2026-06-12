@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeft, ArrowUpRight, BookOpen, Calendar, Clock, FolderKanban, Globe, Tag } from 'lucide-react';
-import type { BlogPost } from '@/lib/blog/blog-types';
+import { ArticleToc } from './ArticleToc';
+import type { BlogPost, BlogTocItem } from '@/lib/blog/blog-types';
 import { formatBlogDate } from '@/lib/blog/markdown';
 import { tagToSlug } from '@/lib/blog/tag-slug';
 import type { ProjectMeta } from '@/lib/projects';
@@ -11,6 +12,7 @@ import type { StylePreset, Lang } from '@/lib/types';
 interface BlogArticleProps {
   post: BlogPost;
   htmlContent: string;
+  toc: BlogTocItem[];
   relatedProjects: ProjectMeta[];
   stylePreset: StylePreset;
   lang: Lang;
@@ -19,14 +21,16 @@ interface BlogArticleProps {
 export function BlogArticle({
   post,
   htmlContent,
+  toc,
   relatedProjects,
   stylePreset,
   lang,
 }: BlogArticleProps) {
   const tokens = getStyleTokens(stylePreset);
-
-  return (
-    <article className={`${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow}`}>
+  const shouldShowToc = toc.length >= 2;
+  const articleCardClass = `${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow}`;
+  const articleContent = (
+    <article className={articleCardClass}>
       <div className="border-b border-zinc-200/60 p-5 dark:border-zinc-800/60 md:p-8">
         <Link
           href="/blog"
@@ -36,12 +40,12 @@ export function BlogArticle({
           {t('blog.backToLogs', lang)}
         </Link>
 
-        <h1 className={`mb-4 text-2xl md:text-3xl font-bold ${tokens.textPrimary}`}>
+        <h1 className={`mb-4 text-2xl font-bold md:text-3xl ${tokens.textPrimary}`}>
           {post.title}
         </h1>
 
         {post.summary && (
-          <p className={`mb-5 text-sm md:text-base leading-relaxed ${tokens.textSecondary}`}>
+          <p className={`mb-5 text-sm leading-relaxed md:text-base ${tokens.textSecondary}`}>
             {post.summary}
           </p>
         )}
@@ -103,6 +107,12 @@ export function BlogArticle({
         )}
       </div>
 
+      {shouldShowToc && (
+        <div className="lg:hidden">
+          <ArticleToc toc={toc} stylePreset={stylePreset} lang={lang} variant="inline" />
+        </div>
+      )}
+
       <div
         className="blog-article-body p-5 md:p-8"
         // Content originates from local Markdown files.
@@ -138,5 +148,16 @@ export function BlogArticle({
         </div>
       )}
     </article>
+  );
+
+  return (
+    <div className={shouldShowToc ? 'lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start lg:gap-6' : undefined}>
+      {shouldShowToc && (
+        <aside className="hidden lg:block">
+          <ArticleToc toc={toc} stylePreset={stylePreset} lang={lang} />
+        </aside>
+      )}
+      <div className="min-w-0">{articleContent}</div>
+    </div>
   );
 }

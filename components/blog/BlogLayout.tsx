@@ -10,9 +10,15 @@ interface BlogLayoutProps {
   children: React.ReactNode;
   backHref?: string;
   backLabel?: string;
+  contentWidth?: 'default' | 'wide';
 }
 
-export function BlogLayout({ children, backHref = '/', backLabel }: BlogLayoutProps) {
+export function BlogLayout({
+  children,
+  backHref = '/',
+  backLabel,
+  contentWidth = 'default',
+}: BlogLayoutProps) {
   const { theme, lang, stylePreset, toggleTheme, toggleLang, toggleStylePreset, mounted } = useSettings();
 
   if (!mounted) {
@@ -23,7 +29,10 @@ export function BlogLayout({ children, backHref = '/', backLabel }: BlogLayoutPr
   const backText = backLabel || t('blog.back', lang);
 
   return (
-    <div className={`h-screen overflow-y-auto overscroll-contain transition-colors duration-200 ${tokens.desktopBg} ${tokens.bodyFont}`}>
+    <div
+      data-blog-scroll-container
+      className={`h-screen overflow-y-auto overscroll-contain transition-colors duration-200 ${tokens.desktopBg} ${tokens.bodyFont}`}
+    >
       <header className={`sticky top-0 z-50 ${tokens.statusBarHeight} ${tokens.statusBarClass} ${tokens.statusBarFont} flex items-center justify-between px-3 md:px-5`}>
         <div className="flex items-center gap-2 md:gap-3">
           <Link
@@ -71,8 +80,10 @@ export function BlogLayout({ children, backHref = '/', backLabel }: BlogLayoutPr
         </div>
       </header>
 
-      <main className="px-4 md:px-8 py-6 md:py-10">
-        <div className="max-w-3xl mx-auto">{children}</div>
+      <main className="px-4 py-6 md:px-8 md:py-10">
+        <div className={contentWidth === 'wide' ? 'mx-auto max-w-6xl' : 'mx-auto max-w-3xl'}>
+          {children}
+        </div>
       </main>
 
       <footer className={`${tokens.statusBarHeight} ${tokens.statusBarClass} ${tokens.statusBarFont} flex items-center justify-center px-4`}>

@@ -149,6 +149,9 @@ const translations = {
     'blog.backToTags': '返回标签',
     'blog.tagEmpty': '暂无已发布的标签。',
     'blog.tagDetailSubtitle': '该标签下的所有已发布文章。',
+    'blog.tocTitle': '文章目录',
+    'blog.tocOnThisPage': '本文目录',
+    'blog.tocJumpToSection': '跳转到小节',
 
     'contact.title': '联系',
     'contact.email': 'Email',
@@ -344,6 +347,9 @@ const translations = {
     'blog.backToTags': 'Back to tags',
     'blog.tagEmpty': 'No published tags found.',
     'blog.tagDetailSubtitle': 'All published posts under this tag.',
+    'blog.tocTitle': 'Table of contents',
+    'blog.tocOnThisPage': 'On this page',
+    'blog.tocJumpToSection': 'Jump to section',
 
     'contact.title': 'Contact Channels',
     'contact.email': 'Email',

@@ -7,6 +7,51 @@
 
 import { remark } from 'remark';
 import remarkHtml from 'remark-html';
+import type { Root, Content } from 'mdast';
+import type { Plugin } from 'unified';
+import { createHeadingId } from './toc';
+
+type MarkdownNode = Root | Content;
+
+function collectNodeText(node: MarkdownNode): string {
+  if ('value' in node && typeof node.value === 'string') {
+    return node.value;
+  }
+
+  if ('children' in node) {
+    return node.children.map(collectNodeText).join('');
+  }
+
+  return '';
+}
+
+const addHeadingIds: Plugin<[], Root> = () => {
+  return (tree) => {
+    const usedIds = new Map<string, number>();
+
+    function visit(node: MarkdownNode) {
+      if (node.type === 'heading' && (node.depth === 2 || node.depth === 3)) {
+        const text = collectNodeText(node).trim();
+
+        if (text) {
+          node.data = {
+            ...node.data,
+            hProperties: {
+              ...node.data?.hProperties,
+              id: createHeadingId(text, usedIds),
+            },
+          };
+        }
+      }
+
+      if ('children' in node) {
+        node.children.forEach(visit);
+      }
+    }
+
+    visit(tree);
+  };
+};
 
 /**
  * Extract a plain-text excerpt from Markdown content.
@@ -85,7 +130,14 @@ export function formatBlogDate(dateStr: string, lang: 'zh' | 'en' = 'zh'): strin
  * @returns HTML string
  */
 export async function renderMarkdownToHtml(content: string): Promise<string> {
-  const result = await remark().use(remarkHtml).process(content);
+  const result = await remark()
+    .use(addHeadingIds)
+    .use(remarkHtml, {
+      sanitize: {
+        clobberPrefix: '',
+      },
+    })
+    .process(content);
   return String(result);
 }
 

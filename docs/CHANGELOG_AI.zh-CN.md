@@ -2,6 +2,29 @@
 
 本文件是 `docs/CHANGELOG_AI.md` 的中文摘要版，用于快速了解项目历史和当前状态。完整逐条归档仍以 `docs/CHANGELOG_AI.md` 为准。
 
+### 2026-06-12 - Codex
+**摘要：** Phase 9.2-fix 完成，优化文章目录布局与当前阅读状态。
+
+**Phase 9.2-fix 范围：**
+- 桌面端 `/blog/[slug]` 文章 TOC 从正文前的块调整为左侧边栏。
+- 文章详情页使用更宽的布局；博客列表、系列页、标签页、项目页保持原布局。
+- 新增 `components/blog/ArticleToc.tsx`，只负责 sticky TOC 和 active heading 状态。
+- 桌面端 TOC 使用 sticky 定位、视口高度限制和内部滚动。
+- 移动端保留正文前的轻量 TOC，不强行显示左侧栏，避免横向溢出。
+- active heading 通过 `IntersectionObserver` 结合轻量 scroll fallback 识别。
+- 当前 TOC 项会高亮并加粗，h2 / h3 缩进层级保留。
+- TOC 点击跳转继续复用 Phase 9.2 生成的稳定 heading id。
+- TOC 样式复用现有 style tokens，适配 light / dark 与 macos / vercel preset。
+
+**范围约束：**
+- 未重写 TOC 生成逻辑。
+- 未修改 BlogService / BlogRepository / content/blog 结构。
+- 未修改博客文章正文。
+- sitemap / RSS 未修改。
+- 未修改 Console / CLI、窗口系统或部署配置。
+- 未修改 Projects / Profile 核心逻辑。
+- 未引入大型依赖。
+
 ### 2026-06-12 - Claude Code
 **摘要：** Phase 9.1 完成。新增博客标签页，读者可按主题浏览已发布文章。
 

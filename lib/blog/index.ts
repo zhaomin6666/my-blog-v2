@@ -17,3 +17,4 @@ export { extractExcerpt, formatBlogDate, renderMarkdownToHtml, estimateReadingTi
 export { calculateReadingStats } from './reading-stats';
 export type { ReadingStats } from './reading-stats';
 export { tagToSlug } from './tag-slug';
+export { createHeadingId, extractBlogToc, slugifyHeading } from './toc';

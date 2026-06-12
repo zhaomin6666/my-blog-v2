@@ -82,6 +82,15 @@ export interface BlogTag {
 }
 
 /**
+ * Table of contents item extracted from Markdown article headings.
+ */
+export interface BlogTocItem {
+  id: string;
+  text: string;
+  level: 2 | 3;
+}
+
+/**
  * Query options for listing posts.
  */
 export interface BlogPostQueryOptions {
