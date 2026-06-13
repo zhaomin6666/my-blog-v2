@@ -118,7 +118,7 @@ export function BlogArticle({
       </div>
 
       {shouldShowToc && (
-        <div className="lg:hidden">
+        <div className="xl:hidden">
           <ArticleToc toc={toc} stylePreset={stylePreset} lang={lang} variant="inline" />
         </div>
       )}

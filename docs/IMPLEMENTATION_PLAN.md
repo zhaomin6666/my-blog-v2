@@ -530,13 +530,14 @@
 - No window-system behavior changes were made.
 - No deployment configuration changes were made.
 
-## Phase 9: Blog System Enhancement IN PROGRESS
+## Phase 9: Blog System Enhancement COMPLETED
 - Blog system improvements for better content discovery and reading experience.
 - Completed scope:
   - Blog Tag Pages
   - Article TOC
   - Previous / Next Navigation
   - Blog Search
+  - Blog UX Final Polish
 
 ### Phase 9.1: Blog Tag Pages COMPLETED
 - Added `BlogTag` type and `tagToSlug()` utility for stable tag-to-slug conversion.
@@ -615,6 +616,13 @@
 - Draft posts are excluded from search.
 - No Console / CLI, window-system, deployment, Projects core logic, or Profile core logic changes.
 
-### Phase 9.5: Blog UX Final Polish PLANNED
-- Final blog UX polish and refinements.
-- Do not start implementation until a separate scope is explicitly planned.
+### Phase 9.5: Blog UX Final Polish COMPLETED
+- Completed final acceptance for the Phase 9 Blog enhancement work.
+- Reviewed `/blog`, `/blog/search`, `/blog/tags`, `/blog/tags/[tagSlug]`, `/blog/series`, `/blog/series/personal-developer-os`, and `/blog/[slug]`.
+- Confirmed Blog lists, tag pages, series pages, Article TOC, previous / next navigation, Blog Search, metadata, sitemap, RSS, and robots remain aligned.
+- Confirmed published-only behavior for public Blog routes, sitemap, and RSS.
+- Small fix: kept the inline Article TOC visible until the fixed floating desktop TOC breakpoint, avoiding a no-TOC gap on medium desktop widths.
+- Confirmed Blog enhancements did not require Console / CLI, window-system, Projects core logic, Profile core logic, or deployment configuration changes.
+
+## Phase 10: AI Agent Demo Integration PLANNED
+- Planned only. Implementation details are intentionally deferred.

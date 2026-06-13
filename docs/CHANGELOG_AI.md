@@ -1,6 +1,54 @@
 # AI Development Changelog
 
 ### 2026-06-13 - Codex
+**Summary:** Phase 9.5 completed. Final acceptance and closure for Phase 9 Blog UX polish.
+
+**Phase 9.5 acceptance scope:**
+- Reviewed the Phase 9 Blog discovery and reading experience end to end:
+  - `/blog`
+  - `/blog/search`
+  - `/blog/tags`
+  - `/blog/tags/[tagSlug]`
+  - `/blog/series`
+  - `/blog/series/personal-developer-os`
+  - `/blog/why-rebuild-my-personal-blog`
+- Confirmed Blog list, Tag Pages, Series Pages, Article TOC, Previous / Next Navigation, and Blog Search remain consistent.
+- Confirmed Blog SEO outputs remain aligned:
+  - `sitemap.xml` includes Blog, Search, Tags, Series, published posts, Projects, and published project pages.
+  - `rss.xml` remains blog-post-only.
+  - `robots.txt` points to the sitemap.
+- Confirmed draft posts remain excluded from public Blog pages, tag pages, search, sitemap, RSS, and static params.
+- Confirmed light / dark, macos / vercel, zh / en, and mobile-responsive behavior remain supported through existing settings and style tokens.
+- Updated `docs/IMPLEMENTATION_PLAN.md` to mark Phase 9 and Phase 9.5 as completed.
+- Added Phase 10 as planned only: `AI Agent Demo Integration`.
+
+**Small fix:**
+- Updated the article detail inline TOC visibility from `lg:hidden` to `xl:hidden`, so the in-flow TOC remains visible until the fixed floating TOC appears at the `xl` breakpoint.
+- This avoids a medium desktop width gap where no Article TOC was visible.
+
+**Files changed:**
+- `components/blog/BlogArticle.tsx`
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+- `docs/CHANGELOG_AI.zh-CN.md`
+
+**Scope guard:**
+- No new Blog feature was added.
+- No Blog content source structure or published article body content was changed.
+- No Console / CLI command system changes were made.
+- No window-system behavior changes were made.
+- No Projects or Profile core logic was changed.
+- No deployment, Docker, Nginx, or environment configuration was changed.
+- No database, CMS, third-party search service, comments, reading views, likes, or analytics were added.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+- Local standalone route checks passed for `/`, `/blog`, `/blog/search`, `/blog/tags`, `/blog/tags/developer-os`, `/blog/series`, `/blog/series/personal-developer-os`, `/blog/why-rebuild-my-personal-blog`, `/projects`, `/projects/personal-developer-os`, `/projects/ai-agent-demo`, `/sitemap.xml`, `/rss.xml`, and `/robots.txt`.
+- Sitemap contains `/blog/search`, `/blog/tags`, `/blog/tags/developer-os`, `/blog/series`, `/blog/series/personal-developer-os`, `/projects/personal-developer-os`, and `/projects/ai-agent-demo`.
+- RSS contains published Blog posts and does not contain `/blog/search`, `/blog/tags`, `/blog/series`, or `/projects`.
+
+### 2026-06-13 - Codex
 **Summary:** Phase 9.4 completed. Added lightweight Blog Search at `/blog/search`.
 
 **Phase 9.4 scope:**

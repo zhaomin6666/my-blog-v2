@@ -3,6 +3,54 @@
 本文件是 `docs/CHANGELOG_AI.md` 的中文摘要版，用于快速了解项目历史和当前状态。完整逐条归档仍以 `docs/CHANGELOG_AI.md` 为准。
 
 ### 2026-06-13 - Codex
+**摘要：** Phase 9.5 完成，完成 Phase 9 Blog UX Final Polish 最终验收与收口。
+
+**Phase 9.5 验收范围：**
+- 完整检查 Phase 9 的 Blog 发现与阅读体验：
+  - `/blog`
+  - `/blog/search`
+  - `/blog/tags`
+  - `/blog/tags/[tagSlug]`
+  - `/blog/series`
+  - `/blog/series/personal-developer-os`
+  - `/blog/why-rebuild-my-personal-blog`
+- 确认 Blog 列表、Tag Pages、Series Pages、Article TOC、Previous / Next Navigation 和 Blog Search 之间保持一致。
+- 确认 sitemap / RSS / robots 正常：
+  - `sitemap.xml` 包含 Blog、Search、Tags、Series、已发布文章、Projects 和已发布项目页。
+  - `rss.xml` 仍然只包含已发布博客文章。
+  - `robots.txt` 指向 sitemap。
+- 确认 draft posts 不进入公开 Blog 页面、标签页、搜索、sitemap、RSS 或 static params。
+- 确认 light / dark、macos / vercel、zh / en 和 mobile 响应式仍通过既有 settings 与 style tokens 支持。
+- 更新 `docs/IMPLEMENTATION_PLAN.md`，将 Phase 9 和 Phase 9.5 标记为 completed。
+- 新增下一阶段 planned：`Phase 10: AI Agent Demo Integration`，仅标记 planned，不展开实现细节。
+
+**小修：**
+- 将文章详情页 inline TOC 的隐藏断点从 `lg:hidden` 调整为 `xl:hidden`，让 in-flow TOC 保持显示直到 fixed floating TOC 出现。
+- 避免 1024-1279px 中等桌面宽度下没有 Article TOC 的空档。
+
+**改动文件：**
+- `components/blog/BlogArticle.tsx`
+- `docs/IMPLEMENTATION_PLAN.md`
+- `docs/CHANGELOG_AI.md`
+- `docs/CHANGELOG_AI.zh-CN.md`
+
+**范围约束：**
+- 未新增 Blog 大功能。
+- 未修改 Blog 内容源结构或已发布文章正文。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Projects / Profile 核心逻辑。
+- 未修改部署、Docker、Nginx 或环境配置。
+- 未新增数据库、CMS、第三方搜索、评论、阅读次数、点赞或统计分析。
+
+**验证：**
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
+- 本地 standalone 路由检查通过：`/`、`/blog`、`/blog/search`、`/blog/tags`、`/blog/tags/developer-os`、`/blog/series`、`/blog/series/personal-developer-os`、`/blog/why-rebuild-my-personal-blog`、`/projects`、`/projects/personal-developer-os`、`/projects/ai-agent-demo`、`/sitemap.xml`、`/rss.xml`、`/robots.txt`。
+- sitemap 包含 `/blog/search`、`/blog/tags`、`/blog/tags/developer-os`、`/blog/series`、`/blog/series/personal-developer-os`、`/projects/personal-developer-os` 和 `/projects/ai-agent-demo`。
+- RSS 包含已发布博客文章，不包含 `/blog/search`、`/blog/tags`、`/blog/series` 或 `/projects`。
+
+### 2026-06-13 - Codex
 **摘要：** Phase 9.4 完成，新增轻量博客搜索页 `/blog/search`。
 
 **Phase 9.4 范围：**
