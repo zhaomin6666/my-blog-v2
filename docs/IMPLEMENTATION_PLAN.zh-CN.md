@@ -4,8 +4,10 @@
 
 ## 当前状态
 
-- Phase 1 到 Phase 7 已完成。
-- Phase 8 正在进行，重点是内容与职业展示，而不是改系统架构。
+- Phase 1 到 Phase 9 已完成。
+- Phase 8 已完成：内容与职业展示、真实博客系列、Projects / Profile / Contact 内容体系和内容工作流文档已收口。
+- Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
+- Phase 10 已规划：AI Agent Demo Integration，仅标记 planned，尚未展开实现细节。
 - 当前生产地址：`https://oli6666.top`。
 - 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
@@ -138,7 +140,7 @@
 - 验证生产路由、SEO 输出、HTTPS 重定向和移动端基础表现。
 - 归档发布后运维流程。
 
-## Phase 8：内容与职业展示 - 进行中
+## Phase 8：内容与职业展示 - 已完成
 
 目标：
 
@@ -149,13 +151,88 @@
 已完成：
 
 - 归档 v1.0.0 生产版本和版本里程碑。
-- 建立 `从 Hexo 到 Personal Developer OS` 系列。
-- 添加前三篇已发布中文文章。
-- 对前三篇文章做去 AI 味润色，保留真实开发日志口吻。
+- 建立并完成 `从 Hexo 到 Personal Developer OS` 七篇文章系列。
+- 完成博客阅读体验、系列组织、阅读时间、项目关联等内容侧增强。
+- 完成 Projects 作品集和两个项目详情页：
+  - `Personal Developer OS`
+  - `AI Agent Demo`
+- 完成 Projects 文件型内容源：`content/projects` + `ProjectService`。
+- 完成 Profile / Contact / System Stack 文件型内容源：`content/profile` + `ProfileService`。
+- 完成 About / Profile / Contact 求职转化内容收口。
+- 完成中英文内容发布流程文档：
+  - `docs/CONTENT_WORKFLOW.md`
+  - `docs/CONTENT_WORKFLOW.zh-CN.md`
+- 完成 Phase 8 最终验收。
+
+边界：
+
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改部署配置。
+- 未新增数据库、CMS、后台、评论、在线聊天或 Agent API。
+
+## Phase 9：Blog System Enhancement - 已完成
+
+目标：
+
+- 强化 Blog 内容发现和阅读体验。
+- 在不改变 Developer OS 主体结构的前提下，补齐博客系统的检索、组织、阅读导航和最终体验验收。
+- 保持 Blog 增强轻量化，不接数据库、不接 CMS、不接第三方搜索服务。
+
+已完成：
+
+- Phase 9.1：Blog Tag Pages。
+  - `/blog/tags`
+  - `/blog/tags/[tagSlug]`
+  - 标签来自 published posts。
+  - draft tags 不进入公开页面。
+  - sitemap 包含标签页，RSS 不包含标签页。
+- Phase 9.2：Article TOC。
+  - `/blog/[slug]` 自动提取 h2 / h3。
+  - 支持中文 heading stable id。
+  - 支持桌面端左侧 fixed floating sidebar。
+  - 支持 active heading 高亮和点击跳转。
+  - 移动端保留正文前 in-flow TOC，避免横向溢出。
+- Phase 9.3：Previous / Next Navigation。
+  - 系列文章按 `seriesOrder` 生成上下篇。
+  - draft 不参与上下篇导航。
+  - 文章详情页底部提供上一篇 / 下一篇阅读入口。
+- Phase 9.4：Blog Search。
+  - `/blog/search`
+  - 搜索 published posts 的 title、summary、tags、series。
+  - 空搜索展示最近文章，无结果展示 empty state。
+  - 搜索结果复用 `BlogCard`。
+  - sitemap 包含搜索页，RSS 不包含搜索页。
+- Phase 9.5：Blog UX Final Polish。
+  - 完成 `/blog`、Search、Tags、Series、Article TOC、Previous / Next、sitemap、RSS、robots 的最终验收。
+  - 小修：文章详情页 inline TOC 保持显示到 fixed TOC 的 `xl` 断点，避免中等桌面宽度没有目录。
+  - 更新英文和中文 changelog。
+  - 将 Phase 9 标记为 completed，并新增 Phase 10 planned。
+
+最终验收结论：
+
+- `/blog` 正常。
+- `/blog/search` 正常。
+- `/blog/tags` 和 `/blog/tags/[tagSlug]` 正常。
+- `/blog/series` 和 `/blog/series/personal-developer-os` 正常。
+- `/blog/[slug]`、Article TOC、Previous / Next Navigation 正常。
+- sitemap / RSS / robots 正常。
+- light / dark、macos / vercel、zh / en、mobile 响应式链路正常。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改部署配置。
+
+## Phase 10：AI Agent Demo Integration - 已规划
+
+当前状态：
+
+- 仅标记 planned。
+- 不在 Phase 9 收口中展开实现细节。
+- 后续开始前需要单独定义范围、验收标准和边界。
 
 ## 后续原则
 
-- 先做内容，再做系统扩展。
+- 新阶段开始前先明确范围和验收标准。
 - 新功能必须保护 Developer OS 产品概念。
 - 发布相关改动必须同步检查 `docs/DEPLOYMENT.zh-CN.md`。
 

@@ -2,6 +2,12 @@
 
 本目录已添加中文工作文档，方便后续开发、发布和 AI 协作时直接阅读。
 
+## 当前阶段
+
+- Phase 1 到 Phase 9 已完成。
+- Phase 9 Blog System Enhancement 已收口：Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 均已完成。
+- 下一阶段为 Phase 10：AI Agent Demo Integration，目前仅 planned，尚未展开实现细节。
+
 ## 优先阅读
 
 - [内容发布流程](CONTENT_WORKFLOW.zh-CN.md) / [Content Workflow](CONTENT_WORKFLOW.md)：维护 Blog、Projects、Profile 三类文件型内容源时优先阅读。
@@ -35,4 +41,3 @@ docker compose --env-file .env.production up -d
 ```
 
 只改 `.env.production` 但不重建镜像，不会刷新 Next.js 构建期内联的公开变量。
-

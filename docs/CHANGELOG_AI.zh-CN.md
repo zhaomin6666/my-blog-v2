@@ -269,10 +269,12 @@ Codex 为 docs 添加中文工作文档。
 
 ## 当前状态
 
-- Phase 1 到 Phase 7 已完成。
-- Phase 8 正在进行。
+- Phase 1 到 Phase 9 已完成。
+- Phase 8 已完成：内容与职业展示、项目案例、Profile / Contact、内容工作流文档已收口。
+- Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
+- Phase 10 已规划：AI Agent Demo Integration，仅标记 planned，尚未展开实现细节。
 - 当前生产站点：`https://oli6666.top`。
-- 当前重点：真实博客内容、个人品牌展示、技术写作归档。
+- 当前重点：保持 Phase 9 博客增强稳定，后续单独规划 AI Agent Demo Integration。
 - 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
 ## 2026-06-08 - Phase 8.2.1
