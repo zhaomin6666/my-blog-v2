@@ -3,6 +3,38 @@
 本文件是 `docs/CHANGELOG_AI.md` 的中文摘要版，用于快速了解项目历史和当前状态。完整逐条归档仍以 `docs/CHANGELOG_AI.md` 为准。
 
 ### 2026-06-13 - Codex
+**摘要：** Phase 9.4 完成，新增轻量博客搜索页 `/blog/search`。
+
+**Phase 9.4 范围：**
+- 新增公开路由 `/blog/search`，并配置 SEO metadata。
+- 搜索数据通过 `BlogService.getPublishedPosts()` 获取，只包含 published posts。
+- 新增轻量 Client 搜索页，浏览器端只维护输入关键词状态，并过滤服务端传入的文章元数据。
+- 搜索范围包括 `title`、`summary`、`tags` 和 `series`。
+- 本阶段没有把文章正文内容发送到前端，避免增加搜索页体积。
+- 搜索大小写不敏感，会 trim 前后空格，并支持多个连续空格分隔的多关键词。
+- 空关键词展示最近文章；无结果时展示轻量 empty state。
+- 搜索结果复用 `BlogCard`，保持现有 Blog 列表样式，并可点击进入 `/blog/[slug]`。
+- `/blog` 页面在 tags / series 入口旁新增搜索入口。
+- 补充搜索标题、占位提示、搜索说明、结果、空状态、换词提示、最近文章等 zh / en 翻译 key。
+- `sitemap.xml` 包含 `/blog/search`。
+- RSS 保持不变，仍然只包含博客文章。
+
+**范围约束：**
+- 未接数据库、CMS、第三方搜索服务或服务端全文索引。
+- 未修改 Blog 内容源结构和已发布文章正文。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改部署配置。
+- 未修改 Projects / Profile 核心逻辑。
+- 未引入大型依赖。
+
+**验证：**
+- `pnpm lint` 通过，零警告零错误。
+- `pnpm build` 通过，静态生成 `/blog/search`、`/blog/[slug]`、`/blog`、`/blog/series`、`/blog/tags`、`/projects`、`/sitemap.xml` 和 `/rss.xml`。
+- 本地生产服务路由检查通过：`/`、`/blog`、`/blog/search`、`/blog/why-rebuild-my-personal-blog`、`/blog/series`、`/blog/series/personal-developer-os`、`/blog/tags`、`/projects`、`/sitemap.xml`、`/rss.xml`。
+- sitemap 包含 `/blog/search`；RSS 不包含 `/blog/search`。
+
+### 2026-06-13 - Codex
 **摘要：** Phase 9.3 完成，为博客文章详情页新增上一篇 / 下一篇导航。
 
 **Phase 9.3 范围：**

@@ -1,6 +1,38 @@
 # AI Development Changelog
 
 ### 2026-06-13 - Codex
+**Summary:** Phase 9.4 completed. Added lightweight Blog Search at `/blog/search`.
+
+**Phase 9.4 scope:**
+- Added the public `/blog/search` route with SEO metadata.
+- Search data is loaded through `BlogService.getPublishedPosts()`, so only published posts are included.
+- Added a focused client search page that keeps only query state in the browser and filters server-provided post metadata.
+- Search matches `title`, `summary`, `tags`, and `series`.
+- Full article body content is intentionally not shipped to the client in this phase.
+- Query matching is case-insensitive, trims leading/trailing spaces, and supports multiple terms separated by repeated spaces.
+- Empty query shows recent posts; no-result query shows a lightweight empty state.
+- Search results reuse `BlogCard`, so cards preserve the existing blog style and link to `/blog/[slug]`.
+- Added a `/blog` search entry beside the existing tags and series entries.
+- Added zh / en translation keys for search title, placeholder, hint, results, empty state, retry copy, and recent posts.
+- Added `/blog/search` to `sitemap.xml`.
+- RSS remains unchanged and blog-post-only.
+
+**Scope guard:**
+- No database, CMS, third-party search service, or server-side full-text index was added.
+- Blog content source structure and published article body content were not changed.
+- No Console / CLI command system changes were made.
+- No window-system behavior changes were made.
+- No deployment configuration changes were made.
+- No Projects or Profile core logic was changed.
+- No large dependencies were introduced.
+
+**Verification:**
+- `pnpm lint` passed with zero warnings or errors.
+- `pnpm build` passed. Static pages generated for `/blog/search`, `/blog/[slug]`, `/blog`, `/blog/series`, `/blog/tags`, `/projects`, `/sitemap.xml`, and `/rss.xml`.
+- Local production route checks passed for `/`, `/blog`, `/blog/search`, `/blog/why-rebuild-my-personal-blog`, `/blog/series`, `/blog/series/personal-developer-os`, `/blog/tags`, `/projects`, `/sitemap.xml`, and `/rss.xml`.
+- Sitemap contains `/blog/search`; RSS does not contain `/blog/search`.
+
+### 2026-06-13 - Codex
 **Summary:** Phase 9.3 completed. Added previous / next navigation for blog article detail pages.
 
 **Phase 9.3 scope:**

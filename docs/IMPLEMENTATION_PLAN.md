@@ -536,6 +536,7 @@
   - Blog Tag Pages
   - Article TOC
   - Previous / Next Navigation
+  - Blog Search
 
 ### Phase 9.1: Blog Tag Pages COMPLETED
 - Added `BlogTag` type and `tagToSlug()` utility for stable tag-to-slug conversion.
@@ -599,9 +600,20 @@
 - Sitemap, RSS, article URLs, metadata, tag pages, and series pages remain unchanged.
 - No Console / CLI, window-system, deployment, Projects core logic, or Profile core logic changes.
 
-### Phase 9.4: Blog Search PLANNED
-- Blog search functionality.
-- Do not start implementation until a separate scope is explicitly planned.
+### Phase 9.4: Blog Search COMPLETED
+- Added a public `/blog/search` route with metadata.
+- Search data is fetched at build/server render time through `BlogService.getPublishedPosts()`.
+- Search runs in a focused Client Component with local input state only.
+- Search matches published posts by title, summary, tags, and series.
+- Body content is intentionally not shipped to the client for this phase.
+- Query handling is case-insensitive, trims leading/trailing spaces, and tolerates repeated spaces.
+- Empty query shows recent posts; no-result query shows a lightweight empty state.
+- Results reuse `BlogCard`, so result cards link to `/blog/[slug]` and keep the existing blog list style.
+- Added a lightweight search entry on `/blog` beside the tags and series entries.
+- Sitemap includes `/blog/search`.
+- RSS remains blog-article-only and does not include the search page.
+- Draft posts are excluded from search.
+- No Console / CLI, window-system, deployment, Projects core logic, or Profile core logic changes.
 
 ### Phase 9.5: Blog UX Final Polish PLANNED
 - Final blog UX polish and refinements.
