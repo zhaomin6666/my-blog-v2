@@ -657,10 +657,31 @@
 - No window-system behavior changes were made.
 - No Docker / Nginx / deployment configuration changes were made.
 
-### Phase 10.2: Read-only Knowledge Tools & Scope Classifier PLANNED
-- Planned: read-only tools for public Blog / Projects / Profile data.
-- Planned: rule-based scope classifier.
-- Planned: public knowledge retriever with trace and sources.
+### Phase 10.2: Read-only Knowledge Tools & Scope Classifier COMPLETED
+- Added read-only Agent Demo tools under `features/agent-demo/tools`.
+- Added Blog knowledge tools:
+  - `searchBlogPosts(query)`
+  - `getBlogPostBySlug(slug)`
+  - `getRecentBlogPosts(limit)`
+- Added Project knowledge tools:
+  - `searchProjects(query)`
+  - `getProjectBySlug(slug)`
+  - `getPublishedProjectSummaries(limit)`
+- Added Profile knowledge tools:
+  - `getPublicProfile(locale)`
+  - `getSystemStack(locale)`
+  - `getPublicContact(locale)`
+- Added a rule-based `scopeClassifier` for allowed and blocked categories.
+- Added `publicKnowledgeRetriever` that calls only public Blog / Projects / Profile tools according to the scope category.
+- Retriever returns bounded `contextText`, public `sources`, and trace updates.
+- Draft Blog / Project content remains excluded through published-only service methods.
+- No real model integration was added.
+- No `/api/agent-demo` route was added.
+- No `/agent-demo` UI was added.
+- No Redis integration was added.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx / deployment configuration changes were made.
 
 ### Phase 10.3: Read-only Agent API MVP PLANNED
 - Planned: `/api/agent-demo` POST route.

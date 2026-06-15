@@ -1,6 +1,42 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-15 - Codex
+**摘要：** Phase 10.2 已完成，新增 AI Agent Demo 只读知识工具和范围识别器。
+
+**Phase 10.2 范围：**
+- 新增 `features/agent-demo/tools`。
+- 新增基于 `BlogService` published-only 方法的 Blog 只读工具：
+  - `searchBlogPosts(query)`
+  - `getBlogPostBySlug(slug)`
+  - `getRecentBlogPosts(limit)`
+- 新增基于 `ProjectService` published-only 方法的 Project 只读工具：
+  - `searchProjects(query)`
+  - `getProjectBySlug(slug)`
+  - `getPublishedProjectSummaries(limit)`
+- 新增基于 `ProfileService` public 方法的 Profile 只读工具：
+  - `getPublicProfile(locale)`
+  - `getSystemStack(locale)`
+  - `getPublicContact(locale)`
+- 新增规则型 `scopeClassifier`，支持 allowed / blocked categories。
+- 新增 `publicKnowledgeRetriever`，根据允许范围调用公开工具，并返回受限 `contextText`、公开 `sources` 和 trace 更新。
+- 扩展 Agent Demo 类型：`AgentKnowledgeItem` 和 `AgentKnowledgeRetrieverResult`。
+- 更新 Agent Demo 架构文档和 README。
+- 更新实施计划，将 Phase 10.2 标记为 completed，Phase 10.3 标记为 planned。
+
+**范围约束：**
+- 未接入真实模型。
+- 未新增 `/api/agent-demo` route。
+- 未新增 `/agent-demo` UI。
+- 未接入 Redis。
+- 未修改 Blog / Projects / Profile 核心服务行为。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx / 部署配置。
+
+**验证：**
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
+### 2026-06-15 - Codex
 **摘要：** Phase 10.1 已完成，新增 AI Agent Demo 架构与安全基础。
 
 **Phase 10.1 范围：**
@@ -469,4 +505,5 @@ Claude Code 完成视觉打磨。
 - 设计影响。
 - 验证结果。
 - 后续注意事项。
+
 

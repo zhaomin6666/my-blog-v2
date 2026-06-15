@@ -1,13 +1,13 @@
 # AI Agent Demo Foundation
 
-This directory contains the Phase 10.1 foundation for the public AI Agent Demo.
+This directory contains the Phase 10 foundation for the public AI Agent Demo.
 
 The demo is intentionally designed as a read-only, scope-limited agent for the
 Personal Developer OS website. It is not a general chatbot.
 
 ## Current Phase
 
-Phase 10.1 only defines:
+Phase 10.1 defines:
 
 - Request / response / trace / source types
 - Static configuration
@@ -15,6 +15,14 @@ Phase 10.1 only defines:
 - Trace construction helpers
 - Safety and scope policy constants
 - A foundation-only service response for future route integration
+
+Phase 10.2 adds:
+
+- Read-only Blog knowledge tools
+- Read-only Project knowledge tools
+- Read-only Profile knowledge tools
+- A conservative rule-based scope classifier
+- A public knowledge retriever that returns bounded context, public sources, and trace updates
 
 ## Safety Boundary
 
@@ -45,6 +53,4 @@ The following are intentionally not implemented in Phase 10.1:
 - Redis rate limiting
 - `/api/agent-demo`
 - `/agent-demo` UI
-- Read-only knowledge tools
-- Rule-based scope classifier
 - Production deployment changes

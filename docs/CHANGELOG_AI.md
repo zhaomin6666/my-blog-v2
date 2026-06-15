@@ -1,6 +1,43 @@
 # AI Development Changelog
 
 ### 2026-06-15 - Codex
+**Summary:** Phase 10.2 completed. Added read-only Agent Demo knowledge tools and scope classifier.
+
+**Phase 10.2 scope:**
+- Added `features/agent-demo/tools`.
+- Added Blog read-only tools using `BlogService` published-only methods:
+  - `searchBlogPosts(query)`
+  - `getBlogPostBySlug(slug)`
+  - `getRecentBlogPosts(limit)`
+- Added Project read-only tools using `ProjectService` published-only methods:
+  - `searchProjects(query)`
+  - `getProjectBySlug(slug)`
+  - `getPublishedProjectSummaries(limit)`
+- Added Profile read-only tools using `ProfileService` public methods:
+  - `getPublicProfile(locale)`
+  - `getSystemStack(locale)`
+  - `getPublicContact(locale)`
+- Added rule-based `scopeClassifier` for allowed and blocked categories.
+- Added `publicKnowledgeRetriever` that routes allowed categories to public tools and returns bounded `contextText`, public `sources`, and trace updates.
+- Extended Agent Demo types with `AgentKnowledgeItem` and `AgentKnowledgeRetrieverResult`.
+- Updated Agent Demo architecture docs and README.
+- Updated implementation plans to mark Phase 10.2 as completed and Phase 10.3 as planned.
+
+**Scope guard:**
+- No model integration was added.
+- No `/api/agent-demo` route was added.
+- No `/agent-demo` UI was added.
+- No Redis integration was added.
+- No Blog / Projects / Profile core service behavior was changed.
+- No Console / CLI command system changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx / deployment configuration changes were made.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-15 - Codex
 **Summary:** Phase 10.1 completed. Added the AI Agent Demo architecture and safety foundation.
 
 **Phase 10.1 scope:**

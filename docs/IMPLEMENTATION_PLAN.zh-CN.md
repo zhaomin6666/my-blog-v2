@@ -7,7 +7,7 @@
 - Phase 1 到 Phase 9 已完成。
 - Phase 8 已完成：内容与职业展示、真实博客系列、Projects / Profile / Contact 内容体系和内容工作流文档已收口。
 - Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
-- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础，Phase 10.2 仍为 planned。
+- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器，Phase 10.3 仍为 planned。
 - 当前生产地址：`https://oli6666.top`。
 - 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
@@ -265,11 +265,32 @@
 - 未修改窗口系统。
 - 未修改 Docker / Nginx / 部署配置。
 
-### Phase 10.2：Read-only Knowledge Tools & Scope Classifier - planned
+### Phase 10.2：Read-only Knowledge Tools & Scope Classifier - 已完成
 
-- 计划新增只读 Blog / Projects / Profile knowledge tools。
-- 计划新增规则型 scope classifier。
-- 计划新增 public knowledge retriever，并返回 trace / sources。
+- 新增 `features/agent-demo/tools` 只读工具目录。
+- 新增 Blog 只读知识工具：
+  - `searchBlogPosts(query)`
+  - `getBlogPostBySlug(slug)`
+  - `getRecentBlogPosts(limit)`
+- 新增 Project 只读知识工具：
+  - `searchProjects(query)`
+  - `getProjectBySlug(slug)`
+  - `getPublishedProjectSummaries(limit)`
+- 新增 Profile 只读知识工具：
+  - `getPublicProfile(locale)`
+  - `getSystemStack(locale)`
+  - `getPublicContact(locale)`
+- 新增规则型 `scopeClassifier`，支持 allowed / blocked categories。
+- 新增 `publicKnowledgeRetriever`，根据 scope category 只调用公开 Blog / Projects / Profile 工具。
+- retriever 返回受限 `contextText`、公开 `sources` 和 trace 更新。
+- draft Blog / Project 内容仍通过 published-only service 方法排除。
+- 未接入真实模型。
+- 未新增 `/api/agent-demo` route。
+- 未新增 `/agent-demo` UI。
+- 未接入 Redis。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx / 部署配置。
 
 ### Phase 10.3：Read-only Agent API MVP - planned
 

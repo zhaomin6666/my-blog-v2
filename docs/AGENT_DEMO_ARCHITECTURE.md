@@ -7,8 +7,10 @@ interactive, read-only Agent Demo. The first version must stay tightly scoped:
 it answers only from public website content and exposes its trace and sources
 to make the boundary understandable.
 
-Phase 10.1 is the safety foundation only. It does not connect a model, create an
-API route, add UI, connect Redis, or change deployment configuration.
+Phase 10.1 added the safety foundation. Phase 10.2 added read-only knowledge
+tools, a rule-based scope classifier, and a public knowledge retriever. The demo
+still does not connect a model, create an API route, add UI, connect Redis, or
+change deployment configuration.
 
 ## Public Scope
 
@@ -92,11 +94,15 @@ The agent is read-only:
 
 ## Tool Permissions
 
-Allowed future tools:
+Allowed tools:
 
 - `BlogService`: published posts and limited public excerpts only.
 - `ProjectService`: published projects only.
 - `ProfileService`: public profile and public system stack only.
+
+Phase 10.2 implements wrappers around those services under
+`features/agent-demo/tools`. The wrappers return bounded context snippets and
+public `sources`; they do not expose raw file paths or draft content.
 
 Forbidden tools:
 
@@ -151,9 +157,38 @@ Sources must be public and bounded:
 Sources must not include draft content, private paths, raw Markdown file paths,
 or private infrastructure data.
 
+## Scope Classifier
+
+Phase 10.2 uses a rule-based keyword classifier. It returns:
+
+- `allowed`
+- `category`
+- `reason`
+
+Allowed categories:
+
+- `profile`
+- `project`
+- `blog`
+- `agent_learning`
+- `website`
+- `contact_public`
+
+Blocked categories:
+
+- `out_of_scope`
+- `privacy`
+- `security`
+- `server_internal`
+- `dangerous_action`
+- `high_risk_advice`
+
+This classifier is intentionally conservative and can be replaced or augmented
+later, but model-based classification is not required for Phase 10.2.
+
 ## Future Phases
 
-- Phase 10.2: Read-only knowledge tools and rule-based scope classifier.
+- Phase 10.2: Read-only knowledge tools and rule-based scope classifier. Completed.
 - Phase 10.3: Read-only Agent API MVP with model integration.
 - Phase 10.4: Rate limit, timeout, and abuse protection.
 - Phase 10.5: Agent Demo UI and trace display.

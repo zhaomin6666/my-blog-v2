@@ -91,3 +91,15 @@ export interface AgentScopeResult {
   category: AgentScopeCategory;
   reason: string;
 }
+
+export interface AgentKnowledgeItem {
+  source: AgentSource;
+  context: string;
+  score?: number;
+}
+
+export interface AgentKnowledgeRetrieverResult {
+  contextText: string;
+  sources: AgentSource[];
+  trace: AgentTraceStep[];
+}
