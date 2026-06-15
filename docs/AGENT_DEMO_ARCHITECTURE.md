@@ -11,8 +11,10 @@ Phase 10.1 added the safety foundation. Phase 10.2 added read-only knowledge
 tools, a rule-based scope classifier, and a public knowledge retriever. Phase
 10.2.1 added focused unit tests. Phase 10.3 adds the read-only API MVP with a
 server-only model adapter. Phase 10.4 adds in-process rate limiting, model
-timeouts, and bounded context / output controls. The demo still does not add UI,
-connect Redis, or change Docker / Nginx deployment files.
+timeouts, and bounded context / output controls. Phase 10.5 adds the public
+`/agent-demo` UI with answer, trace, sources, scope notice, loading, error, and
+rate-limit states. The demo still does not connect Redis or change Docker /
+Nginx deployment files.
 
 ## Public Scope
 
@@ -201,7 +203,7 @@ later, but model-based classification is not required for Phase 10.2.
 - Phase 10.2.1: Agent Demo unit test foundation. Completed.
 - Phase 10.3: Read-only Agent API MVP with model integration. Completed.
 - Phase 10.4: Rate limit, timeout, and abuse protection. Completed.
-- Phase 10.5: Agent Demo UI and trace display.
+- Phase 10.5: Agent Demo UI and trace display. Completed.
 - Phase 10.6: Production deployment and safety verification guide.
 - Phase 10.7: Final Phase 10 review.
 

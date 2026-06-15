@@ -45,6 +45,14 @@ Phase 10.4 adds:
 - Bounded context and answer output lengths
 - Focused tests for rate limiting, timeout handling, and truncation
 
+Phase 10.5 adds:
+
+- `/agent-demo` as the public interactive demo page
+- Question input, sample questions, loading, error, and rate-limit states
+- Answer, trace, and public source display
+- A scope notice for the public read-only boundary
+- A project-page entry point through the AI Agent Demo project frontmatter
+
 Required server-only environment variables:
 
 - `AGENT_DEMO_MODEL_API_URL`

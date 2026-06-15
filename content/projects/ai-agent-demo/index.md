@@ -31,7 +31,10 @@ highlights:
   - "用 Zod 和结构化输出约束模型结果，为意图识别、工具选择和后续业务调用保留稳定边界。"
   - "把工具调用、执行器、状态图和持久化作为工程问题拆解，贴近企业流程编排场景。"
   - "面向企业知识库、业务流程理解和交付辅助 Agent 方向持续沉淀学习记录。"
-links: []
+links:
+  - label: "Try live demo"
+    href: "/agent-demo"
+    type: "live"
 relatedPosts: []
 published: true
 lang: "zh"

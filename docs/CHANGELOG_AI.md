@@ -1,6 +1,31 @@
 # AI Development Changelog
 
 ### 2026-06-15 - Codex
+**Summary:** Phase 10.5 completed. Added the public Agent Demo UI and trace display.
+
+**Phase 10.5 scope:**
+- Added `/agent-demo` as the public interactive Agent Demo page.
+- Built the page as an OS-style tool surface using the existing Project layout.
+- Added question input, character counter, submit action, and sample questions.
+- Added loading, network error, model error, and rate-limit states.
+- Added answer rendering, trace step display, and public source display.
+- Added a public read-only scope notice.
+- Added `/agent-demo` to sitemap.
+- Added the `/agent-demo` entry point to the AI Agent Demo project frontmatter.
+- Kept UI imports client-safe so server-only knowledge tools are not bundled into the browser.
+
+**Scope guard:**
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx deployment files were changed.
+
+**Verification:**
+- `pnpm test` passed.
+- `pnpm lint` passed.
+- `pnpm build` passed.
+- A direct hidden dev-server smoke check did not connect in this shell session; build verification confirmed `/agent-demo` is generated.
+
+### 2026-06-15 - Codex
 **Summary:** Phase 10.4 completed. Added Agent Demo rate limiting, timeout handling, and abuse protection.
 
 **Phase 10.4 scope:**

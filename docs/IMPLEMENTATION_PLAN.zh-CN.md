@@ -7,7 +7,7 @@
 - Phase 1 到 Phase 9 已完成。
 - Phase 8 已完成：内容与职业展示、真实博客系列、Projects / Profile / Contact 内容体系和内容工作流文档已收口。
 - Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
-- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础、Phase 10.3 只读 Agent API MVP、Phase 10.4 限流 / 超时 / 滥用防护，下一步进入 Phase 10.5 UI 与 trace 展示。
+- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础、Phase 10.3 只读 Agent API MVP、Phase 10.4 限流 / 超时 / 滥用防护、Phase 10.5 UI 与 trace 展示，下一步进入 Phase 10.6 生产部署与安全验证。
 - 当前生产地址：`https://oli6666.top`。
 - 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
@@ -359,11 +359,21 @@
 - 未修改窗口系统。
 - 未修改 Docker / Nginx 部署文件。
 
-### Phase 10.5：Agent Demo UI & Trace Display - planned
+### Phase 10.5：Agent Demo UI & Trace Display - 已完成
 
-- 计划新增 `/agent-demo` 页面。
-- 计划展示 answer、trace、sources、scope notice、loading、error 和 rate-limit 状态。
-- 计划从 AI Agent Demo 项目页增加轻量体验入口。
+- 新增公开 `/agent-demo` 页面。
+- 基于现有 Project layout 和 settings toggles 新增 OS 风格 Agent Demo 工具界面。
+- 新增问题输入、提交按钮、字数计数、示例问题、loading、网络错误、模型错误和限流状态。
+- 新增 answer 展示，并保留换行。
+- 新增 trace 展示，覆盖 input validation、rate-limit check、scope check、retrieval 和 generation。
+- 新增 public sources 展示，包括 source type、title、excerpt 和内部链接。
+- 新增 scope notice，明确 Demo 只读取公开内容。
+- 将 `/agent-demo` 加入 sitemap。
+- 从 AI Agent Demo 项目 frontmatter 增加 `/agent-demo` 轻量入口。
+- UI 只导入 client-safe 的 Agent Demo types / config，避免把 server-only 知识检索链打进客户端包。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx 部署文件。
 
 ### Phase 10.6：Production Deployment & Safety Verification - planned
 

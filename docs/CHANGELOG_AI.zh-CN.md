@@ -1,6 +1,31 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-15 - Codex
+**摘要：** Phase 10.5 已完成，新增公开 Agent Demo UI 和 trace 展示。
+
+**Phase 10.5 范围：**
+- 新增 `/agent-demo` 公开交互页面。
+- 基于现有 Project layout 实现 OS 风格工具界面。
+- 新增问题输入、字数计数、提交按钮和示例问题。
+- 新增 loading、网络错误、模型错误和限流状态。
+- 新增 answer、trace steps 和 public sources 展示。
+- 新增 public read-only scope notice。
+- 将 `/agent-demo` 加入 sitemap。
+- 在 AI Agent Demo 项目 frontmatter 中增加 `/agent-demo` 入口。
+- UI 只导入 client-safe 的 Agent Demo types / config，避免把 server-only 知识工具打进浏览器包。
+
+**范围约束：**
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx 部署文件。
+
+**验证：**
+- `pnpm test` 通过。
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
+- 本轮隐藏 dev-server smoke check 在当前 shell session 未连接成功；build 验证已确认 `/agent-demo` 生成。
+
+### 2026-06-15 - Codex
 **摘要：** Phase 10.4 已完成，为 Agent Demo 新增限流、超时和滥用防护。
 
 **Phase 10.4 范围：**

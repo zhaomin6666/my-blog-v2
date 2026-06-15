@@ -745,10 +745,20 @@
 - No window-system behavior changes were made.
 - No Docker / Nginx deployment files were changed.
 
-### Phase 10.5: Agent Demo UI & Trace Display PLANNED
-- Planned: `/agent-demo` page.
-- Planned: answer, trace, sources, scope notice, loading, error, and rate-limit states.
-- Planned: lightweight entry points from AI Agent Demo project pages.
+### Phase 10.5: Agent Demo UI & Trace Display COMPLETED
+- Added public `/agent-demo` page.
+- Added an OS-style Agent Demo tool surface using the existing Project layout and settings toggles.
+- Added question input, submit button, character counter, sample questions, loading state, network error state, model error state, and rate-limit state.
+- Added answer display with preserved line breaks.
+- Added trace display for input validation, rate-limit check, scope check, retrieval, and generation.
+- Added public sources display with source type, title, excerpt, and internal links.
+- Added a scope notice that keeps the demo framed as public read-only.
+- Added `/agent-demo` to sitemap.
+- Added a lightweight `/agent-demo` entry point from the AI Agent Demo project frontmatter.
+- Preserved server-only knowledge retrieval boundaries by importing only client-safe Agent Demo types/config in the UI.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx deployment files were changed.
 
 ### Phase 10.6: Production Deployment & Safety Verification PLANNED
 - Planned: production environment checklist.
