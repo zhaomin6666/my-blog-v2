@@ -1,6 +1,34 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-15 - Codex
+**摘要：** Phase 10.2.1 已完成，新增 AI Agent Demo 单元测试基础。
+
+**Phase 10.2.1 范围：**
+- 新增 Vitest 作为轻量单元测试工具。
+- 在 `package.json` 新增 `test` 和 `test:watch` scripts。
+- 新增 `vitest.config.ts`，复用现有 `@` 路径别名，并使用 Node test environment。
+- 新增 Agent Demo 输入校验测试。
+- 新增规则型 scope 分类测试。
+- 新增文本工具函数测试。
+- 新增公开知识检索测试，覆盖检索路由、blocked scope 行为、trace 状态和 source 去重。
+- 更新中英文实施计划，将 Phase 10.2.1 标记为 completed，Phase 10.3 仍保持 planned。
+
+**范围约束：**
+- 未接入真实模型。
+- 未新增 `/api/agent-demo` route。
+- 未新增 `/agent-demo` UI。
+- 未接入 Redis。
+- 未修改 Blog / Projects / Profile 核心服务行为。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx / 部署配置。
+
+**验证：**
+- `pnpm test` 通过。
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
+
+### 2026-06-15 - Codex
 **摘要：** Phase 10.2 已完成，新增 AI Agent Demo 只读知识工具和范围识别器。
 
 **Phase 10.2 范围：**

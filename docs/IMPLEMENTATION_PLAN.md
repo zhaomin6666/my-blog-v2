@@ -683,6 +683,25 @@
 - No window-system behavior changes were made.
 - No Docker / Nginx / deployment configuration changes were made.
 
+### Phase 10.2.1: Agent Demo Unit Test Foundation COMPLETED
+- Added Vitest as the focused unit test runner for Agent Demo foundation work.
+- Added `test` and `test:watch` pnpm scripts.
+- Added `vitest.config.ts` with the existing `@` path alias and Node test environment.
+- Added focused tests for:
+  - Agent Demo input validation.
+  - Rule-based scope classification.
+  - Text utility helpers.
+  - Public knowledge retrieval routing, blocked-scope behavior, trace status, and source deduplication.
+- Kept this as a test-only subphase before Phase 10.3.
+- No real model integration was added.
+- No `/api/agent-demo` route was added.
+- No `/agent-demo` UI was added.
+- No Redis integration was added.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx / deployment configuration changes were made.
+- Verification: `pnpm test`, `pnpm lint`, and `pnpm build` passed.
+
 ### Phase 10.3: Read-only Agent API MVP PLANNED
 - Planned: `/api/agent-demo` POST route.
 - Planned: server-only model integration.

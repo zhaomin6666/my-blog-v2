@@ -7,7 +7,7 @@
 - Phase 1 到 Phase 9 已完成。
 - Phase 8 已完成：内容与职业展示、真实博客系列、Projects / Profile / Contact 内容体系和内容工作流文档已收口。
 - Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
-- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器，Phase 10.3 仍为 planned。
+- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础，Phase 10.3 仍为 planned。
 - 当前生产地址：`https://oli6666.top`。
 - 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
@@ -291,6 +291,28 @@
 - 未修改 Console / CLI。
 - 未修改窗口系统。
 - 未修改 Docker / Nginx / 部署配置。
+
+### Phase 10.2.1：Agent Demo Unit Test Foundation - 已完成
+
+- 新增 Vitest，作为 Agent Demo 基础能力的轻量单元测试工具。
+- 新增 pnpm scripts：
+  - `test`
+  - `test:watch`
+- 新增 `vitest.config.ts`，复用现有 `@` 路径别名，并使用 Node test environment。
+- 新增聚焦测试：
+  - Agent Demo 输入校验。
+  - 规则型 scope 分类。
+  - 文本工具函数。
+  - 公开知识检索的路由、blocked scope 行为、trace 状态和 source 去重。
+- 本阶段只补测试基础，不推进 Phase 10.3 功能。
+- 未接入真实模型。
+- 未新增 `/api/agent-demo` route。
+- 未新增 `/agent-demo` UI。
+- 未接入 Redis。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx / 部署配置。
+- 验证：`pnpm test`、`pnpm lint`、`pnpm build` 均通过。
 
 ### Phase 10.3：Read-only Agent API MVP - planned
 

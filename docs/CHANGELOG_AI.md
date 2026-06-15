@@ -1,6 +1,34 @@
 # AI Development Changelog
 
 ### 2026-06-15 - Codex
+**Summary:** Phase 10.2.1 completed. Added the Agent Demo unit test foundation.
+
+**Phase 10.2.1 scope:**
+- Added Vitest as the focused unit test runner.
+- Added `test` and `test:watch` scripts to `package.json`.
+- Added `vitest.config.ts` with the existing `@` alias and Node test environment.
+- Added tests for Agent Demo input validation.
+- Added tests for the rule-based scope classifier.
+- Added tests for text utility helpers.
+- Added tests for public knowledge retrieval routing, blocked-scope behavior, trace status, and source deduplication.
+- Updated implementation plans to mark Phase 10.2.1 as completed while keeping Phase 10.3 planned.
+
+**Scope guard:**
+- No model integration was added.
+- No `/api/agent-demo` route was added.
+- No `/agent-demo` UI was added.
+- No Redis integration was added.
+- No Blog / Projects / Profile core service behavior was changed.
+- No Console / CLI command system changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx / deployment configuration changes were made.
+
+**Verification:**
+- `pnpm test` passed.
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-15 - Codex
 **Summary:** Phase 10.2 completed. Added read-only Agent Demo knowledge tools and scope classifier.
 
 **Phase 10.2 scope:**
