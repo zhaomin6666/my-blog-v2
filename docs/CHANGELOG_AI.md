@@ -1,6 +1,32 @@
 # AI Development Changelog
 
 ### 2026-06-15 - Codex
+**Summary:** Phase 10.3 completed. Added the read-only Agent API MVP.
+
+**Phase 10.3 scope:**
+- Added `POST /api/agent-demo`.
+- Added a server-only OpenAI Responses API model adapter using native `fetch`.
+- Added explicit server-only environment variables to `.env.example`: `OPENAI_API_KEY` and `AGENT_DEMO_MODEL`.
+- Upgraded `agentDemoService` into the shared validation, scope, retrieval, and model-generation pipeline.
+- Added safe refusal for blocked scope before retrieval or model generation.
+- Added safe no-context and model-error responses.
+- Added service-level unit tests for validation failure, blocked scope, successful generation, and model-unavailable handling.
+- Updated Agent Demo README, architecture docs, and implementation plans.
+
+**Scope guard:**
+- No `/agent-demo` UI was added.
+- No Redis integration was added.
+- No persistent rate limiting was added; Phase 10.4 remains responsible for that.
+- No Console / CLI command system changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx deployment files were changed.
+
+**Verification:**
+- `pnpm test` passed.
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-15 - Codex
 **Summary:** Phase 10.2.1 completed. Added the Agent Demo unit test foundation.
 
 **Phase 10.2.1 scope:**

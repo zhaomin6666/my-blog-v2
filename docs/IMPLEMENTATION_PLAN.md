@@ -702,10 +702,28 @@
 - No Docker / Nginx / deployment configuration changes were made.
 - Verification: `pnpm test`, `pnpm lint`, and `pnpm build` passed.
 
-### Phase 10.3: Read-only Agent API MVP PLANNED
-- Planned: `/api/agent-demo` POST route.
-- Planned: server-only model integration.
-- Planned: refusal strategy, trace, sources, and safe error handling.
+### Phase 10.3: Read-only Agent API MVP COMPLETED
+- Added `POST /api/agent-demo`.
+- Added server-only model adapter using the OpenAI Responses API through native `fetch`.
+- Added explicit server-only environment configuration:
+  - `OPENAI_API_KEY`
+  - `AGENT_DEMO_MODEL`
+- Upgraded `agentDemoService` into the shared API pipeline:
+  - input validation
+  - scope classification
+  - public knowledge retrieval
+  - model answer generation
+- Added safe refusal for blocked categories before retrieval or model generation.
+- Added safe no-context and model-error responses without exposing stack traces, raw upstream errors, secrets, or environment values.
+- API responses preserve `answer`, `allowed`, `category`, `trace`, `sources`, `usage`, and optional `error`.
+- Added service-level unit tests for validation failure, blocked scope, successful model generation, and safe model unavailable handling.
+- Kept `rate_limit_check` as a passed placeholder with Phase 10.4 explicitly responsible for persistent rate limiting.
+- No `/agent-demo` UI was added.
+- No Redis integration was added.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx deployment files were changed.
+- Verification: `pnpm test`, `pnpm lint`, and `pnpm build` passed.
 
 ### Phase 10.4: Rate Limit, Timeout & Abuse Protection PLANNED
 - Planned: Redis-backed rate limiting.

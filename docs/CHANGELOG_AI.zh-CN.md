@@ -1,6 +1,32 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-15 - Codex
+**摘要：** Phase 10.3 已完成，新增只读 Agent API MVP。
+
+**Phase 10.3 范围：**
+- 新增 `POST /api/agent-demo`。
+- 新增 server-only OpenAI Responses API model adapter，使用原生 `fetch` 调用。
+- 在 `.env.example` 新增服务端环境变量：`OPENAI_API_KEY` 和 `AGENT_DEMO_MODEL`。
+- 将 `agentDemoService` 升级为输入校验、scope 分类、公开检索和模型生成的共享 pipeline。
+- blocked scope 会在检索和模型生成前安全拒答。
+- 新增 no-context 和 model-error 的安全响应。
+- 新增 service-level 单元测试，覆盖校验失败、blocked scope、生成成功和模型不可用。
+- 更新 Agent Demo README、架构文档和中英文实施计划。
+
+**范围约束：**
+- 未新增 `/agent-demo` UI。
+- 未接入 Redis。
+- 未新增持久限流，Phase 10.4 继续负责限流与超时保护。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx 部署文件。
+
+**验证：**
+- `pnpm test` 通过。
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
+
+### 2026-06-15 - Codex
 **摘要：** Phase 10.2.1 已完成，新增 AI Agent Demo 单元测试基础。
 
 **Phase 10.2.1 范围：**

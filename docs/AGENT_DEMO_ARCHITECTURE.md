@@ -8,9 +8,10 @@ it answers only from public website content and exposes its trace and sources
 to make the boundary understandable.
 
 Phase 10.1 added the safety foundation. Phase 10.2 added read-only knowledge
-tools, a rule-based scope classifier, and a public knowledge retriever. The demo
-still does not connect a model, create an API route, add UI, connect Redis, or
-change deployment configuration.
+tools, a rule-based scope classifier, and a public knowledge retriever. Phase
+10.2.1 added focused unit tests. Phase 10.3 adds the read-only API MVP with a
+server-only model adapter. The demo still does not add UI, connect Redis, or
+change Docker / Nginx deployment files.
 
 ## Public Scope
 
@@ -42,7 +43,7 @@ The demo must refuse:
 
 ## API Design
 
-The future API route is planned as:
+The API route is:
 
 ```text
 POST /api/agent-demo
@@ -79,6 +80,8 @@ The route handler should only parse the request, call shared validators and the
 agent service, then return JSON. Business logic should stay in
 `features/agent-demo`.
 
+Phase 10.3 implements this route at `app/api/agent-demo/route.ts`.
+
 ## Safety Boundary
 
 The agent is read-only:
@@ -86,8 +89,8 @@ The agent is read-only:
 - It can use only public knowledge tools.
 - It cannot call write tools.
 - It cannot access private files.
-- It cannot read environment variables except server-side model configuration in
-  the API integration phase.
+- It cannot read environment variables except server-side model configuration:
+  `OPENAI_API_KEY` and `AGENT_DEMO_MODEL`.
 - It cannot fetch arbitrary external URLs.
 - It cannot store full conversations.
 - It cannot expose raw errors, stack traces, secrets, or infrastructure details.
@@ -189,7 +192,8 @@ later, but model-based classification is not required for Phase 10.2.
 ## Future Phases
 
 - Phase 10.2: Read-only knowledge tools and rule-based scope classifier. Completed.
-- Phase 10.3: Read-only Agent API MVP with model integration.
+- Phase 10.2.1: Agent Demo unit test foundation. Completed.
+- Phase 10.3: Read-only Agent API MVP with model integration. Completed.
 - Phase 10.4: Rate limit, timeout, and abuse protection.
 - Phase 10.5: Agent Demo UI and trace display.
 - Phase 10.6: Production deployment and safety verification guide.

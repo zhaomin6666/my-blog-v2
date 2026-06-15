@@ -24,6 +24,23 @@ Phase 10.2 adds:
 - A conservative rule-based scope classifier
 - A public knowledge retriever that returns bounded context, public sources, and trace updates
 
+Phase 10.3 adds:
+
+- `POST /api/agent-demo`
+- A shared Agent Demo service pipeline:
+  - input validation
+  - scope classification
+  - public knowledge retrieval
+  - server-only model answer generation
+- Safe refusal for blocked scope
+- Safe model configuration and upstream error handling
+- Unit tests for the API service pipeline
+
+Required server-only environment variables:
+
+- `OPENAI_API_KEY`
+- `AGENT_DEMO_MODEL`
+
 ## Safety Boundary
 
 The future agent may only answer from public site content:
@@ -49,8 +66,6 @@ The agent must not:
 
 The following are intentionally not implemented in Phase 10.1:
 
-- Model API integration
 - Redis rate limiting
-- `/api/agent-demo`
 - `/agent-demo` UI
 - Production deployment changes

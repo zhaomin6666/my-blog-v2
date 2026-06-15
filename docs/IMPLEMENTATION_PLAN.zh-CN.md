@@ -7,7 +7,7 @@
 - Phase 1 到 Phase 9 已完成。
 - Phase 8 已完成：内容与职业展示、真实博客系列、Projects / Profile / Contact 内容体系和内容工作流文档已收口。
 - Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
-- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础，Phase 10.3 仍为 planned。
+- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础、Phase 10.3 只读 Agent API MVP，Phase 10.4 仍为 planned。
 - 当前生产地址：`https://oli6666.top`。
 - 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
@@ -314,11 +314,29 @@
 - 未修改 Docker / Nginx / 部署配置。
 - 验证：`pnpm test`、`pnpm lint`、`pnpm build` 均通过。
 
-### Phase 10.3：Read-only Agent API MVP - planned
+### Phase 10.3：Read-only Agent API MVP - 已完成
 
-- 计划新增 `/api/agent-demo` POST route。
-- 计划接入服务端模型调用。
-- 计划支持拒答策略、trace、sources 和安全错误处理。
+- 新增 `POST /api/agent-demo`。
+- 新增 server-only model adapter，通过原生 `fetch` 调用 OpenAI Responses API。
+- 新增明确的服务端环境变量配置：
+  - `OPENAI_API_KEY`
+  - `AGENT_DEMO_MODEL`
+- 将 `agentDemoService` 升级为共享 API pipeline：
+  - 输入校验
+  - scope 分类
+  - 公开知识检索
+  - 模型回答生成
+- blocked categories 会在检索和模型生成前安全拒答。
+- no-context 和 model-error 会返回安全响应，不暴露 stack trace、原始上游错误、密钥或环境变量值。
+- API response 保留 `answer`、`allowed`、`category`、`trace`、`sources`、`usage` 和可选 `error`。
+- 新增 service-level 单元测试，覆盖校验失败、blocked scope、模型生成成功和模型不可用时的安全错误。
+- `rate_limit_check` 仍作为 passed placeholder，持久限流留给 Phase 10.4。
+- 未新增 `/agent-demo` UI。
+- 未接入 Redis。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx 部署文件。
+- 验证：`pnpm test`、`pnpm lint`、`pnpm build` 均通过。
 
 ### Phase 10.4：Rate Limit, Timeout & Abuse Protection - planned
 

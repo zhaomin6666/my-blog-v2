@@ -137,7 +137,7 @@ export async function retrievePublicKnowledge(
     trace,
     "generate_answer",
     "pending",
-    "Model answer generation is deferred to Phase 10.3.",
+    "Model answer generation is handled by the Agent Demo service.",
   );
 
   return {
