@@ -38,7 +38,8 @@ Phase 10.3 adds:
 
 Required server-only environment variables:
 
-- `OPENAI_API_KEY`
+- `AGENT_DEMO_MODEL_API_URL`
+- `AGENT_DEMO_MODEL_API_KEY`
 - `AGENT_DEMO_MODEL`
 
 ## Safety Boundary

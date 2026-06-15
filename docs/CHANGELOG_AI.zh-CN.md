@@ -5,8 +5,8 @@
 
 **Phase 10.3 范围：**
 - 新增 `POST /api/agent-demo`。
-- 新增 server-only OpenAI Responses API model adapter，使用原生 `fetch` 调用。
-- 在 `.env.example` 新增服务端环境变量：`OPENAI_API_KEY` 和 `AGENT_DEMO_MODEL`。
+- 新增 server-only OpenAI-compatible Chat Completions model adapter，使用原生 `fetch` 调用。
+- 在 `.env.example` 新增服务端环境变量：`AGENT_DEMO_MODEL_API_URL`、`AGENT_DEMO_MODEL_API_KEY` 和 `AGENT_DEMO_MODEL`。
 - 将 `agentDemoService` 升级为输入校验、scope 分类、公开检索和模型生成的共享 pipeline。
 - blocked scope 会在检索和模型生成前安全拒答。
 - 新增 no-context 和 model-error 的安全响应。

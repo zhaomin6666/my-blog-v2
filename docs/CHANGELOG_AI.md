@@ -5,8 +5,8 @@
 
 **Phase 10.3 scope:**
 - Added `POST /api/agent-demo`.
-- Added a server-only OpenAI Responses API model adapter using native `fetch`.
-- Added explicit server-only environment variables to `.env.example`: `OPENAI_API_KEY` and `AGENT_DEMO_MODEL`.
+- Added a server-only OpenAI-compatible Chat Completions model adapter using native `fetch`.
+- Added explicit server-only environment variables to `.env.example`: `AGENT_DEMO_MODEL_API_URL`, `AGENT_DEMO_MODEL_API_KEY`, and `AGENT_DEMO_MODEL`.
 - Upgraded `agentDemoService` into the shared validation, scope, retrieval, and model-generation pipeline.
 - Added safe refusal for blocked scope before retrieval or model generation.
 - Added safe no-context and model-error responses.

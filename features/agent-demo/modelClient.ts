@@ -5,7 +5,6 @@ import type {
   AgentSource,
 } from "./agentDemoTypes";
 
-const OPENAI_RESPONSES_API_URL = "https://api.openai.com/v1/responses";
 const AGENT_DEMO_MAX_OUTPUT_TOKENS = 700;
 
 export interface GenerateAgentDemoModelAnswerParams {
@@ -26,6 +25,7 @@ export type AgentModelClientResult =
       ok: false;
       code:
         | "missing_api_key"
+        | "missing_api_url"
         | "missing_model"
         | "upstream_error"
         | "invalid_response"
@@ -33,35 +33,41 @@ export type AgentModelClientResult =
       message: string;
     };
 
-interface OpenAIOutputText {
-  type: "output_text";
-  text: string;
+interface ChatCompletionPayload {
+  choices?: unknown;
 }
 
-interface OpenAIResponseOutputMessage {
-  type?: string;
+interface ChatCompletionChoice {
+  message?: unknown;
+}
+
+interface ChatCompletionMessage {
   content?: unknown;
-}
-
-interface OpenAIResponsePayload {
-  output_text?: unknown;
-  output?: unknown;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-function isOutputText(value: unknown): value is OpenAIOutputText {
-  return (
-    isRecord(value) &&
-    value.type === "output_text" &&
-    typeof value.text === "string"
-  );
-}
-
 function getAgentDemoModel(): string | null {
   return process.env.AGENT_DEMO_MODEL?.trim() || null;
+}
+
+function getAgentDemoModelApiUrl(): string | null {
+  const rawUrl = process.env.AGENT_DEMO_MODEL_API_URL?.trim();
+  if (!rawUrl) return null;
+
+  return rawUrl.endsWith("/chat/completions")
+    ? rawUrl
+    : `${rawUrl.replace(/\/+$/, "")}/chat/completions`;
+}
+
+function getAgentDemoModelApiKey(): string | null {
+  return (
+    process.env.AGENT_DEMO_MODEL_API_KEY?.trim() ||
+    process.env.OPENAI_API_KEY?.trim() ||
+    null
+  );
 }
 
 function buildSourceList(sources: AgentSource[]): string {
@@ -114,34 +120,33 @@ function buildInput({
   ].join("\n");
 }
 
-function extractOutputText(payload: OpenAIResponsePayload): string | null {
-  if (typeof payload.output_text === "string") {
-    return payload.output_text;
-  }
-
-  if (!Array.isArray(payload.output)) {
+function extractChatCompletionText(payload: ChatCompletionPayload): string | null {
+  if (!Array.isArray(payload.choices)) {
     return null;
   }
 
-  const parts: string[] = [];
-
-  for (const item of payload.output as OpenAIResponseOutputMessage[]) {
-    if (!isRecord(item) || !Array.isArray(item.content)) continue;
-
-    for (const contentItem of item.content) {
-      if (isOutputText(contentItem)) {
-        parts.push(contentItem.text);
-      }
-    }
+  const firstChoice = payload.choices[0] as ChatCompletionChoice | undefined;
+  if (!isRecord(firstChoice) || !isRecord(firstChoice.message)) {
+    return null;
   }
 
-  return parts.length ? parts.join("\n") : null;
+  const message = firstChoice.message as ChatCompletionMessage;
+  return typeof message.content === "string" ? message.content : null;
 }
 
 export async function generateAgentDemoModelAnswer(
   params: GenerateAgentDemoModelAnswerParams,
 ): Promise<AgentModelClientResult> {
-  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  const apiUrl = getAgentDemoModelApiUrl();
+  const apiKey = getAgentDemoModelApiKey();
+
+  if (!apiUrl) {
+    return {
+      ok: false,
+      code: "missing_api_url",
+      message: "Agent Demo model API URL is not configured.",
+    };
+  }
 
   if (!apiKey) {
     return {
@@ -162,7 +167,7 @@ export async function generateAgentDemoModelAnswer(
   }
 
   try {
-    const response = await fetch(OPENAI_RESPONSES_API_URL, {
+    const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -170,10 +175,17 @@ export async function generateAgentDemoModelAnswer(
       },
       body: JSON.stringify({
         model,
-        instructions: buildInstructions(params.locale),
-        input: buildInput(params),
-        max_output_tokens: AGENT_DEMO_MAX_OUTPUT_TOKENS,
-        store: false,
+        messages: [
+          {
+            role: "system",
+            content: buildInstructions(params.locale),
+          },
+          {
+            role: "user",
+            content: buildInput(params),
+          },
+        ],
+        max_tokens: AGENT_DEMO_MAX_OUTPUT_TOKENS,
       }),
     });
 
@@ -185,8 +197,8 @@ export async function generateAgentDemoModelAnswer(
       };
     }
 
-    const payload = (await response.json()) as OpenAIResponsePayload;
-    const answer = extractOutputText(payload)?.trim();
+    const payload = (await response.json()) as ChatCompletionPayload;
+    const answer = extractChatCompletionText(payload)?.trim();
 
     if (!answer) {
       return {

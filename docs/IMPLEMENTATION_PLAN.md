@@ -704,9 +704,10 @@
 
 ### Phase 10.3: Read-only Agent API MVP COMPLETED
 - Added `POST /api/agent-demo`.
-- Added server-only model adapter using the OpenAI Responses API through native `fetch`.
+- Added server-only model adapter using an OpenAI-compatible Chat Completions API through native `fetch`.
 - Added explicit server-only environment configuration:
-  - `OPENAI_API_KEY`
+  - `AGENT_DEMO_MODEL_API_URL`
+  - `AGENT_DEMO_MODEL_API_KEY`
   - `AGENT_DEMO_MODEL`
 - Upgraded `agentDemoService` into the shared API pipeline:
   - input validation

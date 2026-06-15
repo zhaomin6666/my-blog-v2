@@ -317,9 +317,10 @@
 ### Phase 10.3：Read-only Agent API MVP - 已完成
 
 - 新增 `POST /api/agent-demo`。
-- 新增 server-only model adapter，通过原生 `fetch` 调用 OpenAI Responses API。
+- 新增 server-only model adapter，通过原生 `fetch` 调用 OpenAI-compatible Chat Completions API。
 - 新增明确的服务端环境变量配置：
-  - `OPENAI_API_KEY`
+  - `AGENT_DEMO_MODEL_API_URL`
+  - `AGENT_DEMO_MODEL_API_KEY`
   - `AGENT_DEMO_MODEL`
 - 将 `agentDemoService` 升级为共享 API pipeline：
   - 输入校验

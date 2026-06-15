@@ -13,6 +13,7 @@ function getHttpStatus(error?: string): number {
     case "abnormal_payload":
     case "invalid_locale":
       return 400;
+    case "missing_api_url":
     case "missing_api_key":
     case "missing_model":
       return 503;

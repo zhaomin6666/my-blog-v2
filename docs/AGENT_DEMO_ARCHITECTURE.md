@@ -90,7 +90,7 @@ The agent is read-only:
 - It cannot call write tools.
 - It cannot access private files.
 - It cannot read environment variables except server-side model configuration:
-  `OPENAI_API_KEY` and `AGENT_DEMO_MODEL`.
+  `AGENT_DEMO_MODEL_API_URL`, `AGENT_DEMO_MODEL_API_KEY`, and `AGENT_DEMO_MODEL`.
 - It cannot fetch arbitrary external URLs.
 - It cannot store full conversations.
 - It cannot expose raw errors, stack traces, secrets, or infrastructure details.
