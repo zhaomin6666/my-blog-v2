@@ -624,5 +624,63 @@
 - Small fix: kept the inline Article TOC visible until the fixed floating desktop TOC breakpoint, avoiding a no-TOC gap on medium desktop widths.
 - Confirmed Blog enhancements did not require Console / CLI, window-system, Projects core logic, Profile core logic, or deployment configuration changes.
 
-## Phase 10: AI Agent Demo Integration PLANNED
-- Planned only. Implementation details are intentionally deferred.
+## Phase 10: AI Agent Demo Integration IN PROGRESS
+- Goal: upgrade `AI Agent Demo` from a project introduction page into a real, interactive, read-only Agent Demo.
+- The demo must stay scope-limited to public site content: Profile, public stack, published Projects, published Blog content, AI Agent learning journey, and Personal Developer OS implementation notes.
+- The demo must not become a general chatbot, execute commands, write files, access private data, expose secrets, or fabricate private experience / business metrics.
+
+### Phase 10.1: Agent Demo Architecture & Safety Foundation COMPLETED
+- Added isolated Agent Demo foundation under `features/agent-demo`.
+- Added type definitions for request, response, trace steps, sources, usage info, validation results, and scope results.
+- Added static configuration for supported locales, max input length, max sources, trace steps, public project slugs, and scope categories.
+- Added reusable input validation:
+  - `question` must be a string.
+  - Trimmed question cannot be empty.
+  - Input is limited to 800 characters.
+  - Obvious abnormal payloads are rejected.
+  - `locale` is limited to `zh` / `en`.
+- Added trace helpers for the standard Agent Demo flow:
+  - `input_validation`
+  - `rate_limit_check`
+  - `scope_check`
+  - `retrieve_context`
+  - `generate_answer`
+- Added safety policy and scope policy constants documenting allowed / blocked scope and forbidden tools.
+- Added a foundation-only service response for future route integration.
+- Added `docs/AGENT_DEMO_ARCHITECTURE.md` with first-version goals, public scope, forbidden scope, API contract, safety boundary, tool permissions, rate-limit strategy, trace / sources contract, and future phases.
+- No real model integration was added.
+- No Redis integration was added.
+- No `/api/agent-demo` route was added.
+- No `/agent-demo` UI was added.
+- No Blog / Projects / Profile core logic was changed.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx / deployment configuration changes were made.
+
+### Phase 10.2: Read-only Knowledge Tools & Scope Classifier PLANNED
+- Planned: read-only tools for public Blog / Projects / Profile data.
+- Planned: rule-based scope classifier.
+- Planned: public knowledge retriever with trace and sources.
+
+### Phase 10.3: Read-only Agent API MVP PLANNED
+- Planned: `/api/agent-demo` POST route.
+- Planned: server-only model integration.
+- Planned: refusal strategy, trace, sources, and safe error handling.
+
+### Phase 10.4: Rate Limit, Timeout & Abuse Protection PLANNED
+- Planned: Redis-backed rate limiting.
+- Planned: request / model timeout controls.
+- Planned: input, output, context, and source limits.
+
+### Phase 10.5: Agent Demo UI & Trace Display PLANNED
+- Planned: `/agent-demo` page.
+- Planned: answer, trace, sources, scope notice, loading, error, and rate-limit states.
+- Planned: lightweight entry points from AI Agent Demo project pages.
+
+### Phase 10.6: Production Deployment & Safety Verification PLANNED
+- Planned: production environment checklist.
+- Planned: Nginx rate-limit guidance.
+- Planned: safety verification guide.
+
+### Phase 10.7: Phase 10 Final Review PLANNED
+- Planned: final acceptance for the first public Agent Demo version.

@@ -1,5 +1,34 @@
 # AI Development Changelog
 
+### 2026-06-15 - Codex
+**Summary:** Phase 10.1 completed. Added the AI Agent Demo architecture and safety foundation.
+
+**Phase 10.1 scope:**
+- Added an isolated foundation under `features/agent-demo`.
+- Added request / response / trace / source / usage / validation / scope types.
+- Added static configuration for locales, input length, source limits, trace steps, public project slugs, and scope categories.
+- Added reusable input validation for `question` and `locale`.
+- Added trace helpers for `input_validation`, `rate_limit_check`, `scope_check`, `retrieve_context`, and `generate_answer`.
+- Added safety policy constants for the read-only public-content boundary.
+- Added scope policy constants for allowed and blocked categories.
+- Added a foundation-only service response for future API route integration.
+- Added `docs/AGENT_DEMO_ARCHITECTURE.md` covering first-version goals, public scope, forbidden scope, API contract, safety boundary, tool permissions, rate-limit strategy, trace / sources contract, and future phases.
+- Updated `docs/IMPLEMENTATION_PLAN.md` and `docs/IMPLEMENTATION_PLAN.zh-CN.md` to mark Phase 10 as in progress, Phase 10.1 as completed, and Phase 10.2 through Phase 10.7 as planned.
+
+**Scope guard:**
+- No real model integration was added.
+- No Redis integration was added.
+- No `/api/agent-demo` route was added.
+- No `/agent-demo` UI was added.
+- No Blog / Projects / Profile core logic was changed.
+- No Console / CLI command system changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx / deployment configuration changes were made.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
 ### 2026-06-13 - Codex
 **Summary:** Phase 9.5 completed. Final acceptance and closure for Phase 9 Blog UX polish.
 

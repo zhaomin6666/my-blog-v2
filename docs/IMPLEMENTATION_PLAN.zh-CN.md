@@ -1,4 +1,4 @@
-# 实施计划 - Personal Dev OS
+﻿# 实施计划 - Personal Dev OS
 
 本文件是项目阶段计划的中文工作版，用于快速了解当前进度和后续方向。
 
@@ -7,7 +7,7 @@
 - Phase 1 到 Phase 9 已完成。
 - Phase 8 已完成：内容与职业展示、真实博客系列、Projects / Profile / Contact 内容体系和内容工作流文档已收口。
 - Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
-- Phase 10 已规划：AI Agent Demo Integration，仅标记 planned，尚未展开实现细节。
+- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础，Phase 10.2 仍为 planned。
 - 当前生产地址：`https://oli6666.top`。
 - 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
@@ -222,17 +222,87 @@
 - 未修改窗口系统。
 - 未修改部署配置。
 
-## Phase 10：AI Agent Demo Integration - 已规划
+## Phase 10：AI Agent Demo Integration - 进行中
 
-当前状态：
+目标：把 `AI Agent Demo` 从项目介绍页升级成真实可交互的只读 Agent Demo。
 
-- 仅标记 planned。
-- 不在 Phase 9 收口中展开实现细节。
-- 后续开始前需要单独定义范围、验收标准和边界。
+边界：
+
+- 只回答公开 Profile、公开技术栈、已发布 Projects、已发布 Blog、AI Agent 学习路线和 Personal Developer OS 实现相关问题。
+- 不做通用聊天机器人。
+- 不执行命令。
+- 不写文件或数据库。
+- 不访问私有数据。
+- 不暴露密钥、服务器内部路径、证书、环境变量或数据库账号。
+- 不编造经历、项目成果、用户量、收入或商业落地数据。
+
+### Phase 10.1：Agent Demo Architecture & Safety Foundation - 已完成
+
+- 新增隔离目录 `features/agent-demo`。
+- 新增 Agent Demo 请求、响应、trace、sources、usage、输入校验和 scope 相关类型。
+- 新增基础配置：支持语言、最大输入长度、最大 sources 数量、trace steps、公开项目 slug 和 scope 分类。
+- 新增输入校验工具：
+  - `question` 必须是 string。
+  - trim 后不能为空。
+  - 最大长度限制为 800 字符。
+  - 拒绝明显异常 payload。
+  - `locale` 只允许 `zh` / `en`。
+- 新增 trace 构建工具，统一定义：
+  - `input_validation`
+  - `rate_limit_check`
+  - `scope_check`
+  - `retrieve_context`
+  - `generate_answer`
+- 新增 safety policy 和 scope policy，记录允许范围、禁止范围和禁止工具。
+- 新增 foundation-only service response，为后续 API route 接入预留服务契约。
+- 新增 `docs/AGENT_DEMO_ARCHITECTURE.md`，记录第一版目标、公开范围、禁止范围、API 设计、安全边界、工具权限、限流策略、trace / sources 契约和后续阶段。
+- 未接入真实模型。
+- 未接入 Redis。
+- 未新增 `/api/agent-demo` route。
+- 未新增 `/agent-demo` UI。
+- 未修改 Blog / Projects / Profile 核心逻辑。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx / 部署配置。
+
+### Phase 10.2：Read-only Knowledge Tools & Scope Classifier - planned
+
+- 计划新增只读 Blog / Projects / Profile knowledge tools。
+- 计划新增规则型 scope classifier。
+- 计划新增 public knowledge retriever，并返回 trace / sources。
+
+### Phase 10.3：Read-only Agent API MVP - planned
+
+- 计划新增 `/api/agent-demo` POST route。
+- 计划接入服务端模型调用。
+- 计划支持拒答策略、trace、sources 和安全错误处理。
+
+### Phase 10.4：Rate Limit, Timeout & Abuse Protection - planned
+
+- 计划新增 Redis 限流。
+- 计划新增请求和模型调用超时。
+- 计划限制输入、输出、context 和 sources。
+
+### Phase 10.5：Agent Demo UI & Trace Display - planned
+
+- 计划新增 `/agent-demo` 页面。
+- 计划展示 answer、trace、sources、scope notice、loading、error 和 rate-limit 状态。
+- 计划从 AI Agent Demo 项目页增加轻量体验入口。
+
+### Phase 10.6：Production Deployment & Safety Verification - planned
+
+- 计划补充生产环境配置检查。
+- 计划补充 Nginx 限流建议。
+- 计划补充生产安全验证清单。
+
+### Phase 10.7：Phase 10 Final Review - planned
+
+- 计划对第一版公开 Agent Demo 做最终验收。
 
 ## 后续原则
 
 - 新阶段开始前先明确范围和验收标准。
 - 新功能必须保护 Developer OS 产品概念。
 - 发布相关改动必须同步检查 `docs/DEPLOYMENT.zh-CN.md`。
+
 

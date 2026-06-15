@@ -1,5 +1,33 @@
-# AI 变更记录中文摘要
+﻿# AI 变更记录中文摘要
 
+### 2026-06-15 - Codex
+**摘要：** Phase 10.1 已完成，新增 AI Agent Demo 架构与安全基础。
+
+**Phase 10.1 范围：**
+- 新增隔离目录 `features/agent-demo`。
+- 新增 request / response / trace / source / usage / validation / scope 类型。
+- 新增 locales、输入长度、sources 数量、trace steps、公开项目 slug 和 scope categories 配置。
+- 新增 `question` / `locale` 输入校验工具。
+- 新增 trace 构建工具，覆盖 `input_validation`、`rate_limit_check`、`scope_check`、`retrieve_context`、`generate_answer`。
+- 新增只读公开内容边界相关 safety policy。
+- 新增 allowed / blocked categories 相关 scope policy。
+- 新增 foundation-only service response，为后续 API route 接入预留契约。
+- 新增 `docs/AGENT_DEMO_ARCHITECTURE.md`，记录第一版目标、公开范围、禁止范围、API 契约、安全边界、工具权限、限流策略、trace / sources 契约和后续阶段。
+- 更新 `docs/IMPLEMENTATION_PLAN.md` 和 `docs/IMPLEMENTATION_PLAN.zh-CN.md`，将 Phase 10 标记为 in progress，Phase 10.1 标记为 completed，Phase 10.2 到 Phase 10.7 标记为 planned。
+
+**范围约束：**
+- 未接入真实模型。
+- 未接入 Redis。
+- 未新增 `/api/agent-demo` route。
+- 未新增 `/agent-demo` UI。
+- 未修改 Blog / Projects / Profile 核心逻辑。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx / 部署配置。
+
+**验证：**
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
 本文件是 `docs/CHANGELOG_AI.md` 的中文摘要版，用于快速了解项目历史和当前状态。完整逐条归档仍以 `docs/CHANGELOG_AI.md` 为准。
 
 ### 2026-06-13 - Codex
@@ -441,3 +469,4 @@ Claude Code 完成视觉打磨。
 - 设计影响。
 - 验证结果。
 - 后续注意事项。
+
