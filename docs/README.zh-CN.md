@@ -6,12 +6,13 @@
 
 - Phase 1 到 Phase 9 已完成。
 - Phase 9 Blog System Enhancement 已收口：Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 均已完成。
-- 下一阶段为 Phase 10：AI Agent Demo Integration，目前仅 planned，尚未展开实现细节。
+- Phase 10 AI Agent Demo Integration 已完成第一版公开验收：`/agent-demo`、`POST /api/agent-demo`、只读公开知识边界、限流、超时、日志、部署说明和中英文架构文档均已收口。
 
 ## 优先阅读
 
 - [内容发布流程](CONTENT_WORKFLOW.zh-CN.md) / [Content Workflow](CONTENT_WORKFLOW.md)：维护 Blog、Projects、Profile 三类文件型内容源时优先阅读。
 - [部署手册](DEPLOYMENT.zh-CN.md)：每次发布前优先看这份，特别注意 `NEXT_PUBLIC_SITE_URL` 的构建期和运行期要求。
+- [Agent Demo 架构说明](AGENT_DEMO_ARCHITECTURE.zh-CN.md) / [Agent Demo Architecture](AGENT_DEMO_ARCHITECTURE.md)：维护 `/agent-demo`、模型配置、安全边界、trace / sources 契约和生产验收时优先阅读。
 - [开发规则](DEVELOPMENT_RULES.zh-CN.md)：编码、架构、博客、SEO、生产维护规则。
 - [设计简报](DESIGN_BRIEF.zh-CN.md)：Personal Developer OS 的产品概念和设计底线。
 - [实施计划](IMPLEMENTATION_PLAN.zh-CN.md)：项目阶段进度和当前状态。

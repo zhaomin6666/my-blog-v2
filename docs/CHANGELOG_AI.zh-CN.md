@@ -1,6 +1,38 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-15 - Codex
+**摘要：** Phase 10.7 已完成，第一版公开 Agent Demo 完成最终验收与文档收口。
+
+**Phase 10.7 范围：**
+- 完成 `/agent-demo` 和 `POST /api/agent-demo` 的第一版最终验收。
+- 新增 `docs/AGENT_DEMO_ARCHITECTURE.zh-CN.md`，作为中文架构说明。
+- 更新英文架构文档，标记 Phase 10.6 / 10.7 完成，并补充最终验收标准。
+- 更新 Agent Demo README，记录 Phase 10.6 / 10.7，并移除过期 deferred work。
+- 更新中英文实施计划，将 Phase 10 标记为已完成。
+- 更新 README 和中文 docs 入口，补充 Agent Demo 架构文档链接。
+- 扩展中文部署手册，补充 Agent Demo 模型环境变量、生产日志级别、Nginx 限流、线上验证命令和安全日志检查。
+- 复核第一版公开 Demo 仍保持只读边界，只回答公开 Profile、技术栈、已发布 Projects、已发布 Blog、AI Agent 学习路线和 Personal Developer OS 实现相关问题。
+
+**验收结论：**
+- `/agent-demo` 是公开交互 UI。
+- `POST /api/agent-demo` 返回稳定的 scoped Agent Demo response 结构。
+- 私密数据、密钥、服务器内部、危险操作和高风险建议会在模型生成前拒答。
+- trace 和 public sources 是 API / UI 契约的一部分。
+- sitemap 包含 `/agent-demo`，RSS 仍只包含博客文章。
+- live model test 仍通过 `AGENT_DEMO_RUN_LIVE_TEST=true` 显式开启。
+
+**范围约束：**
+- 未修改 Agent Demo 运行时行为。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx 已跟踪配置文件。
+
+**验证：**
+- `pnpm test` 通过。
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
+
+### 2026-06-15 - Codex
 **摘要：** Phase 10.6 已完成，补充 Agent Demo 生产部署与安全验证指南。
 
 **Phase 10.6 范围：**
@@ -485,12 +517,12 @@ Codex 为 docs 添加中文工作文档。
 
 ## 当前状态
 
-- Phase 1 到 Phase 9 已完成。
+- Phase 1 到 Phase 10 已完成。
 - Phase 8 已完成：内容与职业展示、项目案例、Profile / Contact、内容工作流文档已收口。
 - Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
-- Phase 10 已规划：AI Agent Demo Integration，仅标记 planned，尚未展开实现细节。
+- Phase 10 已完成：AI Agent Demo Integration 第一版公开 Demo 已完成最终验收与文档收口。
 - 当前生产站点：`https://oli6666.top`。
-- 当前重点：保持 Phase 9 博客增强稳定，后续单独规划 AI Agent Demo Integration。
+- 当前重点：保持公开 Agent Demo 的只读安全边界，后续按需规划 Redis 分布式限流、评测集或独立 agent-api。
 - 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
 ## 2026-06-08 - Phase 8.2.1

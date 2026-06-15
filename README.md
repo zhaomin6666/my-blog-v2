@@ -69,3 +69,4 @@ See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the deployment checklist and pr
 
 - [Content Workflow](docs/CONTENT_WORKFLOW.md) / [内容发布流程](docs/CONTENT_WORKFLOW.zh-CN.md)
 - [Deployment Guide](docs/DEPLOYMENT.md) / [部署手册](docs/DEPLOYMENT.zh-CN.md)
+- [Agent Demo Architecture](docs/AGENT_DEMO_ARCHITECTURE.md) / [Agent Demo 架构说明](docs/AGENT_DEMO_ARCHITECTURE.zh-CN.md)

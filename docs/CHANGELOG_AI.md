@@ -1,6 +1,38 @@
 # AI Development Changelog
 
 ### 2026-06-15 - Codex
+**Summary:** Phase 10.7 completed. Final acceptance and documentation closure for the first public Agent Demo version.
+
+**Phase 10.7 scope:**
+- Completed final acceptance for `/agent-demo` and `POST /api/agent-demo`.
+- Added `docs/AGENT_DEMO_ARCHITECTURE.zh-CN.md` as the Chinese architecture counterpart.
+- Updated the English architecture document with Phase 10.6 / 10.7 completion and final acceptance criteria.
+- Updated Agent Demo README to record Phase 10.6 / 10.7 and remove stale deferred work.
+- Updated English and Chinese implementation plans to mark Phase 10 completed.
+- Updated README and the Chinese docs index with Agent Demo architecture links.
+- Expanded the Chinese deployment guide with Agent Demo model environment variables, production log-level guidance, Nginx rate limiting, online validation commands, and safe log checks.
+- Rechecked that the public demo scope remains read-only and limited to public Profile, stack, published Projects, published Blog, AI Agent learning, and Personal Developer OS implementation notes.
+
+**Acceptance checks:**
+- `/agent-demo` is the public interactive UI.
+- `POST /api/agent-demo` returns the scoped Agent Demo response shape.
+- Private data, secrets, server internals, dangerous actions, and high-risk advice are refused before model generation.
+- Trace and public sources are part of the API / UI contract.
+- Sitemap includes `/agent-demo`; RSS remains blog-post-only.
+- Live model tests remain opt-in with `AGENT_DEMO_RUN_LIVE_TEST=true`.
+
+**Scope guard:**
+- No runtime Agent Demo behavior was changed.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No tracked Docker / Nginx config files were changed.
+
+**Verification:**
+- `pnpm test` passed.
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-15 - Codex
 **Summary:** Phase 10.6 completed. Added Agent Demo production deployment and safety verification guidance.
 
 **Phase 10.6 scope:**

@@ -624,7 +624,7 @@
 - Small fix: kept the inline Article TOC visible until the fixed floating desktop TOC breakpoint, avoiding a no-TOC gap on medium desktop widths.
 - Confirmed Blog enhancements did not require Console / CLI, window-system, Projects core logic, Profile core logic, or deployment configuration changes.
 
-## Phase 10: AI Agent Demo Integration IN PROGRESS
+## Phase 10: AI Agent Demo Integration COMPLETED
 - Goal: upgrade `AI Agent Demo` from a project introduction page into a real, interactive, read-only Agent Demo.
 - The demo must stay scope-limited to public site content: Profile, public stack, published Projects, published Blog content, AI Agent learning journey, and Personal Developer OS implementation notes.
 - The demo must not become a general chatbot, execute commands, write files, access private data, expose secrets, or fabricate private experience / business metrics.
@@ -780,5 +780,16 @@
 - No window-system behavior changes were made.
 - No Docker / Nginx tracked config files were changed.
 
-### Phase 10.7: Phase 10 Final Review PLANNED
-- Planned: final acceptance for the first public Agent Demo version.
+### Phase 10.7: Phase 10 Final Review COMPLETED
+- Completed final acceptance for the first public Agent Demo version.
+- Confirmed `/agent-demo` exists as the public interactive UI.
+- Confirmed `POST /api/agent-demo` exists and returns scoped Agent Demo responses.
+- Confirmed the demo remains limited to public Profile, stack, published Projects, published Blog, AI Agent learning journey, and Personal Developer OS implementation notes.
+- Confirmed private data, secrets, server internals, dangerous actions, and high-risk advice are refused before model generation.
+- Confirmed the model adapter uses server-only OpenAI-compatible Chat Completions configuration.
+- Confirmed input validation, source limits, context limits, output limits, timeout handling, app-level rate limiting, and safe upstream errors are covered.
+- Confirmed diagnostic logs are controlled by `AGENT_DEMO_LOG_LEVEL` and avoid secrets, full prompts, full context, and full answers.
+- Confirmed sitemap includes `/agent-demo` while RSS remains blog-post-only.
+- Added `docs/AGENT_DEMO_ARCHITECTURE.zh-CN.md` as the Chinese architecture counterpart.
+- Updated English and Chinese documentation to cover architecture, deployment configuration, safety verification, and final acceptance.
+- Updated Agent Demo README to remove stale deferred work and record Phase 10.6 / 10.7.

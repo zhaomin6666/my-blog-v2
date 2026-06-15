@@ -7,7 +7,7 @@
 - Phase 1 到 Phase 9 已完成。
 - Phase 8 已完成：内容与职业展示、真实博客系列、Projects / Profile / Contact 内容体系和内容工作流文档已收口。
 - Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
-- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础、Phase 10.3 只读 Agent API MVP、Phase 10.4 限流 / 超时 / 滥用防护、Phase 10.5 UI 与 trace 展示、Phase 10.6 生产部署与安全验证，下一步进入 Phase 10.7 最终验收。
+- Phase 10 已完成：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础、Phase 10.3 只读 Agent API MVP、Phase 10.4 限流 / 超时 / 滥用防护、Phase 10.5 UI 与 trace 展示、Phase 10.6 生产部署与安全验证、Phase 10.7 第一版最终验收与文档收口。
 - 当前生产地址：`https://oli6666.top`。
 - 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
@@ -222,7 +222,7 @@
 - 未修改窗口系统。
 - 未修改部署配置。
 
-## Phase 10：AI Agent Demo Integration - 进行中
+## Phase 10：AI Agent Demo Integration - 已完成
 
 目标：把 `AI Agent Demo` 从项目介绍页升级成真实可交互的只读 Agent Demo。
 
@@ -396,9 +396,20 @@
 - 未修改窗口系统。
 - 未修改 Docker / Nginx 已跟踪配置文件。
 
-### Phase 10.7：Phase 10 Final Review - planned
+### Phase 10.7：Phase 10 Final Review - 已完成
 
-- 计划对第一版公开 Agent Demo 做最终验收。
+- 完成第一版公开 Agent Demo 最终验收。
+- 确认 `/agent-demo` 公开交互页面存在。
+- 确认 `POST /api/agent-demo` 存在，并返回稳定的 Agent Demo response 结构。
+- 确认 Demo 只回答公开 Profile、技术栈、已发布 Projects、已发布 Blog、AI Agent 学习路线和 Personal Developer OS 实现相关问题。
+- 确认私密数据、密钥、服务器内部、危险操作和高风险建议会在模型生成前拒答。
+- 确认模型适配器使用 server-only OpenAI-compatible Chat Completions 配置。
+- 确认输入校验、sources 限制、context 限制、输出限制、超时处理、应用层限流和安全上游错误处理已覆盖。
+- 确认诊断日志由 `AGENT_DEMO_LOG_LEVEL` 控制，且不输出密钥、完整 prompt、完整 context 或完整回答。
+- 确认 sitemap 包含 `/agent-demo`，RSS 仍只包含博客文章。
+- 新增 `docs/AGENT_DEMO_ARCHITECTURE.zh-CN.md` 作为中文架构说明。
+- 更新中英文文档，覆盖架构、安全边界、部署配置、生产验证和最终验收清单。
+- 更新 Agent Demo README，移除过期 deferred work，并记录 Phase 10.6 / 10.7。
 
 ## 后续原则
 

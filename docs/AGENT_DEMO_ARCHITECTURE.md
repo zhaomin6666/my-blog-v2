@@ -13,8 +13,10 @@ tools, a rule-based scope classifier, and a public knowledge retriever. Phase
 server-only model adapter. Phase 10.4 adds in-process rate limiting, model
 timeouts, and bounded context / output controls. Phase 10.5 adds the public
 `/agent-demo` UI with answer, trace, sources, scope notice, loading, error, and
-rate-limit states. The demo still does not connect Redis or change Docker /
-Nginx deployment files.
+rate-limit states. Phase 10.6 adds production environment, log-level, Nginx
+rate-limit, and online safety verification guidance. Phase 10.7 completes the
+first-version public acceptance review. The demo still does not connect Redis
+or change tracked Docker / Nginx deployment files.
 
 ## Public Scope
 
@@ -172,6 +174,30 @@ Before enabling `/agent-demo` publicly, verify:
 - Logs contain `[agent-demo]` request IDs and safe stage summaries only.
 - Sitemap includes `/agent-demo`, while RSS remains blog-post-only.
 
+## Final Acceptance
+
+Phase 10.7 closes the first public Agent Demo version with the following
+acceptance result:
+
+- `/agent-demo` exists as a public interactive page.
+- `POST /api/agent-demo` exists and returns the stable Agent Demo response
+  shape.
+- The demo stays limited to public Profile, stack, Projects, Blog, AI Agent
+  learning, and Personal Developer OS implementation content.
+- Private data, secrets, server internals, dangerous actions, and high-risk
+  advice are refused before model generation.
+- The model adapter uses server-only OpenAI-compatible Chat Completions
+  configuration.
+- Input validation, source limits, context limits, output limits, timeout
+  handling, app-level rate limiting, and Nginx rate-limit guidance are
+  documented.
+- Safe logs are controlled by `AGENT_DEMO_LOG_LEVEL`.
+- API and UI expose trace steps and public sources.
+- Sitemap includes `/agent-demo`; RSS remains blog-post-only.
+- Live model testing remains opt-in through `AGENT_DEMO_RUN_LIVE_TEST=true`.
+- English and Chinese docs now cover the architecture, safety boundary,
+  deployment configuration, and final acceptance checklist.
+
 ## Trace Contract
 
 Every response should include trace steps:
@@ -237,8 +263,8 @@ later, but model-based classification is not required for Phase 10.2.
 - Phase 10.3: Read-only Agent API MVP with model integration. Completed.
 - Phase 10.4: Rate limit, timeout, and abuse protection. Completed.
 - Phase 10.5: Agent Demo UI and trace display. Completed.
-- Phase 10.6: Production deployment and safety verification guide.
-- Phase 10.7: Final Phase 10 review.
+- Phase 10.6: Production deployment and safety verification guide. Completed.
+- Phase 10.7: Final Phase 10 review. Completed.
 
 ## Standalone Agent API Option
 

@@ -53,6 +53,19 @@ Phase 10.5 adds:
 - A scope notice for the public read-only boundary
 - A project-page entry point through the AI Agent Demo project frontmatter
 
+Phase 10.6 adds:
+
+- Production environment variable guidance
+- Recommended production log-level usage
+- Nginx route-level rate-limit guidance for `/api/agent-demo`
+- Online validation commands for safe questions, blocked questions, logs, and rate limiting
+
+Phase 10.7 closes the first public version:
+
+- Final acceptance for `/agent-demo` and `POST /api/agent-demo`
+- English and Chinese architecture / deployment documentation alignment
+- Confirmation that the first version remains read-only and public-content-only
+
 Required server-only environment variables:
 
 - `AGENT_DEMO_MODEL_API_URL`
@@ -100,6 +113,6 @@ The agent must not:
 
 The following are intentionally not implemented yet:
 
-- `/agent-demo` UI
-- Production deployment changes
 - Redis-backed distributed rate limiting for multi-instance production
+- Optional richer evaluation / monitoring beyond the current focused tests
+- Optional standalone `agent-api` service if the demo grows beyond the Next.js app
