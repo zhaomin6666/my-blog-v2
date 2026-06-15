@@ -1,6 +1,30 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-15 - Codex
+**摘要：** Phase 10.6 已完成，补充 Agent Demo 生产部署与安全验证指南。
+
+**Phase 10.6 范围：**
+- 在 `docs/DEPLOYMENT.md` 中补充 Agent Demo 生产环境变量配置说明。
+- 记录模型 API URL、API key、模型名、超时、应用层限流、日志级别和 live-test flag 的生产建议。
+- 记录生产日志级别建议：默认 `info`，短时间排查用 `debug`，稳定后如日志过多可用 `silent`。
+- 补充 Nginx `limit_req_zone` 和 `/api/agent-demo` `limit_req` 示例。
+- 补充线上验证命令：安全公开问题和 secret 类问题拒答。
+- 补充 `[agent-demo]` requestId 和安全摘要日志检查说明。
+- 在架构文档中补充 Agent Demo 生产安全验证说明。
+- 更新中英文实施计划，将 Phase 10.6 标记为已完成。
+
+**范围约束：**
+- 未修改运行时代码。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx 已跟踪配置文件。
+
+**验证：**
+- `pnpm test` 通过。
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
+
+### 2026-06-15 - Codex
 **摘要：** 为 Agent Demo 新增安全诊断日志，用于排查上游模型超时。
 
 **范围：**

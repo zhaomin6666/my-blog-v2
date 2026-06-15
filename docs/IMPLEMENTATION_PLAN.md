@@ -760,10 +760,25 @@
 - No window-system behavior changes were made.
 - No Docker / Nginx deployment files were changed.
 
-### Phase 10.6: Production Deployment & Safety Verification PLANNED
-- Planned: production environment checklist.
-- Planned: Nginx rate-limit guidance.
-- Planned: safety verification guide.
+### Phase 10.6: Production Deployment & Safety Verification COMPLETED
+- Added Agent Demo production environment variable guidance to the deployment docs.
+- Documented production recommendations for:
+  - `AGENT_DEMO_MODEL_API_URL`
+  - `AGENT_DEMO_MODEL_API_KEY`
+  - `AGENT_DEMO_MODEL`
+  - `AGENT_DEMO_MODEL_TIMEOUT_MS`
+  - `AGENT_DEMO_RATE_LIMIT_WINDOW_MS`
+  - `AGENT_DEMO_RATE_LIMIT_MAX_REQUESTS`
+  - `AGENT_DEMO_LOG_LEVEL`
+  - `AGENT_DEMO_RUN_LIVE_TEST`
+- Documented recommended production log-level usage: `info` by default, `debug` only during short troubleshooting windows, `silent` only after the feature is stable.
+- Added Nginx `limit_req_zone` / `limit_req` guidance for `/api/agent-demo`.
+- Added online validation commands for safe public questions, blocked secret questions, log checks, and rate-limit behavior.
+- Added Agent Demo production safety verification notes to the architecture document.
+- No runtime code changes were made.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx tracked config files were changed.
 
 ### Phase 10.7: Phase 10 Final Review PLANNED
 - Planned: final acceptance for the first public Agent Demo version.

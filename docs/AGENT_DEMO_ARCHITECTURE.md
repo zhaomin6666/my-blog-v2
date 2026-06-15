@@ -154,6 +154,24 @@ Logs must not include API keys, full prompts, full retrieved context, full model
 answers, raw upstream response bodies, private environment values, or server
 paths.
 
+## Production Safety Verification
+
+Before enabling `/agent-demo` publicly, verify:
+
+- `.env.production` contains model API URL, API key, model name, timeout, rate
+  limit, and log-level values.
+- `.env.production` is not tracked by Git.
+- `AGENT_DEMO_LOG_LEVEL=info` is used by default in production.
+- The Nginx reverse proxy applies a route-level limit to `/api/agent-demo`.
+- Safe public questions return `allowed: true` and include trace / sources.
+- Private, secret, server-internal, dangerous-action, and high-risk-advice
+  questions return a refusal before model generation.
+- Repeated requests eventually return `429`.
+- Upstream timeout returns `upstream_timeout` / HTTP `504` without raw upstream
+  details.
+- Logs contain `[agent-demo]` request IDs and safe stage summaries only.
+- Sitemap includes `/agent-demo`, while RSS remains blog-post-only.
+
 ## Trace Contract
 
 Every response should include trace steps:

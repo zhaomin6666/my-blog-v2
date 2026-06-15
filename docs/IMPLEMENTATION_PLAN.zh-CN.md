@@ -7,7 +7,7 @@
 - Phase 1 到 Phase 9 已完成。
 - Phase 8 已完成：内容与职业展示、真实博客系列、Projects / Profile / Contact 内容体系和内容工作流文档已收口。
 - Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
-- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础、Phase 10.3 只读 Agent API MVP、Phase 10.4 限流 / 超时 / 滥用防护、Phase 10.5 UI 与 trace 展示，下一步进入 Phase 10.6 生产部署与安全验证。
+- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础、Phase 10.3 只读 Agent API MVP、Phase 10.4 限流 / 超时 / 滥用防护、Phase 10.5 UI 与 trace 展示、Phase 10.6 生产部署与安全验证，下一步进入 Phase 10.7 最终验收。
 - 当前生产地址：`https://oli6666.top`。
 - 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
@@ -375,11 +375,26 @@
 - 未修改窗口系统。
 - 未修改 Docker / Nginx 部署文件。
 
-### Phase 10.6：Production Deployment & Safety Verification - planned
+### Phase 10.6：Production Deployment & Safety Verification - 已完成
 
-- 计划补充生产环境配置检查。
-- 计划补充 Nginx 限流建议。
-- 计划补充生产安全验证清单。
+- 在部署文档中补充 Agent Demo 生产环境变量配置说明。
+- 补充生产环境建议：
+  - `AGENT_DEMO_MODEL_API_URL`
+  - `AGENT_DEMO_MODEL_API_KEY`
+  - `AGENT_DEMO_MODEL`
+  - `AGENT_DEMO_MODEL_TIMEOUT_MS`
+  - `AGENT_DEMO_RATE_LIMIT_WINDOW_MS`
+  - `AGENT_DEMO_RATE_LIMIT_MAX_REQUESTS`
+  - `AGENT_DEMO_LOG_LEVEL`
+  - `AGENT_DEMO_RUN_LIVE_TEST`
+- 记录生产日志级别建议：默认 `info`，临时排查用 `debug`，稳定后如日志过多可用 `silent`。
+- 补充 `/api/agent-demo` 的 Nginx `limit_req_zone` / `limit_req` 示例。
+- 补充线上验证命令：安全公开问题、secret / server-internal 拒答、日志检查和限流行为。
+- 在架构文档中补充 Agent Demo 生产安全验证说明。
+- 未修改运行时代码。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx 已跟踪配置文件。
 
 ### Phase 10.7：Phase 10 Final Review - planned
 

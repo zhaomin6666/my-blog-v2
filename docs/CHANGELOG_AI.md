@@ -1,6 +1,30 @@
 # AI Development Changelog
 
 ### 2026-06-15 - Codex
+**Summary:** Phase 10.6 completed. Added Agent Demo production deployment and safety verification guidance.
+
+**Phase 10.6 scope:**
+- Added Agent Demo production environment variable guidance to `docs/DEPLOYMENT.md`.
+- Documented production recommendations for model API URL, API key, model name, timeout, app rate limit, log level, and live-test flag.
+- Documented recommended production log levels: `info` by default, `debug` only for short troubleshooting windows, `silent` after the feature is stable if logs become too noisy.
+- Added Nginx `limit_req_zone` and `/api/agent-demo` `limit_req` examples.
+- Added online validation commands for safe public questions and blocked secret questions.
+- Added log validation guidance for `[agent-demo]` request IDs and safe summaries.
+- Added Agent Demo production safety verification notes to the architecture document.
+- Updated English and Chinese implementation plans to mark Phase 10.6 as completed.
+
+**Scope guard:**
+- No runtime code changes were made.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx tracked config files were changed.
+
+**Verification:**
+- `pnpm test` passed.
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-15 - Codex
 **Summary:** Added safe Agent Demo diagnostic logging for upstream timeout investigation.
 
 **Scope:**
