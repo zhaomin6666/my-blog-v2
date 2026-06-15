@@ -29,6 +29,7 @@ describe("generateAgentDemoModelAnswer", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.useRealTimers();
+    vi.restoreAllMocks();
     process.env = originalEnv;
   });
 
@@ -161,6 +162,7 @@ describe("generateAgentDemoModelAnswer", () => {
     process.env.AGENT_DEMO_MODEL_API_URL = "https://example.com/v1/chat/completions";
     process.env.AGENT_DEMO_MODEL_API_KEY = "test-key";
     process.env.AGENT_DEMO_MODEL = "test-model";
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     vi.useFakeTimers();
     vi.stubGlobal(
       "fetch",
@@ -186,6 +188,14 @@ describe("generateAgentDemoModelAnswer", () => {
       code: "upstream_timeout",
       message: "Agent Demo model request timed out.",
     });
+    expect(warnSpy).toHaveBeenCalledWith(
+      "[agent-demo]",
+      "model_request_timeout",
+      expect.objectContaining({
+        timeoutMs: 10,
+        errorName: "AbortError",
+      }),
+    );
   });
 
   it("clamps overly long model answers", async () => {

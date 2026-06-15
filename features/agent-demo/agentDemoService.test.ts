@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { createAgentTrace, updateAgentTraceStep } from "./traceBuilder";
 import { createAgentDemoResponse } from "./agentDemoService";
 import type {
@@ -28,6 +28,10 @@ function retrievedContext(locale: AgentDemoLocale): AgentKnowledgeRetrieverResul
 }
 
 describe("createAgentDemoResponse", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("returns validation errors without calling retrieval or model generation", async () => {
     const retrieveKnowledge = vi.fn();
     const generateModelAnswer = vi.fn();
@@ -184,6 +188,56 @@ describe("createAgentDemoResponse", () => {
           status: "passed",
         }),
       ]),
+    );
+  });
+
+  it("writes safe service summary logs without exposing full question or context", async () => {
+    const infoSpy = vi.spyOn(console, "info").mockImplementation(() => {});
+    const allowedScope: AgentScopeResult = {
+      allowed: true,
+      category: "profile",
+      reason: "allowed",
+    };
+
+    await createAgentDemoResponse(
+      {
+        question: "Who are you?",
+        locale: "en",
+      },
+      {
+        requestId: "agent-test",
+        classifyScope: () => allowedScope,
+        retrieveKnowledge: async () => retrievedContext("en"),
+        generateModelAnswer: async () => ({
+          ok: true,
+          answer: "Model answer from public context.",
+          model: "test-model",
+        }),
+        checkRateLimit: () => ({
+          allowed: true,
+          limit: 10,
+          remaining: 9,
+          resetAt: 2000,
+          windowMs: 1000,
+        }),
+      },
+    );
+
+    expect(infoSpy).toHaveBeenCalledWith(
+      "[agent-demo]",
+      "service_context_retrieved",
+      expect.objectContaining({
+        requestId: "agent-test",
+        sourceCount: 1,
+        contextLength: "Public profile context".length,
+      }),
+    );
+    expect(infoSpy).not.toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.objectContaining({
+        question: "Who are you?",
+      }),
     );
   });
 

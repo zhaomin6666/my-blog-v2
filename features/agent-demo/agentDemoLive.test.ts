@@ -11,6 +11,8 @@ const liveEnvKeys = [
   "AGENT_DEMO_MODEL",
 ] as const;
 
+const shouldRunLiveTest = process.env.AGENT_DEMO_RUN_LIVE_TEST === "true";
+
 function loadDotenvLocalForLiveTest(): void {
   const envPath = path.resolve(process.cwd(), ".env.local");
   if (!existsSync(envPath)) return;
@@ -37,7 +39,7 @@ function loadDotenvLocalForLiveTest(): void {
 }
 
 function hasLiveModelConfig(): boolean {
-  return liveEnvKeys.every((key) => Boolean(process.env[key]?.trim()));
+  return shouldRunLiveTest && liveEnvKeys.every((key) => Boolean(process.env[key]?.trim()));
 }
 
 function tinyRetrievedContext(): AgentKnowledgeRetrieverResult {

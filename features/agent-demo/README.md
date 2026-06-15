@@ -64,6 +64,16 @@ Optional protection variables:
 - `AGENT_DEMO_MODEL_TIMEOUT_MS` (default: `10000`)
 - `AGENT_DEMO_RATE_LIMIT_WINDOW_MS` (default: `60000`)
 - `AGENT_DEMO_RATE_LIMIT_MAX_REQUESTS` (default: `10`)
+- `AGENT_DEMO_LOG_LEVEL` (default: `info`; allowed: `info`, `debug`, `silent`)
+
+Live model tests are skipped by default. To run them locally, set:
+
+- `AGENT_DEMO_RUN_LIVE_TEST=true`
+
+When diagnosing upstream model latency or timeout issues, keep
+`AGENT_DEMO_LOG_LEVEL=info` or use `debug` for extra payload-size summaries.
+Logs intentionally avoid API keys, full prompts, full retrieved context, and raw
+upstream response bodies.
 
 ## Safety Boundary
 

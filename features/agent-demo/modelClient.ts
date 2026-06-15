@@ -8,6 +8,11 @@ import type {
   AgentScopeCategory,
   AgentSource,
 } from "./agentDemoTypes";
+import {
+  logAgentDemoDebug,
+  logAgentDemoInfo,
+  logAgentDemoWarn,
+} from "./agentDemoLogger";
 
 const AGENT_DEMO_MAX_OUTPUT_TOKENS = 700;
 
@@ -18,6 +23,7 @@ export interface GenerateAgentDemoModelAnswerParams {
   contextText: string;
   sources: AgentSource[];
   timeoutMs?: number;
+  requestId?: string;
 }
 
 export type AgentModelClientResult =
@@ -89,6 +95,15 @@ function getAgentDemoModelTimeoutMs(timeoutMs?: number): number {
   return Number.isFinite(configuredTimeout) && configuredTimeout > 0
     ? configuredTimeout
     : AGENT_DEMO_DEFAULT_MODEL_TIMEOUT_MS;
+}
+
+function getSafeUrlSummary(apiUrl: string): string {
+  try {
+    const url = new URL(apiUrl);
+    return `${url.origin}${url.pathname}`;
+  } catch {
+    return "invalid_url";
+  }
 }
 
 function buildSourceList(sources: AgentSource[]): string {
@@ -166,8 +181,13 @@ export async function generateAgentDemoModelAnswer(
 ): Promise<AgentModelClientResult> {
   const apiUrl = getAgentDemoModelApiUrl();
   const apiKey = getAgentDemoModelApiKey();
+  const startedAt = Date.now();
 
   if (!apiUrl) {
+    logAgentDemoWarn("model_config_missing", {
+      requestId: params.requestId,
+      missing: "api_url",
+    });
     return {
       ok: false,
       code: "missing_api_url",
@@ -176,6 +196,11 @@ export async function generateAgentDemoModelAnswer(
   }
 
   if (!apiKey) {
+    logAgentDemoWarn("model_config_missing", {
+      requestId: params.requestId,
+      missing: "api_key",
+      apiUrl: getSafeUrlSummary(apiUrl),
+    });
     return {
       ok: false,
       code: "missing_api_key",
@@ -186,6 +211,11 @@ export async function generateAgentDemoModelAnswer(
   const model = getAgentDemoModel();
 
   if (!model) {
+    logAgentDemoWarn("model_config_missing", {
+      requestId: params.requestId,
+      missing: "model",
+      apiUrl: getSafeUrlSummary(apiUrl),
+    });
     return {
       ok: false,
       code: "missing_model",
@@ -195,12 +225,31 @@ export async function generateAgentDemoModelAnswer(
 
   const controller = new AbortController();
   let didTimeout = false;
+  const timeoutMs = getAgentDemoModelTimeoutMs(params.timeoutMs);
   const timeout = setTimeout(() => {
     didTimeout = true;
     controller.abort();
-  }, getAgentDemoModelTimeoutMs(params.timeoutMs));
+  }, timeoutMs);
 
   try {
+    logAgentDemoInfo("model_request_start", {
+      requestId: params.requestId,
+      apiUrl: getSafeUrlSummary(apiUrl),
+      model,
+      locale: params.locale,
+      category: params.category,
+      sourceCount: params.sources.length,
+      questionLength: params.question.length,
+      contextLength: params.contextText.length,
+      timeoutMs,
+    });
+
+    logAgentDemoDebug("model_request_payload_summary", {
+      requestId: params.requestId,
+      maxTokens: AGENT_DEMO_MAX_OUTPUT_TOKENS,
+      maxOutputLength: AGENT_DEMO_MAX_OUTPUT_LENGTH,
+    });
+
     const response = await fetch(apiUrl, {
       method: "POST",
       signal: controller.signal,
@@ -225,6 +274,13 @@ export async function generateAgentDemoModelAnswer(
     });
 
     if (!response.ok) {
+      logAgentDemoWarn("model_request_failed", {
+        requestId: params.requestId,
+        status: response.status,
+        statusText: response.statusText,
+        durationMs: Date.now() - startedAt,
+      });
+
       return {
         ok: false,
         code: "upstream_error",
@@ -236,12 +292,26 @@ export async function generateAgentDemoModelAnswer(
     const answer = extractChatCompletionText(payload)?.trim();
 
     if (!answer) {
+      logAgentDemoWarn("model_response_empty", {
+        requestId: params.requestId,
+        status: response.status,
+        durationMs: Date.now() - startedAt,
+      });
+
       return {
         ok: false,
         code: "empty_answer",
         message: "Agent Demo model returned an empty answer.",
       };
     }
+
+    logAgentDemoInfo("model_request_success", {
+      requestId: params.requestId,
+      status: response.status,
+      durationMs: Date.now() - startedAt,
+      answerLength: answer.length,
+      clamped: answer.length > AGENT_DEMO_MAX_OUTPUT_LENGTH,
+    });
 
     return {
       ok: true,
@@ -253,12 +323,25 @@ export async function generateAgentDemoModelAnswer(
       didTimeout ||
       (isRecord(error) && error.name === "AbortError")
     ) {
+      logAgentDemoWarn("model_request_timeout", {
+        requestId: params.requestId,
+        durationMs: Date.now() - startedAt,
+        timeoutMs,
+        errorName: isRecord(error) && typeof error.name === "string" ? error.name : "unknown",
+      });
+
       return {
         ok: false,
         code: "upstream_timeout",
         message: "Agent Demo model request timed out.",
       };
     }
+
+    logAgentDemoWarn("model_request_error", {
+      requestId: params.requestId,
+      durationMs: Date.now() - startedAt,
+      errorName: isRecord(error) && typeof error.name === "string" ? error.name : "unknown",
+    });
 
     return {
       ok: false,

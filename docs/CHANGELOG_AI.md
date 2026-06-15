@@ -1,6 +1,27 @@
 # AI Development Changelog
 
 ### 2026-06-15 - Codex
+**Summary:** Added safe Agent Demo diagnostic logging for upstream timeout investigation.
+
+**Scope:**
+- Added `features/agent-demo/agentDemoLogger.ts` with `info`, `debug`, and `silent` log levels.
+- Added server-side request lifecycle logs in the Agent Demo route.
+- Added service-level logs for validation, rate-limit checks, scope classification, context retrieval, model failures, and completion.
+- Added model-client logs for configuration misses, request start, upstream status failures, empty responses, success, timeout, and unknown fetch errors.
+- Added `requestId` propagation across route, service, and model client.
+- Added `.env.example` entries for `AGENT_DEMO_LOG_LEVEL` and `AGENT_DEMO_RUN_LIVE_TEST`.
+- Made live model tests opt-in with `AGENT_DEMO_RUN_LIVE_TEST=true` so normal unit tests are not blocked by external model latency.
+- Documented diagnostic logging in Agent Demo README and architecture docs.
+
+**Safety guard:**
+- Logs intentionally avoid API keys, full prompts, full retrieved context, full model answers, raw upstream response bodies, private environment values, and server paths.
+
+**Verification:**
+- `pnpm test` passed, with the live model test skipped by default.
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-15 - Codex
 **Summary:** Phase 10.5 completed. Added the public Agent Demo UI and trace display.
 
 **Phase 10.5 scope:**

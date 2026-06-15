@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 import { createAgentDemoResponse } from "@/features/agent-demo/agentDemoService";
+import {
+  createAgentDemoRequestId,
+  logAgentDemoInfo,
+  logAgentDemoWarn,
+} from "@/features/agent-demo/agentDemoLogger";
 import { getAgentDemoClientIdentifier } from "@/features/agent-demo/rateLimiter";
 
 export const runtime = "nodejs";
@@ -32,16 +37,29 @@ function getHttpStatus(error?: string): number {
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
+  const requestId = createAgentDemoRequestId();
+  const startedAt = Date.now();
+  const clientIdentifier = getAgentDemoClientIdentifier(request);
   let payload: unknown;
 
   try {
     payload = await request.json();
   } catch {
     payload = null;
+    logAgentDemoWarn("route_json_parse_failed", {
+      requestId,
+      clientIdentifier,
+    });
   }
 
+  logAgentDemoInfo("route_request_start", {
+    requestId,
+    clientIdentifier,
+  });
+
   const response = await createAgentDemoResponse(payload, {
-    rateLimitIdentifier: getAgentDemoClientIdentifier(request),
+    requestId,
+    rateLimitIdentifier: clientIdentifier,
   });
 
   const status = getHttpStatus(response.error);
@@ -54,6 +72,15 @@ export async function POST(request: Request): Promise<NextResponse> {
     );
     headers.set("Retry-After", retryAfterSeconds.toString());
   }
+
+  logAgentDemoInfo("route_request_end", {
+    requestId,
+    status,
+    error: response.error,
+    allowed: response.allowed,
+    category: response.category,
+    durationMs: Date.now() - startedAt,
+  });
 
   return NextResponse.json(response, {
     status,

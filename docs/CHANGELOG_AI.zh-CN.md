@@ -1,6 +1,27 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-15 - Codex
+**摘要：** 为 Agent Demo 新增安全诊断日志，用于排查上游模型超时。
+
+**范围：**
+- 新增 `features/agent-demo/agentDemoLogger.ts`，支持 `info`、`debug`、`silent` 日志级别。
+- 在 Agent Demo route 层新增服务端请求生命周期日志。
+- 在 service 层新增输入校验、限流检查、scope 分类、context 检索、模型失败和完成日志。
+- 在 model client 层新增配置缺失、请求开始、上游状态失败、空响应、成功、超时和未知 fetch 错误日志。
+- 在 route、service 和 model client 之间传递 `requestId`。
+- 在 `.env.example` 新增 `AGENT_DEMO_LOG_LEVEL` 和 `AGENT_DEMO_RUN_LIVE_TEST`。
+- live model test 改为通过 `AGENT_DEMO_RUN_LIVE_TEST=true` 显式开启，避免常规单元测试被外部模型延迟阻塞。
+- 在 Agent Demo README 和架构文档中补充诊断日志说明。
+
+**安全约束：**
+- 日志不会输出 API key、完整 prompt、完整检索 context、完整模型回答、上游原始响应体、私有环境变量值或服务器路径。
+
+**验证：**
+- `pnpm test` 通过，live model test 默认跳过。
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
+
+### 2026-06-15 - Codex
 **摘要：** Phase 10.5 已完成，新增公开 Agent Demo UI 和 trace 展示。
 
 **Phase 10.5 范围：**

@@ -163,6 +163,7 @@ const allowedRules: KeywordRule[] = [
       "博客系统",
       "内容系统",
       "站点",
+      "网站",
     ],
     reason: "The question is about the Personal Developer OS website or its implementation.",
   },

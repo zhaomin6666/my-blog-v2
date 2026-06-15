@@ -23,6 +23,12 @@ import {
   checkAgentDemoRateLimit,
   type AgentDemoRateLimitResult,
 } from "./rateLimiter";
+import {
+  createAgentDemoRequestId,
+  logAgentDemoDebug,
+  logAgentDemoInfo,
+  logAgentDemoWarn,
+} from "./agentDemoLogger";
 
 const foundationAnswers = {
   zh: "AI Agent Demo 的安全基础已经建立：当前阶段只定义只读 Agent 的类型、输入校验、trace 契约、安全边界和文档，不接入模型、不开放 API、不读取私有数据。",
@@ -81,6 +87,7 @@ interface AgentDemoServiceOptions {
   ) => Promise<AgentModelClientResult>;
   checkRateLimit?: (identifier: string) => AgentDemoRateLimitResult;
   rateLimitIdentifier?: string;
+  requestId?: string;
 }
 
 const blockedAnswers: Record<AgentDemoLocale, string> = {
@@ -190,9 +197,17 @@ export async function createAgentDemoResponse(
   payload: unknown,
   options: AgentDemoServiceOptions = {},
 ): Promise<AgentDemoResponse> {
+  const requestId = options.requestId ?? createAgentDemoRequestId();
+  const startedAt = Date.now();
   const validation = validateAgentDemoRequest(payload);
 
   if (!validation.ok) {
+    logAgentDemoWarn("service_validation_failed", {
+      requestId,
+      code: validation.code,
+      durationMs: Date.now() - startedAt,
+    });
+
     const trace = updateAgentTraceStep(
       createAgentTrace(),
       "input_validation",
@@ -211,6 +226,12 @@ export async function createAgentDemoResponse(
   }
 
   const { question, locale } = validation.request;
+  logAgentDemoInfo("service_request_validated", {
+    requestId,
+    locale,
+    inputLength: question.length,
+  });
+
   const classifyScope = options.classifyScope ?? classifyAgentDemoScope;
   const retrieveKnowledge =
     options.retrieveKnowledge ?? retrievePublicKnowledgeLazily;
@@ -219,8 +240,21 @@ export async function createAgentDemoResponse(
   const rateLimit = (options.checkRateLimit ?? checkAgentDemoRateLimit)(
     options.rateLimitIdentifier ?? "local",
   );
+  logAgentDemoDebug("service_rate_limit_checked", {
+    requestId,
+    allowed: rateLimit.allowed,
+    remaining: rateLimit.remaining,
+    resetAt: rateLimit.resetAt,
+  });
 
   if (!rateLimit.allowed) {
+    logAgentDemoWarn("service_rate_limited", {
+      requestId,
+      limit: rateLimit.limit,
+      resetAt: rateLimit.resetAt,
+      durationMs: Date.now() - startedAt,
+    });
+
     return {
       answer: rateLimitAnswers[locale],
       allowed: false,
@@ -236,8 +270,19 @@ export async function createAgentDemoResponse(
   }
 
   const scopeResult = classifyScope(question);
+  logAgentDemoInfo("service_scope_classified", {
+    requestId,
+    allowed: scopeResult.allowed,
+    category: scopeResult.category,
+  });
 
   if (!scopeResult.allowed) {
+    logAgentDemoInfo("service_scope_blocked", {
+      requestId,
+      category: scopeResult.category,
+      durationMs: Date.now() - startedAt,
+    });
+
     return {
       answer: blockedAnswers[locale],
       allowed: false,
@@ -248,10 +293,24 @@ export async function createAgentDemoResponse(
     };
   }
 
+  const retrievalStartedAt = Date.now();
   const retrieval = await retrieveKnowledge(question, scopeResult, locale);
+  logAgentDemoInfo("service_context_retrieved", {
+    requestId,
+    category: scopeResult.category,
+    sourceCount: retrieval.sources.length,
+    contextLength: retrieval.contextText.length,
+    durationMs: Date.now() - retrievalStartedAt,
+  });
   let trace = normalizeRetrieverTrace(retrieval.trace, rateLimit);
 
   if (!retrieval.contextText || retrieval.sources.length === 0) {
+    logAgentDemoWarn("service_context_empty", {
+      requestId,
+      category: scopeResult.category,
+      durationMs: Date.now() - startedAt,
+    });
+
     trace = updateAgentTraceStep(
       trace,
       "generate_answer",
@@ -278,9 +337,17 @@ export async function createAgentDemoResponse(
     category: scopeResult.category as AgentScopeCategory,
     contextText: retrieval.contextText,
     sources: retrieval.sources,
+    requestId,
   });
 
   if (!modelResult.ok) {
+    logAgentDemoWarn("service_model_failed", {
+      requestId,
+      code: modelResult.code,
+      category: scopeResult.category,
+      durationMs: Date.now() - startedAt,
+    });
+
     trace = updateAgentTraceStep(trace, "generate_answer", "failed", modelResult.message);
 
     return {
@@ -303,6 +370,14 @@ export async function createAgentDemoResponse(
     "passed",
     `Generated with ${modelResult.model}.`,
   );
+
+  logAgentDemoInfo("service_request_completed", {
+    requestId,
+    category: scopeResult.category,
+    sourceCount: retrieval.sources.length,
+    answerLength: modelResult.answer.length,
+    durationMs: Date.now() - startedAt,
+  });
 
   return {
     answer: modelResult.answer,

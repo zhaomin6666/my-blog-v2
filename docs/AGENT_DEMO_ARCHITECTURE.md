@@ -135,9 +135,24 @@ Phase 10.4 implements the first application-level protection layer:
 - Output length limit, currently defined as 1800 characters.
 - Source count limit, currently defined as 5 sources.
 - `429` response with `Retry-After` when the API is rate limited.
+- Server-side diagnostic logs controlled by `AGENT_DEMO_LOG_LEVEL`.
 
 Redis-backed persistent / distributed rate limiting is intentionally deferred
 until the demo needs multi-instance production behavior.
+
+## Diagnostic Logging
+
+Agent Demo server logs use the `[agent-demo]` prefix and are controlled by:
+
+- `AGENT_DEMO_LOG_LEVEL=info` (default): request lifecycle, scope category,
+  retrieval source count / context length, model request duration, upstream
+  status, timeout, and safe error code.
+- `AGENT_DEMO_LOG_LEVEL=debug`: includes additional payload-size summaries.
+- `AGENT_DEMO_LOG_LEVEL=silent`: disables Agent Demo logs.
+
+Logs must not include API keys, full prompts, full retrieved context, full model
+answers, raw upstream response bodies, private environment values, or server
+paths.
 
 ## Trace Contract
 
