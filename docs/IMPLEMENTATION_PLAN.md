@@ -726,10 +726,24 @@
 - No Docker / Nginx deployment files were changed.
 - Verification: `pnpm test`, `pnpm lint`, and `pnpm build` passed.
 
-### Phase 10.4: Rate Limit, Timeout & Abuse Protection PLANNED
-- Planned: Redis-backed rate limiting.
-- Planned: request / model timeout controls.
-- Planned: input, output, context, and source limits.
+### Phase 10.4: Rate Limit, Timeout & Abuse Protection COMPLETED
+- Added in-process fixed-window rate limiting for `POST /api/agent-demo`.
+- Added client identifier detection from `x-forwarded-for`, `x-real-ip`, `cf-connecting-ip`, then `local` fallback.
+- Added `429` responses with `Retry-After` for rate-limited requests.
+- Added configurable protection environment variables:
+  - `AGENT_DEMO_MODEL_TIMEOUT_MS`
+  - `AGENT_DEMO_RATE_LIMIT_WINDOW_MS`
+  - `AGENT_DEMO_RATE_LIMIT_MAX_REQUESTS`
+- Added model request timeout via `AbortController`.
+- Added safe `upstream_timeout` handling without exposing upstream details.
+- Added context and output length limits while preserving existing input and source limits.
+- Extended `usage` with output length and rate-limit metadata.
+- Added focused unit tests for rate limiting, service short-circuiting, model timeout, output clamp, and context clamp.
+- Redis-backed distributed rate limiting remains deferred until multi-instance production needs it.
+- No `/agent-demo` UI was added.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx deployment files were changed.
 
 ### Phase 10.5: Agent Demo UI & Trace Display PLANNED
 - Planned: `/agent-demo` page.

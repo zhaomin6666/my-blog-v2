@@ -10,8 +10,9 @@ to make the boundary understandable.
 Phase 10.1 added the safety foundation. Phase 10.2 added read-only knowledge
 tools, a rule-based scope classifier, and a public knowledge retriever. Phase
 10.2.1 added focused unit tests. Phase 10.3 adds the read-only API MVP with a
-server-only model adapter. The demo still does not add UI, connect Redis, or
-change Docker / Nginx deployment files.
+server-only model adapter. Phase 10.4 adds in-process rate limiting, model
+timeouts, and bounded context / output controls. The demo still does not add UI,
+connect Redis, or change Docker / Nginx deployment files.
 
 ## Public Scope
 
@@ -121,15 +122,20 @@ Forbidden tools:
 
 ## Rate Limit Strategy
 
-Phase 10.1 only documents the contract. Later phases should add:
+Phase 10.4 implements the first application-level protection layer:
 
-- Fixed-window per-IP limits.
-- Short request timeout.
-- Model call timeout.
+- Fixed-window per-client limits using `x-forwarded-for`, `x-real-ip`, `cf-connecting-ip`, then `local` fallback.
+- In-process buckets for the current self-hosted / single-instance shape.
+- Configurable model call timeout through `AGENT_DEMO_MODEL_TIMEOUT_MS`.
+- Configurable rate-limit window and max requests through `AGENT_DEMO_RATE_LIMIT_WINDOW_MS` and `AGENT_DEMO_RATE_LIMIT_MAX_REQUESTS`.
 - Input length limit, currently defined as 800 characters.
-- Output length limit.
+- Context length limit, currently defined as 6000 characters.
+- Output length limit, currently defined as 1800 characters.
 - Source count limit, currently defined as 5 sources.
-- Safe failure when rate-limit infrastructure is unavailable.
+- `429` response with `Retry-After` when the API is rate limited.
+
+Redis-backed persistent / distributed rate limiting is intentionally deferred
+until the demo needs multi-instance production behavior.
 
 ## Trace Contract
 
@@ -194,7 +200,7 @@ later, but model-based classification is not required for Phase 10.2.
 - Phase 10.2: Read-only knowledge tools and rule-based scope classifier. Completed.
 - Phase 10.2.1: Agent Demo unit test foundation. Completed.
 - Phase 10.3: Read-only Agent API MVP with model integration. Completed.
-- Phase 10.4: Rate limit, timeout, and abuse protection.
+- Phase 10.4: Rate limit, timeout, and abuse protection. Completed.
 - Phase 10.5: Agent Demo UI and trace display.
 - Phase 10.6: Production deployment and safety verification guide.
 - Phase 10.7: Final Phase 10 review.

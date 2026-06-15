@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { AGENT_DEMO_MAX_CONTEXT_LENGTH } from "../agentDemoConfig";
 import type { AgentKnowledgeItem } from "../agentDemoTypes";
 import {
   getBlogPostBySlug,
@@ -141,5 +142,32 @@ describe("retrievePublicKnowledge", () => {
       "/projects/a",
       "/projects/b",
     ]);
+  });
+
+  it("clamps retrieved context to the configured maximum length", async () => {
+    mockSearchProjects.mockResolvedValue([
+      {
+        source: {
+          type: "project",
+          title: "Project A",
+          url: "/projects/a",
+          excerpt: "Project A excerpt",
+        },
+        context: "a".repeat(AGENT_DEMO_MAX_CONTEXT_LENGTH + 100),
+      },
+    ]);
+
+    const result = await retrievePublicKnowledge(
+      "project",
+      {
+        allowed: true,
+        category: "project",
+        reason: "allowed",
+      },
+      "en",
+    );
+
+    expect(result.contextText).toHaveLength(AGENT_DEMO_MAX_CONTEXT_LENGTH);
+    expect(result.contextText.endsWith("...")).toBe(true);
   });
 });

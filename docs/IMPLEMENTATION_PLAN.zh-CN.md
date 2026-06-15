@@ -7,7 +7,7 @@
 - Phase 1 到 Phase 9 已完成。
 - Phase 8 已完成：内容与职业展示、真实博客系列、Projects / Profile / Contact 内容体系和内容工作流文档已收口。
 - Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
-- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础、Phase 10.3 只读 Agent API MVP，Phase 10.4 仍为 planned。
+- Phase 10 已进入进行中：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础、Phase 10.3 只读 Agent API MVP、Phase 10.4 限流 / 超时 / 滥用防护，下一步进入 Phase 10.5 UI 与 trace 展示。
 - 当前生产地址：`https://oli6666.top`。
 - 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
@@ -339,11 +339,25 @@
 - 未修改 Docker / Nginx 部署文件。
 - 验证：`pnpm test`、`pnpm lint`、`pnpm build` 均通过。
 
-### Phase 10.4：Rate Limit, Timeout & Abuse Protection - planned
+### Phase 10.4：Rate Limit, Timeout & Abuse Protection - 已完成
 
-- 计划新增 Redis 限流。
-- 计划新增请求和模型调用超时。
-- 计划限制输入、输出、context 和 sources。
+- 为 `POST /api/agent-demo` 新增进程内 fixed-window 限流。
+- 新增客户端标识识别：优先读取 `x-forwarded-for`、`x-real-ip`、`cf-connecting-ip`，最后回退到 `local`。
+- 限流触发时返回 `429`，并带上 `Retry-After`。
+- 新增可配置防护环境变量：
+  - `AGENT_DEMO_MODEL_TIMEOUT_MS`
+  - `AGENT_DEMO_RATE_LIMIT_WINDOW_MS`
+  - `AGENT_DEMO_RATE_LIMIT_MAX_REQUESTS`
+- 通过 `AbortController` 为模型调用增加超时控制。
+- 新增安全的 `upstream_timeout` 处理，不暴露上游原始错误。
+- 在已有输入长度和 sources 数量限制基础上，新增 context 和输出长度限制。
+- 扩展 `usage`，返回输出长度和限流剩余额度 / reset 时间。
+- 新增单元测试覆盖限流、service 短路、模型超时、输出截断和 context 截断。
+- Redis 分布式限流仍保留为多实例生产环境后的后续选项。
+- 未新增 `/agent-demo` UI。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx 部署文件。
 
 ### Phase 10.5：Agent Demo UI & Trace Display - planned
 

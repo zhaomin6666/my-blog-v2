@@ -53,6 +53,10 @@ export interface AgentUsageInfo {
   maxInputLength: number;
   sourceCount: number;
   maxSources: number;
+  outputLength?: number;
+  maxOutputLength?: number;
+  rateLimitRemaining?: number;
+  rateLimitResetAt?: number;
 }
 
 export interface AgentDemoResponse {

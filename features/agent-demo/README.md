@@ -36,11 +36,26 @@ Phase 10.3 adds:
 - Safe model configuration and upstream error handling
 - Unit tests for the API service pipeline
 
+Phase 10.4 adds:
+
+- In-process fixed-window rate limiting for `POST /api/agent-demo`
+- Client identifier detection from common proxy headers
+- `429` responses with `Retry-After` when the rate limit is exceeded
+- Configurable model request timeout
+- Bounded context and answer output lengths
+- Focused tests for rate limiting, timeout handling, and truncation
+
 Required server-only environment variables:
 
 - `AGENT_DEMO_MODEL_API_URL`
 - `AGENT_DEMO_MODEL_API_KEY`
 - `AGENT_DEMO_MODEL`
+
+Optional protection variables:
+
+- `AGENT_DEMO_MODEL_TIMEOUT_MS` (default: `10000`)
+- `AGENT_DEMO_RATE_LIMIT_WINDOW_MS` (default: `60000`)
+- `AGENT_DEMO_RATE_LIMIT_MAX_REQUESTS` (default: `10`)
 
 ## Safety Boundary
 
@@ -65,8 +80,8 @@ The agent must not:
 
 ## Deferred Work
 
-The following are intentionally not implemented in Phase 10.1:
+The following are intentionally not implemented yet:
 
-- Redis rate limiting
 - `/agent-demo` UI
 - Production deployment changes
+- Redis-backed distributed rate limiting for multi-instance production

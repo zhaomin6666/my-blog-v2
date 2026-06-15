@@ -1,4 +1,8 @@
-import { AGENT_DEMO_MAX_SOURCES } from "./agentDemoConfig";
+import {
+  AGENT_DEMO_DEFAULT_MODEL_TIMEOUT_MS,
+  AGENT_DEMO_MAX_OUTPUT_LENGTH,
+  AGENT_DEMO_MAX_SOURCES,
+} from "./agentDemoConfig";
 import type {
   AgentDemoLocale,
   AgentScopeCategory,
@@ -13,6 +17,7 @@ export interface GenerateAgentDemoModelAnswerParams {
   category: AgentScopeCategory;
   contextText: string;
   sources: AgentSource[];
+  timeoutMs?: number;
 }
 
 export type AgentModelClientResult =
@@ -28,6 +33,7 @@ export type AgentModelClientResult =
         | "missing_api_url"
         | "missing_model"
         | "upstream_error"
+        | "upstream_timeout"
         | "invalid_response"
         | "empty_answer";
       message: string;
@@ -68,6 +74,21 @@ function getAgentDemoModelApiKey(): string | null {
     process.env.OPENAI_API_KEY?.trim() ||
     null
   );
+}
+
+function getAgentDemoModelTimeoutMs(timeoutMs?: number): number {
+  if (typeof timeoutMs === "number" && Number.isFinite(timeoutMs) && timeoutMs > 0) {
+    return timeoutMs;
+  }
+
+  const configuredTimeout = Number.parseInt(
+    process.env.AGENT_DEMO_MODEL_TIMEOUT_MS ?? "",
+    10,
+  );
+
+  return Number.isFinite(configuredTimeout) && configuredTimeout > 0
+    ? configuredTimeout
+    : AGENT_DEMO_DEFAULT_MODEL_TIMEOUT_MS;
 }
 
 function buildSourceList(sources: AgentSource[]): string {
@@ -134,6 +155,12 @@ function extractChatCompletionText(payload: ChatCompletionPayload): string | nul
   return typeof message.content === "string" ? message.content : null;
 }
 
+function clampAnswer(answer: string): string {
+  if (answer.length <= AGENT_DEMO_MAX_OUTPUT_LENGTH) return answer;
+
+  return `${answer.slice(0, AGENT_DEMO_MAX_OUTPUT_LENGTH - 3).trim()}...`;
+}
+
 export async function generateAgentDemoModelAnswer(
   params: GenerateAgentDemoModelAnswerParams,
 ): Promise<AgentModelClientResult> {
@@ -166,9 +193,17 @@ export async function generateAgentDemoModelAnswer(
     };
   }
 
+  const controller = new AbortController();
+  let didTimeout = false;
+  const timeout = setTimeout(() => {
+    didTimeout = true;
+    controller.abort();
+  }, getAgentDemoModelTimeoutMs(params.timeoutMs));
+
   try {
     const response = await fetch(apiUrl, {
       method: "POST",
+      signal: controller.signal,
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
@@ -210,14 +245,27 @@ export async function generateAgentDemoModelAnswer(
 
     return {
       ok: true,
-      answer,
+      answer: clampAnswer(answer),
       model,
     };
-  } catch {
+  } catch (error) {
+    if (
+      didTimeout ||
+      (isRecord(error) && error.name === "AbortError")
+    ) {
+      return {
+        ok: false,
+        code: "upstream_timeout",
+        message: "Agent Demo model request timed out.",
+      };
+    }
+
     return {
       ok: false,
       code: "upstream_error",
       message: "Agent Demo model request failed.",
     };
+  } finally {
+    clearTimeout(timeout);
   }
 }

@@ -1,6 +1,34 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-15 - Codex
+**摘要：** Phase 10.4 已完成，为 Agent Demo 新增限流、超时和滥用防护。
+
+**Phase 10.4 范围：**
+- 为 `POST /api/agent-demo` 新增进程内 fixed-window 限流。
+- 新增基于常见代理请求头的客户端标识识别。
+- 超过限流窗口时返回 `429`，并带上 `Retry-After`。
+- 新增可选防护环境变量：`AGENT_DEMO_MODEL_TIMEOUT_MS`、`AGENT_DEMO_RATE_LIMIT_WINDOW_MS`、`AGENT_DEMO_RATE_LIMIT_MAX_REQUESTS`。
+- 通过 `AbortController` 为模型请求增加超时控制。
+- 新增安全的 `upstream_timeout` 处理。
+- 新增 context 和输出长度截断，保留已有输入长度和 sources 数量限制。
+- 扩展 `usage`，返回输出长度和限流元数据。
+- 新增测试覆盖限流、service 短路、模型超时、输出截断和 context 截断。
+
+**范围约束：**
+- Redis 分布式限流仍保留为多实例生产环境后的后续选项。
+- 未新增 `/agent-demo` UI。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx 部署文件。
+
+**验证：**
+- Agent Demo 聚焦测试已通过：`pnpm vitest run features/agent-demo`。
+- `pnpm test` 通过。
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
+
+
+### 2026-06-15 - Codex
 **摘要：** Phase 10.3 已完成，新增只读 Agent API MVP。
 
 **Phase 10.3 范围：**

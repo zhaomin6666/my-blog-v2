@@ -84,6 +84,48 @@ describe("createAgentDemoResponse", () => {
     expect(generateModelAnswer).not.toHaveBeenCalled();
   });
 
+  it("short-circuits before scope classification when rate limited", async () => {
+    const classifyScope = vi.fn();
+    const retrieveKnowledge = vi.fn();
+    const generateModelAnswer = vi.fn();
+
+    const response = await createAgentDemoResponse(
+      {
+        question: "Who are you?",
+        locale: "en",
+      },
+      {
+        classifyScope,
+        retrieveKnowledge,
+        generateModelAnswer,
+        checkRateLimit: () => ({
+          allowed: false,
+          limit: 1,
+          remaining: 0,
+          resetAt: 2000,
+          windowMs: 1000,
+        }),
+      },
+    );
+
+    expect(response).toMatchObject({
+      allowed: false,
+      category: "error",
+      error: "rate_limited",
+    });
+    expect(response.trace).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          step: "rate_limit_check",
+          status: "blocked",
+        }),
+      ]),
+    );
+    expect(classifyScope).not.toHaveBeenCalled();
+    expect(retrieveKnowledge).not.toHaveBeenCalled();
+    expect(generateModelAnswer).not.toHaveBeenCalled();
+  });
+
   it("retrieves public context and returns a model answer for allowed scope", async () => {
     const allowedScope: AgentScopeResult = {
       allowed: true,
@@ -106,6 +148,13 @@ describe("createAgentDemoResponse", () => {
         classifyScope: () => allowedScope,
         retrieveKnowledge,
         generateModelAnswer,
+        checkRateLimit: () => ({
+          allowed: true,
+          limit: 10,
+          remaining: 9,
+          resetAt: 2000,
+          windowMs: 1000,
+        }),
       },
     );
 
@@ -122,6 +171,10 @@ describe("createAgentDemoResponse", () => {
       answer: "Model answer from public context.",
       allowed: true,
       category: "profile",
+    });
+    expect(response.usage).toMatchObject({
+      outputLength: "Model answer from public context.".length,
+      rateLimitRemaining: 9,
     });
     expect(response.sources).toHaveLength(1);
     expect(response.trace).toEqual(

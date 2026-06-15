@@ -1,6 +1,33 @@
 # AI Development Changelog
 
 ### 2026-06-15 - Codex
+**Summary:** Phase 10.4 completed. Added Agent Demo rate limiting, timeout handling, and abuse protection.
+
+**Phase 10.4 scope:**
+- Added in-process fixed-window rate limiting for `POST /api/agent-demo`.
+- Added client identifier detection from common proxy headers.
+- Added `429` responses with `Retry-After` when requests exceed the configured window.
+- Added optional protection environment variables: `AGENT_DEMO_MODEL_TIMEOUT_MS`, `AGENT_DEMO_RATE_LIMIT_WINDOW_MS`, and `AGENT_DEMO_RATE_LIMIT_MAX_REQUESTS`.
+- Added model request timeout via `AbortController`.
+- Added safe `upstream_timeout` handling.
+- Added context and output length clamps while preserving existing input and source limits.
+- Extended `usage` with output length and rate-limit metadata.
+- Added tests for rate limiting, service short-circuiting, model timeout, output clamp, and context clamp.
+
+**Scope guard:**
+- Redis-backed distributed rate limiting remains deferred until multi-instance production needs it.
+- No `/agent-demo` UI was added.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No Docker / Nginx deployment files were changed.
+
+**Verification:**
+- Agent Demo focused tests passed: `pnpm vitest run features/agent-demo`.
+- `pnpm test` passed.
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
+### 2026-06-15 - Codex
 **Summary:** Phase 10.3 completed. Added the read-only Agent API MVP.
 
 **Phase 10.3 scope:**

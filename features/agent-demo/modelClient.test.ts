@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { AGENT_DEMO_MAX_OUTPUT_LENGTH } from "./agentDemoConfig";
 import { generateAgentDemoModelAnswer } from "./modelClient";
 
 const originalEnv = process.env;
@@ -27,6 +28,7 @@ describe("generateAgentDemoModelAnswer", () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.useRealTimers();
     process.env = originalEnv;
   });
 
@@ -153,5 +155,64 @@ describe("generateAgentDemoModelAnswer", () => {
       code: "upstream_error",
       message: "Agent Demo model request failed.",
     });
+  });
+
+  it("returns a safe timeout error when the model request is aborted", async () => {
+    process.env.AGENT_DEMO_MODEL_API_URL = "https://example.com/v1/chat/completions";
+    process.env.AGENT_DEMO_MODEL_API_KEY = "test-key";
+    process.env.AGENT_DEMO_MODEL = "test-model";
+    vi.useFakeTimers();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        () =>
+          new Promise((_resolve, reject) => {
+            setTimeout(() => {
+              reject(new DOMException("The operation was aborted.", "AbortError"));
+            }, 20);
+          }),
+      ),
+    );
+
+    const resultPromise = generateAgentDemoModelAnswer({
+      ...params(),
+      timeoutMs: 10,
+    });
+    await vi.advanceTimersByTimeAsync(20);
+    const result = await resultPromise;
+
+    expect(result).toEqual({
+      ok: false,
+      code: "upstream_timeout",
+      message: "Agent Demo model request timed out.",
+    });
+  });
+
+  it("clamps overly long model answers", async () => {
+    process.env.AGENT_DEMO_MODEL_API_URL = "https://example.com/v1/chat/completions";
+    process.env.AGENT_DEMO_MODEL_API_KEY = "test-key";
+    process.env.AGENT_DEMO_MODEL = "test-model";
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        json: async () => ({
+          choices: [
+            {
+              message: {
+                content: "a".repeat(AGENT_DEMO_MAX_OUTPUT_LENGTH + 50),
+              },
+            },
+          ],
+        }),
+      })),
+    );
+
+    const result = await generateAgentDemoModelAnswer(params());
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.answer).toHaveLength(AGENT_DEMO_MAX_OUTPUT_LENGTH);
+    expect(result.answer.endsWith("...")).toBe(true);
   });
 });

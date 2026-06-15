@@ -1,4 +1,7 @@
-import { AGENT_DEMO_MAX_SOURCES } from "../agentDemoConfig";
+import {
+  AGENT_DEMO_MAX_CONTEXT_LENGTH,
+  AGENT_DEMO_MAX_SOURCES,
+} from "../agentDemoConfig";
 import type {
   AgentDemoLocale,
   AgentKnowledgeItem,
@@ -38,9 +41,15 @@ function uniqueKnowledgeItems(items: AgentKnowledgeItem[]): AgentKnowledgeItem[]
 }
 
 function buildContextText(items: AgentKnowledgeItem[]): string {
-  return items
+  const contextText = items
     .map((item, index) => `Source ${index + 1}\n${item.context}`)
     .join("\n\n---\n\n");
+
+  if (contextText.length <= AGENT_DEMO_MAX_CONTEXT_LENGTH) {
+    return contextText;
+  }
+
+  return `${contextText.slice(0, AGENT_DEMO_MAX_CONTEXT_LENGTH - 3).trim()}...`;
 }
 
 async function retrieveAllowedContext(

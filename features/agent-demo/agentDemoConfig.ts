@@ -13,6 +13,16 @@ export const AGENT_DEMO_MAX_INPUT_LENGTH = 800;
 
 export const AGENT_DEMO_MAX_SOURCES = 5;
 
+export const AGENT_DEMO_MAX_CONTEXT_LENGTH = 6000;
+
+export const AGENT_DEMO_MAX_OUTPUT_LENGTH = 1800;
+
+export const AGENT_DEMO_DEFAULT_MODEL_TIMEOUT_MS = 10000;
+
+export const AGENT_DEMO_DEFAULT_RATE_LIMIT_WINDOW_MS = 60_000;
+
+export const AGENT_DEMO_DEFAULT_RATE_LIMIT_MAX_REQUESTS = 10;
+
 export const AGENT_DEMO_TRACE_STEPS: AgentTraceStepId[] = [
   "input_validation",
   "rate_limit_check",
@@ -56,5 +66,10 @@ export const AGENT_DEMO_CONFIG = {
   supportedLocales: AGENT_DEMO_SUPPORTED_LOCALES,
   maxInputLength: AGENT_DEMO_MAX_INPUT_LENGTH,
   maxSources: AGENT_DEMO_MAX_SOURCES,
+  maxContextLength: AGENT_DEMO_MAX_CONTEXT_LENGTH,
+  maxOutputLength: AGENT_DEMO_MAX_OUTPUT_LENGTH,
+  defaultModelTimeoutMs: AGENT_DEMO_DEFAULT_MODEL_TIMEOUT_MS,
+  defaultRateLimitWindowMs: AGENT_DEMO_DEFAULT_RATE_LIMIT_WINDOW_MS,
+  defaultRateLimitMaxRequests: AGENT_DEMO_DEFAULT_RATE_LIMIT_MAX_REQUESTS,
   publicProjectSlugs: AGENT_DEMO_PUBLIC_PROJECT_SLUGS,
 } as const;

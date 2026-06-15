@@ -1,4 +1,8 @@
-import { AGENT_DEMO_MAX_INPUT_LENGTH, AGENT_DEMO_MAX_SOURCES } from "./agentDemoConfig";
+import {
+  AGENT_DEMO_MAX_INPUT_LENGTH,
+  AGENT_DEMO_MAX_OUTPUT_LENGTH,
+  AGENT_DEMO_MAX_SOURCES,
+} from "./agentDemoConfig";
 import { validateAgentDemoRequest } from "./inputValidator";
 import {
   generateAgentDemoModelAnswer,
@@ -15,6 +19,10 @@ import type {
   AgentScopeCategory,
 } from "./agentDemoTypes";
 import { classifyAgentDemoScope } from "./tools/scopeClassifier";
+import {
+  checkAgentDemoRateLimit,
+  type AgentDemoRateLimitResult,
+} from "./rateLimiter";
 
 const foundationAnswers = {
   zh: "AI Agent Demo 的安全基础已经建立：当前阶段只定义只读 Agent 的类型、输入校验、trace 契约、安全边界和文档，不接入模型、不开放 API、不读取私有数据。",
@@ -71,6 +79,8 @@ interface AgentDemoServiceOptions {
   generateModelAnswer?: (
     params: GenerateAgentDemoModelAnswerParams,
   ) => Promise<AgentModelClientResult>;
+  checkRateLimit?: (identifier: string) => AgentDemoRateLimitResult;
+  rateLimitIdentifier?: string;
 }
 
 const blockedAnswers: Record<AgentDemoLocale, string> = {
@@ -88,21 +98,35 @@ const modelErrorAnswers: Record<AgentDemoLocale, string> = {
   en: "This question passed the scope check and public context was found, but model generation is temporarily unavailable. Please try again later.",
 };
 
+const rateLimitAnswers: Record<AgentDemoLocale, string> = {
+  zh: "请求有点频繁了。请稍后再试，AI Agent Demo 会限制短时间内的连续调用。",
+  en: "Too many requests. Please try again later; the AI Agent Demo limits repeated calls in a short window.",
+};
+
 function buildUsage(
   question: string,
   sources: AgentSource[],
+  options: {
+    answer?: string;
+    rateLimit?: AgentDemoRateLimitResult;
+  } = {},
 ) {
   return {
     inputLength: question.length,
     maxInputLength: AGENT_DEMO_MAX_INPUT_LENGTH,
     sourceCount: sources.length,
     maxSources: AGENT_DEMO_MAX_SOURCES,
+    outputLength: options.answer?.length,
+    maxOutputLength: AGENT_DEMO_MAX_OUTPUT_LENGTH,
+    rateLimitRemaining: options.rateLimit?.remaining,
+    rateLimitResetAt: options.rateLimit?.resetAt,
   };
 }
 
 function createBlockedTrace(
   locale: AgentDemoLocale,
   scopeResult: AgentScopeResult,
+  rateLimit: AgentDemoRateLimitResult,
 ) {
   let trace = createAgentTrace(locale);
   trace = updateAgentTraceStep(trace, "input_validation", "passed");
@@ -110,7 +134,7 @@ function createBlockedTrace(
     trace,
     "rate_limit_check",
     "passed",
-    "Phase 10.4 will add persistent rate limiting.",
+    `Remaining requests in current window: ${rateLimit.remaining}.`,
   );
   trace = updateAgentTraceStep(trace, "scope_check", "blocked", scopeResult.reason);
   trace = updateAgentTraceStep(trace, "retrieve_context", "blocked", "Scope is not allowed.");
@@ -120,15 +144,34 @@ function createBlockedTrace(
 
 function normalizeRetrieverTrace(
   trace: AgentKnowledgeRetrieverResult["trace"],
+  rateLimit: AgentDemoRateLimitResult,
 ): AgentKnowledgeRetrieverResult["trace"] {
   let normalizedTrace = updateAgentTraceStep(trace, "input_validation", "passed");
   normalizedTrace = updateAgentTraceStep(
     normalizedTrace,
     "rate_limit_check",
     "passed",
-    "Phase 10.4 will add persistent rate limiting.",
+    `Remaining requests in current window: ${rateLimit.remaining}.`,
   );
   return normalizedTrace;
+}
+
+function createRateLimitedTrace(
+  locale: AgentDemoLocale,
+  rateLimit: AgentDemoRateLimitResult,
+) {
+  let trace = createAgentTrace(locale);
+  trace = updateAgentTraceStep(trace, "input_validation", "passed");
+  trace = updateAgentTraceStep(
+    trace,
+    "rate_limit_check",
+    "blocked",
+    `Rate limit exceeded. Try again after ${new Date(rateLimit.resetAt).toISOString()}.`,
+  );
+  trace = updateAgentTraceStep(trace, "scope_check", "blocked", "Rate limited before scope classification.");
+  trace = updateAgentTraceStep(trace, "retrieve_context", "blocked", "Rate limited before retrieval.");
+  trace = updateAgentTraceStep(trace, "generate_answer", "blocked", "Rate limited before model generation.");
+  return trace;
 }
 
 async function retrievePublicKnowledgeLazily(
@@ -173,6 +216,24 @@ export async function createAgentDemoResponse(
     options.retrieveKnowledge ?? retrievePublicKnowledgeLazily;
   const generateModelAnswer =
     options.generateModelAnswer ?? generateAgentDemoModelAnswer;
+  const rateLimit = (options.checkRateLimit ?? checkAgentDemoRateLimit)(
+    options.rateLimitIdentifier ?? "local",
+  );
+
+  if (!rateLimit.allowed) {
+    return {
+      answer: rateLimitAnswers[locale],
+      allowed: false,
+      category: "error",
+      trace: createRateLimitedTrace(locale, rateLimit),
+      sources: [],
+      usage: buildUsage(question, [], {
+        answer: rateLimitAnswers[locale],
+        rateLimit,
+      }),
+      error: "rate_limited",
+    };
+  }
 
   const scopeResult = classifyScope(question);
 
@@ -181,14 +242,14 @@ export async function createAgentDemoResponse(
       answer: blockedAnswers[locale],
       allowed: false,
       category: scopeResult.category,
-      trace: createBlockedTrace(locale, scopeResult),
+      trace: createBlockedTrace(locale, scopeResult, rateLimit),
       sources: [],
-      usage: buildUsage(question, []),
+      usage: buildUsage(question, [], { answer: blockedAnswers[locale], rateLimit }),
     };
   }
 
   const retrieval = await retrieveKnowledge(question, scopeResult, locale);
-  let trace = normalizeRetrieverTrace(retrieval.trace);
+  let trace = normalizeRetrieverTrace(retrieval.trace, rateLimit);
 
   if (!retrieval.contextText || retrieval.sources.length === 0) {
     trace = updateAgentTraceStep(
@@ -204,7 +265,10 @@ export async function createAgentDemoResponse(
       category: scopeResult.category,
       trace,
       sources: retrieval.sources,
-      usage: buildUsage(question, retrieval.sources),
+      usage: buildUsage(question, retrieval.sources, {
+        answer: noContextAnswers[locale],
+        rateLimit,
+      }),
     };
   }
 
@@ -225,7 +289,10 @@ export async function createAgentDemoResponse(
       category: scopeResult.category,
       trace,
       sources: retrieval.sources,
-      usage: buildUsage(question, retrieval.sources),
+      usage: buildUsage(question, retrieval.sources, {
+        answer: modelErrorAnswers[locale],
+        rateLimit,
+      }),
       error: modelResult.code,
     };
   }
@@ -243,6 +310,9 @@ export async function createAgentDemoResponse(
     category: scopeResult.category,
     trace,
     sources: retrieval.sources,
-    usage: buildUsage(question, retrieval.sources),
+    usage: buildUsage(question, retrieval.sources, {
+      answer: modelResult.answer,
+      rateLimit,
+    }),
   };
 }
