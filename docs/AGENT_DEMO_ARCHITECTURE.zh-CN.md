@@ -325,4 +325,4 @@ Phase 11.1 已于 2026-06-21 验收通过，作为 Agent Demo 观测与反馈功
 - 观测写入失败只降级为安全 server log，不阻断 Agent Demo 正常回答。
 - Console / CLI、窗口系统、Agent 回答范围和已跟踪 Docker / Nginx 配置保持不变。
 
-Phase 11 后续计划：Phase 11.2 Agent Demo Answer Quality Improvement、Phase 11.3 Agent Demo Suggested Questions、Phase 11.4 Agent Demo Trace UX Polish、Phase 11.5 Phase 11 Final Review。
+Phase 11 后续方向已调整：Phase 11.2 为 Admin / CMS Architecture Design，并已在 `docs/ADMIN_CMS_DESIGN.md` 和 `docs/ADMIN_CMS_DESIGN.zh-CN.md` 中完成设计。Agent Demo 迁移后仍通过 BlogService / ProjectService / ProfileService 读取公开内容，不直接查询数据库，不扩大回答范围。后续 Agent Demo 回答质量、推荐问题和 trace UX 优化需另行规划。

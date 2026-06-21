@@ -411,10 +411,11 @@ later, but model-based classification is not required for Phase 10.2.
 - Phase 10.6: Production deployment and safety verification guide. Completed.
 - Phase 10.7: Final Phase 10 review. Completed.
 - Phase 11.1: Agent Demo observability and feedback. Completed.
-- Phase 11.2: Agent Demo answer quality improvement. Planned.
-- Phase 11.3: Agent Demo suggested questions. Planned.
-- Phase 11.4: Agent Demo trace UX polish. Planned.
-- Phase 11.5: Phase 11 final review. Planned.
+- Phase 11.2: Admin / CMS architecture design. Completed in
+  `docs/ADMIN_CMS_DESIGN.md`. Agent Demo keeps reading public content through
+  BlogService / ProjectService / ProfileService.
+- Later Agent Demo quality, suggested-question, and trace UX improvements are
+  deferred until they are planned separately from the Admin / CMS migration.
 
 ## Standalone Agent API Option
 

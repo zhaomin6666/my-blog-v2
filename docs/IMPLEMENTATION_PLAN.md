@@ -794,9 +794,11 @@
 - Updated English and Chinese documentation to cover architecture, deployment configuration, safety verification, and final acceptance.
 - Updated Agent Demo README to remove stale deferred work and record Phase 10.6 / 10.7.
 
-## Phase 11: Agent Demo Enhancement IN PROGRESS
-- Improve the public Agent Demo after the first release while preserving the read-only public-content boundary.
-- Do not expand the answer scope, add write tools, modify Console / CLI, modify the window system, or change tracked Docker / Nginx deployment config unless separately planned.
+## Phase 11: Admin / CMS Architecture And Implementation IN PROGRESS
+- Design and then gradually implement an author-only Admin / CMS path for Personal Dev OS.
+- Keep the existing Service / Repository boundary so public pages do not query PostgreSQL directly.
+- Preserve current public URLs, sitemap, RSS, Blog Search, Tags, Series, Projects, Profile, and Agent Demo behavior while content sources migrate from files to PostgreSQL.
+- Do not expand the Agent Demo answer scope, add public user accounts, add write tools, modify Console / CLI, modify the window system, or change tracked Docker / Nginx deployment config unless separately planned.
 
 ### Phase 11.1: Agent Demo Observability & Feedback COMPLETED
 - Added privacy-safe PostgreSQL minimal event logging for Agent Demo requests.
@@ -815,14 +817,55 @@
 - No window-system behavior changes were made.
 - No tracked Docker / Nginx config files were changed.
 
-### Phase 11.2: Agent Demo Answer Quality Improvement PLANNED
-- Improve answer quality using the existing public-content scope and safety boundaries.
+### Phase 11.2: Admin / CMS Architecture Design COMPLETED
+- Added `docs/ADMIN_CMS_DESIGN.md` and `docs/ADMIN_CMS_DESIGN.zh-CN.md`.
+- Designed the author-only Admin / CMS scope for Blog Posts, Blog Series, Projects, Profile, Contact Channels, System Stack, and Homepage Content.
+- Documented why content should gradually move from file-based sources to PostgreSQL.
+- Designed the PostgreSQL model draft, including MVP tables and later enhancement tables.
+- Documented the FileRepository to DatabaseRepository migration path while keeping Service boundaries stable.
+- Compared environment-variable admin credentials with an `admin_users` table and recommended environment credentials for the first version.
+- Designed Admin routes, publishing flow, rendering / cache strategy, external blog directory import/export, security boundaries, deployment, and backup.
+- Confirmed this phase did not implement Admin code, database migrations, content migration, Agent Demo logic changes, Console / CLI changes, window-system changes, or deployment config changes.
 
-### Phase 11.3: Agent Demo Suggested Questions PLANNED
-- Improve entry prompts and suggested questions without widening the Agent scope.
+### Phase 11.3: Database Schema & Repository Refactor Plan PLANNED
+- Design and implement the database schema.
+- Add DatabaseRepository implementations for Blog, Projects, and Profile.
+- Keep FileRepository fallback and import-source behavior.
+- Do not build Admin UI yet.
 
-### Phase 11.4: Agent Demo Trace UX Polish PLANNED
-- Polish trace readability and user comprehension without changing trace semantics.
+### Phase 11.4: Admin Auth Foundation PLANNED
+- Add `/admin/login`.
+- Add signed session cookie handling.
+- Add middleware protection for `/admin/*`.
+- Add an Admin layout shell.
 
-### Phase 11.5: Phase 11 Final Review PLANNED
-- Final acceptance for Phase 11 enhancements.
+### Phase 11.5: Blog Admin MVP PLANNED
+- Blog list.
+- Create / edit draft.
+- Publish / unpublish.
+- Markdown editor.
+- Slug validation.
+
+### Phase 11.6: Homepage / Profile Admin PLANNED
+- Profile editor.
+- Contact editor.
+- System Stack editor.
+- Homepage sections editor.
+
+### Phase 11.7: Projects Admin PLANNED
+- Project list.
+- Create / edit project.
+- Featured / order / published controls.
+
+### Phase 11.8: Content Import / Export PLANNED
+- External blog directory import.
+- Markdown export.
+- JSON backup.
+
+### Phase 11.9: Backup & Deployment Hardening PLANNED
+- `pg_dump`.
+- Rollback documentation.
+- Production checklist.
+
+### Phase 11.10: Phase 11 Final Review PLANNED
+- Full Admin / CMS review.

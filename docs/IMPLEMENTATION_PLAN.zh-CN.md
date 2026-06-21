@@ -411,13 +411,14 @@
 - 更新中英文文档，覆盖架构、安全边界、部署配置、生产验证和最终验收清单。
 - 更新 Agent Demo README，移除过期 deferred work，并记录 Phase 10.6 / 10.7。
 
-## Phase 11：Agent Demo Enhancement - 进行中
+## Phase 11：后台管理与 CMS 架构及实施 - 进行中
 
-目标：在第一版公开 Agent Demo 的基础上增强使用反馈、回答质量和体验，同时继续保持只读、公开内容、隐私安全边界。
+目标：为 Personal Dev OS 设计并逐步实现作者自用后台与内容系统，让 Blog、Projects、Profile、Homepage 等内容后续可以从文件型内容源平滑迁移到 PostgreSQL，同时保持公开页面继续通过 Service / Repository 获取内容。
 
 边界：
 
 - 不扩大 Agent 回答范围。
+- 不新增公开用户系统。
 - 不新增写工具。
 - 不保存完整对话。
 - 不修改 Console / CLI。
@@ -447,21 +448,67 @@
 - 未修改窗口系统。
 - 未修改已跟踪 Docker / Nginx 部署配置。
 
-### Phase 11.2：Agent Demo Answer Quality Improvement - 计划中
+### Phase 11.2：Admin / CMS Architecture Design - 已完成
 
-- 在不扩大公开只读范围的前提下优化回答质量。
+- 新增 `docs/ADMIN_CMS_DESIGN.md` 和 `docs/ADMIN_CMS_DESIGN.zh-CN.md`。
+- 设计作者自用后台管理范围：Blog Posts、Blog Series、Projects、Profile、Contact Channels、System Stack、Homepage Content。
+- 明确内容将从文件型内容源逐步迁移到 PostgreSQL。
+- 设计 PostgreSQL 表结构草案，并区分 MVP 必需表和后续增强表。
+- 设计 Repository 从 FileRepository 到 DatabaseRepository 的平滑迁移路径，保持 Service 边界稳定。
+- 比较环境变量管理员账号和 `admin_users` 表两种方案，第一版建议使用环境变量账号。
+- 设计后台路由、发布流程、动态渲染与缓存、外部博客目录导入导出、安全边界、部署和备份方案。
+- 本阶段未实现后台代码，未新增数据库迁移，未迁移内容，未修改 Agent Demo、Console / CLI、窗口系统或部署配置。
 
-### Phase 11.3：Agent Demo Suggested Questions - 计划中
+### Phase 11.3：Database Schema & Repository Refactor Plan - 计划中
 
-- 优化示例问题和推荐问题入口。
+- 设计并实现数据库 schema。
+- 增加 Blog / Projects / Profile 的 DatabaseRepository。
+- 保留 FileRepository fallback 和 import source。
+- 不做后台 UI。
 
-### Phase 11.4：Agent Demo Trace UX Polish - 计划中
+### Phase 11.4：Admin Auth Foundation - 计划中
 
-- 优化 trace 可读性，不改变 trace 语义。
+- `/admin/login`
+- session cookie
+- middleware
+- admin layout
 
-### Phase 11.5：Phase 11 Final Review - 计划中
+### Phase 11.5：Blog Admin MVP - 计划中
 
-- 完成 Phase 11 增强的最终验收。
+- Blog list
+- create / edit draft
+- publish / unpublish
+- Markdown editor
+- slug validation
+
+### Phase 11.6：Homepage / Profile Admin - 计划中
+
+- Profile editor
+- Contact editor
+- System Stack editor
+- Homepage sections editor
+
+### Phase 11.7：Projects Admin - 计划中
+
+- Project list
+- create / edit project
+- featured / order / published controls
+
+### Phase 11.8：Content Import / Export - 计划中
+
+- external blog directory import
+- Markdown export
+- JSON backup
+
+### Phase 11.9：Backup & Deployment Hardening - 计划中
+
+- `pg_dump`
+- rollback doc
+- production checklist
+
+### Phase 11.10：Phase 11 Final Review - 计划中
+
+- 完成 Admin / CMS 全量验收。
 
 ## 后续原则
 

@@ -1,6 +1,30 @@
 # AI Development Changelog
 
 ### 2026-06-21 - Codex
+**Summary:** Phase 11.2 completed. Added Admin / CMS architecture design documentation.
+
+**Phase 11.2 scope:**
+- Added `docs/ADMIN_CMS_DESIGN.md` and `docs/ADMIN_CMS_DESIGN.zh-CN.md`.
+- Documented why content should gradually move from file-based repositories to PostgreSQL.
+- Defined the first Admin / CMS management scope for Blog Posts, Blog Series, Projects, Profile, Contact Channels, System Stack, and Homepage Content.
+- Drafted PostgreSQL content models and marked MVP tables versus later enhancement tables.
+- Designed the migration path from FileRepository to DatabaseRepository while preserving Service boundaries.
+- Designed Admin login, security, publishing, import/export, external blog directory, backup, deployment, and rollback boundaries.
+- Clarified that Agent Demo will continue reading public content through BlogService / ProjectService / ProfileService and will not expand its answer scope.
+- Updated the Phase 11 plan to make Phase 11.3 through Phase 11.10 the follow-up Admin / CMS implementation phases.
+
+**Scope guard:**
+- No Admin code was implemented.
+- No database tables or migrations were added.
+- No content was migrated, moved, or deleted.
+- No Blog / Projects / Profile core logic was changed.
+- No Agent Demo logic, Console / CLI, window system, or tracked deployment config was changed.
+
+**Verification:**
+- `pnpm lint` passed.
+- `pnpm build` passed after syncing the already-declared dependencies with `pnpm install`.
+
+### 2026-06-21 - Codex
 **Summary:** Phase 11.1 accepted. Documentation updated and current version prepared for commit.
 
 **Acceptance scope:**

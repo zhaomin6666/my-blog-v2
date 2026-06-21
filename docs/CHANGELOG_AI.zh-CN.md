@@ -1,5 +1,29 @@
 ﻿# AI 变更记录中文摘要
 
+### 2026-06-21 - Codex
+**摘要：** Phase 11.2 已完成，新增后台管理与 CMS 架构设计文档。
+
+**Phase 11.2 范围：**
+- 新增 `docs/ADMIN_CMS_DESIGN.md` 和 `docs/ADMIN_CMS_DESIGN.zh-CN.md`。
+- 明确内容将从文件型内容源逐步迁移到 PostgreSQL。
+- 明确第一版后台管理范围：Blog Posts、Blog Series、Projects、Profile、Contact Channels、System Stack、Homepage Content。
+- 设计 PostgreSQL 内容模型草案，并区分 MVP 必需表和后续增强表。
+- 设计 Repository 从 FileRepository 到 DatabaseRepository 的迁移方式，同时保持 Service 边界稳定。
+- 设计后台登录、安全、发布、导入导出、外部博客目录、备份、部署和回滚边界。
+- 明确 Agent Demo 继续通过 BlogService / ProjectService / ProfileService 读取公开内容，不扩大回答范围。
+- 更新 Phase 11 计划，将 Phase 11.3 到 Phase 11.10 拆分为后续 Admin / CMS 实施阶段。
+
+**范围约束：**
+- 未实现后台代码。
+- 未新增数据库表或迁移脚本。
+- 未迁移、移动或删除内容。
+- 未修改 Blog / Projects / Profile 核心逻辑。
+- 未修改 Agent Demo 逻辑、Console / CLI、窗口系统或已跟踪部署配置。
+
+**验证：**
+- `pnpm lint` 通过。
+- `pnpm build` 在通过 `pnpm install` 同步已声明依赖后通过。
+
 ### 2026-06-15 - Codex
 **摘要：** Phase 10.7 已完成，第一版公开 Agent Demo 完成最终验收与文档收口。
 
