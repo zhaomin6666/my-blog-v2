@@ -220,3 +220,109 @@ Phase 10.7 收口后，第一版公开 Agent Demo 达到可发布状态：
 - Redis-backed distributed rate limiting，用于多实例部署。
 - 更系统的评测集和线上监控。
 - 如果 Agent 复杂度增长，可拆分为独立 `agent-api` 服务。
+## Phase 11.1：观测与反馈
+
+Phase 11.1 为 Agent Demo 增加最小化、隐私安全的观测与反馈闭环：
+
+- `POST /api/agent-demo` 响应新增随机 UUID `requestId`。
+- 每次 Agent 请求在响应前生成一条最小化 PostgreSQL 事件。
+- `/agent-demo` 页面在回答后显示 Helpful / Not helpful 按钮。
+- 新增 `POST /api/agent-demo/feedback`，只接受 `helpful` / `not_helpful`。
+- 第一版不做后台管理页、不做完整会话历史、不接第三方 analytics。
+- 观测写入失败不会影响 Agent 正常回答，只记录安全 server log。
+
+反馈 API：
+
+```text
+POST /api/agent-demo/feedback
+```
+
+请求体：
+
+```json
+{
+  "requestId": "11111111-1111-4111-8111-111111111111",
+  "feedback": "helpful"
+}
+```
+
+只允许 `helpful` 和 `not_helpful`。第一版不接受 `reason`、`message`、`text` 等自由文本字段。
+
+观测环境变量：
+
+```text
+AGENT_DEMO_OBSERVABILITY_ENABLED=true
+AGENT_DEMO_HASH_SALT=<server-side-random-salt>
+AGENT_DEMO_DATABASE_URL=postgres://...
+```
+
+保存的事件字段：`request_id`、`event_type`、`allowed`、`category`、`locale`、`latency_ms`、`source_count`、`trace_step_count`、`trace_ok`、`error_type`、`question_hash`、`ip_hash`。
+
+保存的反馈字段：`request_id`、`feedback`、`category`、`ip_hash`。
+
+明确不保存：完整 `question`、完整 `answer`、明文 IP、原始 User-Agent 或 headers、prompt、检索 context 原文、完整 trace detail、密钥、环境变量、服务器路径、真实联系方式、真实单位、真实客户或甲方信息。
+
+PostgreSQL 表结构需手动执行，应用不会自动迁移：
+
+```sql
+create table if not exists agent_demo_events (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  request_id uuid not null,
+  event_type text not null check (
+    event_type in (
+      'request_completed',
+      'request_blocked',
+      'request_rate_limited',
+      'request_error'
+    )
+  ),
+  allowed boolean not null,
+  category text not null,
+  locale text not null,
+  latency_ms integer not null,
+  source_count integer not null,
+  trace_step_count integer not null,
+  trace_ok boolean not null,
+  error_type text,
+  question_hash text,
+  ip_hash text
+);
+
+create unique index if not exists agent_demo_events_request_id_idx
+  on agent_demo_events (request_id);
+
+create index if not exists agent_demo_events_created_at_idx
+  on agent_demo_events (created_at desc);
+
+create index if not exists agent_demo_events_category_idx
+  on agent_demo_events (category);
+
+create table if not exists agent_demo_feedback (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  request_id uuid not null references agent_demo_events(request_id) on delete cascade,
+  feedback text not null check (feedback in ('helpful', 'not_helpful')),
+  category text,
+  ip_hash text
+);
+
+create unique index if not exists agent_demo_feedback_request_id_idx
+  on agent_demo_feedback (request_id);
+
+create index if not exists agent_demo_feedback_created_at_idx
+  on agent_demo_feedback (created_at desc);
+```
+
+## Phase 11.1 验收结论
+
+Phase 11.1 已于 2026-06-21 验收通过，作为 Agent Demo 观测与反馈功能的稳定基线：
+
+- `POST /api/agent-demo` 所有返回路径都带有 UUID `requestId`。
+- 最小化 PostgreSQL 事件和按钮式反馈闭环已接入并写入文档。
+- 存储内容仅限隐私安全的事件元数据、hash 和反馈值。
+- 不保存完整 question、完整 answer、prompt、context、trace detail、原始 headers 或明文 IP。
+- 观测写入失败只降级为安全 server log，不阻断 Agent Demo 正常回答。
+- Console / CLI、窗口系统、Agent 回答范围和已跟踪 Docker / Nginx 配置保持不变。
+
+Phase 11 后续计划：Phase 11.2 Agent Demo Answer Quality Improvement、Phase 11.3 Agent Demo Suggested Questions、Phase 11.4 Agent Demo Trace UX Polish、Phase 11.5 Phase 11 Final Review。

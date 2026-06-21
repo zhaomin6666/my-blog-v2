@@ -8,6 +8,8 @@ import {
   Bot,
   CheckCircle2,
   Clock3,
+  ThumbsDown,
+  ThumbsUp,
   Loader2,
   LockKeyhole,
   Send,
@@ -27,6 +29,8 @@ interface AgentDemoPageProps {
 }
 
 type RequestState = 'idle' | 'loading' | 'success' | 'error' | 'rate_limited';
+type FeedbackState = 'idle' | 'submitting' | 'submitted' | 'error';
+type FeedbackValue = 'helpful' | 'not_helpful';
 
 const sampleQuestions: Record<Lang, string[]> = {
   zh: [
@@ -78,6 +82,9 @@ export function AgentDemoPage({ stylePreset, lang }: AgentDemoPageProps) {
   const [response, setResponse] = useState<AgentDemoResponse | null>(null);
   const [requestState, setRequestState] = useState<RequestState>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [feedbackState, setFeedbackState] = useState<FeedbackState>('idle');
+  const [feedbackError, setFeedbackError] = useState('');
+  const [submittedFeedback, setSubmittedFeedback] = useState<FeedbackValue | null>(null);
 
   const trimmedQuestion = question.trim();
   const canSubmit = trimmedQuestion.length > 0 && requestState !== 'loading';
@@ -94,6 +101,9 @@ export function AgentDemoPage({ stylePreset, lang }: AgentDemoPageProps) {
     setQuestion(finalQuestion);
     setRequestState('loading');
     setErrorMessage('');
+    setFeedbackState('idle');
+    setFeedbackError('');
+    setSubmittedFeedback(null);
 
     try {
       const result = await fetch('/api/agent-demo', {
@@ -121,6 +131,40 @@ export function AgentDemoPage({ stylePreset, lang }: AgentDemoPageProps) {
     } catch {
       setRequestState('error');
       setErrorMessage(t('agentDemo.networkError', lang));
+    }
+  }
+
+  async function submitFeedback(feedback: FeedbackValue) {
+    if (!response?.requestId || feedbackState === 'submitting' || feedbackState === 'submitted') return;
+
+    setFeedbackState('submitting');
+    setFeedbackError('');
+
+    try {
+      const result = await fetch('/api/agent-demo/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          requestId: response.requestId,
+          feedback,
+          category: response.category,
+        }),
+      });
+      const data = (await result.json()) as { ok: boolean; error?: string };
+
+      if (!result.ok || !data.ok) {
+        setFeedbackState('error');
+        setFeedbackError(t('agentDemo.feedbackError', lang));
+        return;
+      }
+
+      setSubmittedFeedback(feedback);
+      setFeedbackState('submitted');
+    } catch {
+      setFeedbackState('error');
+      setFeedbackError(t('agentDemo.feedbackError', lang));
     }
   }
 
@@ -256,6 +300,59 @@ export function AgentDemoPage({ stylePreset, lang }: AgentDemoPageProps) {
                     <p className={`text-[11px] ${tokens.textMuted}`}>
                       {t('agentDemo.rateLimitReset', lang)} {resetTime}
                     </p>
+                  )}
+                  {response.requestId && requestState === 'success' && (
+                    <div className={`rounded-md border border-zinc-200/70 bg-white/55 p-3 dark:border-zinc-800 dark:bg-black/20 ${isMacos ? '' : 'font-mono'}`}>
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <p className={`text-xs font-medium ${tokens.textPrimary}`}>
+                          {t('agentDemo.feedbackQuestion', lang)}
+                        </p>
+                        <div className="grid grid-cols-2 gap-2 sm:flex">
+                          <button
+                            type="button"
+                            onClick={() => void submitFeedback('helpful')}
+                            disabled={feedbackState === 'submitting' || feedbackState === 'submitted'}
+                            className={`inline-flex min-h-9 items-center justify-center gap-2 rounded-md border px-3 py-2 text-xs transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 ${
+                              submittedFeedback === 'helpful'
+                                ? 'border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-500/40 dark:bg-emerald-950/30 dark:text-emerald-300'
+                                : `border-zinc-200 bg-white/70 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-black/20 dark:hover:bg-zinc-900 ${tokens.textSecondary}`
+                            }`}
+                          >
+                            <ThumbsUp size={13} />
+                            <span>{t('agentDemo.feedbackHelpful', lang)}</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => void submitFeedback('not_helpful')}
+                            disabled={feedbackState === 'submitting' || feedbackState === 'submitted'}
+                            className={`inline-flex min-h-9 items-center justify-center gap-2 rounded-md border px-3 py-2 text-xs transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 ${
+                              submittedFeedback === 'not_helpful'
+                                ? 'border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-500/40 dark:bg-amber-950/30 dark:text-amber-300'
+                                : `border-zinc-200 bg-white/70 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-black/20 dark:hover:bg-zinc-900 ${tokens.textSecondary}`
+                            }`}
+                          >
+                            <ThumbsDown size={13} />
+                            <span>{t('agentDemo.feedbackNotHelpful', lang)}</span>
+                          </button>
+                        </div>
+                      </div>
+                      {feedbackState === 'submitting' && (
+                        <p className={`mt-2 flex items-center gap-2 text-[11px] ${tokens.textMuted}`}>
+                          <Loader2 size={12} className="animate-spin" />
+                          {t('agentDemo.feedbackSubmitting', lang)}
+                        </p>
+                      )}
+                      {feedbackState === 'submitted' && (
+                        <p className="mt-2 text-[11px] text-emerald-600 dark:text-emerald-300">
+                          {t('agentDemo.feedbackThanks', lang)}
+                        </p>
+                      )}
+                      {feedbackState === 'error' && feedbackError && (
+                        <p className="mt-2 text-[11px] text-rose-600 dark:text-rose-300">
+                          {feedbackError}
+                        </p>
+                      )}
+                    </div>
                   )}
                 </div>
               )}

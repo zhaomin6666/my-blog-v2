@@ -3,9 +3,11 @@ import { createAgentTrace, updateAgentTraceStep } from "./traceBuilder";
 import { createAgentDemoResponse } from "./agentDemoService";
 import type {
   AgentDemoLocale,
+  AgentDemoResponse,
   AgentKnowledgeRetrieverResult,
   AgentScopeResult,
 } from "./agentDemoTypes";
+import type { AgentDemoEventRecord } from "./observability/agentDemoMetricsTypes";
 
 function retrievedContext(locale: AgentDemoLocale): AgentKnowledgeRetrieverResult {
   let trace = createAgentTrace(locale);
@@ -35,20 +37,31 @@ describe("createAgentDemoResponse", () => {
   it("returns validation errors without calling retrieval or model generation", async () => {
     const retrieveKnowledge = vi.fn();
     const generateModelAnswer = vi.fn();
+    const recordEvent = vi.fn();
 
     const response = await createAgentDemoResponse(
       { question: "   " },
       {
         retrieveKnowledge,
         generateModelAnswer,
+        recordEvent,
       },
     );
 
     expect(response).toMatchObject({
+      requestId: expect.stringMatching(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+      ),
       allowed: false,
       category: "error",
       error: "empty_question",
     });
+    expect(recordEvent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventType: "request_error",
+        errorType: "empty_question",
+      }),
+    );
     expect(retrieveKnowledge).not.toHaveBeenCalled();
     expect(generateModelAnswer).not.toHaveBeenCalled();
   });
@@ -86,6 +99,98 @@ describe("createAgentDemoResponse", () => {
     );
     expect(retrieveKnowledge).not.toHaveBeenCalled();
     expect(generateModelAnswer).not.toHaveBeenCalled();
+  });
+
+  it("records minimal events for blocked, rate-limited, and successful responses", async () => {
+    const allowedScope: AgentScopeResult = {
+      allowed: true,
+      category: "profile",
+      reason: "allowed",
+    };
+    const blockedScope: AgentScopeResult = {
+      allowed: false,
+      category: "privacy",
+      reason: "private info",
+    };
+    const events: AgentDemoEventRecord[] = [];
+    const recordEvent = vi.fn(async (event: AgentDemoEventRecord) => {
+      events.push(event);
+    });
+
+    await createAgentDemoResponse(
+      {
+        question: "Who are you?",
+        locale: "en",
+      },
+      {
+        classifyScope: () => allowedScope,
+        retrieveKnowledge: async () => retrievedContext("en"),
+        generateModelAnswer: async () => ({
+          ok: true,
+          answer: "Model answer from public context.",
+          model: "test-model",
+        }),
+        checkRateLimit: () => ({
+          allowed: true,
+          limit: 10,
+          remaining: 9,
+          resetAt: 2000,
+          windowMs: 1000,
+        }),
+        clientIdentifier: "203.0.113.1",
+        recordEvent,
+      },
+    );
+
+    await createAgentDemoResponse(
+      {
+        question: "What is your real company?",
+        locale: "en",
+      },
+      {
+        classifyScope: () => blockedScope,
+        checkRateLimit: () => ({
+          allowed: true,
+          limit: 10,
+          remaining: 9,
+          resetAt: 2000,
+          windowMs: 1000,
+        }),
+        recordEvent,
+      },
+    );
+
+    await createAgentDemoResponse(
+      {
+        question: "Who are you?",
+        locale: "en",
+      },
+      {
+        checkRateLimit: () => ({
+          allowed: false,
+          limit: 1,
+          remaining: 0,
+          resetAt: 2000,
+          windowMs: 1000,
+        }),
+        recordEvent,
+      },
+    );
+
+    expect(events.map((event) => event.eventType)).toEqual([
+      "request_completed",
+      "request_blocked",
+      "request_rate_limited",
+    ]);
+    expect(events[0]).toMatchObject({
+      allowed: true,
+      category: "profile",
+      sourceCount: 1,
+      traceStepCount: 5,
+    });
+    expect(JSON.stringify(events)).not.toContain("Model answer from public context.");
+    expect(JSON.stringify(events)).not.toContain("Who are you?");
+    expect(JSON.stringify(events)).not.toContain("203.0.113.1");
   });
 
   it("short-circuits before scope classification when rate limited", async () => {
@@ -172,6 +277,7 @@ describe("createAgentDemoResponse", () => {
       }),
     );
     expect(response).toMatchObject({
+      requestId: expect.any(String),
       answer: "Model answer from public context.",
       allowed: true,
       category: "profile",

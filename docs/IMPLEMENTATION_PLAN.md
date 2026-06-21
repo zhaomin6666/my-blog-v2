@@ -793,3 +793,36 @@
 - Added `docs/AGENT_DEMO_ARCHITECTURE.zh-CN.md` as the Chinese architecture counterpart.
 - Updated English and Chinese documentation to cover architecture, deployment configuration, safety verification, and final acceptance.
 - Updated Agent Demo README to remove stale deferred work and record Phase 10.6 / 10.7.
+
+## Phase 11: Agent Demo Enhancement IN PROGRESS
+- Improve the public Agent Demo after the first release while preserving the read-only public-content boundary.
+- Do not expand the answer scope, add write tools, modify Console / CLI, modify the window system, or change tracked Docker / Nginx deployment config unless separately planned.
+
+### Phase 11.1: Agent Demo Observability & Feedback COMPLETED
+- Added privacy-safe PostgreSQL minimal event logging for Agent Demo requests.
+- Added `requestId` to `POST /api/agent-demo` responses using random UUIDs.
+- Added `features/agent-demo/observability` with metrics types, hash utilities, PostgreSQL storage, event logging, and feedback service.
+- Added `POST /api/agent-demo/feedback` for button-only `helpful` / `not_helpful` feedback.
+- Added Helpful / Not helpful feedback controls to `/agent-demo` after successful answers.
+- Stored only minimal fields: request id, event type, allowed flag, category, locale, latency, source count, trace step count, trace health, safe error type, question hash, and IP hash.
+- Feedback stores only request id, feedback value, category, and IP hash.
+- Full questions, full answers, plaintext IPs, raw headers, prompts, retrieved context, and trace details are not stored.
+- Observability failures are logged safely and do not affect Agent Demo responses.
+- Added env placeholders for observability enablement, hash salt, and PostgreSQL connection URL.
+- Documented manual PostgreSQL table SQL, privacy rules, disabling observability, and minimal SQL statistics.
+- User acceptance recorded on 2026-06-21; Phase 11.1 is the accepted baseline for the remaining Phase 11 follow-up work.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No tracked Docker / Nginx config files were changed.
+
+### Phase 11.2: Agent Demo Answer Quality Improvement PLANNED
+- Improve answer quality using the existing public-content scope and safety boundaries.
+
+### Phase 11.3: Agent Demo Suggested Questions PLANNED
+- Improve entry prompts and suggested questions without widening the Agent scope.
+
+### Phase 11.4: Agent Demo Trace UX Polish PLANNED
+- Polish trace readability and user comprehension without changing trace semantics.
+
+### Phase 11.5: Phase 11 Final Review PLANNED
+- Final acceptance for Phase 11 enhancements.

@@ -411,6 +411,58 @@
 - 更新中英文文档，覆盖架构、安全边界、部署配置、生产验证和最终验收清单。
 - 更新 Agent Demo README，移除过期 deferred work，并记录 Phase 10.6 / 10.7。
 
+## Phase 11：Agent Demo Enhancement - 进行中
+
+目标：在第一版公开 Agent Demo 的基础上增强使用反馈、回答质量和体验，同时继续保持只读、公开内容、隐私安全边界。
+
+边界：
+
+- 不扩大 Agent 回答范围。
+- 不新增写工具。
+- 不保存完整对话。
+- 不修改 Console / CLI。
+- 不修改窗口系统。
+- 不修改已跟踪 Docker / Nginx 部署配置。
+
+### Phase 11.1：Agent Demo Observability & Feedback - 已完成
+
+- 为 Agent Demo 请求新增隐私安全的 PostgreSQL 最小化事件记录。
+- `POST /api/agent-demo` 响应新增随机 UUID `requestId`。
+- 新增 `features/agent-demo/observability`：
+  - metrics 类型。
+  - SHA-256 + salt 哈希工具。
+  - PostgreSQL 存储层。
+  - 最小化事件 logger。
+  - feedback service。
+- 新增 `POST /api/agent-demo/feedback`，只接受 `helpful` / `not_helpful`。
+- `/agent-demo` 回答后展示 Helpful / Not helpful 反馈按钮。
+- 事件只保存 request id、event type、allowed、category、locale、latency、sources 数量、trace step 数量、trace 是否正常、安全 error type、question hash 和 IP hash。
+- 反馈只保存 request id、feedback、category 和 IP hash。
+- 不保存完整 question、完整 answer、明文 IP、原始 headers、prompt、检索 context 或完整 trace detail。
+- 观测写入失败只记录安全 server log，不影响 Agent 正常回答。
+- `.env.example` 新增 observability 开关、hash salt 和 PostgreSQL 连接 URL 占位。
+- 文档补充手动建表 SQL、隐私规则、关闭 observability 方法和最小统计查询示例。
+- 2026-06-21 用户验收通过，Phase 11.1 可作为后续 Phase 11 工作的稳定基线。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改已跟踪 Docker / Nginx 部署配置。
+
+### Phase 11.2：Agent Demo Answer Quality Improvement - 计划中
+
+- 在不扩大公开只读范围的前提下优化回答质量。
+
+### Phase 11.3：Agent Demo Suggested Questions - 计划中
+
+- 优化示例问题和推荐问题入口。
+
+### Phase 11.4：Agent Demo Trace UX Polish - 计划中
+
+- 优化 trace 可读性，不改变 trace 语义。
+
+### Phase 11.5：Phase 11 Final Review - 计划中
+
+- 完成 Phase 11 增强的最终验收。
+
 ## 后续原则
 
 - 新阶段开始前先明确范围和验收标准。

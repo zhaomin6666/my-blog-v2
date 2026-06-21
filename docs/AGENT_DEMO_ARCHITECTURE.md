@@ -18,6 +18,12 @@ rate-limit, and online safety verification guidance. Phase 10.7 completes the
 first-version public acceptance review. The demo still does not connect Redis
 or change tracked Docker / Nginx deployment files.
 
+Phase 11.1 adds privacy-safe observability and feedback. The API now returns a
+random UUID `requestId`, records a minimal PostgreSQL event summary when
+observability is enabled, and exposes a button-only feedback API. It still does
+not store full questions, full answers, raw prompts, raw retrieved context, raw
+trace details, plaintext IPs, or raw request headers.
+
 ## Public Scope
 
 The demo may answer questions about:
@@ -67,6 +73,7 @@ Response body:
 
 ```json
 {
+  "requestId": "11111111-1111-4111-8111-111111111111",
   "answer": "string",
   "allowed": true,
   "category": "project",
@@ -86,6 +93,26 @@ agent service, then return JSON. Business logic should stay in
 `features/agent-demo`.
 
 Phase 10.3 implements this route at `app/api/agent-demo/route.ts`.
+
+Feedback route:
+
+```text
+POST /api/agent-demo/feedback
+```
+
+Request body:
+
+```json
+{
+  "requestId": "11111111-1111-4111-8111-111111111111",
+  "feedback": "helpful"
+}
+```
+
+Allowed `feedback` values are `helpful` and `not_helpful`. Free-text fields
+such as `reason`, `message`, or `text` are rejected. Successful responses return
+`{ "ok": true }`; failures return a safe `{ "ok": false, "error": "..." }`
+without database details.
 
 ## Safety Boundary
 
@@ -156,6 +183,108 @@ Logs must not include API keys, full prompts, full retrieved context, full model
 answers, raw upstream response bodies, private environment values, or server
 paths.
 
+## Observability And Feedback
+
+Phase 11.1 uses PostgreSQL for minimal event and feedback storage. The app does
+not auto-migrate tables; run the SQL manually in production before enabling
+storage.
+
+Environment variables:
+
+```text
+AGENT_DEMO_OBSERVABILITY_ENABLED=true
+AGENT_DEMO_HASH_SALT=<server-side-random-salt>
+AGENT_DEMO_DATABASE_URL=postgres://...
+```
+
+If observability is disabled, `AGENT_DEMO_DATABASE_URL` is missing, or
+PostgreSQL is unavailable, the Agent Demo still returns its normal response.
+The failure is recorded only as a safe server log.
+
+Stored event fields:
+
+- `request_id`
+- `event_type`: `request_completed`, `request_blocked`, `request_rate_limited`, or `request_error`
+- `allowed`
+- `category`
+- `locale`
+- `latency_ms`
+- `source_count`
+- `trace_step_count`
+- `trace_ok`
+- `error_type`
+- `question_hash`
+- `ip_hash`
+
+Stored feedback fields:
+
+- `request_id`
+- `feedback`: `helpful` or `not_helpful`
+- `category`
+- `ip_hash`
+
+Never store:
+
+- full `question`
+- full `answer`
+- plaintext IP
+- raw User-Agent or raw headers
+- prompt or retrieved context
+- full trace detail
+- secrets, environment values, server paths, private contact data, employer names, client names, or buyer names
+
+PostgreSQL schema:
+
+```sql
+create table if not exists agent_demo_events (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  request_id uuid not null,
+  event_type text not null check (
+    event_type in (
+      'request_completed',
+      'request_blocked',
+      'request_rate_limited',
+      'request_error'
+    )
+  ),
+  allowed boolean not null,
+  category text not null,
+  locale text not null,
+  latency_ms integer not null,
+  source_count integer not null,
+  trace_step_count integer not null,
+  trace_ok boolean not null,
+  error_type text,
+  question_hash text,
+  ip_hash text
+);
+
+create unique index if not exists agent_demo_events_request_id_idx
+  on agent_demo_events (request_id);
+
+create index if not exists agent_demo_events_created_at_idx
+  on agent_demo_events (created_at desc);
+
+create index if not exists agent_demo_events_category_idx
+  on agent_demo_events (category);
+
+create table if not exists agent_demo_feedback (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  request_id uuid not null references agent_demo_events(request_id) on delete cascade,
+  feedback text not null check (feedback in ('helpful', 'not_helpful')),
+  category text,
+  ip_hash text
+);
+
+create unique index if not exists agent_demo_feedback_request_id_idx
+  on agent_demo_feedback (request_id);
+
+create index if not exists agent_demo_feedback_created_at_idx
+  on agent_demo_feedback (created_at desc);
+```
+
 ## Production Safety Verification
 
 Before enabling `/agent-demo` publicly, verify:
@@ -197,6 +326,22 @@ acceptance result:
 - Live model testing remains opt-in through `AGENT_DEMO_RUN_LIVE_TEST=true`.
 - English and Chinese docs now cover the architecture, safety boundary,
   deployment configuration, and final acceptance checklist.
+
+## Phase 11.1 Acceptance
+
+Phase 11.1 was accepted on 2026-06-21 as the baseline for Agent Demo
+observability and feedback:
+
+- `POST /api/agent-demo` returns a UUID `requestId` on every response path.
+- Minimal PostgreSQL events and button-only feedback are documented and wired.
+- Stored data stays limited to privacy-safe event metadata, hashes, and feedback
+  values.
+- Full questions, answers, prompts, context, trace details, raw headers, and
+  plaintext IP addresses are intentionally not stored.
+- Observability failures degrade to safe server logs and do not block Agent Demo
+  answers.
+- Console / CLI, the window system, the Agent answer scope, and tracked
+  Docker / Nginx config remain unchanged.
 
 ## Trace Contract
 
@@ -265,6 +410,11 @@ later, but model-based classification is not required for Phase 10.2.
 - Phase 10.5: Agent Demo UI and trace display. Completed.
 - Phase 10.6: Production deployment and safety verification guide. Completed.
 - Phase 10.7: Final Phase 10 review. Completed.
+- Phase 11.1: Agent Demo observability and feedback. Completed.
+- Phase 11.2: Agent Demo answer quality improvement. Planned.
+- Phase 11.3: Agent Demo suggested questions. Planned.
+- Phase 11.4: Agent Demo trace UX polish. Planned.
+- Phase 11.5: Phase 11 final review. Planned.
 
 ## Standalone Agent API Option
 

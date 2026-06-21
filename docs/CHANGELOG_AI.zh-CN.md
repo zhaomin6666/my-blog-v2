@@ -29,6 +29,17 @@
 
 **验证：**
 - `pnpm test` 通过。
+
+### 2026-06-21 - Codex
+**摘要：** Phase 11.1 已验收通过，完成文档验收归档并准备提交当前版本。
+
+**验收范围：**
+- 记录用户对 Phase 11.1 Agent Demo 观测与反馈功能的验收结论。
+- 确认当前基线保留隐私安全的最小化事件、UUID `requestId`、PostgreSQL 反馈存储和按钮式反馈闭环。
+- 范围边界不变：未扩大 Agent 回答范围，未新增写工具，未修改 Console / CLI，未修改窗口系统，未修改已跟踪 Docker / Nginx 配置。
+
+**验证：**
+- `pnpm test`、`pnpm lint`、`pnpm build` 作为本次验收提交的发布检查。
 - `pnpm lint` 通过。
 - `pnpm build` 通过。
 
@@ -691,3 +702,33 @@ Claude Code 完成视觉打磨。
 - 后续注意事项。
 
 
+### 2026-06-17 - Codex
+**摘要：** Phase 11.1 已完成，为 Agent Demo 增加隐私安全的最小化观测事件和反馈闭环。
+
+**Phase 11.1 范围：**
+- 新增 `features/agent-demo/observability`，封装 Agent Demo 最小化观测逻辑。
+- `POST /api/agent-demo` 所有响应新增随机 UUID `requestId`。
+- 使用 SHA-256 + 服务端 salt 生成 `question_hash` 和 `ip_hash`。
+- 为 completed、blocked、rate-limited 和 error 响应记录最小事件。
+- 新增 `POST /api/agent-demo/feedback`，只接受 `helpful` / `not_helpful`。
+- `/agent-demo` 回答后新增 Helpful / Not helpful 反馈按钮。
+- `.env.example` 新增 `AGENT_DEMO_OBSERVABILITY_ENABLED`、`AGENT_DEMO_HASH_SALT` 和 `AGENT_DEMO_DATABASE_URL`。
+- 架构和部署文档补充 PostgreSQL 建表 SQL、隐私边界、关闭 observability 方法和最小统计查询示例。
+- 实施计划新增 Phase 11，标记 Phase 11.1 完成，Phase 11.2 到 11.5 计划中。
+
+**隐私边界：**
+- 不保存完整 question。
+- 不保存完整 answer。
+- 不保存明文 IP。
+- 不保存原始 headers、prompt、检索 context 或完整 trace detail。
+- 观测写入失败只记录安全 server log，不影响 Agent 正常回答。
+
+**范围约束：**
+- 未扩大 Agent 回答范围。
+- 未新增 Agent 写工具。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改已跟踪 Docker / Nginx 配置文件。
+
+**验证：**
+- `pnpm test` 通过。

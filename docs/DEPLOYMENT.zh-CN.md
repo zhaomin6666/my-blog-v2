@@ -467,3 +467,113 @@ docker compose --env-file .env.production up -d --build
 如果未来迁移到托管平台，应选择支持 Next.js App Router 和 Node server runtime 的平台。Vercel 是自然选项，但当前 Docker 目标使用 standalone 输出，不是静态导出。
 
 不要把平台账号 ID、私有项目名、访问 token 或部署密钥写入仓库。
+## 15. Agent Demo 观测与反馈配置
+
+Phase 11.1 增加了最小化 PostgreSQL 观测事件和 Helpful / Not helpful 反馈。生产 `.env.production` 可增加：
+
+```text
+AGENT_DEMO_OBSERVABILITY_ENABLED=true
+AGENT_DEMO_HASH_SALT=<random-server-side-salt>
+AGENT_DEMO_DATABASE_URL=<postgres-connection-url>
+```
+
+说明：
+
+- `AGENT_DEMO_OBSERVABILITY_ENABLED=false` 可关闭观测与反馈存储，但不关闭 Agent Demo 本身。
+- `AGENT_DEMO_HASH_SALT` 只放在服务器环境变量里，不要提交到仓库。
+- `AGENT_DEMO_DATABASE_URL` 缺失或 PostgreSQL 不可用时，Agent Demo 仍会正常返回回答，只记录安全日志。
+- 应用不会自动建表或迁移数据库，需手动执行 SQL。
+
+建表 SQL：
+
+```sql
+create table if not exists agent_demo_events (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  request_id uuid not null,
+  event_type text not null check (
+    event_type in (
+      'request_completed',
+      'request_blocked',
+      'request_rate_limited',
+      'request_error'
+    )
+  ),
+  allowed boolean not null,
+  category text not null,
+  locale text not null,
+  latency_ms integer not null,
+  source_count integer not null,
+  trace_step_count integer not null,
+  trace_ok boolean not null,
+  error_type text,
+  question_hash text,
+  ip_hash text
+);
+
+create unique index if not exists agent_demo_events_request_id_idx
+  on agent_demo_events (request_id);
+
+create index if not exists agent_demo_events_created_at_idx
+  on agent_demo_events (created_at desc);
+
+create index if not exists agent_demo_events_category_idx
+  on agent_demo_events (category);
+
+create table if not exists agent_demo_feedback (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  request_id uuid not null references agent_demo_events(request_id) on delete cascade,
+  feedback text not null check (feedback in ('helpful', 'not_helpful')),
+  category text,
+  ip_hash text
+);
+
+create unique index if not exists agent_demo_feedback_request_id_idx
+  on agent_demo_feedback (request_id);
+
+create index if not exists agent_demo_feedback_created_at_idx
+  on agent_demo_feedback (created_at desc);
+```
+
+最小统计查询示例：
+
+```sql
+select count(*) as today_requests
+from agent_demo_events
+where created_at >= date_trunc('day', now());
+
+select event_type, count(*)
+from agent_demo_events
+where created_at >= now() - interval '7 days'
+group by event_type
+order by count(*) desc;
+
+select category, count(*), avg(latency_ms)::int as avg_latency_ms
+from agent_demo_events
+where created_at >= now() - interval '7 days'
+group by category
+order by count(*) desc;
+
+select feedback, count(*)
+from agent_demo_feedback
+where created_at >= now() - interval '30 days'
+group by feedback;
+```
+
+隐私边界：
+
+- 不保存完整 question。
+- 不保存完整 answer。
+- 不保存明文 IP。
+- 不保存原始 headers / User-Agent。
+- 不保存 prompt、检索 context 原文或完整 trace detail。
+- 不保存密钥、环境变量、服务器路径、真实联系方式、真实单位、真实客户或甲方信息。
+
+发布后验收：
+
+- `POST /api/agent-demo` 返回 UUID `requestId`。
+- `/agent-demo` 回答后显示 Helpful / Not helpful。
+- `POST /api/agent-demo/feedback` 只接受 `helpful` / `not_helpful`。
+- 反馈 API 不接受 `reason`、`message`、`text` 等自由文本字段。
+- 观测写入失败不影响 Agent 正常回答。

@@ -102,6 +102,9 @@ AGENT_DEMO_RATE_LIMIT_WINDOW_MS=60000
 AGENT_DEMO_RATE_LIMIT_MAX_REQUESTS=10
 AGENT_DEMO_LOG_LEVEL=info
 AGENT_DEMO_RUN_LIVE_TEST=false
+AGENT_DEMO_OBSERVABILITY_ENABLED=true
+AGENT_DEMO_HASH_SALT=<random-server-side-salt>
+AGENT_DEMO_DATABASE_URL=<postgres-connection-url>
 ```
 
 Notes:
@@ -118,12 +121,103 @@ Notes:
   are too noisy.
 - Keep `AGENT_DEMO_RUN_LIVE_TEST=false` in production. It only controls local
   Vitest live-model checks and should not be needed at runtime.
+- `AGENT_DEMO_OBSERVABILITY_ENABLED=false` disables the Phase 11.1 event and
+  feedback storage layer without disabling the Agent Demo itself.
+- `AGENT_DEMO_HASH_SALT` is used to hash question and IP summaries. Use a
+  private random value in `.env.production`; do not commit it.
+- `AGENT_DEMO_DATABASE_URL` enables PostgreSQL writes for minimal observability
+  events and feedback. If it is missing or PostgreSQL is unavailable, the Agent
+  Demo still returns normal answers and logs a safe server-side warning.
 
 After changing Agent Demo model or timeout variables, restart the container:
 
 ```bash
 docker compose --env-file .env.production up -d --build
 ```
+
+### Agent Demo Observability Tables
+
+Phase 11.1 uses PostgreSQL for minimal request and feedback events. The app does
+not auto-run migrations. Run the SQL manually before enabling storage:
+
+```sql
+create table if not exists agent_demo_events (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  request_id uuid not null,
+  event_type text not null check (
+    event_type in (
+      'request_completed',
+      'request_blocked',
+      'request_rate_limited',
+      'request_error'
+    )
+  ),
+  allowed boolean not null,
+  category text not null,
+  locale text not null,
+  latency_ms integer not null,
+  source_count integer not null,
+  trace_step_count integer not null,
+  trace_ok boolean not null,
+  error_type text,
+  question_hash text,
+  ip_hash text
+);
+
+create unique index if not exists agent_demo_events_request_id_idx
+  on agent_demo_events (request_id);
+
+create index if not exists agent_demo_events_created_at_idx
+  on agent_demo_events (created_at desc);
+
+create index if not exists agent_demo_events_category_idx
+  on agent_demo_events (category);
+
+create table if not exists agent_demo_feedback (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  request_id uuid not null references agent_demo_events(request_id) on delete cascade,
+  feedback text not null check (feedback in ('helpful', 'not_helpful')),
+  category text,
+  ip_hash text
+);
+
+create unique index if not exists agent_demo_feedback_request_id_idx
+  on agent_demo_feedback (request_id);
+
+create index if not exists agent_demo_feedback_created_at_idx
+  on agent_demo_feedback (created_at desc);
+```
+
+Minimal statistics examples:
+
+```sql
+select count(*) as today_requests
+from agent_demo_events
+where created_at >= date_trunc('day', now());
+
+select event_type, count(*)
+from agent_demo_events
+where created_at >= now() - interval '7 days'
+group by event_type
+order by count(*) desc;
+
+select category, count(*), avg(latency_ms)::int as avg_latency_ms
+from agent_demo_events
+where created_at >= now() - interval '7 days'
+group by category
+order by count(*) desc;
+
+select feedback, count(*)
+from agent_demo_feedback
+where created_at >= now() - interval '30 days'
+group by feedback;
+```
+
+Privacy guard: these tables must not store full questions, full answers,
+plaintext IPs, raw headers, prompts, retrieved context, full trace details,
+secrets, server paths, or private personal/business information.
 
 ## Production Archive
 
@@ -377,6 +471,9 @@ Future releases should use Git tags for clearer rollback targets.
   - `AGENT_DEMO_RATE_LIMIT_WINDOW_MS`
   - `AGENT_DEMO_RATE_LIMIT_MAX_REQUESTS`
   - `AGENT_DEMO_LOG_LEVEL`
+  - `AGENT_DEMO_OBSERVABILITY_ENABLED`
+  - `AGENT_DEMO_HASH_SALT`
+  - `AGENT_DEMO_DATABASE_URL`
 - Run `pnpm lint`.
 - Run `pnpm build`.
 - Run `docker compose --env-file .env.production build` when Docker is available locally or on the server.
@@ -394,6 +491,8 @@ Future releases should use Git tags for clearer rollback targets.
 - Confirm `POST /api/agent-demo` returns a scoped answer for a safe public question.
 - Confirm private / secret / server-internal questions are refused.
 - Confirm repeated Agent Demo requests eventually return `429`.
+- Confirm `POST /api/agent-demo` returns a UUID `requestId`.
+- Confirm `POST /api/agent-demo/feedback` accepts only `helpful` and `not_helpful`.
 - Confirm application logs include `[agent-demo]` request IDs but do not include API keys, full prompts, full retrieved context, or full answers.
 
 ## Online Validation Checklist

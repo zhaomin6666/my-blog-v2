@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 type AgentDemoLogLevel = "silent" | "info" | "debug";
 
 type AgentDemoLogMeta = Record<
@@ -34,8 +36,7 @@ function shouldLog(level: Exclude<AgentDemoLogLevel, "silent">): boolean {
 }
 
 export function createAgentDemoRequestId(): string {
-  const randomPart = Math.random().toString(36).slice(2, 8);
-  return `agent-${Date.now().toString(36)}-${randomPart}`;
+  return randomUUID();
 }
 
 export function logAgentDemoInfo(event: string, meta: AgentDemoLogMeta = {}): void {

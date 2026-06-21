@@ -60,6 +60,7 @@ export interface AgentUsageInfo {
 }
 
 export interface AgentDemoResponse {
+  requestId: string;
   answer: string;
   allowed: boolean;
   category: AgentScopeCategory | "foundation" | "error";

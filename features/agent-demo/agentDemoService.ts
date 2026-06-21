@@ -29,6 +29,11 @@ import {
   logAgentDemoInfo,
   logAgentDemoWarn,
 } from "./agentDemoLogger";
+import {
+  buildAgentDemoEventRecord,
+  recordAgentDemoEvent,
+} from "./observability/agentDemoEventLogger";
+import type { AgentDemoEventRecord } from "./observability/agentDemoMetricsTypes";
 
 const foundationAnswers = {
   zh: "AI Agent Demo 的安全基础已经建立：当前阶段只定义只读 Agent 的类型、输入校验、trace 契约、安全边界和文档，不接入模型、不开放 API、不读取私有数据。",
@@ -38,6 +43,7 @@ const foundationAnswers = {
 export function createAgentDemoFoundationResponse(
   payload: unknown,
 ): AgentDemoResponse {
+  const requestId = createAgentDemoRequestId();
   const validation = validateAgentDemoRequest(payload);
 
   if (!validation.ok) {
@@ -49,6 +55,7 @@ export function createAgentDemoFoundationResponse(
     );
 
     return {
+      requestId,
       answer: validation.error,
       allowed: false,
       category: "error",
@@ -61,6 +68,7 @@ export function createAgentDemoFoundationResponse(
   const { question, locale } = validation.request;
 
   return {
+    requestId,
     answer: foundationAnswers[locale],
     allowed: false,
     category: "foundation",
@@ -86,7 +94,9 @@ interface AgentDemoServiceOptions {
     params: GenerateAgentDemoModelAnswerParams,
   ) => Promise<AgentModelClientResult>;
   checkRateLimit?: (identifier: string) => AgentDemoRateLimitResult;
+  recordEvent?: (record: AgentDemoEventRecord) => Promise<void>;
   rateLimitIdentifier?: string;
+  clientIdentifier?: string;
   requestId?: string;
 }
 
@@ -128,6 +138,42 @@ function buildUsage(
     rateLimitRemaining: options.rateLimit?.remaining,
     rateLimitResetAt: options.rateLimit?.resetAt,
   };
+}
+
+function getQuestionForHash(payload: unknown): string | undefined {
+  if (!payload || typeof payload !== "object") return undefined;
+  const question = (payload as { question?: unknown }).question;
+  return typeof question === "string" ? question : undefined;
+}
+
+async function finalizeAgentDemoResponse(
+  response: AgentDemoResponse,
+  options: {
+    question?: string;
+    locale?: AgentDemoLocale;
+    clientIdentifier?: string;
+    startedAt: number;
+    recordEvent?: (record: AgentDemoEventRecord) => Promise<void>;
+  },
+): Promise<AgentDemoResponse> {
+  const record = buildAgentDemoEventRecord({
+    response,
+    question: options.question,
+    locale: options.locale,
+    clientIdentifier: options.clientIdentifier,
+    latencyMs: Date.now() - options.startedAt,
+  });
+
+  try {
+    await (options.recordEvent ?? recordAgentDemoEvent)(record);
+  } catch {
+    logAgentDemoWarn("observability_event_recorder_failed", {
+      requestId: response.requestId,
+      category: response.category,
+    });
+  }
+
+  return response;
 }
 
 function createBlockedTrace(
@@ -215,14 +261,23 @@ export async function createAgentDemoResponse(
       validation.error,
     );
 
-    return {
-      answer: validation.error,
-      allowed: false,
-      category: "error",
-      trace,
-      sources: [],
-      error: validation.code,
-    };
+    return finalizeAgentDemoResponse(
+      {
+        requestId,
+        answer: validation.error,
+        allowed: false,
+        category: "error",
+        trace,
+        sources: [],
+        error: validation.code,
+      },
+      {
+        question: getQuestionForHash(payload),
+        clientIdentifier: options.clientIdentifier,
+        startedAt,
+        recordEvent: options.recordEvent,
+      },
+    );
   }
 
   const { question, locale } = validation.request;
@@ -255,18 +310,28 @@ export async function createAgentDemoResponse(
       durationMs: Date.now() - startedAt,
     });
 
-    return {
-      answer: rateLimitAnswers[locale],
-      allowed: false,
-      category: "error",
-      trace: createRateLimitedTrace(locale, rateLimit),
-      sources: [],
-      usage: buildUsage(question, [], {
+    return finalizeAgentDemoResponse(
+      {
+        requestId,
         answer: rateLimitAnswers[locale],
-        rateLimit,
-      }),
-      error: "rate_limited",
-    };
+        allowed: false,
+        category: "error",
+        trace: createRateLimitedTrace(locale, rateLimit),
+        sources: [],
+        usage: buildUsage(question, [], {
+          answer: rateLimitAnswers[locale],
+          rateLimit,
+        }),
+        error: "rate_limited",
+      },
+      {
+        question,
+        locale,
+        clientIdentifier: options.clientIdentifier,
+        startedAt,
+        recordEvent: options.recordEvent,
+      },
+    );
   }
 
   const scopeResult = classifyScope(question);
@@ -283,14 +348,24 @@ export async function createAgentDemoResponse(
       durationMs: Date.now() - startedAt,
     });
 
-    return {
-      answer: blockedAnswers[locale],
-      allowed: false,
-      category: scopeResult.category,
-      trace: createBlockedTrace(locale, scopeResult, rateLimit),
-      sources: [],
-      usage: buildUsage(question, [], { answer: blockedAnswers[locale], rateLimit }),
-    };
+    return finalizeAgentDemoResponse(
+      {
+        requestId,
+        answer: blockedAnswers[locale],
+        allowed: false,
+        category: scopeResult.category,
+        trace: createBlockedTrace(locale, scopeResult, rateLimit),
+        sources: [],
+        usage: buildUsage(question, [], { answer: blockedAnswers[locale], rateLimit }),
+      },
+      {
+        question,
+        locale,
+        clientIdentifier: options.clientIdentifier,
+        startedAt,
+        recordEvent: options.recordEvent,
+      },
+    );
   }
 
   const retrievalStartedAt = Date.now();
@@ -318,17 +393,27 @@ export async function createAgentDemoResponse(
       "No public context was available for model generation.",
     );
 
-    return {
-      answer: noContextAnswers[locale],
-      allowed: true,
-      category: scopeResult.category,
-      trace,
-      sources: retrieval.sources,
-      usage: buildUsage(question, retrieval.sources, {
+    return finalizeAgentDemoResponse(
+      {
+        requestId,
         answer: noContextAnswers[locale],
-        rateLimit,
-      }),
-    };
+        allowed: true,
+        category: scopeResult.category,
+        trace,
+        sources: retrieval.sources,
+        usage: buildUsage(question, retrieval.sources, {
+          answer: noContextAnswers[locale],
+          rateLimit,
+        }),
+      },
+      {
+        question,
+        locale,
+        clientIdentifier: options.clientIdentifier,
+        startedAt,
+        recordEvent: options.recordEvent,
+      },
+    );
   }
 
   const modelResult = await generateModelAnswer({
@@ -350,18 +435,28 @@ export async function createAgentDemoResponse(
 
     trace = updateAgentTraceStep(trace, "generate_answer", "failed", modelResult.message);
 
-    return {
-      answer: modelErrorAnswers[locale],
-      allowed: true,
-      category: scopeResult.category,
-      trace,
-      sources: retrieval.sources,
-      usage: buildUsage(question, retrieval.sources, {
+    return finalizeAgentDemoResponse(
+      {
+        requestId,
         answer: modelErrorAnswers[locale],
-        rateLimit,
-      }),
-      error: modelResult.code,
-    };
+        allowed: true,
+        category: scopeResult.category,
+        trace,
+        sources: retrieval.sources,
+        usage: buildUsage(question, retrieval.sources, {
+          answer: modelErrorAnswers[locale],
+          rateLimit,
+        }),
+        error: modelResult.code,
+      },
+      {
+        question,
+        locale,
+        clientIdentifier: options.clientIdentifier,
+        startedAt,
+        recordEvent: options.recordEvent,
+      },
+    );
   }
 
   trace = updateAgentTraceStep(
@@ -379,15 +474,25 @@ export async function createAgentDemoResponse(
     durationMs: Date.now() - startedAt,
   });
 
-  return {
-    answer: modelResult.answer,
-    allowed: true,
-    category: scopeResult.category,
-    trace,
-    sources: retrieval.sources,
-    usage: buildUsage(question, retrieval.sources, {
+  return finalizeAgentDemoResponse(
+    {
+      requestId,
       answer: modelResult.answer,
-      rateLimit,
-    }),
-  };
+      allowed: true,
+      category: scopeResult.category,
+      trace,
+      sources: retrieval.sources,
+      usage: buildUsage(question, retrieval.sources, {
+        answer: modelResult.answer,
+        rateLimit,
+      }),
+    },
+    {
+      question,
+      locale,
+      clientIdentifier: options.clientIdentifier,
+      startedAt,
+      recordEvent: options.recordEvent,
+    },
+  );
 }

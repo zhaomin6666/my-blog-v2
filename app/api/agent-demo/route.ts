@@ -60,6 +60,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   const response = await createAgentDemoResponse(payload, {
     requestId,
     rateLimitIdentifier: clientIdentifier,
+    clientIdentifier,
   });
 
   const status = getHttpStatus(response.error);

@@ -1,5 +1,47 @@
 # AI Development Changelog
 
+### 2026-06-21 - Codex
+**Summary:** Phase 11.1 accepted. Documentation updated and current version prepared for commit.
+
+**Acceptance scope:**
+- Recorded user acceptance for Phase 11.1 Agent Demo observability and feedback.
+- Confirmed the accepted baseline keeps the privacy-safe minimal event model, UUID `requestId`, PostgreSQL feedback storage, and button-only feedback flow.
+- Kept the scope guard unchanged: no Agent answer-scope expansion, no write tools, no Console / CLI changes, no window-system changes, and no tracked Docker / Nginx config changes.
+
+**Verification:**
+- `pnpm test`, `pnpm lint`, and `pnpm build` are the release checks for this acceptance commit.
+
+### 2026-06-17 - Codex
+**Summary:** Phase 11.1 completed. Added privacy-safe Agent Demo observability and feedback.
+
+**Phase 11.1 scope:**
+- Added PostgreSQL-backed minimal Agent Demo event logging under `features/agent-demo/observability`.
+- Added random UUID `requestId` to all `POST /api/agent-demo` responses.
+- Added SHA-256 + server-side salt hashing for question and IP summaries.
+- Added minimal event records for completed, blocked, rate-limited, and error responses.
+- Added `POST /api/agent-demo/feedback` for button-only `helpful` / `not_helpful` feedback.
+- Added Helpful / Not helpful controls to `/agent-demo` after successful answers.
+- Added `.env.example` placeholders for `AGENT_DEMO_OBSERVABILITY_ENABLED`, `AGENT_DEMO_HASH_SALT`, and `AGENT_DEMO_DATABASE_URL`.
+- Added PostgreSQL table SQL, privacy notes, disable instructions, and minimal statistics queries to deployment and architecture docs.
+- Updated implementation plans with Phase 11.1 completed and Phase 11.2 through Phase 11.5 planned.
+
+**Privacy guard:**
+- Full questions are not stored.
+- Full answers are not stored.
+- Plaintext IPs are not stored.
+- Raw headers, prompts, retrieved context, and trace details are not stored.
+- Observability write failures are logged safely and do not affect Agent Demo responses.
+
+**Scope guard:**
+- No Agent answer scope changes were made.
+- No write tools were added to the Agent.
+- No Console / CLI changes were made.
+- No window-system behavior changes were made.
+- No tracked Docker / Nginx config files were changed.
+
+**Verification:**
+- `pnpm test` passed.
+
 ### 2026-06-15 - Codex
 **Summary:** Phase 10.7 completed. Final acceptance and documentation closure for the first public Agent Demo version.
 
