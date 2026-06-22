@@ -648,14 +648,63 @@ CONTENT_SOURCE=database
 - 文档化恢复命令。
 - 在非生产数据库先测试恢复流程。
 
+## Phase 11.3 实施结果
+
+Phase 11.3 已新增数据库内容源基础，但默认仍然不切换到 database。
+
+新增运行时基础：
+
+- `lib/db/postgres.ts`：PostgreSQL Pool 与查询入口。
+- `lib/db/dbConfig.ts`：数据库环境变量读取。
+- `lib/db/dbTypes.ts`：数据库 row 类型。
+- `lib/content/contentSource.ts`：Repository factory。
+- `lib/content/contentSourceConfig.ts`：纯内容源环境变量解析。
+- `blogService`、`projectService`、`profileService` 通过 factory 选择 Repository。
+
+新增 migration：
+
+- `database/migrations/001_create_cms_tables.sql`
+
+该 migration 包含 Blog Posts、Blog Series、Projects、Profile Pages、Contact
+Channels、System Stack Groups、System Stack Items 和 Homepage Sections 等 MVP
+表，并包含常用索引与 `updated_at` trigger。
+
+内容源环境变量设计：
+
+```text
+PERSONAL_SITE_DATABASE_URL=
+CONTENT_SOURCE=file
+BLOG_CONTENT_SOURCE=
+PROJECT_CONTENT_SOURCE=
+PROFILE_CONTENT_SOURCE=
+```
+
+选择顺序：模块级环境变量优先，其次 `CONTENT_SOURCE`，最后默认 `file`。默认仍为
+`file`，所以当前构建不依赖 PostgreSQL。
+
+DatabaseRepository 状态：
+
+- `DatabaseBlogRepository` 已实现公开 Blog 只读路径。
+- `DatabaseProjectRepository` 已实现公开 Project 只读路径。
+- `DatabaseProfileRepository` 已实现公开 Profile、Contact、System Stack 只读路径。
+
+Phase 11.3 未新增 Admin UI、`/admin` 路由、登录页、真实内容迁移、内容删除、Agent
+Demo 范围变更、Console / CLI 变更、窗口系统变更、Docker 变更或 Nginx 变更。
+
+详细使用说明见：
+
+- `docs/DATABASE_CONTENT_SOURCE.md`
+- `docs/DATABASE_CONTENT_SOURCE.zh-CN.md`
+
 ## 后续实施阶段
 
-### Phase 11.3：Database Schema & Repository Refactor Plan
+### Phase 11.3：Database Schema & Repository Refactor Plan - 已完成
 
-- 设计并实现数据库 schema。
-- 增加 DatabaseRepository。
-- 保留 FileRepository fallback。
-- 不做后台 UI。
+- 已新增数据库 schema migration。
+- 已新增只读 DatabaseRepository。
+- 已新增 Repository factory 和内容源环境变量切换。
+- 默认仍保留 FileRepository。
+- 未实现后台 UI。
 
 ### Phase 11.4：Admin Auth Foundation
 
@@ -701,4 +750,3 @@ CONTENT_SOURCE=database
 
 - 完整 Admin / CMS 验收。
 - 确认公开路由、sitemap、RSS、search、Agent Demo 和部署安全边界。
-

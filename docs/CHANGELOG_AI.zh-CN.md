@@ -1,5 +1,59 @@
 ﻿# AI 变更记录中文摘要
 
+### 2026-06-22 - Codex
+**摘要：** Phase 11.3-fix 已完成，database 内容源可安全处理空表。
+
+**修复范围：**
+- 修复 database 模式缺少 Profile 内容时首页构建失败的问题。
+- 仅为 database 模式新增集中定义的空 Profile、Contact Channels、System Stack 和 `PublicProfile`。
+- 首页内容模块和公开 Projects 列表新增轻量 empty state。
+- Blog、标签、系列、RSS、sitemap 和 Projects 空集合可安全处理。
+- database 模式不会自动 fallback 到 file 内容。
+- 配置、连接、表、SQL 和 schema 错误仍会明确抛出。
+- file 模式保留严格校验，并继续完全不依赖 PostgreSQL。
+- 新增空内容与异常边界的 Service / config 测试。
+
+**验证：**
+- `pnpm test`：16 个测试文件、65 个测试通过；1 个既有 live test 跳过。
+- `pnpm lint` 通过。
+- file 模式在数据库地址无效时 `pnpm build` 通过。
+- 本地 PostgreSQL 18.1 database 空表 smoke build 通过。
+- migration 执行成功，并确认 Blog、Projects、Profile 表均为空。
+
+**范围约束：**
+- 未新增 Admin UI 或 `/admin` 路由。
+- 未迁移真实内容。
+- 未修改部署、Nginx、Agent Demo 范围、Console / CLI 或窗口系统。
+
+### 2026-06-21 - Codex
+**摘要：** Phase 11.3 已完成，新增数据库内容源基础。
+
+**Phase 11.3 范围：**
+- 新增 PostgreSQL CMS schema migration：`database/migrations/001_create_cms_tables.sql`。
+- 新增 Blog Posts、Blog Series、Projects、Profile Pages、Contact Channels、System Stack、Homepage Sections 等 MVP 表。
+- 新增常用公开查询索引和 `updated_at` trigger。
+- 新增 `lib/db` PostgreSQL 访问基础。
+- 新增 Blog / Projects / Profile 的只读 DatabaseRepository。
+- 新增数据库 row 到领域模型 mapper，并补充 mapper / 内容源选择测试。
+- 新增 `lib/content` Repository factory 和内容源环境变量选择。
+- `BlogService`、`ProjectService`、`ProfileService` 已通过 factory 获取 repository。
+- `.env.example` 新增数据库内容源相关环境变量。
+- 新增 `docs/DATABASE_CONTENT_SOURCE.md` 和 `docs/DATABASE_CONTENT_SOURCE.zh-CN.md`。
+- 更新 Admin / CMS 设计文档和实施计划。
+
+**范围约束：**
+- 默认内容源仍为 `file`。
+- 文件模式不依赖 PostgreSQL。
+- 未新增 Admin UI、`/admin` 路由或登录页。
+- 未迁移、移动、删除或覆盖真实内容。
+- `content/blog`、`content/projects`、`content/profile` 保持不变。
+- 未修改 Agent Demo 范围、Console / CLI、窗口系统、Docker 或 Nginx。
+
+**验证：**
+- `pnpm test` 通过。
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
+
 ### 2026-06-21 - Codex
 **摘要：** Phase 11.2 已完成，新增后台管理与 CMS 架构设计文档。
 

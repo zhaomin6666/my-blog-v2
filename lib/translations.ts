@@ -3,6 +3,10 @@ import { Lang } from './types';
 const translations = {
   zh: {
     'status.portfolio': 'Portfolio',
+    'about.empty': '个人档案内容尚未发布。',
+    'skills.empty': '技术栈内容尚未发布。',
+    'projects.empty': '暂无已发布的项目。',
+    'contact.empty': '联系方式尚未发布。',
     'status.terminal': '终端',
     'status.switchToMinimal': '切换极简',
     'status.switchToMacos': '切换 macOS',
@@ -244,6 +248,10 @@ const translations = {
   },
   en: {
     'status.portfolio': 'Portfolio',
+    'about.empty': 'Profile content has not been published yet.',
+    'skills.empty': 'System stack content has not been published yet.',
+    'projects.empty': 'No published projects found.',
+    'contact.empty': 'Contact channels have not been published yet.',
     'status.terminal': 'Terminal',
     'status.switchToMinimal': 'Switch to Minimal',
     'status.switchToMacos': 'Switch to macOS',

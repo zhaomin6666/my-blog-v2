@@ -1,5 +1,59 @@
 # AI Development Changelog
 
+### 2026-06-22 - Codex
+**Summary:** Phase 11.3-fix completed. Database content sources now handle empty tables safely.
+
+**Fix scope:**
+- Fixed the database-mode homepage build failure caused by missing Profile content.
+- Added centralized empty Profile, Contact Channels, System Stack, and `PublicProfile` values for database mode.
+- Added lightweight empty states for homepage content modules and the public Projects list.
+- Kept Blog, tags, series, RSS, sitemap, and Projects empty collections safe.
+- Kept database mode from automatically falling back to file content.
+- Kept configuration, connection, table, SQL, and schema errors explicit.
+- Kept file mode strict and independent from PostgreSQL.
+- Added service/config tests for empty content and error boundaries.
+
+**Verification:**
+- `pnpm test`: 16 files and 65 tests passed; 1 existing live test skipped.
+- `pnpm lint` passed.
+- `pnpm build` passed in file mode with an invalid database URL.
+- Local PostgreSQL 18.1 empty-table smoke build passed in database mode.
+- Migration succeeded and Blog, Projects, and Profile tables were confirmed empty.
+
+**Scope guard:**
+- No Admin UI or `/admin` route was added.
+- No real content was migrated.
+- No deployment, Nginx, Agent Demo scope, Console / CLI, or window-system changes were made.
+
+### 2026-06-21 - Codex
+**Summary:** Phase 11.3 completed. Added database content-source foundation.
+
+**Phase 11.3 scope:**
+- Added PostgreSQL CMS schema migration at `database/migrations/001_create_cms_tables.sql`.
+- Added MVP tables for Blog Posts, Blog Series, Projects, Profile Pages, Contact Channels, System Stack, and Homepage Sections.
+- Added indexes for common public reads and `updated_at` triggers.
+- Added PostgreSQL access helpers under `lib/db`.
+- Added read-only DatabaseRepository implementations for Blog, Projects, and Profile.
+- Added database row-to-domain mappers and focused mapper/source tests.
+- Added repository factory and content-source env selection under `lib/content`.
+- Wired `BlogService`, `ProjectService`, and `ProfileService` through the factory.
+- Added `.env.example` placeholders for database content-source configuration.
+- Added `docs/DATABASE_CONTENT_SOURCE.md` and `docs/DATABASE_CONTENT_SOURCE.zh-CN.md`.
+- Updated Admin / CMS design docs and implementation plans.
+
+**Scope guard:**
+- Default content source remains `file`.
+- File mode does not require PostgreSQL.
+- No Admin UI, `/admin` route, or login page was added.
+- No real content was migrated, moved, deleted, or overwritten.
+- `content/blog`, `content/projects`, and `content/profile` remain in place.
+- No Agent Demo scope, Console / CLI, window-system, Docker, or Nginx changes were made.
+
+**Verification:**
+- `pnpm test` passed.
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
 ### 2026-06-21 - Codex
 **Summary:** Phase 11.2 completed. Added Admin / CMS architecture design documentation.
 

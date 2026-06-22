@@ -6,6 +6,7 @@ import type { ContactChannelData, ContactChannels, ContactChannelType } from '@/
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
+import { EmptySectionCard } from './EmptySectionCard';
 
 interface ContactSectionProps {
   contactChannels: ContactChannels;
@@ -39,6 +40,17 @@ export function ContactSection({ contactChannels }: ContactSectionProps) {
   const isMacos = stylePreset === 'macos';
 
   const channels = contactChannels.channels.filter((channel) => channel.visible);
+
+  if (channels.length === 0) {
+    return (
+      <EmptySectionCard
+        titleKey="contact.title"
+        emptyKey="contact.empty"
+        tag="endpoints/"
+        macosAccent="bg-teal-500"
+      />
+    );
+  }
 
   return (
     <div className={`p-6 ${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow}`}>

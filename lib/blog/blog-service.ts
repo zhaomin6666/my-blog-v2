@@ -11,7 +11,7 @@ import type {
   BlogSeries,
   BlogTag,
 } from './blog-types';
-import { FileBlogRepository } from './file-blog-repository';
+import { getBlogRepository } from '@/lib/content/contentSource';
 
 /**
  * BlogService is the unified entry point for all blog data access.
@@ -184,4 +184,4 @@ export class BlogService {
  * Import this for use in Server Components, API routes, and
  * server-side data fetching.
  */
-export const blogService = new BlogService(new FileBlogRepository());
+export const blogService = new BlogService(getBlogRepository());

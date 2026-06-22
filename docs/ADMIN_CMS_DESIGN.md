@@ -678,13 +678,63 @@ Backup rules:
 - Document restore commands.
 - Test restore on a non-production database before relying on the backup plan.
 
+## Phase 11.3 Implementation Result
+
+Phase 11.3 added the database content-source foundation without turning database
+mode on by default.
+
+Added runtime foundation:
+
+- PostgreSQL access layer in `lib/db/postgres.ts`.
+- Database config helpers in `lib/db/dbConfig.ts`.
+- Shared row types in `lib/db/dbTypes.ts`.
+- Repository source selection in `lib/content/contentSource.ts`.
+- Pure env resolver in `lib/content/contentSourceConfig.ts`.
+- Service singletons now select repositories through the factory.
+
+Added migration:
+
+- `database/migrations/001_create_cms_tables.sql`
+
+The migration defines the MVP CMS tables for Blog Posts, Blog Series, Projects,
+Profile Pages, Contact Channels, System Stack Groups, System Stack Items, and
+Homepage Sections. It also includes indexes and `updated_at` triggers.
+
+Content-source env design:
+
+```text
+PERSONAL_SITE_DATABASE_URL=
+CONTENT_SOURCE=file
+BLOG_CONTENT_SOURCE=
+PROJECT_CONTENT_SOURCE=
+PROFILE_CONTENT_SOURCE=
+```
+
+Selection order is domain-specific env, then `CONTENT_SOURCE`, then `file`.
+The default remains `file`, so current builds do not need PostgreSQL.
+
+DatabaseRepository status:
+
+- `DatabaseBlogRepository` is implemented for read-only Blog public paths.
+- `DatabaseProjectRepository` is implemented for read-only Project public paths.
+- `DatabaseProfileRepository` is implemented for read-only Profile, Contact, and
+  System Stack public paths.
+
+No Admin UI, `/admin` route, login page, real content migration, content
+deletion, Agent Demo scope change, Console / CLI change, window-system change,
+Docker change, or Nginx change was added in Phase 11.3.
+
+Detailed usage lives in `docs/DATABASE_CONTENT_SOURCE.md` and
+`docs/DATABASE_CONTENT_SOURCE.zh-CN.md`.
+
 ## Future Implementation Phases
 
-### Phase 11.3: Database Schema & Repository Refactor Plan
+### Phase 11.3: Database Schema & Repository Refactor Plan - Completed
 
-- Design and implement database schema.
-- Add DatabaseRepository implementations.
-- Keep FileRepository fallback.
+- Added the database schema migration.
+- Added read-only DatabaseRepository implementations.
+- Added repository factory and content-source env selection.
+- Kept FileRepository as the default source and fallback.
 - Do not build Admin UI yet.
 
 ### Phase 11.4: Admin Auth Foundation
@@ -731,4 +781,3 @@ Backup rules:
 
 - Full Admin / CMS review.
 - Confirm public routes, sitemap, RSS, search, Agent Demo, and deployment safety.
-

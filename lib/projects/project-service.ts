@@ -1,6 +1,6 @@
 import type { ProjectLookupOptions, ProjectRepository } from './project-repository';
 import type { Project, ProjectMeta, ProjectQueryOptions } from './project-types';
-import { FileProjectRepository } from './file-project-repository';
+import { getProjectRepository } from '@/lib/content/contentSource';
 
 export class ProjectService {
   constructor(private readonly repository: ProjectRepository) {}
@@ -43,4 +43,4 @@ export class ProjectService {
   }
 }
 
-export const projectService = new ProjectService(new FileProjectRepository());
+export const projectService = new ProjectService(getProjectRepository());

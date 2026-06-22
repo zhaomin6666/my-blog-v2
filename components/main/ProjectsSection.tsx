@@ -7,6 +7,7 @@ import { getStyleTokens } from '@/lib/stylePresets';
 import type { ProjectLinkData, ProjectMeta } from '@/lib/projects';
 import { ProjectStatus } from '@/lib/types';
 import { t } from '@/lib/translations';
+import { EmptySectionCard } from './EmptySectionCard';
 
 function getStatusColor(status: ProjectStatus, isMacos: boolean): string {
   switch (status) {
@@ -303,6 +304,17 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
   const isMacos = stylePreset === 'macos';
   const featuredProjects = projects.filter((project) => project.featured);
   const supportingProjects = projects.filter((project) => !project.featured);
+
+  if (projects.length === 0) {
+    return (
+      <EmptySectionCard
+        titleKey="projects.title"
+        emptyKey="projects.empty"
+        tag="services/"
+        macosAccent="bg-indigo-500"
+      />
+    );
+  }
 
   return (
     <div className={`p-6 ${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow}`}>

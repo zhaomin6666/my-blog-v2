@@ -4,6 +4,7 @@ import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
 import type { SystemStack } from '@/lib/profile';
+import { EmptySectionCard } from './EmptySectionCard';
 
 interface SkillsSectionProps {
   systemStack: SystemStack;
@@ -13,6 +14,17 @@ export function SkillsSection({ systemStack }: SkillsSectionProps) {
   const { lang, stylePreset } = useSettings();
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
+
+  if (systemStack.groups.length === 0) {
+    return (
+      <EmptySectionCard
+        titleKey="skills.title"
+        emptyKey="skills.empty"
+        tag="stack.config"
+        macosAccent="bg-purple-500"
+      />
+    );
+  }
 
   return (
     <div className={`p-6 ${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow}`}>

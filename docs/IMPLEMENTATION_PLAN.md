@@ -827,11 +827,28 @@
 - Designed Admin routes, publishing flow, rendering / cache strategy, external blog directory import/export, security boundaries, deployment, and backup.
 - Confirmed this phase did not implement Admin code, database migrations, content migration, Agent Demo logic changes, Console / CLI changes, window-system changes, or deployment config changes.
 
-### Phase 11.3: Database Schema & Repository Refactor Plan PLANNED
-- Design and implement the database schema.
-- Add DatabaseRepository implementations for Blog, Projects, and Profile.
-- Keep FileRepository fallback and import-source behavior.
-- Do not build Admin UI yet.
+### Phase 11.3: Database Schema & Repository Refactor Plan COMPLETED
+- Added `database/migrations/001_create_cms_tables.sql` with MVP CMS tables, indexes, and `updated_at` triggers.
+- Added PostgreSQL access helpers under `lib/db`.
+- Added read-only `DatabaseBlogRepository`, `DatabaseProjectRepository`, and `DatabaseProfileRepository`.
+- Added database row-to-domain mappers for Blog, Projects, and Profile.
+- Added repository factory and content-source env selection under `lib/content`.
+- Wired `BlogService`, `ProjectService`, and `ProfileService` to the repository factory.
+- Added `.env.example` placeholders for `PERSONAL_SITE_DATABASE_URL`, `CONTENT_SOURCE`, `BLOG_CONTENT_SOURCE`, `PROJECT_CONTENT_SOURCE`, and `PROFILE_CONTENT_SOURCE`.
+- Added database content-source documentation in English and Chinese.
+- Default content source remains `file`, so file-mode builds do not require PostgreSQL.
+- No Admin UI, `/admin` route, login page, real content migration, Agent Demo scope change, Console / CLI change, window-system change, Docker change, or Nginx change was made.
+
+#### Phase 11.3-fix: Database Content Source Empty State Fallback COMPLETED
+- Fixed the database empty-table homepage build failure caused by strict `ProfileService` missing-content validation.
+- Added centralized safe empty Profile, Contact Channels, System Stack, and `PublicProfile` values for database mode only.
+- Added lightweight empty states for homepage Profile, Stack, Projects, Contact, and the public Projects list.
+- Confirmed Blog lists, tags, series, RSS, sitemap, and project routes already handle empty database collections safely.
+- Kept database configuration, connection, table, SQL, and schema errors explicit; no exceptions are swallowed.
+- Kept database mode from automatically falling back to file content.
+- Kept file mode strict and independent from PostgreSQL.
+- Added unit coverage and passed the local PostgreSQL empty-table smoke build in both database and file modes.
+- No Admin UI, content migration, deployment config, Agent Demo scope, Console / CLI, or window-system changes were made.
 
 ### Phase 11.4: Admin Auth Foundation PLANNED
 - Add `/admin/login`.

@@ -3,10 +3,12 @@
 import Link from 'next/link';
 import { ArrowUpRight, BriefcaseBusiness, CheckCircle2, Compass, FileText, FolderGit2, LockKeyhole, Sparkles, Target } from 'lucide-react';
 import type { ProfileContent } from '@/lib/profile';
+import { isProfileContentEmpty } from '@/lib/profile/empty-profile';
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
 import type { Lang, LocalizedText } from '@/lib/types';
+import { EmptySectionCard } from './EmptySectionCard';
 
 function text(value: LocalizedText, lang: Lang) {
   return value[lang];
@@ -22,6 +24,16 @@ export function AboutSection({ profile }: AboutSectionProps) {
   const isMacos = stylePreset === 'macos';
 
   const profileIcons = [BriefcaseBusiness, Compass, Target];
+  if (isProfileContentEmpty(profile)) {
+    return (
+      <EmptySectionCard
+        titleKey="nav.profile"
+        emptyKey="about.empty"
+        tag="profile/career"
+        macosAccent="bg-blue-500"
+      />
+    );
+  }
 
   return (
     <div className={`p-6 ${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow}`}>

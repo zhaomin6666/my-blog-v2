@@ -81,8 +81,13 @@ export function ProjectListPage({ projects, stylePreset, lang }: ProjectListPage
         </div>
       </section>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        {projects.map((project) => (
+      {projects.length === 0 ? (
+        <div className={`flex min-h-48 items-center justify-center ${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow} p-6`}>
+          <p className={`text-sm ${tokens.textSecondary}`}>{t('projects.empty', lang)}</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          {projects.map((project) => (
           <article
             key={project.slug}
             className={`${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow} overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md`}
@@ -144,8 +149,9 @@ export function ProjectListPage({ projects, stylePreset, lang }: ProjectListPage
               </div>
             </div>
           </article>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

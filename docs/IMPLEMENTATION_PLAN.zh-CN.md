@@ -459,12 +459,30 @@
 - 设计后台路由、发布流程、动态渲染与缓存、外部博客目录导入导出、安全边界、部署和备份方案。
 - 本阶段未实现后台代码，未新增数据库迁移，未迁移内容，未修改 Agent Demo、Console / CLI、窗口系统或部署配置。
 
-### Phase 11.3：Database Schema & Repository Refactor Plan - 计划中
+### Phase 11.3：Database Schema & Repository Refactor Plan - 已完成
 
-- 设计并实现数据库 schema。
-- 增加 Blog / Projects / Profile 的 DatabaseRepository。
-- 保留 FileRepository fallback 和 import source。
-- 不做后台 UI。
+- 新增 `database/migrations/001_create_cms_tables.sql`，包含 MVP CMS 表、索引和 `updated_at` trigger。
+- 新增 `lib/db` PostgreSQL 访问基础。
+- 新增只读 `DatabaseBlogRepository`、`DatabaseProjectRepository`、`DatabaseProfileRepository`。
+- 新增 Blog / Projects / Profile 的数据库 row 到领域模型 mapper。
+- 新增 `lib/content` Repository factory 和内容源环境变量选择。
+- `BlogService`、`ProjectService`、`ProfileService` 已接入 Repository factory。
+- `.env.example` 新增 `PERSONAL_SITE_DATABASE_URL`、`CONTENT_SOURCE`、`BLOG_CONTENT_SOURCE`、`PROJECT_CONTENT_SOURCE`、`PROFILE_CONTENT_SOURCE`。
+- 新增中英文数据库内容源说明文档。
+- 默认内容源仍为 `file`，文件模式构建不依赖 PostgreSQL。
+- 未新增 Admin UI、`/admin` 路由、登录页、真实内容迁移、Agent Demo 范围变更、Console / CLI 变更、窗口系统变更、Docker 变更或 Nginx 变更。
+
+#### Phase 11.3-fix：Database Content Source Empty State Fallback - 已完成
+
+- 修复 database 空表时 `ProfileService` 严格缺失校验导致的首页构建失败。
+- 仅为 database 模式新增集中定义的空 Profile、Contact Channels、System Stack 和 `PublicProfile`。
+- 首页 Profile、Stack、Projects、Contact 以及公开 Projects 列表新增轻量 empty state。
+- 确认 Blog 列表、标签、系列、RSS、sitemap 和项目路由可安全处理数据库空集合。
+- database 配置、连接、表、SQL 和 schema 错误仍会明确抛出，不吞异常。
+- database 模式不会自动 fallback 到 file 内容。
+- file 模式保持严格校验并继续完全不依赖 PostgreSQL。
+- 已补充单元测试，并通过本地 PostgreSQL database/file 两种模式的空表 smoke build。
+- 未新增 Admin UI，未迁移内容，未修改部署配置、Agent Demo 范围、Console / CLI 或窗口系统。
 
 ### Phase 11.4：Admin Auth Foundation - 计划中
 
