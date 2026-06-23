@@ -113,6 +113,37 @@ File mode:
 - Does not create a PostgreSQL Pool.
 - Keeps current public URLs and rendering behavior.
 
+## Blog Admin Writes
+
+Phase 11.5 adds Blog Admin writes to PostgreSQL `blog_posts`.
+
+Important boundaries:
+
+- `/admin/blog` manages database content only.
+- Public Blog pages read database posts only when `BLOG_CONTENT_SOURCE=database`
+  or `CONTENT_SOURCE=database`.
+- If public pages still run in file mode, newly created database posts will not
+  appear on `/blog`; this is expected.
+- The phase does not automatically switch production content source.
+- The phase does not import old Markdown files from `content/blog`.
+- The phase does not delete or overwrite file-based content.
+
+Status behavior:
+
+- `draft` database posts are visible in Admin, but excluded from public
+  published-only queries.
+- `published` database posts are included by `DatabaseBlogRepository` public
+  reads when database mode is active.
+- Unpublish changes the post back to `draft`, so public database-mode reads stop
+  returning it.
+- Soft-deleted rows remain excluded from both Admin list results and public
+  reads.
+
+Admin save, publish, and unpublish actions call `revalidatePath()` for `/blog`,
+Blog Search, Tags, Series, sitemap, RSS, and the affected article path when the
+slug is known. In file mode this does not make database posts public; it only
+keeps the cache behavior ready for database mode.
+
 ## Database Mode Notes
 
 Database repositories are read-only for Phase 11.3.

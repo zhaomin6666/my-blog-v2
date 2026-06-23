@@ -850,18 +850,31 @@
 - Added unit coverage and passed the local PostgreSQL empty-table smoke build in both database and file modes.
 - No Admin UI, content migration, deployment config, Agent Demo scope, Console / CLI, or window-system changes were made.
 
-### Phase 11.4: Admin Auth Foundation PLANNED
-- Add `/admin/login`.
-- Add signed session cookie handling.
-- Add middleware protection for `/admin/*`.
-- Add an Admin layout shell.
+### Phase 11.4: Admin Auth Foundation COMPLETED
+- Added `/admin/login`.
+- Added environment-variable admin credentials: `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, and `ADMIN_SESSION_SECRET`.
+- Added signed HttpOnly admin session cookie handling.
+- Added middleware protection for `/admin/*`, excluding `/admin/login`.
+- Added basic in-process login rate limiting.
+- Added an Admin layout shell and `/admin` dashboard.
+- Admin routes are marked `noindex`.
+- No public registration, multi-user collaboration, database-backed admin users, Agent Demo scope change, Console / CLI change, window-system change, or deployment config change was made.
 
-### Phase 11.5: Blog Admin MVP PLANNED
-- Blog list.
-- Create / edit draft.
-- Publish / unpublish.
-- Markdown editor.
-- Slug validation.
+### Phase 11.5: Blog Admin MVP COMPLETED
+- Added database-backed Blog Admin routes:
+  - `/admin/blog`
+  - `/admin/blog/new`
+  - `/admin/blog/[id]`
+- Added `lib/admin` Blog Admin service / repository / validation foundation.
+- Blog Admin writes to PostgreSQL `blog_posts`.
+- Public Blog pages read these database posts only when `BLOG_CONTENT_SOURCE=database` or `CONTENT_SOURCE=database`.
+- File content source remains the default and is not changed automatically.
+- Supported list, search, status filter, language filter, empty state, create, edit, save draft, publish, and unpublish.
+- Supported editable fields: title, slug, summary, status, lang, date, tags, series, series slug, series order, cover, SEO title, SEO description, and Markdown content.
+- Markdown editor is a plain `textarea`; no image upload, file upload, rich text editor, or AI writing flow was added.
+- Added slug validation and uniqueness checks across active database posts.
+- Save / publish / unpublish revalidate public Blog, search, tags, series, sitemap, RSS, and the affected article slug when applicable.
+- No `content/blog` migration, deletion, overwrite, external import, Console / CLI change, window-system change, Agent Demo scope change, Docker change, or Nginx change was made.
 
 ### Phase 11.6: Homepage / Profile Admin PLANNED
 - Profile editor.

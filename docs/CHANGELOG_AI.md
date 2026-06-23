@@ -1,5 +1,29 @@
 # AI Development Changelog
 
+### 2026-06-23 - Codex
+**Summary:** Phase 11.5 completed. Added Blog Admin MVP for PostgreSQL `blog_posts`.
+
+**Phase 11.4 / 11.5 scope:**
+- Added minimal Admin Auth foundation because the current workspace did not yet contain Phase 11.4 runtime code.
+- Added `/admin/login`, `/admin`, middleware protection for `/admin/*`, signed HttpOnly admin session cookies, environment-variable credentials, basic login rate limiting, and Admin `noindex`.
+- Added `/admin/blog`, `/admin/blog/new`, and `/admin/blog/[id]`.
+- Added Blog Admin service, repository, validation, and Server Actions under `lib/admin` and `app/admin/blog`.
+- Blog Admin writes to PostgreSQL `blog_posts`.
+- Supported list, empty state, search, status/language filters, create, edit, save draft, publish, unpublish, and Markdown textarea editing.
+- Supported fields: title, slug, summary, status, lang, date, tags, series, series slug, series order, cover, SEO title, SEO description, and Markdown content.
+- Added slug format validation and active-post uniqueness checks.
+- Added cache revalidation for Blog, Search, Tags, Series, sitemap, RSS, and affected article paths.
+
+**Data-source guard:**
+- Public Blog reads database posts only when `BLOG_CONTENT_SOURCE=database` or `CONTENT_SOURCE=database`.
+- Default file content source remains unchanged.
+- No `content/blog` files were migrated, deleted, imported, or overwritten.
+- No Agent Demo scope, Console / CLI, window-system, Docker, or Nginx config changes were made.
+
+**Verification:**
+- Added focused tests for Blog Admin service, validation, and public DatabaseBlogRepository visibility.
+- `pnpm test`, `pnpm lint`, and `pnpm build` are the release checks for this phase.
+
 ### 2026-06-22 - Codex
 **Summary:** Phase 11.3-fix completed. Database content sources now handle empty tables safely.
 

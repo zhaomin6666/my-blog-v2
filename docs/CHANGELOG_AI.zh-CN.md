@@ -1,5 +1,29 @@
 ﻿# AI 变更记录中文摘要
 
+### 2026-06-23 - Codex
+**摘要：** Phase 11.5 已完成，新增 PostgreSQL `blog_posts` 的 Blog Admin MVP。
+
+**Phase 11.4 / 11.5 范围：**
+- 因当前工作区尚未包含 Phase 11.4 运行时代码，本次补齐最小 Admin Auth foundation。
+- 新增 `/admin/login`、`/admin`、middleware 保护 `/admin/*`、签名 HttpOnly admin session cookie、环境变量管理员账号、基础登录限流和 Admin `noindex`。
+- 新增 `/admin/blog`、`/admin/blog/new`、`/admin/blog/[id]`。
+- 新增 `lib/admin` 下的 Blog Admin service、repository、validation，以及 `app/admin/blog` 下的 Server Actions。
+- Blog Admin 写入 PostgreSQL `blog_posts`。
+- 支持列表、empty state、搜索、status / language 筛选、新建、编辑、保存 draft、发布、下架和 Markdown textarea 编辑。
+- 支持字段：title、slug、summary、status、lang、date、tags、series、series slug、series order、cover、SEO title、SEO description、Markdown content。
+- 新增 slug 格式校验和 active posts 唯一校验。
+- 保存、发布、下架会 revalidate Blog、Search、Tags、Series、sitemap、RSS，以及可确定的文章路径。
+
+**数据源边界：**
+- 公开 Blog 只有在 `BLOG_CONTENT_SOURCE=database` 或 `CONTENT_SOURCE=database` 时读取 database posts。
+- 默认 file 内容源保持不变。
+- 未迁移、删除、导入或覆盖 `content/blog` 文件。
+- 未修改 Agent Demo 范围、Console / CLI、窗口系统、Docker 或 Nginx 配置。
+
+**验证：**
+- 新增 Blog Admin service、validation 和公开 DatabaseBlogRepository 可见性边界测试。
+- `pnpm test`、`pnpm lint`、`pnpm build` 是本阶段发布检查。
+
 ### 2026-06-22 - Codex
 **摘要：** Phase 11.3-fix 已完成，database 内容源可安全处理空表。
 

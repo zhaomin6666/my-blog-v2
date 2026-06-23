@@ -484,20 +484,30 @@
 - 已补充单元测试，并通过本地 PostgreSQL database/file 两种模式的空表 smoke build。
 - 未新增 Admin UI，未迁移内容，未修改部署配置、Agent Demo 范围、Console / CLI 或窗口系统。
 
-### Phase 11.4：Admin Auth Foundation - 计划中
+### Phase 11.4：Admin Auth Foundation - 已完成
 
-- `/admin/login`
-- session cookie
-- middleware
-- admin layout
+- 新增 `/admin/login`。
+- 新增环境变量管理员账号：`ADMIN_USERNAME`、`ADMIN_PASSWORD_HASH`、`ADMIN_SESSION_SECRET`。
+- 新增签名 HttpOnly admin session cookie。
+- 新增 middleware 保护 `/admin/*`，并放行 `/admin/login`。
+- 新增基础登录限流。
+- 新增 Admin layout shell 和 `/admin` dashboard。
+- Admin 路由均为 `noindex`。
+- 未开放注册，未新增多用户协作，未实现数据库 admin_users，未修改 Agent Demo 范围、Console / CLI、窗口系统或部署配置。
 
-### Phase 11.5：Blog Admin MVP - 计划中
+### Phase 11.5：Blog Admin MVP - 已完成
 
-- Blog list
-- create / edit draft
-- publish / unpublish
-- Markdown editor
-- slug validation
+- 新增 database-backed Blog Admin 路由：`/admin/blog`、`/admin/blog/new`、`/admin/blog/[id]`。
+- 新增 `lib/admin` Blog Admin service / repository / validation 基础。
+- Blog Admin 写入 PostgreSQL `blog_posts`。
+- 公开 Blog 页面只有在 `BLOG_CONTENT_SOURCE=database` 或 `CONTENT_SOURCE=database` 时读取这些数据库文章。
+- 默认内容源仍是 `file`，不会自动切换。
+- 支持列表、搜索、status filter、language filter、empty state、新建、编辑、保存 draft、发布、下架。
+- 支持编辑 title、slug、summary、status、lang、date、tags、series、series slug、series order、cover、SEO title、SEO description 和 Markdown content。
+- Markdown editor 使用普通 `textarea`；未新增图片上传、文件上传、富文本编辑器或 AI 写作流程。
+- 新增 slug 格式校验和 active database posts 全局唯一校验。
+- 保存 / 发布 / 下架会 revalidate Blog、search、tags、series、sitemap、RSS，以及可确定的文章 slug。
+- 未迁移、删除或覆盖 `content/blog`，未实现外部导入，未修改 Console / CLI、窗口系统、Agent Demo 范围、Docker 或 Nginx。
 
 ### Phase 11.6：Homepage / Profile Admin - 计划中
 

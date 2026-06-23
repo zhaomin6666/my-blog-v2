@@ -737,20 +737,94 @@ Detailed usage lives in `docs/DATABASE_CONTENT_SOURCE.md` and
 - Kept FileRepository as the default source and fallback.
 - Do not build Admin UI yet.
 
-### Phase 11.4: Admin Auth Foundation
+### Phase 11.4: Admin Auth Foundation - Implemented
 
-- Add `/admin/login`.
-- Add signed session cookie.
-- Add middleware protection.
-- Add Admin layout shell.
+Implemented foundation:
 
-### Phase 11.5: Blog Admin MVP
+- `/admin/login`
+- `/admin`
+- Signed HttpOnly session cookie.
+- Middleware protection for `/admin/*`, with `/admin/login` excluded.
+- Environment-variable credentials through `ADMIN_USERNAME`,
+  `ADMIN_PASSWORD_HASH`, and `ADMIN_SESSION_SECRET`.
+- Basic in-process login rate limiting.
+- `noindex` metadata for Admin routes.
 
-- Blog list.
-- Create / edit draft.
-- Publish / unpublish.
-- Markdown editor.
-- Slug validation.
+The first version still intentionally avoids public registration,
+multi-admin user management, `admin_users`, audit logs, and role separation.
+
+### Phase 11.5: Blog Admin MVP - Implemented
+
+Implemented routes:
+
+- `/admin/blog`
+- `/admin/blog/new`
+- `/admin/blog/[id]`
+
+Implemented backend boundary:
+
+- Blog Admin uses `lib/admin/blog-admin-service.ts`.
+- SQL is centralized in `lib/admin/blog-admin-repository.ts`.
+- Pages and Client Components do not connect to PostgreSQL directly.
+- All SQL uses parameterized queries.
+
+Data-source rules:
+
+- Blog Admin manages PostgreSQL `blog_posts`.
+- Public Blog pages read these posts only when `BLOG_CONTENT_SOURCE=database`
+  or `CONTENT_SOURCE=database`.
+- The default file content source remains unchanged.
+- This phase does not migrate, import, delete, or overwrite `content/blog`.
+
+Supported editing scope:
+
+- title
+- slug
+- summary
+- status: `draft` / `published`
+- lang: `zh` / `en`
+- date
+- comma-separated tags saved as `text[]`
+- series
+- series slug
+- series order
+- cover
+- SEO title
+- SEO description
+- Markdown content through a plain `textarea`
+
+Publishing rules:
+
+- New posts default to `draft`.
+- Draft posts do not appear on public database-mode Blog pages.
+- Publishing sets `status = 'published'` and fills `published_at` only when it
+  was empty.
+- Unpublishing sets `status = 'draft'` and keeps `published_at` as historical
+  release metadata.
+- Save / publish / unpublish revalidates public Blog, Search, Tags, Series,
+  Sitemap, RSS, and the affected article path when the slug is known.
+
+Slug rules:
+
+- Slug is required.
+- Slug must be globally unique among active database posts.
+- Edits may keep the post's current slug.
+- Slug accepts lowercase letters, numbers, and hyphens only.
+- Spaces, Chinese characters, slashes, query characters, and other URL-special
+  characters are rejected.
+
+Not included in this MVP:
+
+- Projects Admin.
+- Profile / Homepage Admin.
+- Content import / export.
+- Image upload.
+- Rich text editor.
+- AI writing.
+- Comments.
+- Console / CLI changes.
+- Window-system changes.
+- Docker / Nginx deployment config changes.
 
 ### Phase 11.6: Homepage / Profile Admin
 
