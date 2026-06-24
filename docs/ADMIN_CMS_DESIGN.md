@@ -144,9 +144,9 @@ Fields:
 Fields:
 
 - Group name
-- Items
-- Level / status
-- Order
+- Group order
+- Item name
+- Item order
 
 ### Homepage Content
 
@@ -826,12 +826,68 @@ Not included in this MVP:
 - Window-system changes.
 - Docker / Nginx deployment config changes.
 
-### Phase 11.6: Homepage / Profile Admin
+### Phase 11.6: Homepage / Profile Admin - Implemented
 
-- Profile editor.
-- Contact editor.
-- System Stack editor.
-- Homepage sections editor.
+Implemented routes:
+
+- `/admin/hero`
+- `/admin/profile`
+- `/admin/contact`
+- `/admin/stack`
+
+Implemented backend boundary:
+
+- Homepage / Profile Admin uses `lib/admin/profile-admin-service.ts`.
+- SQL is centralized in `lib/admin/profile-admin-repository.ts`.
+- Pages and Client Components do not connect to PostgreSQL directly.
+- All SQL uses parameterized queries.
+- Write actions re-check the admin session through `requireAdminSession()`.
+
+Managed database tables:
+
+- `/admin/hero` manages `homepage_sections`.
+- `/admin/profile` manages `profile_pages` with `key = 'profile'`.
+- `/admin/contact` manages `contact_channels`.
+- `/admin/stack` manages `system_stack_groups` and `system_stack_items`.
+
+Current admin UX boundary after the Phase 11.6 follow-up tightening:
+
+- `/admin/hero` manages only homepage Hero copy.
+- `/admin/profile` manages structured homepage About/Profile content with a
+  language-scoped two-column editor.
+- `/admin/contact` manages single-source global contact channels.
+- `/admin/stack` manages single-source global stack groups and stack items.
+- Homepage logs remain part of Blog Admin / `BlogService`, not Hero Admin.
+
+Public content-source behavior:
+
+- Database-mode Profile, Contact, and Stack continue to be read through
+  `ProfileService` and `DatabaseProfileRepository`.
+- Database-mode homepage now reads visible `homepage_sections` through the new
+  lightweight `HomepageService`.
+- The public homepage Hero now reads only the `hero` section for the Main App
+  Hero title / subtitle while preserving the Developer OS window structure.
+- Legacy `overview`, `logs`, `services`, and `cta` rows may still exist in
+  PostgreSQL, but they are no longer shown in Hero Admin and do not affect the
+  public homepage Hero.
+- `/admin/profile` is now aligned to the homepage About section and no longer
+  exposes unused generic page metadata in the visible editor.
+- File mode continues to read `content/profile` and ignores database admin rows.
+- Empty database tables and partial data remain safe and render empty states or
+  existing fallback copy without falling back to files in database mode.
+
+Not included in this MVP:
+
+- Projects Admin.
+- Content import / export.
+- Migration, deletion, or overwrite of `content/profile`.
+- Image upload or file upload.
+- Rich text editor.
+- AI-generated homepage/profile content.
+- Agent Demo answer-scope changes.
+- Console / CLI changes.
+- Window-system changes.
+- Docker / Nginx deployment config changes.
 
 ### Phase 11.7: Projects Admin
 

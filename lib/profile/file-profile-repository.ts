@@ -7,8 +7,6 @@ import type { ProfileRepository } from './profile-repository';
 import type {
   ContactChannelData,
   ContactChannels,
-  ContactChannelsFrontmatter,
-  ContactChannelType,
   ProfileContent,
   ProfileField,
   ProfileFieldLabel,
@@ -20,7 +18,15 @@ import type {
   SystemStack,
   SystemStackFrontmatter,
   SystemStackGroup,
+  SystemStackItem,
 } from './profile-types';
+import {
+  buildContactHref,
+  type ContactPlatform,
+  formatContactDisplayValue,
+  isContactPlatform,
+  sanitizeContactValue,
+} from './contact-platforms';
 
 const PROFILE_DIR = path.join(process.cwd(), 'content', 'profile');
 
@@ -133,36 +139,32 @@ function toProfileProjects(value: unknown): ProfileProject[] {
   return value.map(toProfileProject).filter((item): item is ProfileProject => item !== null);
 }
 
-function toContactType(value: unknown): ContactChannelType {
-  if (
-    value === 'email' ||
-    value === 'github' ||
-    value === 'linkedin' ||
-    value === 'blog' ||
-    value === 'projects' ||
-    value === 'resume'
-  ) {
-    return value;
-  }
-
-  return 'other';
-}
-
 function toContactChannel(value: unknown): ContactChannelData | null {
   if (!isRecord(value)) return null;
+  if (!isContactPlatform(typeof value.platform === 'string' ? value.platform : '')) {
+    return null;
+  }
 
-  const href = typeof value.href === 'string' ? value.href : '';
-  const visible = toBoolean(value.visible, Boolean(href));
+  const platform = value.platform as ContactPlatform;
+  const rawValue = typeof value.value === 'string' ? value.value : '';
+  const hrefOverride = typeof value.hrefOverride === 'string' ? value.hrefOverride : '';
+  const customLabel = typeof value.customLabel === 'string' ? value.customLabel.trim() : '';
+  const sanitizedValue = sanitizeContactValue(platform, rawValue);
+  const href = buildContactHref(platform, sanitizedValue, hrefOverride);
+  const label = platform === 'custom' ? customLabel : platform === 'x' ? 'X' : platform;
+
+  if (!sanitizedValue) return null;
+  if (platform === 'custom' && (!customLabel || !href)) return null;
 
   return {
-    label: toLocalizedText(value.label),
-    type: toContactType(value.type),
+    platform,
+    label,
     href,
-    value: toLocalizedText(value.value),
-    endpoint: typeof value.endpoint === 'string' ? value.endpoint : '',
-    visible,
-    disabled: toBoolean(value.disabled),
-    privacyNote: value.privacyNote ? toLocalizedText(value.privacyNote) : null,
+    value: formatContactDisplayValue(platform, sanitizedValue),
+    displayOrder:
+      typeof value.displayOrder === 'number' && Number.isFinite(value.displayOrder)
+        ? value.displayOrder
+        : 0,
   };
 }
 
@@ -177,9 +179,16 @@ function toContactChannels(value: unknown): ContactChannelData[] {
 function toStackGroup(value: unknown): SystemStackGroup | null {
   if (!isRecord(value)) return null;
 
+  const name = typeof value.name === 'string' ? value.name.trim() : '';
+  if (!name) return null;
+
   return {
-    name: toLocalizedText(value.name),
-    items: toStringArray(value.items),
+    name,
+    displayOrder:
+      typeof value.order === 'number' && Number.isFinite(value.order)
+        ? value.order
+        : 0,
+    items: toStackItems(value.items),
   };
 }
 
@@ -188,7 +197,36 @@ function toStackGroups(value: unknown): SystemStackGroup[] {
     return [];
   }
 
-  return value.map(toStackGroup).filter((item): item is SystemStackGroup => item !== null);
+  return value
+    .map(toStackGroup)
+    .filter((item): item is SystemStackGroup => item !== null)
+    .sort((left, right) => left.displayOrder - right.displayOrder);
+}
+
+function toStackItem(value: unknown): SystemStackItem | null {
+  if (!isRecord(value)) return null;
+
+  const name = typeof value.name === 'string' ? value.name.trim() : '';
+  if (!name) return null;
+
+  return {
+    name,
+    displayOrder:
+      typeof value.order === 'number' && Number.isFinite(value.order)
+        ? value.order
+        : 0,
+  };
+}
+
+function toStackItems(value: unknown): SystemStackItem[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map(toStackItem)
+    .filter((item): item is SystemStackItem => item !== null)
+    .sort((left, right) => left.displayOrder - right.displayOrder);
 }
 
 function normalizeProfile(
@@ -223,43 +261,17 @@ function normalizeProfile(
   };
 }
 
-function normalizeContactChannels(
-  raw: ContactChannelsFrontmatter,
-  content: string,
-  rawContent: string,
-): ContactChannels {
-  const slug = raw.slug?.trim() || 'contact-channels';
-
+function normalizeContactChannels(raw: Record<string, unknown>): ContactChannels {
   return {
-    title: raw.title?.trim() || 'Contact Channels',
-    slug,
-    summary: toLocalizedText(raw.summary),
-    channels: toContactChannels(raw.channels),
-    privacyNote: toLocalizedText(raw.privacyNote),
-    resumeNote: toLocalizedText(raw.resumeNote),
-    published: toBoolean(raw.published, true),
-    lang: toLang(raw.lang),
-    content,
-    rawContent,
+    channels: toContactChannels(raw.channels).sort((left, right) => left.displayOrder - right.displayOrder),
   };
 }
 
 function normalizeSystemStack(
   raw: SystemStackFrontmatter,
-  content: string,
-  rawContent: string,
 ): SystemStack {
-  const slug = raw.slug?.trim() || 'system-stack';
-
   return {
-    title: raw.title?.trim() || 'System Stack',
-    slug,
-    summary: toLocalizedText(raw.summary),
     groups: toStackGroups(raw.groups),
-    published: toBoolean(raw.published, true),
-    lang: toLang(raw.lang),
-    content,
-    rawContent,
   };
 }
 
@@ -298,26 +310,14 @@ export class FileProfileRepository implements ProfileRepository {
     const parsed = await this.readProfileFile('contact-channels');
     if (!parsed) return null;
 
-    const channels = normalizeContactChannels(
-      parsed.data as ContactChannelsFrontmatter,
-      parsed.content,
-      parsed.rawContent,
-    );
-
-    return channels.published ? channels : null;
+    return normalizeContactChannels(parsed.data);
   }
 
   async getSystemStack(): Promise<SystemStack | null> {
     const parsed = await this.readProfileFile('system-stack');
     if (!parsed) return null;
 
-    const stack = normalizeSystemStack(
-      parsed.data as SystemStackFrontmatter,
-      parsed.content,
-      parsed.rawContent,
-    );
-
-    return stack.published ? stack : null;
+    return normalizeSystemStack(parsed.data as SystemStackFrontmatter);
   }
 
   async getPublicProfile(): Promise<PublicProfile | null> {

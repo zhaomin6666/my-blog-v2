@@ -43,7 +43,7 @@ export function SkillsSection({ systemStack }: SkillsSectionProps) {
       <div className="space-y-3">
         {systemStack.groups.map((skill) => (
           <div
-            key={skill.name.en}
+            key={skill.name}
             className={`${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm`}
           >
             {/* Module header */}
@@ -52,7 +52,7 @@ export function SkillsSection({ systemStack }: SkillsSectionProps) {
                 {t('skills.module', lang)}
               </span>
               <span className={`text-xs ${isMacos ? 'font-semibold' : 'font-mono font-bold'} ${tokens.textPrimary}`}>
-                {skill.name[lang]}
+                {skill.name}
               </span>
             </div>
             {/* Config entries */}
@@ -60,10 +60,10 @@ export function SkillsSection({ systemStack }: SkillsSectionProps) {
               <div className="flex flex-wrap gap-1.5">
                 {skill.items.map((item) => (
                   <span
-                    key={item}
+                    key={item.name}
                     className={`px-2 py-0.5 text-[11px] ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius} ${isMacos ? '' : 'font-mono'}`}
                   >
-                    {item}
+                    {item.name}
                   </span>
                 ))}
               </div>

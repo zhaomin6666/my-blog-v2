@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Database, FileText, LayoutDashboard, LogOut } from 'lucide-react';
+import { Contact, Database, FileText, Layers3, LayoutDashboard, LogOut, UserRound } from 'lucide-react';
 import { logoutAction } from './actions';
 
 interface AdminShellProps {
@@ -32,6 +32,34 @@ export function AdminShell({ children, title, description, action }: AdminShellP
             >
               <FileText size={14} />
               Blog
+            </Link>
+            <Link
+              href="/admin/hero"
+              className="hidden items-center gap-1.5 rounded-md px-2.5 py-1.5 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white md:flex"
+            >
+              <LayoutDashboard size={14} />
+              Hero
+            </Link>
+            <Link
+              href="/admin/profile"
+              className="hidden items-center gap-1.5 rounded-md px-2.5 py-1.5 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white md:flex"
+            >
+              <UserRound size={14} />
+              Profile
+            </Link>
+            <Link
+              href="/admin/contact"
+              className="hidden items-center gap-1.5 rounded-md px-2.5 py-1.5 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white lg:flex"
+            >
+              <Contact size={14} />
+              Contact
+            </Link>
+            <Link
+              href="/admin/stack"
+              className="hidden items-center gap-1.5 rounded-md px-2.5 py-1.5 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white lg:flex"
+            >
+              <Layers3 size={14} />
+              Stack
             </Link>
             <form action={logoutAction}>
               <button

@@ -9,9 +9,9 @@ import type {
 import type { ProfileRepository } from './profile-repository';
 import type { ContactChannels, ProfileContent, PublicProfile, SystemStack } from './profile-types';
 import {
-  mapProfilePageRowToContactChannels,
-  mapProfilePageRowToProfile,
-  mapProfilePageRowToSystemStack,
+  mapContactRowsToChannels,
+  mapProfilePageRowsToProfile,
+  mapSystemStackRows,
 } from './profile-db-mapper';
 
 const PROFILE_PAGE_COLUMNS = `
@@ -24,69 +24,62 @@ const PROFILE_PAGE_COLUMNS = `
   lang
 `;
 
-async function getProfilePage(key: string): Promise<ProfilePageRow | null> {
+async function getProfilePageRows(key: string): Promise<{ zh?: ProfilePageRow; en?: ProfilePageRow }> {
   const result = await queryPostgres<ProfilePageRow>(
     `
       select ${PROFILE_PAGE_COLUMNS}
       from profile_pages
       where key = $1
+        and lang in ('zh', 'en')
       order by case when lang = 'zh' then 0 else 1 end, updated_at desc
-      limit 1
     `,
     [key],
   );
 
-  return result.rows[0] ?? null;
+  return {
+    zh: result.rows.find((row) => row.lang === 'zh'),
+    en: result.rows.find((row) => row.lang === 'en'),
+  };
 }
 
 export class DatabaseProfileRepository implements ProfileRepository {
   async getProfile(): Promise<ProfileContent | null> {
-    const row = await getProfilePage('profile');
-    if (!row) return null;
+    const rows = await getProfilePageRows('profile');
+    if (!rows.zh && !rows.en) return null;
 
-    const profile = mapProfilePageRowToProfile(row);
+    const profile = mapProfilePageRowsToProfile(rows);
     return profile.published ? profile : null;
   }
 
   async getContactChannels(): Promise<ContactChannels | null> {
-    const [pageRow, channelRows] = await Promise.all([
-      getProfilePage('contact-channels'),
-      queryPostgres<ContactChannelRow>(
-        `
-          select
-            id,
-            label,
-            type,
-            href,
-            description,
-            visible,
-            display_order,
-            lang
-          from contact_channels
-          where deleted_at is null
-            and visible = true
-          order by display_order asc nulls last, created_at asc
-        `,
-      ),
-    ]);
+    const channelRows = await queryPostgres<ContactChannelRow>(
+      `
+        select
+          id,
+          platform,
+          custom_label,
+          value,
+          href_override,
+          display_order
+        from contact_channels
+        where deleted_at is null
+        order by display_order asc nulls last, created_at asc
+      `,
+    );
 
-    if (!pageRow) return null;
-
-    const channels = mapProfilePageRowToContactChannels(pageRow, channelRows.rows);
-    return channels.published ? channels : null;
+    return {
+      channels: mapContactRowsToChannels(channelRows.rows),
+    };
   }
 
   async getSystemStack(): Promise<SystemStack | null> {
-    const [pageRow, groupRows, itemRows] = await Promise.all([
-      getProfilePage('system-stack'),
+    const [groupRows, itemRows] = await Promise.all([
       queryPostgres<SystemStackGroupRow>(
         `
           select
             id,
             name,
-            description,
-            display_order,
-            lang
+            display_order
           from system_stack_groups
           where deleted_at is null
           order by display_order asc nulls last, created_at asc
@@ -98,9 +91,6 @@ export class DatabaseProfileRepository implements ProfileRepository {
             id,
             group_id,
             name,
-            description,
-            level,
-            status,
             display_order
           from system_stack_items
           where deleted_at is null
@@ -109,10 +99,9 @@ export class DatabaseProfileRepository implements ProfileRepository {
       ),
     ]);
 
-    if (!pageRow) return null;
+    if (groupRows.rows.length === 0) return null;
 
-    const stack = mapProfilePageRowToSystemStack(pageRow, groupRows.rows, itemRows.rows);
-    return stack.published ? stack : null;
+    return mapSystemStackRows(groupRows.rows, itemRows.rows);
   }
 
   async getPublicProfile(): Promise<PublicProfile | null> {

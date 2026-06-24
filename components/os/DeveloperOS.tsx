@@ -3,6 +3,7 @@
 import { useCallback, useRef } from 'react';
 import { Layout, Terminal } from 'lucide-react';
 import type { BlogPostMeta } from '@/lib/blog/blog-types';
+import type { HomepageSection } from '@/lib/homepage/homepage-types';
 import type { ProjectMeta } from '@/lib/projects';
 import type { PublicProfile } from '@/lib/profile';
 import { useSettings } from '@/lib/settings-context';
@@ -17,11 +18,12 @@ import { ConsoleApp } from '@/components/console/ConsoleApp';
 
 interface DeveloperOSProps {
   blogPosts: BlogPostMeta[];
+  homepageSections: HomepageSection[];
   projects: ProjectMeta[];
   profile: PublicProfile;
 }
 
-export function DeveloperOS({ blogPosts, projects, profile }: DeveloperOSProps) {
+export function DeveloperOS({ blogPosts, homepageSections, projects, profile }: DeveloperOSProps) {
   const { lang, stylePreset, mounted } = useSettings();
   const {
     main,
@@ -90,6 +92,7 @@ export function DeveloperOS({ blogPosts, projects, profile }: DeveloperOSProps) 
               ref={mainAppRef}
               onOpenTerminal={openConsoleFromMain}
               blogPosts={blogPosts}
+              homepageSections={homepageSections}
               projects={projects}
               profile={profile}
             />

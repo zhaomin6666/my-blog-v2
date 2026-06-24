@@ -5,3 +5,16 @@ export type {
   AdminBlogPostInput,
   AdminBlogStatus,
 } from './blog-admin-types';
+export type {
+  AdminContactChannel,
+  AdminContactChannelInput,
+  AdminContentLanguage,
+  AdminHomepageSection,
+  AdminHomepageSectionInput,
+  AdminProfilePage,
+  AdminProfilePageInput,
+  AdminStackGroup,
+  AdminStackGroupInput,
+  AdminStackItem,
+  AdminStackItemInput,
+} from './profile-admin-types';

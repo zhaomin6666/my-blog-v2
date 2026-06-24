@@ -1,5 +1,142 @@
 # AI Development Changelog
 
+### 2026-06-24 - Codex
+**Summary:** Fixed Profile database-mode rendering gaps and tightened Profile Admin to match the homepage About section.
+
+**Profile follow-up scope:**
+- Checked the local PostgreSQL `profile_pages` data used by `.env.local` and confirmed the homepage Profile test values were being stored.
+- Fixed database-mode Profile mapping so admin-managed nested localized fields like `intro`, `role`, `status`, `privacyNote`, and `building` now render correctly on the homepage even when only one language side is filled.
+- Preserved the homepage About rendering structure and clarified the real data flow instead of expanding unused UI fields into the public page.
+- Simplified `/admin/profile` by removing the unused `title` and `summary` editors from the visible form while preserving their stored values through hidden inputs.
+- Added a clearer `Building` input placeholder and note so homepage-visible entries include the required link field.
+- Added focused mapper regression coverage for admin-managed nested localized Profile data.
+
+**Verification:**
+- `pnpm vitest run lib/profile/profile-db-mapper.test.ts`
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-24 - Codex
+**Summary:** Rebuilt Stack Admin and homepage Stack into a single global stack configuration with simplified group/item editing.
+
+**Phase 11.6.4 scope:**
+- Reset `system_stack_groups` and `system_stack_items` away from the old localized `zh/en` + `translation_key` model into a single global stack configuration model.
+- Added `database/migrations/004_reset_system_stack_single_source.sql` to recreate Stack tables with group `name` / `display_order` and item `name` / `display_order`.
+- Refactored `/admin/stack` into a single global Stack Admin panel with left-side group selection and right-side group/item editing.
+- Removed Stack language switching, translation pairing, description, level, and status editing from the admin flow.
+- Added group and item up/down ordering actions so Stack Admin no longer exposes raw order inputs.
+- Removed database-mode Stack dependence on `profile_pages('system-stack')` and switched public Stack reads to direct `system_stack_groups` / `system_stack_items` queries.
+- Simplified file-mode `content/profile/system-stack.md` to the same single-source group/item structure used by database mode.
+- Updated homepage Stack rendering and Agent Demo stack summary to consume one shared group/item dataset in both `zh` and `en`.
+
+**Verification:**
+- `pnpm vitest run lib/profile/profile-db-mapper.test.ts lib/profile/profile-service.test.ts lib/admin/profile-admin-service.test.ts lib/admin/profile-admin-validation.test.ts`
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-24 - Codex
+**Summary:** Rebuilt Contact Admin and homepage Contact into a single global contact configuration with preset platform icons and direct database-mode rendering.
+
+**Phase 11.6.3 scope:**
+- Reset `contact_channels` away from the old localized `zh/en` row model into a single global contact configuration model.
+- Added `database/migrations/003_reset_contact_channels_single_source.sql` to recreate `contact_channels` with `platform`, `custom_label`, `value`, `href_override`, and `display_order`.
+- Refactored `/admin/contact` into a single global contact manager with configured-method list, preset platform creation, custom entries, and up/down ordering.
+- Removed Contact language switching, localized label/value editing, and public footer meta copy from the homepage Contact flow.
+- Added shared contact platform metadata and icon mapping with `react-icons` plus `lucide-react` fallback icons.
+- Tightened Contact Admin validation around platform type, email / URL format, custom-label requirements, and override-link validation.
+- Added non-`custom` platform uniqueness protection in the Contact admin service.
+- Removed Contact localization-merging logic for database mode and switched homepage Contact rendering to a single-source `platform / label / value / href / displayOrder` model.
+- Kept file-mode Contact support, but updated `content/profile/contact-channels.md` to the new simplified structure.
+- Updated the Agent Demo profile knowledge tool to summarize the new Contact shape.
+- Applied the new Contact reset migration to the local PostgreSQL database used in `.env.local`.
+
+**Verification:**
+- `pnpm vitest run lib/profile/profile-db-mapper.test.ts lib/profile/profile-service.test.ts lib/admin/profile-admin-service.test.ts lib/admin/profile-admin-validation.test.ts`
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-24 - Codex
+**Summary:** Fixed Phase 11.6.2 Contact / Stack admin save failures caused by invalid translation key format.
+
+**Fix scope:**
+- Changed new `contact` / `stack` admin records to generate plain UUID `translationKey` values instead of prefixed strings like `contact-<uuid>`.
+- Tightened Profile Admin validation so `contact`, `stack group`, and `stack item` translation keys must be valid UUIDs before any PostgreSQL write is attempted.
+- Updated focused admin service and validation tests to use valid UUID fixtures.
+- Added a regression test that rejects legacy prefixed translation key strings before they reach the database layer.
+
+**Verification:**
+- `pnpm vitest run lib/profile/profile-db-mapper.test.ts lib/profile/profile-service.test.ts lib/admin/profile-admin-service.test.ts lib/admin/profile-admin-validation.test.ts`
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-24 - Codex
+**Summary:** Tightened Phase 11.6 Profile / Contact / Stack Admin into Hero-style language panels and fixed database-mode homepage localization for those sections.
+
+**Phase 11.6.2 scope:**
+- Refactored `/admin/profile`, `/admin/contact`, and `/admin/stack` into two-column admin pages with a left-side `zh` / `en` language switch and a right-side single-language editor.
+- Removed the old descriptive copy blocks from these pages so the admin surface is focused on editing.
+- Replaced the broken old `ProfilePageForm` wiring with a new `ProfileAdminPanel` and structured single-language `Profile` editor.
+- Tightened `Profile Admin` around the homepage About-facing structured fields instead of exposing a generic page form.
+- Tightened `Contact Admin` so channel create/edit/delete now happens inside the current language context.
+- Tightened `System Stack Admin` so group/item create/edit/delete now happens inside the current language context.
+- Updated database-mode profile mappers so homepage About, Contact, and Stack build localized display objects from zh/en admin rows.
+- Updated homepage Stack rendering to use localized item text so site language switching reflects admin-managed database content.
+
+**Verification:**
+- `pnpm vitest run lib/profile/profile-db-mapper.test.ts lib/profile/profile-service.test.ts lib/admin/profile-admin-service.test.ts lib/admin/profile-admin-validation.test.ts`
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-24 - Codex
+**Summary:** Tightened Phase 11.6 Homepage Admin into Hero Admin so the admin boundary matches the real homepage data flow.
+
+**Phase 11.6.1 scope:**
+- Added `/admin/hero` as the primary Hero Admin route.
+- Removed the old `/admin/homepage` route.
+- Updated the Admin navigation and dashboard card from Homepage Admin to Hero Admin.
+- Tightened Hero Admin to manage only `homepage_sections.key = 'hero'`.
+- Removed `displayOrder`, `data`, custom key creation, and multi-section defaults from the Hero Admin UI flow.
+- Replaced the old “create default homepage sections” behavior with per-language Hero initialization.
+- Tightened admin validation so non-`hero` homepage keys are rejected.
+- Tightened homepage runtime Hero selection so it reads only `hero` and no longer falls back to `overview`.
+- Kept legacy `overview/services/logs/cta` rows in PostgreSQL untouched, but they are no longer shown in Hero Admin and do not affect the public Hero.
+- Confirmed homepage logs remain sourced from published Blog content through `BlogService`.
+
+**Verification:**
+- `pnpm vitest run lib/admin/profile-admin-validation.test.ts lib/admin/profile-admin-service.test.ts lib/homepage/homepage-service.test.ts`
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-23 - Codex
+**Summary:** Phase 11.6 completed. Added Homepage / Profile Admin MVP for PostgreSQL-backed public profile content.
+
+**Phase 11.6 scope:**
+- Added `/admin/homepage`, `/admin/profile`, `/admin/contact`, and `/admin/stack`.
+- Added `lib/admin` Homepage / Profile Admin service, repository, validation, and tests.
+- Homepage Admin writes to `homepage_sections`.
+- Profile Admin writes to `profile_pages` with `key = 'profile'`.
+- Contact Admin writes to `contact_channels`, including visible, display order, language, and soft delete.
+- Stack Admin writes to `system_stack_groups` and `system_stack_items`, including display order and soft delete.
+- Added a lightweight `HomepageService` for database-mode visible homepage sections.
+- Database-mode public homepage can read admin-saved `hero` / `overview` content for the Main App Hero.
+- Database-mode public Profile, Contact, and Stack continue to read through `ProfileService`.
+- File mode remains unchanged and continues to read `content/profile`.
+
+**Scope guard:**
+- No Projects Admin was added.
+- No Content Import / Export was added.
+- No `content/profile` migration, deletion, overwrite, or import was performed.
+- No Agent Demo answer-scope change was made.
+- No Console / CLI change was made.
+- No window-system change was made.
+- No Docker / Nginx deployment config change was made.
+
+**Verification:**
+- Added focused tests for Profile Admin validation, service behavior, homepage database/file mode, and existing public profile empty-state behavior.
+- `pnpm test` passed.
+- `pnpm lint` passed.
+- `pnpm build` passed.
+
 ### 2026-06-23 - Codex
 **Summary:** Phase 11.5 completed. Added Blog Admin MVP for PostgreSQL `blog_posts`.
 

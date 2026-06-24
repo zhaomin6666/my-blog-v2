@@ -64,27 +64,29 @@ export interface ProfilePageRow {
   content_markdown: string | null;
   data: DbJsonValue;
   lang: string;
+  created_at?: DbDateValue;
+  updated_at?: DbDateValue;
 }
 
 export interface ContactChannelRow {
   [column: string]: unknown;
   id: string;
-  label: string;
-  type: string;
-  href: string | null;
-  description: string | null;
-  visible: boolean;
+  platform: string;
+  custom_label: string | null;
+  value: string;
+  href_override: string | null;
   display_order: number | null;
-  lang: string;
+  created_at?: DbDateValue;
+  updated_at?: DbDateValue;
 }
 
 export interface SystemStackGroupRow {
   [column: string]: unknown;
   id: string;
   name: string;
-  description: string | null;
   display_order: number | null;
-  lang: string;
+  created_at?: DbDateValue;
+  updated_at?: DbDateValue;
 }
 
 export interface SystemStackItemRow {
@@ -92,8 +94,22 @@ export interface SystemStackItemRow {
   id: string;
   group_id: string;
   name: string;
-  description: string | null;
-  level: string | null;
-  status: string | null;
   display_order: number | null;
+  created_at?: DbDateValue;
+  updated_at?: DbDateValue;
+}
+
+export interface HomepageSectionRow {
+  [column: string]: unknown;
+  id: string;
+  key: string;
+  title: string | null;
+  subtitle: string | null;
+  content_markdown: string | null;
+  data: DbJsonValue;
+  visible: boolean;
+  display_order: number | null;
+  lang: string;
+  created_at?: DbDateValue;
+  updated_at?: DbDateValue;
 }

@@ -876,11 +876,56 @@
 - Save / publish / unpublish revalidate public Blog, search, tags, series, sitemap, RSS, and the affected article slug when applicable.
 - No `content/blog` migration, deletion, overwrite, external import, Console / CLI change, window-system change, Agent Demo scope change, Docker change, or Nginx change was made.
 
-### Phase 11.6: Homepage / Profile Admin PLANNED
-- Profile editor.
-- Contact editor.
-- System Stack editor.
-- Homepage sections editor.
+### Phase 11.6: Homepage / Profile Admin COMPLETED
+- Added `/admin/hero` for PostgreSQL `homepage_sections`.
+- Added `/admin/profile` for `profile_pages key='profile'`.
+- Added `/admin/contact` for `contact_channels`.
+- Added `/admin/stack` for `system_stack_groups` and `system_stack_items`.
+- Added Profile Admin service / repository / validation foundation under `lib/admin`.
+- Added lightweight `HomepageService` for database-mode visible homepage sections.
+- Database-mode public homepage can read admin-saved Hero content.
+- Database-mode public Profile, Contact, and Stack continue to read through `ProfileService`.
+- File mode remains unchanged and continues to read `content/profile`.
+- No Projects Admin, Import / Export, Agent Demo scope change, Console / CLI change, window-system change, or deployment config change was made.
+
+#### Phase 11.6.1: Hero Admin Boundary Tightening COMPLETED
+- Added `/admin/hero` as the primary Hero Admin route.
+- Removed the old `/admin/homepage` route.
+- Updated Admin navigation and dashboard copy to use Hero Admin terminology.
+- Hero Admin now manages only the `hero` key in `homepage_sections`.
+- Hero Admin no longer exposes custom keys, `displayOrder`, or `data` editing in the UI.
+- Admin validation now rejects non-`hero` homepage keys.
+- Homepage Hero runtime now reads only the `hero` key and no longer falls back to `overview`.
+- Legacy `overview`, `logs`, `services`, and `cta` rows may remain in PostgreSQL, but Hero Admin does not display them and the public Hero does not consume them.
+- Confirmed homepage logs remain sourced from `BlogService`, not `homepage_sections`.
+
+#### Phase 11.6.2: Profile / Contact / Stack Admin UX Tightening COMPLETED
+- Refactored `/admin/profile`, `/admin/contact`, and `/admin/stack` into Hero-style two-column admin panels with left-side `zh` / `en` language switching.
+- Removed the old page descriptions and warning blocks from these admin pages so each page now focuses on the content editor itself.
+- `Profile Admin` now edits the structured homepage About content for one language at a time instead of exposing a generic profile page form.
+- `Profile Admin` is now narrowed to the fields that the homepage About section actually uses, with clearer multi-line and structured text inputs.
+- `Contact Admin` and `System Stack Admin` were the accepted baseline before their later single-source resets.
+- Tightened database-mode public profile mapping so homepage About, Contact, and Stack render localized admin-managed content instead of relying on partial single-row fallback behavior.
+- Homepage Stack items now preserve localized text in database mode and switch correctly with the site language.
+
+#### Phase 11.6.3: Contact Single-Source Reset COMPLETED
+- Reset `contact_channels` away from the old localized `zh/en` row model into a single global contact configuration model.
+- Added a new reset migration for `contact_channels` with `platform`, `custom_label`, `value`, `href_override`, and `display_order`.
+- Refactored `/admin/contact` into a single global contact manager with preset platform creation, custom entries, and up/down ordering.
+- Removed Contact language switching, localized label/value editing, and public footer meta copy from the homepage Contact flow.
+- Added platform metadata, icon mapping, and generated-link rules for preset services such as email, GitHub, LinkedIn, X, Telegram, and more.
+- Database-mode homepage Contact now reads `contact_channels` directly without requiring `profile_pages('contact-channels')`.
+- File-mode contact content remains supported through the simplified `content/profile/contact-channels.md` structure.
+
+#### Phase 11.6.4: Stack Single-Source Reset COMPLETED
+- Reset `system_stack_groups` and `system_stack_items` away from the old localized `zh/en` + `translation_key` model into a single global stack configuration model.
+- Added a new reset migration for Stack with group `name` / `display_order` and item `name` / `display_order`.
+- Refactored `/admin/stack` into a single global Stack Admin panel with left-side group selection and right-side group/item editing.
+- Removed Stack language switching, translation pairing, description, level, and status editing from the admin flow.
+- Added group and item up/down ordering actions so Stack Admin no longer exposes raw order inputs.
+- Database-mode homepage Stack now reads `system_stack_groups` and `system_stack_items` directly without requiring `profile_pages('system-stack')`.
+- File-mode stack content now uses the same simplified single-source structure in `content/profile/system-stack.md`.
+- Homepage Stack now renders one shared group/item dataset in both `zh` and `en`.
 
 ### Phase 11.7: Projects Admin PLANNED
 - Project list.

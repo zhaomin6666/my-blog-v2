@@ -144,6 +144,48 @@ Blog Search, Tags, Series, sitemap, RSS, and the affected article path when the
 slug is known. In file mode this does not make database posts public; it only
 keeps the cache behavior ready for database mode.
 
+## Hero / Profile Admin Writes
+
+Phase 11.6 adds Homepage / Profile Admin writes to PostgreSQL.
+
+Important boundaries:
+
+- `/admin/hero` manages homepage Hero content in `homepage_sections`.
+- `/admin/profile` manages `profile_pages` with `key = 'profile'`.
+- `/admin/contact` manages `contact_channels`.
+- `/admin/stack` manages `system_stack_groups` and `system_stack_items`.
+- Public pages still read through services. Admin pages and Client Components do
+  not query PostgreSQL directly.
+- The phase does not migrate, delete, import, or overwrite `content/profile`.
+- The phase does not implement Projects Admin or Content Import / Export.
+
+Public database-mode behavior:
+
+- `profile_pages key='profile'` feeds the public Profile section through
+  `ProfileService`.
+- Profile Admin is aligned to the homepage About section fields that are
+  actually rendered; unused generic metadata is no longer exposed in the
+  visible editor.
+- `contact_channels` feeds the public Contact section directly in database mode.
+- `system_stack_groups` and `system_stack_items` feed the public Stack section,
+  ordered by `display_order`.
+- `homepage_sections.visible = true` rows feed the lightweight
+  `HomepageService`, ordered by `display_order`.
+- The Hero mapping now reads only the `hero` key for the Main App Hero title /
+  subtitle. `overview` and other legacy keys may remain in the table, but they
+  are not used by the public homepage Hero.
+- Homepage logs continue to come from published Blog content through
+  `BlogService`, not from `homepage_sections`.
+- Contact is now a single global dataset and no longer depends on `lang` or
+  `profile_pages('contact-channels')`.
+- Stack is now a single global dataset and no longer depends on `lang`,
+  `translation_key`, or `profile_pages('system-stack')`.
+- Soft-deleted Contact and Stack rows are excluded from public reads.
+
+Admin save actions revalidate `/`, `/agent-demo`, `/projects/ai-agent-demo`,
+and `sitemap.xml` so database-mode public content can refresh after edits. File
+mode remains independent from these database rows.
+
 ## Database Mode Notes
 
 Database repositories are read-only for Phase 11.3.

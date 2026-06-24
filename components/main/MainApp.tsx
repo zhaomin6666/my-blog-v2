@@ -2,6 +2,7 @@
 
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import type { BlogPostMeta } from '@/lib/blog/blog-types';
+import type { HomepageSection } from '@/lib/homepage/homepage-types';
 import type { ProjectMeta } from '@/lib/projects';
 import type { PublicProfile } from '@/lib/profile';
 import { useSettings } from '@/lib/settings-context';
@@ -18,6 +19,7 @@ import { ContactSection } from './ContactSection';
 interface MainAppProps {
   onOpenTerminal?: () => void;
   blogPosts: BlogPostMeta[];
+  homepageSections: HomepageSection[];
   projects: ProjectMeta[];
   profile: PublicProfile;
 }
@@ -27,7 +29,7 @@ export interface MainAppHandle {
 }
 
 export const MainApp = forwardRef<MainAppHandle, MainAppProps>(function MainApp(
-  { onOpenTerminal, blogPosts, projects, profile },
+  { onOpenTerminal, blogPosts, homepageSections, projects, profile },
   ref
 ) {
   const { stylePreset } = useSettings();
@@ -98,6 +100,7 @@ export const MainApp = forwardRef<MainAppHandle, MainAppProps>(function MainApp(
           {/* Overview */}
           <div ref={setSectionRef('overview')} className={sectionClassName('overview')}>
             <HeroOverview
+              homepageSections={homepageSections}
               onOpenTerminal={onOpenTerminal}
               onNavigate={scrollToSection}
             />

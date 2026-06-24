@@ -1,8 +1,8 @@
 'use client';
 
-import { BookOpen, BriefcaseBusiness, FileText, Github, Linkedin, Mail } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
-import type { ContactChannelData, ContactChannels, ContactChannelType } from '@/lib/profile';
+import { ExternalLink } from 'lucide-react';
+import type { ContactChannels } from '@/lib/profile';
+import { CONTACT_PLATFORM_META, type ContactPlatform } from '@/lib/profile/contact-platforms';
 import { useSettings } from '@/lib/settings-context';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
@@ -10,24 +10,6 @@ import { EmptySectionCard } from './EmptySectionCard';
 
 interface ContactSectionProps {
   contactChannels: ContactChannels;
-}
-
-function getContactIcon(type: ContactChannelType): LucideIcon {
-  switch (type) {
-    case 'github':
-      return Github;
-    case 'linkedin':
-      return Linkedin;
-    case 'blog':
-      return BookOpen;
-    case 'projects':
-      return BriefcaseBusiness;
-    case 'resume':
-      return FileText;
-    case 'email':
-    default:
-      return Mail;
-  }
 }
 
 function isExternalLink(href: string) {
@@ -39,7 +21,7 @@ export function ContactSection({ contactChannels }: ContactSectionProps) {
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
 
-  const channels = contactChannels.channels.filter((channel) => channel.visible);
+  const channels = contactChannels.channels.filter((channel) => channel.href && channel.value);
 
   if (channels.length === 0) {
     return (
@@ -67,52 +49,38 @@ export function ContactSection({ contactChannels }: ContactSectionProps) {
 
       {/* Contact channels like API endpoints */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {channels.map((channel: ContactChannelData) => {
-          const Icon = getContactIcon(channel.type);
-          const href = channel.disabled || !channel.href ? undefined : channel.href;
+        {channels.map((channel) => {
+          const Icon = CONTACT_PLATFORM_META[channel.platform as ContactPlatform]?.icon ?? CONTACT_PLATFORM_META.custom.icon;
+          const href = channel.href;
 
           return (
           <a
-            key={`${channel.type}-${channel.endpoint}`}
+            key={`${channel.platform}-${channel.label}`}
             href={href}
             target={href && isExternalLink(href) ? '_blank' : undefined}
             rel={href && isExternalLink(href) ? 'noopener noreferrer' : undefined}
             className={`group flex items-center gap-3 p-4 ${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius} transition-all duration-200 hover:-translate-y-0.5 ${
-              channel.disabled
-                ? 'opacity-60 cursor-not-allowed'
-                : isMacos
-                  ? 'hover:bg-white/60 dark:hover:bg-black/30'
-                  : 'hover:border-zinc-400 dark:hover:border-zinc-600'
+              isMacos
+                ? 'hover:bg-white/60 dark:hover:bg-black/30'
+                : 'hover:border-zinc-400 dark:hover:border-zinc-600'
             }`}
           >
             <Icon size={isMacos ? 18 : 16} className={tokens.textSecondary} />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <span className={`${isMacos ? 'text-sm font-medium' : 'text-xs font-mono font-bold'} ${tokens.textPrimary}`}>
-                  {channel.label[lang]}
+                  {channel.label}
                 </span>
-                {channel.disabled && (
-                  <span className={`text-[9px] px-1.5 py-0.5 ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius}`}>
-                    {t('contact.comingSoon', lang)}
-                  </span>
-                )}
               </div>
               <div className={`truncate ${isMacos ? 'text-xs' : 'text-[11px] font-mono'} ${tokens.textMuted}`}>
-                {channel.value[lang]}
+                {channel.value}
               </div>
             </div>
-            {/* Endpoint label */}
-            <span className={`hidden sm:block text-[10px] ${tokens.textMuted} ${isMacos ? '' : 'font-mono'}`}>
-              {channel.endpoint}
-            </span>
+            <ExternalLink size={14} className={tokens.textMuted} />
           </a>
           );
         })}
       </div>
-
-      <p className={`mt-4 ${isMacos ? 'text-xs leading-relaxed' : 'text-[11px] font-mono leading-relaxed'} ${tokens.textMuted}`}>
-        {contactChannels.privacyNote[lang]} {contactChannels.resumeNote[lang]}
-      </p>
     </div>
   );
 }

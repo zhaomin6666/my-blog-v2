@@ -1,6 +1,36 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-23 - Codex
+**摘要：** Phase 11.6 已完成，新增 Homepage / Profile Admin MVP，支持 PostgreSQL 管理公开首页与个人资料相关内容。
+
+**Phase 11.6 范围：**
+- 新增 `/admin/homepage`、`/admin/profile`、`/admin/contact`、`/admin/stack`。
+- 新增 `lib/admin` 下的 Profile Admin service、repository、validation 和测试。
+- Homepage Admin 写入 `homepage_sections`。
+- Profile Admin 写入 `profile_pages key='profile'`。
+- Contact Admin 写入 `contact_channels`，支持 visible、display order、lang 和软删除。
+- Stack Admin 写入 `system_stack_groups` 和 `system_stack_items`，支持 display order 和软删除。
+- 新增轻量 `HomepageService`，database mode 下读取 visible homepage sections。
+- database mode 下公开首页可以读取后台保存的 `hero` / `overview` 内容，并映射到 Main App Hero。
+- database mode 下公开 Profile、Contact、Stack 继续通过 `ProfileService` 读取。
+- file mode 保持不变，继续读取 `content/profile`。
+
+**范围边界：**
+- 未实现 Projects Admin。
+- 未实现 Content Import / Export。
+- 未迁移、删除、覆盖或导入 `content/profile`。
+- 未修改 Agent Demo 回答范围。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx 部署配置。
+
+**验证：**
+- 新增 Profile Admin validation、service、homepage database/file mode 等聚焦测试。
+- `pnpm test` 通过。
+- `pnpm lint` 通过。
+- `pnpm build` 通过。
+
+### 2026-06-23 - Codex
 **摘要：** Phase 11.5 已完成，新增 PostgreSQL `blog_posts` 的 Blog Admin MVP。
 
 **Phase 11.4 / 11.5 范围：**

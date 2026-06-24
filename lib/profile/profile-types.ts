@@ -1,8 +1,8 @@
 import type { LocalizedText } from '@/lib/types';
+import type { ContactPlatform } from './contact-platforms';
 
 export type ProfileLanguage = 'zh' | 'en';
 export type ProfileFieldLabel = 'about.role' | 'about.direction' | 'about.status';
-export type ContactChannelType = 'email' | 'github' | 'linkedin' | 'blog' | 'projects' | 'resume' | 'other';
 
 export interface ProfileField {
   labelKey: ProfileFieldLabel;
@@ -68,63 +68,34 @@ export interface ProfileContent {
 }
 
 export interface ContactChannelData {
-  label: LocalizedText;
-  type: ContactChannelType;
+  platform: ContactPlatform;
+  label: string;
   href: string;
-  value: LocalizedText;
-  endpoint: string;
-  visible: boolean;
-  disabled: boolean;
-  privacyNote: LocalizedText | null;
-}
-
-export interface ContactChannelsFrontmatter {
-  title?: string;
-  slug?: string;
-  summary?: LocalizedText | string;
-  channels?: ContactChannelData[];
-  privacyNote?: LocalizedText | string;
-  resumeNote?: LocalizedText | string;
-  published?: boolean | string;
-  lang?: string;
+  value: string;
+  displayOrder: number;
 }
 
 export interface ContactChannels {
-  title: string;
-  slug: string;
-  summary: LocalizedText;
   channels: ContactChannelData[];
-  privacyNote: LocalizedText;
-  resumeNote: LocalizedText;
-  published: boolean;
-  lang: ProfileLanguage;
-  content: string;
-  rawContent: string;
+}
+
+export interface SystemStackItem {
+  name: string;
+  displayOrder: number;
 }
 
 export interface SystemStackGroup {
-  name: LocalizedText;
-  items: string[];
+  name: string;
+  displayOrder: number;
+  items: SystemStackItem[];
 }
 
 export interface SystemStackFrontmatter {
-  title?: string;
-  slug?: string;
-  summary?: LocalizedText | string;
   groups?: SystemStackGroup[];
-  published?: boolean | string;
-  lang?: string;
 }
 
 export interface SystemStack {
-  title: string;
-  slug: string;
-  summary: LocalizedText;
   groups: SystemStackGroup[];
-  published: boolean;
-  lang: ProfileLanguage;
-  content: string;
-  rawContent: string;
 }
 
 export interface PublicProfile {

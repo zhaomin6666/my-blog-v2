@@ -4,19 +4,14 @@ import { pickLocalizedText, truncateText } from "./textUtils";
 
 function visibleContactSummary(
   channels: ContactChannelData[],
-  locale: AgentDemoLocale,
 ): string {
-  const visibleChannels = channels.filter(
-    (channel) => channel.visible && !channel.disabled,
-  );
+  const visibleChannels = channels.filter((channel) => channel.href && channel.value);
 
   if (!visibleChannels.length) return "No public contact channels are available.";
 
   return visibleChannels
     .map((channel) => {
-      const label = pickLocalizedText(channel.label, locale);
-      const value = pickLocalizedText(channel.value, locale);
-      return `${label}: ${value}`;
+      return `${channel.label}: ${channel.value}`;
     })
     .join("\n");
 }
@@ -24,8 +19,7 @@ function visibleContactSummary(
 function stackSummary(groups: SystemStackGroup[], locale: AgentDemoLocale): string {
   return groups
     .map((group) => {
-      const name = pickLocalizedText(group.name, locale);
-      return `${name}: ${group.items.join(", ")}`;
+      return `${group.name}: ${group.items.map((item) => item.name).join(", ")}`;
     })
     .join("\n");
 }
@@ -79,34 +73,27 @@ export async function getSystemStack(
       type: "profile",
       title: "Public System Stack",
       url: "/",
-      excerpt: truncateText(pickLocalizedText(stack.summary, locale)),
+      excerpt: truncateText(summary),
     },
-    context: [`System Stack: ${stack.title}`, summary].join("\n"),
+    context: [`System Stack`, summary].join("\n"),
     score: 10,
   };
 }
 
 export async function getPublicContact(
-  locale: AgentDemoLocale = "zh",
+  _locale: AgentDemoLocale = "zh",
 ): Promise<AgentKnowledgeItem> {
   const channels = await profileService.getContactChannels();
-  const summary = visibleContactSummary(channels.channels, locale);
-  const privacyNote = pickLocalizedText(channels.privacyNote, locale);
-  const resumeNote = pickLocalizedText(channels.resumeNote, locale);
+  const summary = visibleContactSummary(channels.channels);
 
   return {
     source: {
       type: "profile",
       title: "Public Contact Channels",
       url: "/",
-      excerpt: truncateText(pickLocalizedText(channels.summary, locale)),
+      excerpt: truncateText(summary),
     },
-    context: [
-      `Contact: ${channels.title}`,
-      summary,
-      `Privacy Note: ${privacyNote}`,
-      `Resume Note: ${resumeNote}`,
-    ].join("\n"),
+    context: [`Contact`, summary].join("\n"),
     score: 10,
   };
 }

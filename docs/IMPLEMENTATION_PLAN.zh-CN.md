@@ -509,12 +509,19 @@
 - 保存 / 发布 / 下架会 revalidate Blog、search、tags、series、sitemap、RSS，以及可确定的文章 slug。
 - 未迁移、删除或覆盖 `content/blog`，未实现外部导入，未修改 Console / CLI、窗口系统、Agent Demo 范围、Docker 或 Nginx。
 
-### Phase 11.6：Homepage / Profile Admin - 计划中
+### Phase 11.6：Homepage / Profile Admin - 已完成
 
-- Profile editor
-- Contact editor
-- System Stack editor
-- Homepage sections editor
+- 新增 `/admin/homepage`，管理 PostgreSQL `homepage_sections`。
+- 新增 `/admin/profile`，管理 `profile_pages key='profile'`。
+- 新增 `/admin/contact`，管理 `contact_channels`。
+- 新增 `/admin/stack`，管理 `system_stack_groups` 和 `system_stack_items`。
+- 新增 `lib/admin` 下的 Profile Admin service / repository / validation。
+- 新增轻量 `HomepageService`，database mode 下读取 visible homepage sections。
+- database mode 下公开首页可以读取后台保存的 Hero / Overview 内容。
+- database mode 下公开 Profile / Contact / Stack 继续通过 `ProfileService` 读取。
+- file mode 保持不变，继续读取 `content/profile`。
+- 未实现 Projects Admin、Import / Export。
+- 未修改 Agent Demo 回答范围、Console / CLI、窗口系统或部署配置。
 
 ### Phase 11.7：Projects Admin - 计划中
 

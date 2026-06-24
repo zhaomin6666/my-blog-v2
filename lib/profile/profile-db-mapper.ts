@@ -7,54 +7,102 @@ import type {
 import type { LocalizedText } from '@/lib/types';
 import type {
   ContactChannelData,
-  ContactChannels,
-  ContactChannelType,
   ProfileContent,
   ProfileField,
   ProfileFieldLabel,
-  ProfileLanguage,
   ProfileLink,
   ProfileProject,
   SystemStack,
   SystemStackGroup,
+  SystemStackItem,
 } from './profile-types';
+import {
+  buildContactHref,
+  CONTACT_PLATFORM_META,
+  formatContactDisplayValue,
+  isContactPlatform,
+  sanitizeContactValue,
+} from './contact-platforms';
 
 type JsonRecord = Record<string, unknown>;
+
+interface LocalizedProfilePageRows {
+  zh?: ProfilePageRow | null;
+  en?: ProfilePageRow | null;
+}
 
 function isRecord(value: unknown): value is JsonRecord {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function rowData(row: ProfilePageRow): JsonRecord {
-  return isRecord(row.data) ? row.data : {};
+function rowData(row: ProfilePageRow | null | undefined): JsonRecord {
+  return row && isRecord(row.data) ? row.data : {};
 }
 
-function toLocalizedText(value: unknown, fallback = ''): LocalizedText {
+function toText(value: unknown): string {
+  return typeof value === 'string' ? value : '';
+}
+
+function localizedText(
+  zhValue: unknown,
+  enValue: unknown,
+  fallbackZh = '',
+  fallbackEn = '',
+): LocalizedText {
+  const zh = typeof zhValue === 'string' ? zhValue : fallbackZh;
+  const en = typeof enValue === 'string' ? enValue : fallbackEn || zh;
+  return { zh, en };
+}
+
+function localizedTextFromData(
+  zhData: JsonRecord,
+  enData: JsonRecord,
+  key: string,
+  fallbackZh = '',
+  fallbackEn = '',
+): LocalizedText {
+  return localizedText(zhData[key], enData[key], fallbackZh, fallbackEn);
+}
+
+function localizedTextFromNestedData(
+  zhData: JsonRecord,
+  enData: JsonRecord,
+  key: string,
+  fallbackZh = '',
+  fallbackEn = '',
+): LocalizedText {
+  const zhValue = localizedTextFromValue(zhData[key]);
+  const enValue = localizedTextFromValue(enData[key]);
+  const zh = zhValue.zh || fallbackZh;
+  const en = enValue.en || fallbackEn || zh;
+  return { zh, en };
+}
+
+function localizedTextFromValue(value: unknown): LocalizedText {
   if (isRecord(value)) {
-    const zh = typeof value.zh === 'string' ? value.zh : fallback;
-    const en = typeof value.en === 'string' ? value.en : zh || fallback;
-    return { zh, en };
+    return localizedText(value.zh, value.en);
   }
 
-  if (typeof value === 'string') {
-    return { zh: value, en: value };
+  return localizedText(value, value);
+}
+
+function localizedTextArray(zhValue: unknown, enValue: unknown): LocalizedText[] {
+  const zhItems = Array.isArray(zhValue) ? zhValue : [];
+  const enItems = Array.isArray(enValue) ? enValue : [];
+  const length = Math.max(zhItems.length, enItems.length);
+  const items: LocalizedText[] = [];
+
+  for (let index = 0; index < length; index += 1) {
+    const zhItem = localizedTextFromValue(zhItems[index]);
+    const enItem = localizedTextFromValue(enItems[index]);
+    const merged = localizedText(zhItem.zh, enItem.en, zhItem.zh, enItem.en);
+
+    if (merged.zh || merged.en) {
+      items.push(merged);
+    }
   }
 
-  return { zh: fallback, en: fallback };
-}
-
-function toLocalizedTextArray(value: unknown): LocalizedText[] {
-  if (!Array.isArray(value)) return [];
-  return value.map((item) => toLocalizedText(item)).filter((item) => item.zh || item.en);
-}
-
-function toStringArray(value: unknown): string[] {
-  if (!Array.isArray(value)) return [];
-  return value.filter((item): item is string => typeof item === 'string');
-}
-
-function toProfileLanguage(value: string): ProfileLanguage {
-  return value === 'en' ? 'en' : 'zh';
+  return items;
 }
 
 function toBoolean(value: unknown, fallback: boolean): boolean {
@@ -63,98 +111,152 @@ function toBoolean(value: unknown, fallback: boolean): boolean {
   return fallback;
 }
 
-function toProfileField(value: unknown): ProfileField | null {
-  if (!isRecord(value)) return null;
-  const labelKey = value.labelKey;
+function stringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === 'string');
+}
 
+function profileFieldLabel(value: unknown): ProfileFieldLabel | null {
   if (
-    labelKey !== 'about.role' &&
-    labelKey !== 'about.direction' &&
-    labelKey !== 'about.status'
-  ) {
-    return null;
-  }
-
-  return {
-    labelKey: labelKey as ProfileFieldLabel,
-    value: toLocalizedText(value.value),
-  };
-}
-
-function toProfileFields(value: unknown): ProfileField[] {
-  if (!Array.isArray(value)) return [];
-  return value.map(toProfileField).filter((item): item is ProfileField => item !== null);
-}
-
-function toProfileLink(value: unknown): ProfileLink | null {
-  if (!isRecord(value) || typeof value.href !== 'string') return null;
-
-  return {
-    label: toLocalizedText(value.label),
-    href: value.href,
-    description: toLocalizedText(value.description),
-  };
-}
-
-function toProfileLinks(value: unknown): ProfileLink[] {
-  if (!Array.isArray(value)) return [];
-  return value.map(toProfileLink).filter((item): item is ProfileLink => item !== null);
-}
-
-function toProfileProject(value: unknown): ProfileProject | null {
-  if (!isRecord(value) || typeof value.href !== 'string') return null;
-
-  return {
-    title: toLocalizedText(value.title),
-    href: value.href,
-    summary: toLocalizedText(value.summary),
-  };
-}
-
-function toProfileProjects(value: unknown): ProfileProject[] {
-  if (!Array.isArray(value)) return [];
-  return value.map(toProfileProject).filter((item): item is ProfileProject => item !== null);
-}
-
-function toContactType(value: string): ContactChannelType {
-  if (
-    value === 'email' ||
-    value === 'github' ||
-    value === 'linkedin' ||
-    value === 'blog' ||
-    value === 'projects' ||
-    value === 'resume'
+    value === 'about.role' ||
+    value === 'about.direction' ||
+    value === 'about.status'
   ) {
     return value;
   }
 
-  return 'other';
+  return null;
 }
 
-export function mapProfilePageRowToProfile(row: ProfilePageRow): ProfileContent {
-  const data = rowData(row);
-  const content = row.content_markdown ?? '';
+function profileFields(zhValue: unknown, enValue: unknown): ProfileField[] {
+  const zhItems = Array.isArray(zhValue) ? zhValue : [];
+  const enItems = Array.isArray(enValue) ? enValue : [];
+  const length = Math.max(zhItems.length, enItems.length);
+  const fields: ProfileField[] = [];
+
+  for (let index = 0; index < length; index += 1) {
+    const zhItem = zhItems[index];
+    const enItem = enItems[index];
+
+    const labelKey = profileFieldLabel(
+      isRecord(zhItem) ? zhItem.labelKey : isRecord(enItem) ? enItem.labelKey : null,
+    );
+    if (!labelKey) continue;
+
+    const zhFieldValue = isRecord(zhItem) ? zhItem.value : undefined;
+    const enFieldValue = isRecord(enItem) ? enItem.value : undefined;
+
+    fields.push({
+      labelKey,
+      value: localizedText(
+        isRecord(zhFieldValue) ? zhFieldValue.zh : zhFieldValue,
+        isRecord(enFieldValue) ? enFieldValue.en : enFieldValue,
+      ),
+    });
+  }
+
+  return fields;
+}
+
+function profileLinks(zhValue: unknown, enValue: unknown): ProfileLink[] {
+  const zhItems = Array.isArray(zhValue) ? zhValue : [];
+  const enItems = Array.isArray(enValue) ? enValue : [];
+  const length = Math.max(zhItems.length, enItems.length);
+  const links: ProfileLink[] = [];
+
+  for (let index = 0; index < length; index += 1) {
+    const zhItem = isRecord(zhItems[index]) ? zhItems[index] : null;
+    const enItem = isRecord(enItems[index]) ? enItems[index] : null;
+    const href = toText(zhItem?.href) || toText(enItem?.href);
+    if (!href) continue;
+
+    links.push({
+      href,
+      label: (() => {
+        const zhLabel = localizedTextFromValue(zhItem?.label);
+        const enLabel = localizedTextFromValue(enItem?.label);
+        return {
+          zh: zhLabel.zh,
+          en: enLabel.en || zhLabel.zh,
+        };
+      })(),
+      description: (() => {
+        const zhDescription = localizedTextFromValue(zhItem?.description);
+        const enDescription = localizedTextFromValue(enItem?.description);
+        return {
+          zh: zhDescription.zh,
+          en: enDescription.en || zhDescription.zh,
+        };
+      })(),
+    });
+  }
+
+  return links;
+}
+
+function profileProjects(zhValue: unknown, enValue: unknown): ProfileProject[] {
+  const zhItems = Array.isArray(zhValue) ? zhValue : [];
+  const enItems = Array.isArray(enValue) ? enValue : [];
+  const length = Math.max(zhItems.length, enItems.length);
+  const projects: ProfileProject[] = [];
+
+  for (let index = 0; index < length; index += 1) {
+    const zhItem = isRecord(zhItems[index]) ? zhItems[index] : null;
+    const enItem = isRecord(enItems[index]) ? enItems[index] : null;
+    const href = toText(zhItem?.href) || toText(enItem?.href);
+    if (!href) continue;
+
+    projects.push({
+      href,
+      title: localizedText(
+        isRecord(zhItem?.title) ? zhItem.title.zh : zhItem?.title,
+        isRecord(enItem?.title) ? enItem.title.en : enItem?.title,
+      ),
+      summary: localizedText(
+        isRecord(zhItem?.summary) ? zhItem.summary.zh : zhItem?.summary,
+        isRecord(enItem?.summary) ? enItem.summary.en : enItem?.summary,
+      ),
+    });
+  }
+
+  return projects;
+}
+
+function sortRowsByDisplayOrder<T extends { display_order: number | null }>(rows: T[]): T[] {
+  return [...rows].sort((left, right) => {
+    const leftOrder = left.display_order ?? 0;
+    const rightOrder = right.display_order ?? 0;
+    return leftOrder - rightOrder;
+  });
+}
+
+export function mapProfilePageRowsToProfile(rows: LocalizedProfilePageRows): ProfileContent {
+  const zhRow = rows.zh ?? rows.en ?? null;
+  const enRow = rows.en ?? rows.zh ?? null;
+  const zhData = rowData(zhRow);
+  const enData = rowData(enRow);
+  const content = zhRow?.content_markdown ?? enRow?.content_markdown ?? '';
 
   return {
-    title: row.title?.trim() || 'Profile',
-    slug: typeof data.slug === 'string' ? data.slug : 'profile',
-    summary: toLocalizedText(data.summary, row.summary ?? ''),
-    role: toLocalizedText(data.role),
-    status: toLocalizedText(data.status),
-    intro: toLocalizedText(data.intro),
-    fields: toProfileFields(data.fields),
-    focus: toLocalizedTextArray(data.focus),
-    background: toLocalizedTextArray(data.background),
-    building: toProfileLinks(data.building),
-    workStyle: toLocalizedTextArray(data.workStyle),
-    coreSkills: toStringArray(data.coreSkills),
-    aiFocus: toLocalizedTextArray(data.aiFocus),
-    enterpriseExperience: toLocalizedTextArray(data.enterpriseExperience),
-    featuredProjects: toProfileProjects(data.featuredProjects),
-    careerDirection: toLocalizedTextArray(data.careerDirection),
-    privacyNote: toLocalizedText(data.privacyNote),
-    published: toBoolean(data.published, true),
-    lang: toProfileLanguage(row.lang),
+    title: zhRow?.title?.trim() || enRow?.title?.trim() || 'Profile',
+    slug: toText(zhData.slug).trim() || toText(enData.slug).trim() || 'profile',
+    summary: localizedTextFromData(zhData, enData, 'summary', zhRow?.summary ?? '', enRow?.summary ?? ''),
+    role: localizedTextFromNestedData(zhData, enData, 'role'),
+    status: localizedTextFromNestedData(zhData, enData, 'status'),
+    intro: localizedTextFromNestedData(zhData, enData, 'intro'),
+    fields: profileFields(zhData.fields, enData.fields),
+    focus: localizedTextArray(zhData.focus, enData.focus),
+    background: localizedTextArray(zhData.background, enData.background),
+    building: profileLinks(zhData.building, enData.building),
+    workStyle: localizedTextArray(zhData.workStyle, enData.workStyle),
+    coreSkills: stringArray(zhData.coreSkills).length ? stringArray(zhData.coreSkills) : stringArray(enData.coreSkills),
+    aiFocus: localizedTextArray(zhData.aiFocus, enData.aiFocus),
+    enterpriseExperience: localizedTextArray(zhData.enterpriseExperience, enData.enterpriseExperience),
+    featuredProjects: profileProjects(zhData.featuredProjects, enData.featuredProjects),
+    careerDirection: localizedTextArray(zhData.careerDirection, enData.careerDirection),
+    privacyNote: localizedTextFromNestedData(zhData, enData, 'privacyNote'),
+    published: toBoolean(zhData.published, toBoolean(enData.published, true)),
+    lang: 'zh',
     content,
     rawContent: content,
   };
@@ -162,73 +264,66 @@ export function mapProfilePageRowToProfile(row: ProfilePageRow): ProfileContent 
 
 export function mapContactRowsToChannels(rows: ContactChannelRow[]): ContactChannelData[] {
   return rows
-    .filter((row) => row.visible)
     .map((row) => {
-      const href = row.href ?? '';
-      const description = row.description ?? '';
+      const platformValue = typeof row.platform === 'string' ? row.platform.trim() : '';
+      if (!isContactPlatform(platformValue)) return null;
+
+      const platform = platformValue;
+      const rawValue = row.value.trim();
+      const customLabel = toText(row.custom_label).trim();
+      const hrefOverride = toText(row.href_override).trim();
+      const sanitizedValue = sanitizeContactValue(platform, rawValue);
+      const href = buildContactHref(platform, sanitizedValue, hrefOverride);
+      const label =
+        platform === 'custom'
+          ? customLabel
+          : platform === 'x'
+            ? 'X'
+            : CONTACT_PLATFORM_META[platform].label;
+
+      if (!sanitizedValue) return null;
+      if (platform === 'custom' && (!customLabel || !href)) return null;
 
       return {
-        label: toLocalizedText(row.label),
-        type: toContactType(row.type),
+        platform,
+        label,
         href,
-        value: toLocalizedText(description),
-        endpoint: href ? `GET ${href}` : '',
-        visible: row.visible,
-        disabled: !href,
-        privacyNote: null,
-      };
-    });
-}
-
-export function mapProfilePageRowToContactChannels(
-  row: ProfilePageRow,
-  channelRows: ContactChannelRow[],
-): ContactChannels {
-  const data = rowData(row);
-  const content = row.content_markdown ?? '';
-
-  return {
-    title: row.title?.trim() || 'Contact Channels',
-    slug: typeof data.slug === 'string' ? data.slug : 'contact-channels',
-    summary: toLocalizedText(data.summary, row.summary ?? ''),
-    channels: mapContactRowsToChannels(channelRows),
-    privacyNote: toLocalizedText(data.privacyNote),
-    resumeNote: toLocalizedText(data.resumeNote),
-    published: toBoolean(data.published, true),
-    lang: toProfileLanguage(row.lang),
-    content,
-    rawContent: content,
-  };
+        value: formatContactDisplayValue(platform, sanitizedValue),
+        displayOrder: row.display_order ?? 0,
+      } satisfies ContactChannelData;
+    })
+    .filter((channel): channel is ContactChannelData => channel !== null)
+    .sort((left, right) => left.displayOrder - right.displayOrder);
 }
 
 export function mapStackRowsToGroups(
   groupRows: SystemStackGroupRow[],
   itemRows: SystemStackItemRow[],
 ): SystemStackGroup[] {
-  return groupRows.map((group) => ({
-    name: toLocalizedText(group.name),
-    items: itemRows
-      .filter((item) => item.group_id === group.id)
-      .map((item) => item.name),
+  const itemsByGroupId = new Map<string, SystemStackItem[]>();
+
+  for (const itemRow of sortRowsByDisplayOrder(itemRows)) {
+    const item: SystemStackItem = {
+      name: itemRow.name,
+      displayOrder: itemRow.display_order ?? 0,
+    };
+    const list = itemsByGroupId.get(itemRow.group_id) ?? [];
+    list.push(item);
+    itemsByGroupId.set(itemRow.group_id, list);
+  }
+
+  return sortRowsByDisplayOrder(groupRows).map((groupRow) => ({
+    name: groupRow.name,
+    displayOrder: groupRow.display_order ?? 0,
+    items: itemsByGroupId.get(groupRow.id) ?? [],
   }));
 }
 
-export function mapProfilePageRowToSystemStack(
-  row: ProfilePageRow,
+export function mapSystemStackRows(
   groupRows: SystemStackGroupRow[],
   itemRows: SystemStackItemRow[],
 ): SystemStack {
-  const data = rowData(row);
-  const content = row.content_markdown ?? '';
-
   return {
-    title: row.title?.trim() || 'System Stack',
-    slug: typeof data.slug === 'string' ? data.slug : 'system-stack',
-    summary: toLocalizedText(data.summary, row.summary ?? ''),
     groups: mapStackRowsToGroups(groupRows, itemRows),
-    published: toBoolean(data.published, true),
-    lang: toProfileLanguage(row.lang),
-    content,
-    rawContent: content,
   };
 }

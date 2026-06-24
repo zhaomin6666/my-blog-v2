@@ -1,78 +1,87 @@
 ---
-title: "System Stack"
-slug: "system-stack"
-summary:
-  zh: "公开展示的技术栈与学习方向。"
-  en: "Public technical stack and learning direction."
 groups:
-  - name:
-      zh: "Backend"
-      en: "Backend"
+  - name: "Backend"
+    order: 0
     items:
-      - "Java"
-      - "Spring Boot"
-      - "MyBatis"
-      - "Redis"
-      - "REST APIs"
-      - "Relational Databases"
-  - name:
-      zh: "Frontend / Full-stack"
-      en: "Frontend / Full-stack"
+      - name: "Java"
+        order: 0
+      - name: "Spring Boot"
+        order: 1
+      - name: "MyBatis"
+        order: 2
+      - name: "Redis"
+        order: 3
+      - name: "REST APIs"
+        order: 4
+      - name: "Relational Databases"
+        order: 5
+  - name: "Frontend / Full-stack"
+    order: 1
     items:
-      - "TypeScript"
-      - "React"
-      - "Next.js"
-      - "Tailwind CSS"
-  - name:
-      zh: "AI Agent"
-      en: "AI Agent"
+      - name: "TypeScript"
+        order: 0
+      - name: "React"
+        order: 1
+      - name: "Next.js"
+        order: 2
+      - name: "Tailwind CSS"
+        order: 3
+  - name: "AI Agent"
+    order: 2
     items:
-      - "LangChain.js"
-      - "LangGraph.js"
-      - "Structured Output"
-      - "Tool Calling"
-      - "RAG"
-      - "Agent Workflow"
-  - name:
-      zh: "DevOps / Deployment"
-      en: "DevOps / Deployment"
+      - name: "LangChain.js"
+        order: 0
+      - name: "LangGraph.js"
+        order: 1
+      - name: "Structured Output"
+        order: 2
+      - name: "Tool Calling"
+        order: 3
+      - name: "RAG"
+        order: 4
+      - name: "Agent Workflow"
+        order: 5
+  - name: "DevOps / Deployment"
+    order: 3
     items:
-      - "Docker"
-      - "Docker Compose"
-      - "Nginx"
-      - "Linux"
-      - "HTTPS / Let's Encrypt"
-  - name:
-      zh: "Learning / Exploring"
-      en: "Learning / Exploring"
+      - name: "Docker"
+        order: 0
+      - name: "Docker Compose"
+        order: 1
+      - name: "Nginx"
+        order: 2
+      - name: "Linux"
+        order: 3
+      - name: "HTTPS / Let's Encrypt"
+        order: 4
+  - name: "Learning / Exploring"
+    order: 4
     items:
-      - "MCP"
-      - "OAuth"
-      - "Agent Persistence"
-      - "Enterprise Knowledge Base"
-published: true
-lang: "zh"
+      - name: "MCP"
+        order: 0
+      - name: "OAuth"
+        order: 1
+      - name: "Agent Persistence"
+        order: 2
+      - name: "Enterprise Knowledge Base"
+        order: 3
 ---
 
 <!--
 System stack content mapping:
 
-- title:
-  Internal content title. The Main App Stack section heading currently uses the
-  shared translation key skills.title.
-- summary:
-  Parsed for content metadata, CMS/admin preview text, and future card summaries.
-  It is not rendered directly on the current homepage.
 - groups:
   Drives the System Stack section in the Main App.
 - groups.name:
   Displayed as the module name for each stack group.
+- groups.order:
+  Controls group order in file mode.
 - groups.items:
   Displayed as stack tags under the matching group.
-- published:
-  Controls whether ProfileService returns this stack content.
-- lang:
-  Source content language marker.
+- groups.items.name:
+  Visible stack item text.
+- groups.items.order:
+  Controls item order inside the group.
 
 Maintenance notes:
 - Learning / Exploring means the area is being studied or explored. It should not
@@ -80,5 +89,3 @@ Maintenance notes:
 - To update the visible stack, edit groups in this file. Do not duplicate stack
   data inside components.
 -->
-
-技术栈按公开展示和学习方向整理。处于学习阶段的内容保留在 Learning / Exploring 分组中。

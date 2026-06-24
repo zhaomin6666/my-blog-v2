@@ -62,29 +62,13 @@ export function createEmptyProfileContent(): ProfileContent {
 
 export function createEmptyContactChannels(): ContactChannels {
   return {
-    title: '',
-    slug: 'contact-channels',
-    summary: createEmptyText(),
     channels: [],
-    privacyNote: createEmptyText(),
-    resumeNote: createEmptyText(),
-    published: false,
-    lang: 'zh',
-    content: '',
-    rawContent: '',
   };
 }
 
 export function createEmptySystemStack(): SystemStack {
   return {
-    title: '',
-    slug: 'system-stack',
-    summary: createEmptyText(),
     groups: [],
-    published: false,
-    lang: 'zh',
-    content: '',
-    rawContent: '',
   };
 }
 

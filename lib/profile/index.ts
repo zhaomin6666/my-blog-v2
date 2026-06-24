@@ -11,8 +11,6 @@ export type { ProfileRepository } from './profile-repository';
 export type {
   ContactChannelData,
   ContactChannels,
-  ContactChannelsFrontmatter,
-  ContactChannelType,
   ProfileContent,
   ProfileField,
   ProfileFieldLabel,
@@ -24,4 +22,5 @@ export type {
   SystemStack,
   SystemStackFrontmatter,
   SystemStackGroup,
+  SystemStackItem,
 } from './profile-types';
