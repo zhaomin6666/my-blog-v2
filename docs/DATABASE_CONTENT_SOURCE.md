@@ -53,18 +53,36 @@ to build normally without PostgreSQL.
 
 ## Migration
 
-Migration path:
+Migration files:
 
 ```text
 database/migrations/001_create_cms_tables.sql
+database/migrations/002_add_translation_keys_to_contact_and_stack.sql
+database/migrations/003_reset_contact_channels_single_source.sql
+database/migrations/004_reset_system_stack_single_source.sql
 ```
 
-The migration is not executed automatically. Run it manually against the
+Migrations are not executed automatically. Run them manually against the
 dedicated personal-site database when database-mode testing begins:
 
 ```bash
 psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/001_create_cms_tables.sql
+psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/002_add_translation_keys_to_contact_and_stack.sql
+psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/003_reset_contact_channels_single_source.sql
+psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/004_reset_system_stack_single_source.sql
 ```
+
+Production rules:
+
+- Migration filenames must use increasing numeric prefixes.
+- Append new migration files; do not modify migrations that have already run in
+  production.
+- Back up PostgreSQL before running migrations.
+- Record migration execution in release notes or an operations log.
+- `pnpm build` must not require a database connection.
+- The app must not run migrations automatically at startup.
+
+See `docs/PRODUCTION_CMS_DEPLOYMENT.md` for the production migration workflow.
 
 ## Tables
 
@@ -286,6 +304,46 @@ Recommended backup baseline:
 - Restrict backup directory permissions.
 - Test restore on a non-production database.
 - Document restore commands before relying on the database as the primary source.
+
+The full backup and restore runbook is in `docs/POSTGRES_BACKUP_RESTORE.md`.
+
+## Production Source Switch And Rollback
+
+File mode remains the safe default:
+
+```text
+CONTENT_SOURCE=file
+BLOG_CONTENT_SOURCE=file
+PROJECT_CONTENT_SOURCE=file
+PROFILE_CONTENT_SOURCE=file
+```
+
+Database mode can be enabled gradually:
+
+```text
+CONTENT_SOURCE=file
+BLOG_CONTENT_SOURCE=database
+PROJECT_CONTENT_SOURCE=file
+PROFILE_CONTENT_SOURCE=file
+```
+
+Before switching a production domain to `database`, confirm PostgreSQL
+connectivity, migrations, backup, Admin content review, local or staging build,
+and `.env.production` values. After switching, rebuild or restart and verify
+public pages, sitemap, RSS, and Agent Demo sources.
+
+Rollback to file mode uses:
+
+```text
+CONTENT_SOURCE=file
+BLOG_CONTENT_SOURCE=file
+PROJECT_CONTENT_SOURCE=file
+PROFILE_CONTENT_SOURCE=file
+```
+
+Rollback does not delete database rows. Public pages return to the old
+`content/blog`, `content/projects`, and `content/profile` files. See
+`docs/PRODUCTION_CMS_DEPLOYMENT.md` for the detailed checklist.
 
 ## Admin Markdown Import / Export
 

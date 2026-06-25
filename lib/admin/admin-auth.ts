@@ -11,10 +11,15 @@ import {
   verifySignedSessionToken,
   type AdminSessionPayload,
 } from './admin-session';
+import {
+  ADMIN_PASSWORD_HASH_ENV,
+  ADMIN_SESSION_SECRET_ENV,
+  ADMIN_USERNAME_ENV,
+  checkAdminEnv,
+  normalizeAdminPasswordHash,
+} from './admin-env-check';
 
-export const ADMIN_USERNAME_ENV = 'ADMIN_USERNAME';
-export const ADMIN_PASSWORD_HASH_ENV = 'ADMIN_PASSWORD_HASH';
-export const ADMIN_SESSION_SECRET_ENV = 'ADMIN_SESSION_SECRET';
+export { ADMIN_PASSWORD_HASH_ENV, ADMIN_SESSION_SECRET_ENV, ADMIN_USERNAME_ENV };
 
 export interface AdminCredentialsConfig {
   username: string;
@@ -23,6 +28,9 @@ export interface AdminCredentialsConfig {
 }
 
 export function getAdminCredentialsConfig(): AdminCredentialsConfig | null {
+  const check = checkAdminEnv();
+  if (!check.ok) return null;
+
   const username = process.env[ADMIN_USERNAME_ENV]?.trim();
   const passwordHash = process.env[ADMIN_PASSWORD_HASH_ENV]?.trim();
   const sessionSecret = process.env[ADMIN_SESSION_SECRET_ENV]?.trim();
@@ -38,14 +46,8 @@ export function getAdminCredentialsConfig(): AdminCredentialsConfig | null {
   };
 }
 
-function normalizePasswordHash(value: string): string {
-  if (value.startsWith('sha256:')) return value.slice('sha256:'.length);
-  if (value.startsWith('$sha256$')) return value.slice('$sha256$'.length);
-  return value;
-}
-
 export function verifyAdminPassword(password: string, expectedHash: string): boolean {
-  const normalizedHash = normalizePasswordHash(expectedHash).toLowerCase();
+  const normalizedHash = normalizeAdminPasswordHash(expectedHash).toLowerCase();
   if (!/^[a-f0-9]{64}$/.test(normalizedHash)) return false;
 
   const actualHash = createHash('sha256').update(password, 'utf8').digest('hex');

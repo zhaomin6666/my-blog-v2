@@ -11,6 +11,8 @@ vi.mock('next/cache', () => ({
 }));
 
 vi.mock('@/lib/admin/content-transfer', () => ({
+  ADMIN_MARKDOWN_IMPORT_MAX_FILE_SIZE_BYTES: 1024 * 1024,
+  ADMIN_MARKDOWN_IMPORT_MAX_FILES: 20,
   MAX_MARKDOWN_IMPORT_FILE_BYTES: 1024 * 1024,
   MAX_MARKDOWN_IMPORT_FILES: 20,
   contentTransferService: {
@@ -82,5 +84,35 @@ describe('runMarkdownImportAction', () => {
       'dry-run',
       expect.arrayContaining([expect.objectContaining({ filename: 'project.md' })]),
     );
+  });
+
+  it('rejects imports above the max file count before calling the service', async () => {
+    const formData = new FormData();
+    formData.set('mode', 'dry-run');
+
+    for (let index = 0; index < 21; index += 1) {
+      formData.append(
+        'files',
+        new File(['---\ntitle: Sample\nslug: sample\n---\n\nBody'], `sample-${index}.md`),
+      );
+    }
+
+    const result = await runMarkdownImportAction('blog', formData);
+
+    expect(result.ok).toBe(false);
+    expect(result.message).toBe('Upload at most 20 Markdown files at a time.');
+    expect(importMarkdownFilesMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects imports above the max file size before calling the service', async () => {
+    const formData = new FormData();
+    formData.set('mode', 'dry-run');
+    formData.set('files', new File(['x'.repeat(1024 * 1024 + 1)], 'large.md'));
+
+    const result = await runMarkdownImportAction('blog', formData);
+
+    expect(result.ok).toBe(false);
+    expect(result.message).toBe('Each Markdown file must be 1MB or smaller.');
+    expect(importMarkdownFilesMock).not.toHaveBeenCalled();
   });
 });

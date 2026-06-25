@@ -1,6 +1,34 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-25 - Codex
+**摘要：** Phase 11.9 已完成，补齐 CMS 备份、恢复、生产部署、Admin env 和导入导出限制加固。
+
+**Phase 11.9 范围：**
+- 新增 `docs/PRODUCTION_CMS_DEPLOYMENT.md` 和 `docs/PRODUCTION_CMS_DEPLOYMENT.zh-CN.md`。
+- 新增 `docs/POSTGRES_BACKUP_RESTORE.md` 和 `docs/POSTGRES_BACKUP_RESTORE.zh-CN.md`。
+- 文档化宿主机 / 外部 PostgreSQL 与 Docker PostgreSQL 的 `pg_dump` 备份。
+- 文档化恢复到测试库，以及谨慎恢复到生产库的 `pg_restore` 流程。
+- 文档化 migration 规范：数字顺序命名、只追加不改旧 migration、执行前备份、手动执行、不让 build 依赖数据库、不在应用启动时自动执行。
+- 文档化 file mode -> database mode 生产切换、分领域逐步切换，以及 database mode -> file mode 回滚。
+- 新增 Admin env 安全检查：`ADMIN_USERNAME`、`ADMIN_PASSWORD_HASH`、`ADMIN_SESSION_SECRET` 必填，session secret 至少 32 字符，拒绝占位值和常见默认密码 hash。
+- 新增安全 database health-check helper，只返回状态，不暴露数据库 URL 或用户名。
+- 集中 Admin Markdown 限制命名，并文档化只允许 `.md`、单次 20 个文件、单文件 1MB、不支持 zip / URL / 图片导入，以及批量导出 100 条限制。
+- 批量 Markdown zip 导出在匹配 active rows 超过 100 条时明确失败，不再静默返回部分 zip。
+- 文档化 Admin Markdown Import 出现 413 时的 Nginx `client_max_body_size 2m` 处理。
+- `.env.example` 仅补充 Admin 占位值。
+
+**范围守卫：**
+- 未新增后台业务模块。
+- 未新增自动备份任务、migration runner 或生产 `CONTENT_SOURCE` 自动切换。
+- 未修改公开页面 UI。
+- 未修改 Agent Demo 回答范围、Console / CLI、窗口系统、Docker 或已跟踪 Nginx 部署配置。
+- 未提交真实 env、密钥、数据库连接串或备份 dump 文件。
+
+**验证：**
+- 新增 Admin env check、database health-check、导入文件数 / 文件大小限制、批量导出记录数限制的聚焦测试。
+- `pnpm test`、`pnpm lint` 和 `pnpm build` 是本阶段最终验收命令。
+
+### 2026-06-25 - Codex
 **摘要：** 新增 Blog Admin soft delete，并优化 `/admin/blog` 行操作区。
 
 **修复范围：**

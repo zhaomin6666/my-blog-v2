@@ -958,9 +958,38 @@ Boundaries:
 
 ### Phase 11.9: Backup & Deployment Hardening
 
-- `pg_dump`.
-- Rollback documentation.
-- Production checklist.
+Completed as production hardening documentation plus small safety checks.
+
+Implemented:
+
+- Added `docs/PRODUCTION_CMS_DEPLOYMENT.md` and
+  `docs/PRODUCTION_CMS_DEPLOYMENT.zh-CN.md`.
+- Added `docs/POSTGRES_BACKUP_RESTORE.md` and
+  `docs/POSTGRES_BACKUP_RESTORE.zh-CN.md`.
+- Documented PostgreSQL `pg_dump` backups, `pg_restore` recovery, migration
+  execution rules, file-to-database switching, database-to-file rollback, and
+  Nginx 413 handling.
+- Added `lib/admin/admin-env-check.ts` for explicit Admin credential checks:
+  required username, required password hash, required session secret, minimum
+  32-character session secret, placeholder rejection, and known default password
+  hash rejection.
+- Added `lib/db/database-health-check.ts` for a safe `select 1` database health
+  result that does not expose connection strings or usernames.
+- Centralized Admin Markdown import/export limit names:
+  `ADMIN_MARKDOWN_IMPORT_MAX_FILES`,
+  `ADMIN_MARKDOWN_IMPORT_MAX_FILE_SIZE_BYTES`, and
+  `ADMIN_MARKDOWN_EXPORT_MAX_RECORDS`.
+- Bulk Markdown zip export now fails clearly when more than 100 active records
+  match, instead of silently returning a partial export.
+
+Boundaries:
+
+- No new Admin business module was added.
+- No public page design was changed.
+- No Agent Demo answer-scope, Console / CLI, window-system, Docker, or tracked
+  Nginx deployment config changes were made.
+- No automatic backup job, migration runner, production content-source switch,
+  hard delete, or database content deletion was added.
 
 ### Phase 11.10: Phase 11 Final Review
 

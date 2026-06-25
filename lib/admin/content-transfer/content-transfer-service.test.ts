@@ -13,7 +13,11 @@ vi.mock('@/lib/db/dbConfig', () => ({
   hasPersonalSiteDatabaseConfig: vi.fn(() => true),
 }));
 
-const { ContentTransferService } = await import('./content-transfer-service');
+const {
+  ADMIN_MARKDOWN_EXPORT_MAX_RECORDS,
+  ContentTransferExportLimitError,
+  ContentTransferService,
+} = await import('./content-transfer-service');
 const { hasPersonalSiteDatabaseConfig } = await import('@/lib/db/dbConfig');
 const hasDatabaseConfigMock = vi.mocked(hasPersonalSiteDatabaseConfig);
 
@@ -219,5 +223,32 @@ describe('ContentTransferService', () => {
     await expect(service.importMarkdownFiles('blog', 'dry-run', [])).rejects.toThrow(
       'PERSONAL_SITE_DATABASE_URL is required',
     );
+  });
+
+  it('rejects bulk export when active rows exceed the max record count', async () => {
+    const repository = new MemoryContentTransferRepository();
+    const service = new ContentTransferService(repository);
+
+    for (let index = 0; index < ADMIN_MARKDOWN_EXPORT_MAX_RECORDS + 1; index += 1) {
+      const slug = `post-${index}`;
+      repository.blog.set(slug, {
+        title: `Post ${index}`,
+        slug,
+        summary: '',
+        contentMarkdown: 'Body',
+        status: 'published',
+        lang: 'zh',
+        cover: '',
+        seoTitle: '',
+        seoDescription: '',
+        tags: [],
+        series: '',
+        seriesSlug: '',
+        seriesOrder: null,
+        date: '2026-06-25',
+      });
+    }
+
+    await expect(service.exportMarkdownZip('blog')).rejects.toThrow(ContentTransferExportLimitError);
   });
 });

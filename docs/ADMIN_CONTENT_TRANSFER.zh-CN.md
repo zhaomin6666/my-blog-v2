@@ -56,9 +56,18 @@ Phase 11.8 不新增 `scripts/content/*.ts` 迁移脚本，也不新增 `pnpm co
 
 ## 上传限制
 
+集中常量：
+
+```text
+ADMIN_MARKDOWN_IMPORT_MAX_FILES=20
+ADMIN_MARKDOWN_IMPORT_MAX_FILE_SIZE_BYTES=1048576
+ADMIN_MARKDOWN_EXPORT_MAX_RECORDS=100
+```
+
 - 只接受 `.md` 文件。
 - 单次最多 20 个文件。
 - 单个文件最大 1MB。
+- 不支持 zip 导入、远程 URL 导入或图片上传。
 - 上传文件只在内存中解析，不长期保存到磁盘。
 - 文件名只用于报告展示；可信 slug 以 frontmatter 为准。
 
@@ -129,7 +138,30 @@ Project 导入字段映射：
 - `/admin/projects/export`
 
 批量导出支持 `scope=all`、`scope=published`、`scope=draft`。软删除记录不会导出。
-单次批量导出最多 100 条记录。
+单次批量导出最多 100 条记录。如果匹配的 active rows 超过 100 条，导出会明确失败，
+不会静默返回不完整 zip。
+
+导出响应过大仍可能带来内存和带宽风险。生产备份应优先使用 PostgreSQL `pg_dump`；
+Markdown 导出只作为内容转移和人工检查工具。
+
+## 部署限制
+
+如果 Admin Markdown 导入在 Nginx 后方出现 `413 Request Entity Too Large`，应配置
+一个与应用限制匹配的小上传限制，例如：
+
+```nginx
+client_max_body_size 2m;
+```
+
+修改后检查并重载：
+
+```bash
+docker exec nginx-proxy nginx -t
+docker exec nginx-proxy nginx -s reload
+```
+
+不要把限制扩大到很大的值。当前应用限制是单个 Markdown 文件 1MB、单次 20 个文件。
+这个配置不修改 Agent Demo API 的 body size 或限流策略。
 
 ## 安全边界
 
@@ -161,4 +193,5 @@ Project 导入字段映射：
 
 **可以当作备份吗？**
 
-后台可以导出 Markdown 或 zip。自动化 `pg_dump`、生产备份和回滚加固放到 Phase 11.9。
+后台可以导出 Markdown 或 zip，但生产数据库备份应使用 `pg_dump`。详见
+`docs/POSTGRES_BACKUP_RESTORE.zh-CN.md`。

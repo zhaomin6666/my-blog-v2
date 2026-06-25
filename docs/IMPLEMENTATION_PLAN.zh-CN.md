@@ -575,11 +575,21 @@
 - 文件型内容目录未被删除、迁移或覆盖，也没有自动切换 `CONTENT_SOURCE`。
 - 未新增 Projects 删除能力，未修改公开 Blog UI、Agent Demo 范围、Console / CLI、窗口系统、Docker 或 Nginx 部署配置。
 
-### Phase 11.9：Backup & Deployment Hardening - 计划中
+### Phase 11.9：Backup & Deployment Hardening - 已完成
 
-- `pg_dump`
-- rollback doc
-- production checklist
+- 新增中英文生产 CMS 部署 runbook。
+- 新增中英文 PostgreSQL 备份 / 恢复 runbook。
+- 文档化宿主机 / 外部 PostgreSQL 与 Docker PostgreSQL 的 `pg_dump` 逻辑备份。
+- 文档化恢复到测试库，以及谨慎恢复到生产库的流程。
+- 文档化 migration 执行规范：数字顺序、只追加不修改旧 migration、执行前备份、执行后记录、不在 build 或应用启动时自动执行。
+- 文档化 file mode -> database mode 切换、分领域逐步切换、重新构建 / 重启要求和验收 URL。
+- 文档化 database mode -> file mode 回滚，回滚不删除数据库内容。
+- 新增 Admin env 检查：username、password hash、session secret 必填，session secret 最少 32 字符，拒绝占位值和常见默认密码 hash。
+- 新增安全 database health-check helper，不暴露连接串或数据库用户名。
+- 集中 Admin Markdown import/export 限制命名，并文档化只允许 `.md`、单次 20 个文件、单文件 1MB、不支持 zip 导入、远程 URL 导入、图片上传，以及批量导出 100 条限制。
+- 批量 Markdown zip 导出在匹配 active rows 超过 100 条时明确失败。
+- 文档化 Admin Markdown Import 出现 413 时的 Nginx `client_max_body_size 2m` 处理。
+- 未新增后台业务模块、自动备份任务、migration runner、自动切换 `CONTENT_SOURCE`、公开 UI 改动、Agent Demo 范围改动、Console / CLI 改动、窗口系统改动或已跟踪 Docker / Nginx 配置改动。
 
 ### Phase 11.10：Phase 11 Final Review - 计划中
 

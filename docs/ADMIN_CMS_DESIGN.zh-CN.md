@@ -821,9 +821,32 @@ Slug 规则：
 
 ### Phase 11.9：Backup & Deployment Hardening
 
-- `pg_dump`
-- rollback doc
-- production checklist
+已完成生产部署加固文档和少量安全检查代码。
+
+已实现：
+
+- 新增 `docs/PRODUCTION_CMS_DEPLOYMENT.md` 和
+  `docs/PRODUCTION_CMS_DEPLOYMENT.zh-CN.md`。
+- 新增 `docs/POSTGRES_BACKUP_RESTORE.md` 和
+  `docs/POSTGRES_BACKUP_RESTORE.zh-CN.md`。
+- 文档化 PostgreSQL `pg_dump` 备份、`pg_restore` 恢复、migration 执行规范、
+  file -> database 切换、database -> file 回滚和 Nginx 413 处理。
+- 新增 `lib/admin/admin-env-check.ts`，显式检查 Admin username、password hash、
+  session secret、至少 32 字符 secret、占位值和常见默认密码 hash。
+- 新增 `lib/db/database-health-check.ts`，提供安全的 `select 1` database health
+  结果，不暴露连接串或数据库用户名。
+- 集中 Admin Markdown import/export 限制命名：
+  `ADMIN_MARKDOWN_IMPORT_MAX_FILES`、
+  `ADMIN_MARKDOWN_IMPORT_MAX_FILE_SIZE_BYTES` 和
+  `ADMIN_MARKDOWN_EXPORT_MAX_RECORDS`。
+- 批量 Markdown zip 导出在匹配 active rows 超过 100 条时明确失败，不再静默返回部分导出。
+
+边界：
+
+- 未新增新的 Admin 业务模块。
+- 未修改公开页面设计。
+- 未修改 Agent Demo 回答范围、Console / CLI、窗口系统、Docker 或已跟踪 Nginx 部署配置。
+- 未新增自动备份任务、migration runner、生产内容源自动切换、hard delete 或数据库内容删除。
 
 ### Phase 11.10：Phase 11 Final Review
 

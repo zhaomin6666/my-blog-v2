@@ -1,6 +1,34 @@
 # AI Development Changelog
 
 ### 2026-06-25 - Codex
+**Summary:** Phase 11.9 completed. Hardened CMS backup, restore, deployment, Admin env, and import/export limits.
+
+**Phase 11.9 scope:**
+- Added `docs/PRODUCTION_CMS_DEPLOYMENT.md` and `docs/PRODUCTION_CMS_DEPLOYMENT.zh-CN.md`.
+- Added `docs/POSTGRES_BACKUP_RESTORE.md` and `docs/POSTGRES_BACKUP_RESTORE.zh-CN.md`.
+- Documented PostgreSQL `pg_dump` backups for host/external databases and Docker PostgreSQL.
+- Documented `pg_restore` recovery to a test database and cautious production restore flow.
+- Documented migration rules: ordered numeric filenames, append-only migrations, backup before migration, manual execution, no build-time database dependency, and no startup migration runner.
+- Documented file mode -> database mode production switching, domain-level gradual switching, and database mode -> file mode rollback.
+- Added Admin env safety checks for required `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `ADMIN_SESSION_SECRET`, minimum 32-character session secret, placeholder values, and known default password hashes.
+- Added a safe database health-check helper that returns status only and does not expose database URLs or usernames.
+- Centralized Admin Markdown limit names and documented `.md` only, 20 files per request, 1MB per file, no zip/URL/image import, and 100-record bulk export limit.
+- Bulk Markdown zip export now fails clearly when more than 100 active rows match, instead of silently returning a partial zip.
+- Documented Nginx `client_max_body_size 2m` handling for Admin Markdown import 413 errors.
+- Updated `.env.example` with placeholder Admin values only.
+
+**Scope guard:**
+- No new Admin business module was added.
+- No automatic backup job, migration runner, or production `CONTENT_SOURCE` switching was added.
+- No public page UI was changed.
+- No Agent Demo answer-scope, Console / CLI, window-system, Docker, or tracked Nginx deployment config changes were made.
+- No real env, secrets, database URLs, or backup dump files were committed.
+
+**Verification:**
+- Added focused tests for Admin env checks, database health-check behavior, import file-count/file-size limits, and bulk export record limits.
+- `pnpm test`, `pnpm lint`, and `pnpm build` are the final release checks for this phase.
+
+### 2026-06-25 - Codex
 **Summary:** Added Blog Admin soft delete and improved `/admin/blog` row actions.
 
 **Fix scope:**

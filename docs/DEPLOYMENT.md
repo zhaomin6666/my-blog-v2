@@ -87,6 +87,27 @@ NEXT_PUBLIC_SITE_URL=https://oli6666.top
 
 Do not commit `.env.production`.
 
+### CMS / Admin Environment Variables
+
+Database-backed Admin / CMS production hardening is documented in
+`docs/PRODUCTION_CMS_DEPLOYMENT.md` and `docs/POSTGRES_BACKUP_RESTORE.md`.
+Relevant server-only variables:
+
+```text
+PERSONAL_SITE_DATABASE_URL=<postgres-connection-url>
+CONTENT_SOURCE=file
+BLOG_CONTENT_SOURCE=
+PROJECT_CONTENT_SOURCE=
+PROFILE_CONTENT_SOURCE=
+ADMIN_USERNAME=<admin_username>
+ADMIN_PASSWORD_HASH=<sha256_password_hash>
+ADMIN_SESSION_SECRET=<random_32_chars_or_longer>
+```
+
+Keep file mode as the default until PostgreSQL migrations, backups, Admin
+content review, and staging/database-mode builds have passed. Do not commit
+database URLs, password hashes, session secrets, or dump files.
+
 ### Agent Demo Environment Variables
 
 The public `/agent-demo` page and `POST /api/agent-demo` route require a
@@ -447,6 +468,27 @@ Tune the Nginx values after observing real usage. The app-level default is
 10 requests per minute per detected client, while the suggested Nginx rule is
 slightly stricter at 6 requests per minute plus a short burst.
 
+### Admin Markdown Upload Size
+
+Admin Markdown import accepts `.md` files only, up to 20 files per request and
+1MB per file. If uploads fail with `413 Request Entity Too Large`, set a small
+Nginx body limit aligned with the application limit:
+
+```nginx
+client_max_body_size 2m;
+```
+
+Then validate and reload:
+
+```bash
+docker exec nginx-proxy nginx -t
+docker exec nginx-proxy nginx -s reload
+```
+
+Do not raise this to a broad large-upload setting. This is only for Admin
+Markdown import and does not change Agent Demo API rate-limit or body-size
+policy.
+
 ### 11. Rollback
 
 Check out the previous tag or commit, then rebuild the container:
@@ -463,6 +505,9 @@ Future releases should use Git tags for clearer rollback targets.
 ## Pre-Deployment Checklist
 
 - Set the production `NEXT_PUBLIC_SITE_URL`.
+- If database-backed CMS content is enabled, follow
+  `docs/PRODUCTION_CMS_DEPLOYMENT.md` and take a PostgreSQL backup first.
+- Keep `.env.production` out of Git and never commit backup dumps.
 - Set Agent Demo server-only variables in `.env.production` if `/agent-demo` is enabled:
   - `AGENT_DEMO_MODEL_API_URL`
   - `AGENT_DEMO_MODEL_API_KEY`
@@ -488,6 +533,8 @@ Future releases should use Git tags for clearer rollback targets.
 - Confirm `light` / `dark` and `macos` / `vercel` still work.
 - Confirm Console commands still work, especially `blog`, `logs`, and `articles`.
 - Confirm `/agent-demo` renders.
+- Confirm Admin login refuses missing or unsafe credentials.
+- Confirm Admin Markdown import limits reject oversized or too many `.md` files.
 - Confirm `POST /api/agent-demo` returns a scoped answer for a safe public question.
 - Confirm private / secret / server-internal questions are refused.
 - Confirm repeated Agent Demo requests eventually return `429`.

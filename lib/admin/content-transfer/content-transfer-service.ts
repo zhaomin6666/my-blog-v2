@@ -25,14 +25,25 @@ import { MarkdownParseError, parseMarkdownFile } from './markdown-parser';
 import { serializeMarkdown } from './markdown-serializer';
 import { validateBlogMarkdown, validateProjectMarkdown } from './frontmatter-validators';
 
-export const MAX_MARKDOWN_IMPORT_FILES = 20;
-export const MAX_MARKDOWN_IMPORT_FILE_BYTES = 1024 * 1024;
-export const MAX_MARKDOWN_EXPORT_ROWS = 100;
+export const ADMIN_MARKDOWN_IMPORT_MAX_FILES = 20;
+export const ADMIN_MARKDOWN_IMPORT_MAX_FILE_SIZE_BYTES = 1024 * 1024;
+export const ADMIN_MARKDOWN_EXPORT_MAX_RECORDS = 100;
+
+export const MAX_MARKDOWN_IMPORT_FILES = ADMIN_MARKDOWN_IMPORT_MAX_FILES;
+export const MAX_MARKDOWN_IMPORT_FILE_BYTES = ADMIN_MARKDOWN_IMPORT_MAX_FILE_SIZE_BYTES;
+export const MAX_MARKDOWN_EXPORT_ROWS = ADMIN_MARKDOWN_EXPORT_MAX_RECORDS;
 
 export class ContentTransferDatabaseConfigError extends Error {
   constructor() {
     super('PERSONAL_SITE_DATABASE_URL is required for Admin content import/export.');
     this.name = 'ContentTransferDatabaseConfigError';
+  }
+}
+
+export class ContentTransferExportLimitError extends Error {
+  constructor(maxRecords = ADMIN_MARKDOWN_EXPORT_MAX_RECORDS) {
+    super(`Export is limited to ${maxRecords} active records at a time.`);
+    this.name = 'ContentTransferExportLimitError';
   }
 }
 
@@ -328,8 +339,19 @@ export class ContentTransferService {
 
     const rows =
       contentType === 'blog'
-        ? await this.repository.listBlogPostsForExport(scope, MAX_MARKDOWN_EXPORT_ROWS)
-        : await this.repository.listProjectsForExport(scope, MAX_MARKDOWN_EXPORT_ROWS);
+        ? await this.repository.listBlogPostsForExport(
+            scope,
+            ADMIN_MARKDOWN_EXPORT_MAX_RECORDS + 1,
+          )
+        : await this.repository.listProjectsForExport(
+            scope,
+            ADMIN_MARKDOWN_EXPORT_MAX_RECORDS + 1,
+          );
+
+    if (rows.length > ADMIN_MARKDOWN_EXPORT_MAX_RECORDS) {
+      throw new ContentTransferExportLimitError();
+    }
+
     const files = rows.map((row) =>
       contentType === 'blog'
         ? blogRowToMarkdownFile(row as BlogPostRow)

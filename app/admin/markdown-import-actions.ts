@@ -3,9 +3,9 @@
 import { revalidatePath } from 'next/cache';
 import { requireAdminSession } from '@/lib/admin/admin-auth';
 import {
+  ADMIN_MARKDOWN_IMPORT_MAX_FILES,
+  ADMIN_MARKDOWN_IMPORT_MAX_FILE_SIZE_BYTES,
   contentTransferService,
-  MAX_MARKDOWN_IMPORT_FILE_BYTES,
-  MAX_MARKDOWN_IMPORT_FILES,
   type ContentTransferType,
   type ImportMode,
   type ImportReport,
@@ -51,8 +51,8 @@ async function readMarkdownUploads(formData: FormData): Promise<MarkdownUploadFi
     throw new Error('Upload at least one Markdown file.');
   }
 
-  if (files.length > MAX_MARKDOWN_IMPORT_FILES) {
-    throw new Error(`Upload at most ${MAX_MARKDOWN_IMPORT_FILES} Markdown files at a time.`);
+  if (files.length > ADMIN_MARKDOWN_IMPORT_MAX_FILES) {
+    throw new Error(`Upload at most ${ADMIN_MARKDOWN_IMPORT_MAX_FILES} Markdown files at a time.`);
   }
 
   const uploads: MarkdownUploadFile[] = [];
@@ -62,8 +62,12 @@ async function readMarkdownUploads(formData: FormData): Promise<MarkdownUploadFi
       throw new Error('Only .md files are supported.');
     }
 
-    if (file.size > MAX_MARKDOWN_IMPORT_FILE_BYTES) {
-      throw new Error('Each Markdown file must be 1MB or smaller.');
+    if (file.size > ADMIN_MARKDOWN_IMPORT_MAX_FILE_SIZE_BYTES) {
+      throw new Error(
+        `Each Markdown file must be ${Math.floor(
+          ADMIN_MARKDOWN_IMPORT_MAX_FILE_SIZE_BYTES / 1024 / 1024,
+        )}MB or smaller.`,
+      );
     }
 
     uploads.push({

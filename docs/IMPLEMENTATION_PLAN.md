@@ -980,10 +980,36 @@
 - File content directories remain untouched and no automatic `CONTENT_SOURCE` switching was added.
 - No Projects delete behavior, public Blog UI, Agent Demo scope, Console / CLI, window-system, Docker, or Nginx deployment config changes were made.
 
-### Phase 11.9: Backup & Deployment Hardening PLANNED
-- `pg_dump`.
-- Rollback documentation.
-- Production checklist.
+### Phase 11.9: Backup & Deployment Hardening COMPLETED
+- Added production CMS deployment runbooks in English and Chinese.
+- Added PostgreSQL backup / restore runbooks in English and Chinese.
+- Documented `pg_dump` logical backups for host/external PostgreSQL and Docker
+  PostgreSQL.
+- Documented `pg_restore` recovery to a test database and cautious production
+  restore.
+- Documented migration execution rules: numeric ordering, append-only
+  migrations, pre-migration backup, post-migration recording, no build-time or
+  startup migration execution.
+- Documented file mode -> database mode switching, domain-level gradual
+  switching, rebuild/restart requirements, and acceptance URLs.
+- Documented database mode -> file mode rollback without deleting database
+  content.
+- Added Admin env checks for required username, password hash, session secret,
+  minimum session secret length, placeholder values, and known default password
+  hashes.
+- Added a safe database health-check helper that does not expose connection
+  strings or database usernames.
+- Centralized Admin Markdown import/export limit names and documented `.md`
+  only, 20 files per import, 1MB per file, no zip import, no remote URL import,
+  no image upload, and 100-record bulk export limit.
+- Bulk Markdown zip export now fails clearly if more than 100 active records
+  match the request.
+- Documented Nginx `client_max_body_size 2m` handling for Admin Markdown import
+  413 errors.
+- No new Admin business module, automatic backup job, migration runner,
+  automatic `CONTENT_SOURCE` switch, public UI change, Agent Demo scope change,
+  Console / CLI change, window-system change, or tracked Docker / Nginx config
+  change was made.
 
 ### Phase 11.10: Phase 11 Final Review PLANNED
 - Full Admin / CMS review.

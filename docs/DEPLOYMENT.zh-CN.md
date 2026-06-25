@@ -104,6 +104,26 @@ environment:
 
 不要提交 `.env.production`、`.env.local`、证书、私钥、服务器 IP 或部署密钥。
 
+### 3.1 CMS / Admin 环境变量
+
+database-backed Admin / CMS 的生产加固详见
+`docs/PRODUCTION_CMS_DEPLOYMENT.zh-CN.md` 和
+`docs/POSTGRES_BACKUP_RESTORE.zh-CN.md`。相关 server-only 变量：
+
+```text
+PERSONAL_SITE_DATABASE_URL=<postgres-connection-url>
+CONTENT_SOURCE=file
+BLOG_CONTENT_SOURCE=
+PROJECT_CONTENT_SOURCE=
+PROFILE_CONTENT_SOURCE=
+ADMIN_USERNAME=<admin_username>
+ADMIN_PASSWORD_HASH=<sha256_password_hash>
+ADMIN_SESSION_SECRET=<random_32_chars_or_longer>
+```
+
+在 PostgreSQL migration、备份、后台内容检查、staging / database-mode build 都通过前，
+生产默认保持 file mode。不要提交数据库连接串、password hash、session secret 或 dump 文件。
+
 ## 4. 服务器目录
 
 当前约定目录：
@@ -332,6 +352,25 @@ location = /api/agent-demo {
 
 其他路由继续走原有 catch-all proxy location。
 
+### 8.2 Admin Markdown 上传大小
+
+Admin Markdown Import 只接受 `.md` 文件，单次最多 20 个文件，单文件最大 1MB。
+如果上传时出现 `413 Request Entity Too Large`，可以配置与应用限制匹配的小 body limit：
+
+```nginx
+client_max_body_size 2m;
+```
+
+修改后检查并重载：
+
+```bash
+docker exec nginx-proxy nginx -t
+docker exec nginx-proxy nginx -s reload
+```
+
+不要把限制扩大成通用大文件上传能力。该配置只用于 Admin Markdown Import，不修改
+Agent Demo API 的限流或 body size 策略。
+
 修改 Nginx 配置后先检查：
 
 ```bash
@@ -443,6 +482,9 @@ docker compose --env-file .env.production up -d --build
 - 本地 `pnpm lint` 通过。
 - 本地 `pnpm build` 通过。
 - `.env.production` 中 `NEXT_PUBLIC_SITE_URL=https://oli6666.top`。
+- 如果启用 database-backed CMS，先按 `docs/PRODUCTION_CMS_DEPLOYMENT.zh-CN.md`
+  执行上线检查，并完成 PostgreSQL 备份。
+- `.env.production` 不进 Git，备份 dump 不进 Git。
 - 服务器使用 `docker compose --env-file .env.production up -d --build`。
 - 改过域名 / SEO / sitemap / RSS / `.env.production` 时使用 `build --no-cache`。
 - `/` 可访问并仍是 Personal Developer OS。
@@ -455,6 +497,8 @@ docker compose --env-file .env.production up -d --build
 - Console 命令正常。
 - 移动端不溢出。
 - `/agent-demo` 可访问。
+- Admin login 不会在缺失或不安全 env 时放行。
+- Admin Markdown Import 对超大文件或过多 `.md` 文件给出明确错误。
 - `POST /api/agent-demo` 对安全公开问题返回 scoped answer。
 - secret / server-internal / dangerous action / high-risk advice 问题会拒答。
 - 连续请求最终会触发 `429`。

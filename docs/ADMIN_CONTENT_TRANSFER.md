@@ -58,9 +58,18 @@ other valid files from being processed.
 
 ## Upload Limits
 
+Central constants:
+
+```text
+ADMIN_MARKDOWN_IMPORT_MAX_FILES=20
+ADMIN_MARKDOWN_IMPORT_MAX_FILE_SIZE_BYTES=1048576
+ADMIN_MARKDOWN_EXPORT_MAX_RECORDS=100
+```
+
 - Only `.md` files are accepted.
 - Up to 20 files per import request.
 - Each file must be 1MB or smaller.
+- Zip import, remote URL import, and image upload are not supported.
 - Uploaded files are parsed in memory and are not stored on disk.
 - Filename is used only for reports; `slug` comes from frontmatter.
 
@@ -133,6 +142,32 @@ Bulk zip export routes:
 
 Bulk export supports `scope=all`, `scope=published`, and `scope=draft`.
 Soft-deleted rows are excluded. Bulk export is limited to 100 rows per request.
+If more than 100 active rows match the requested scope, export fails with a
+clear limit error instead of silently returning a partial zip.
+
+Large export responses can still consume memory and bandwidth. For production
+backups, prefer PostgreSQL `pg_dump`; Markdown export is for content transfer
+and review, not the primary database backup strategy.
+
+## Deployment Limits
+
+If Admin Markdown import fails behind Nginx with `413 Request Entity Too Large`,
+configure a small upload limit aligned with the app limit, for example:
+
+```nginx
+client_max_body_size 2m;
+```
+
+Then validate and reload Nginx:
+
+```bash
+docker exec nginx-proxy nginx -t
+docker exec nginx-proxy nginx -s reload
+```
+
+Do not raise this to a very large value. The current application limit is 1MB
+per Markdown file and 20 files per request. This does not change Agent Demo API
+body-size or rate-limit behavior.
 
 ## Security Boundaries
 
@@ -165,5 +200,5 @@ No. Phase 11.8 supports multiple `.md` uploads, not zip import.
 
 **Can I export backups?**
 
-You can export Markdown or zip files from Admin. Automated `pg_dump` backup
-hardening is deferred to Phase 11.9.
+You can export Markdown or zip files from Admin, but production database backups
+should use `pg_dump`. See `docs/POSTGRES_BACKUP_RESTORE.md`.
