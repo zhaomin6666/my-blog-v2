@@ -8,6 +8,7 @@
 - Phase 8 已完成：内容与职业展示、真实博客系列、Projects / Profile / Contact 内容体系和内容工作流文档已收口。
 - Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
 - Phase 10 已完成：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础、Phase 10.3 只读 Agent API MVP、Phase 10.4 限流 / 超时 / 滥用防护、Phase 10.5 UI 与 trace 展示、Phase 10.6 生产部署与安全验证、Phase 10.7 第一版最终验收与文档收口。
+- Phase 11 已完成：Admin / CMS 架构与实施完成最终验收，覆盖 Admin Auth、Blog / Projects / Hero / Profile / Contact / Stack Admin、Markdown Import / Export、soft delete、file mode、database mode、Agent Demo sources、sitemap / RSS、docs / env / deployment checklist。
 - 当前生产地址：`https://oli6666.top`。
 - 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
@@ -411,7 +412,7 @@
 - 更新中英文文档，覆盖架构、安全边界、部署配置、生产验证和最终验收清单。
 - 更新 Agent Demo README，移除过期 deferred work，并记录 Phase 10.6 / 10.7。
 
-## Phase 11：后台管理与 CMS 架构及实施 - 进行中
+## Phase 11：后台管理与 CMS 架构及实施 - 已完成
 
 目标：为 Personal Dev OS 设计并逐步实现作者自用后台与内容系统，让 Blog、Projects、Profile、Homepage 等内容后续可以从文件型内容源平滑迁移到 PostgreSQL，同时保持公开页面继续通过 Service / Repository 获取内容。
 
@@ -591,9 +592,20 @@
 - 文档化 Admin Markdown Import 出现 413 时的 Nginx `client_max_body_size 2m` 处理。
 - 未新增后台业务模块、自动备份任务、migration runner、自动切换 `CONTENT_SOURCE`、公开 UI 改动、Agent Demo 范围改动、Console / CLI 改动、窗口系统改动或已跟踪 Docker / Nginx 配置改动。
 
-### Phase 11.10：Phase 11 Final Review - 计划中
+### Phase 11.10：Phase 11 Final Review - 已完成
 
-- 完成 Admin / CMS 全量验收。
+- 完成 Admin / CMS 全量验收，本阶段不新增功能。
+- 确认 Admin Auth 保护正常：未登录访问 `/admin`、Blog Admin、Projects Admin 和 Markdown export 路由会跳转到 `/admin/login`。
+- 确认 Blog Admin、Projects Admin、Hero Admin、Profile Admin、Contact Admin 和 Stack Admin 路由均进入生产构建。
+- 确认 Markdown Import / Export 仍只位于 Blog / Projects Admin，受 Admin Auth 保护，并继续使用既有上传和导出限制。
+- 确认 Blog soft delete 仍基于 `deleted_at`，已删除行不会进入公开 Blog、sitemap、RSS、tags、series、search 或 Markdown export 范围。
+- 确认 file mode 在清空 `PERSONAL_SITE_DATABASE_URL` 后仍可构建。
+- 确认 database mode 在本地 PostgreSQL 配置和内容源切换开启后可构建。
+- 确认 Agent Demo sources 仍来自公开 Profile、Stack、published Projects、published Blog 和 Personal Developer OS 说明，未扩大回答范围。
+- 确认 sitemap / RSS / robots 运行时 smoke check 通过：sitemap 包含公开 Blog、Projects 和 `/agent-demo`，不包含 `/admin`；RSS 仍只包含博客；robots 指向 sitemap 并禁止 Admin。
+- 确认 docs / env / deployment checklist 已覆盖 `.env.example`、数据库内容源文档、Admin 内容导入导出文档、生产 CMS 部署文档、PostgreSQL 备份恢复文档和部署文档。
+- 验证通过：`pnpm test`、`pnpm lint`、`pnpm build`、清空数据库 URL 的 file-mode `pnpm build`、database-mode `pnpm build`、standalone 路由 smoke check、未登录 Admin redirect smoke check。
+- 未新增功能、未修改公开 UI、未修改 Agent Demo 范围、未修改 Console / CLI、未修改窗口系统、未迁移内容、未修改 Docker 或已跟踪 Nginx 配置。
 
 ## 后续原则
 

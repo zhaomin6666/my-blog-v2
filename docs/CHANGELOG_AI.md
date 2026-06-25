@@ -1,6 +1,33 @@
 # AI Development Changelog
 
 ### 2026-06-25 - Codex
+**Summary:** Phase 11.10 completed. Finished the Phase 11 Admin / CMS final review and archived Phase 11 as completed.
+
+**Final review coverage:**
+- Regressed Admin Auth, including unauthenticated redirects for `/admin`, Blog Admin, Projects Admin, and Markdown export routes.
+- Confirmed Blog Admin, Projects Admin, Hero Admin, Profile Admin, Contact Admin, and Stack Admin remain present in the production build.
+- Confirmed Markdown Import / Export remains scoped to Blog and Projects Admin and protected by Admin Auth.
+- Confirmed Blog soft delete remains `deleted_at` based and excluded from public Blog, sitemap, RSS, tags, series, search, and Markdown export scopes.
+- Confirmed file mode builds with `PERSONAL_SITE_DATABASE_URL` cleared.
+- Confirmed database mode builds with local PostgreSQL configuration and database content sources enabled.
+- Confirmed Agent Demo sources remain limited to public Profile, Stack, published Projects, published Blog, and Personal Developer OS implementation notes.
+- Confirmed sitemap / RSS / robots runtime smoke checks pass and preserve the expected public-only boundaries.
+- Confirmed docs / env / deployment checklist coverage across `.env.example`, database content-source docs, Admin content-transfer docs, production CMS deployment docs, PostgreSQL backup / restore docs, and deployment docs.
+
+**Verification:**
+- `pnpm test`
+- `pnpm lint`
+- `pnpm build`
+- file-mode `pnpm build` with database URL cleared
+- database-mode `pnpm build`
+- standalone route smoke check for `/`, `/admin/login`, `/blog`, `/projects`, `/agent-demo`, `/sitemap.xml`, `/rss.xml`, and `/robots.txt`
+- unauthenticated Admin redirect smoke check
+
+**Scope guard:**
+- No new feature was added.
+- No public UI, Agent Demo answer-scope, Console / CLI, window-system, content migration, Docker, or tracked Nginx config change was made.
+
+### 2026-06-25 - Codex
 **Summary:** Phase 11.9 completed. Hardened CMS backup, restore, deployment, Admin env, and import/export limits.
 
 **Phase 11.9 scope:**

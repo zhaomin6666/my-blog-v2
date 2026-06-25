@@ -1,6 +1,33 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-25 - Codex
+**摘要：** Phase 11.10 已完成，结束 Phase 11 Admin / CMS 最终验收，并将 Phase 11 归档为已完成。
+
+**最终验收覆盖：**
+- 回归 Admin Auth，确认未登录访问 `/admin`、Blog Admin、Projects Admin 和 Markdown export 路由会跳转到 `/admin/login`。
+- 确认 Blog Admin、Projects Admin、Hero Admin、Profile Admin、Contact Admin 和 Stack Admin 均进入生产构建。
+- 确认 Markdown Import / Export 仍只位于 Blog / Projects Admin，并受 Admin Auth 保护。
+- 确认 Blog soft delete 仍基于 `deleted_at`，并从公开 Blog、sitemap、RSS、tags、series、search 和 Markdown export 范围中排除。
+- 确认 file mode 在清空 `PERSONAL_SITE_DATABASE_URL` 后可构建。
+- 确认 database mode 在本地 PostgreSQL 配置和 database 内容源开启后可构建。
+- 确认 Agent Demo sources 仍限制在公开 Profile、Stack、published Projects、published Blog 和 Personal Developer OS 实施说明。
+- 确认 sitemap / RSS / robots 运行时 smoke check 通过，并保持 public-only 边界。
+- 确认 docs / env / deployment checklist 已覆盖 `.env.example`、数据库内容源文档、Admin 内容导入导出文档、生产 CMS 部署文档、PostgreSQL 备份恢复文档和部署文档。
+
+**验证：**
+- `pnpm test`
+- `pnpm lint`
+- `pnpm build`
+- 清空数据库 URL 的 file-mode `pnpm build`
+- database-mode `pnpm build`
+- standalone 路由 smoke check：`/`、`/admin/login`、`/blog`、`/projects`、`/agent-demo`、`/sitemap.xml`、`/rss.xml`、`/robots.txt`
+- 未登录 Admin redirect smoke check
+
+**范围守卫：**
+- 未新增功能。
+- 未修改公开 UI、Agent Demo 回答范围、Console / CLI、窗口系统、内容迁移、Docker 或已跟踪 Nginx 配置。
+
+### 2026-06-25 - Codex
 **摘要：** Phase 11.9 已完成，补齐 CMS 备份、恢复、生产部署、Admin env 和导入导出限制加固。
 
 **Phase 11.9 范围：**
