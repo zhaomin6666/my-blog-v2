@@ -47,4 +47,55 @@ describe("project-db-mapper", () => {
       content: "Project body",
     });
   });
+
+  it("maps object links from Projects Admin into public link data", () => {
+    const row: ProjectRow = {
+      id: "project-2",
+      title: "Admin Project",
+      slug: "admin-project",
+      subtitle: "",
+      summary: "",
+      content_markdown: "",
+      status: "mvp",
+      type: "",
+      role: [],
+      timeline: "",
+      featured: false,
+      display_order: 1,
+      tech_stack: [],
+      features: [],
+      highlights: [],
+      links: {
+        github: "https://github.com/example/repo",
+        live: "https://example.com",
+        case: "/projects/admin-project",
+      },
+      related_posts: [],
+      related_series_slug: "",
+      published: true,
+      lang: "en",
+      seo_title: "",
+      seo_description: "",
+    };
+
+    const project = mapProjectRowToProject(row);
+
+    expect(project.links).toEqual([
+      {
+        label: "github",
+        href: "https://github.com/example/repo",
+        type: "github",
+      },
+      {
+        label: "live",
+        href: "https://example.com",
+        type: "live",
+      },
+      {
+        label: "case",
+        href: "/projects/admin-project",
+        type: "live",
+      },
+    ]);
+  });
 });

@@ -157,7 +157,7 @@ Important boundaries:
 - Public pages still read through services. Admin pages and Client Components do
   not query PostgreSQL directly.
 - The phase does not migrate, delete, import, or overwrite `content/profile`.
-- The phase does not implement Projects Admin or Content Import / Export.
+- Content Import / Export remains deferred.
 
 Public database-mode behavior:
 
@@ -185,6 +185,42 @@ Public database-mode behavior:
 Admin save actions revalidate `/`, `/agent-demo`, `/projects/ai-agent-demo`,
 and `sitemap.xml` so database-mode public content can refresh after edits. File
 mode remains independent from these database rows.
+
+## Projects Admin Writes
+
+Phase 11.7 adds author-only Projects Admin writes to PostgreSQL `projects`.
+
+Admin routes:
+
+- `/admin/projects`
+- `/admin/projects/new`
+- `/admin/projects/[id]`
+
+Important boundaries:
+
+- Projects Admin writes database rows only. It does not read, migrate, delete,
+  overwrite, import, or export `content/projects`.
+- Public project pages still read through `ProjectService`.
+- File mode continues reading `content/projects` through `FileProjectRepository`.
+- Database mode reads PostgreSQL through `DatabaseProjectRepository` only when
+  `PROJECT_CONTENT_SOURCE=database` or `CONTENT_SOURCE=database`.
+- Database mode does not automatically fall back to file content.
+
+Public database-mode project rules:
+
+- `published = true` and `deleted_at is null` projects enter `/projects`,
+  `/projects/[slug]`, sitemap, and Agent Demo public project retrieval.
+- `published = false` projects are excluded from all public project reads.
+- Homepage Featured Projects require `published = true`, `featured = true`, and
+  `deleted_at is null`.
+- Project ordering uses `display_order asc` with recent rows as a secondary
+  ordering signal.
+- `/projects/[slug]` allows dynamic params so newly published database projects
+  can be served after Admin saves.
+
+Admin save, publish, and unpublish actions revalidate `/`, `/projects`,
+`/sitemap.xml`, `/agent-demo`, and the affected `/projects/[slug]` path when
+known.
 
 ## Database Mode Notes
 

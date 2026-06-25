@@ -927,10 +927,22 @@
 - File-mode stack content now uses the same simplified single-source structure in `content/profile/system-stack.md`.
 - Homepage Stack now renders one shared group/item dataset in both `zh` and `en`.
 
-### Phase 11.7: Projects Admin PLANNED
-- Project list.
-- Create / edit project.
-- Featured / order / published controls.
+### Phase 11.7: Projects Admin COMPLETED
+- Added database-backed Projects Admin routes:
+  - `/admin/projects`
+  - `/admin/projects/new`
+  - `/admin/projects/[id]`
+- Added Project Admin service / repository / validation foundation under `lib/admin`.
+- Projects Admin writes to PostgreSQL `projects`.
+- Public Projects read these database projects only when `PROJECT_CONTENT_SOURCE=database` or `CONTENT_SOURCE=database`.
+- File content source remains the default and continues reading `content/projects`.
+- Supported list, search, published filter, featured filter, language filter, empty state, create, edit, save, publish, and unpublish.
+- Supported editable fields: title, slug, subtitle, summary, status, type, timeline, lang, published, featured, display order, Markdown content, role, tech stack, features, highlights, links, related posts, related series slug, SEO title, and SEO description.
+- JSON fields use plain textareas with validation; Markdown editor is a plain `textarea`.
+- Added slug format validation and active database project slug uniqueness checks.
+- Database-mode public `/projects`, `/projects/[slug]`, homepage Featured Projects, sitemap, and Agent Demo public project retrieval continue to use published-only `ProjectService` methods.
+- `/projects/[slug]` now allows dynamic params so newly published database projects can be served after Admin saves.
+- No `content/projects` migration, deletion, overwrite, import/export, Console / CLI change, window-system change, Agent Demo scope change, Docker change, or Nginx change was made.
 
 ### Phase 11.8: Content Import / Export PLANNED
 - External blog directory import.

@@ -34,6 +34,20 @@ function toProjectLinkType(value: unknown): ProjectLinkType {
 }
 
 function toLinks(value: DbJsonValue): ProjectLinkData[] {
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    return Object.entries(value)
+      .map(([label, href]) => {
+        if (typeof href !== 'string') return null;
+
+        return {
+          label,
+          href,
+          type: toProjectLinkType(label.toLowerCase()),
+        };
+      })
+      .filter((item): item is ProjectLinkData => item !== null);
+  }
+
   if (!Array.isArray(value)) return [];
 
   return value

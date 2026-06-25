@@ -1,6 +1,35 @@
 # AI Development Changelog
 
 ### 2026-06-24 - Codex
+**Summary:** Phase 11.7 completed. Added PostgreSQL-backed Projects Admin MVP.
+
+**Phase 11.7 scope:**
+- Added `/admin/projects`, `/admin/projects/new`, and `/admin/projects/[id]`.
+- Added Project Admin service, repository, validation, Server Actions, list page, create page, edit page, and admin form.
+- Projects Admin writes to PostgreSQL `projects`.
+- Supported list, search, published / featured / language filters, empty state, create, edit, save, publish, and unpublish.
+- Supported editable fields: title, slug, subtitle, summary, status, type, timeline, language, published, featured, display order, Markdown content, role, tech stack, features, highlights, links, related posts, related series slug, SEO title, and SEO description.
+- JSON fields are edited with plain textareas and validated before writes.
+- Markdown content is edited with a plain textarea.
+- Added slug format validation and active database project slug uniqueness checks.
+- Database-mode public Projects continue through `ProjectService` / `DatabaseProjectRepository`, with published-only reads for `/projects`, `/projects/[slug]`, sitemap, and Agent Demo project retrieval.
+- Homepage Featured Projects in database mode require `published=true`, `featured=true`, and `deleted_at is null`.
+- `/projects/[slug]` now allows dynamic params so newly published database projects can be served after Admin saves.
+- File mode remains unchanged and continues to read `content/projects`.
+
+**Scope guard:**
+- No Content Import / Export was added.
+- No `content/projects` migration, deletion, overwrite, or import was performed.
+- No Agent Demo answer-scope change was made.
+- No Console / CLI change was made.
+- No window-system change was made.
+- No Docker / Nginx deployment config change was made.
+
+**Verification:**
+- Added focused Project Admin service, Project Admin validation, and project database mapper tests.
+- `pnpm test`, `pnpm lint`, and `pnpm build` are the release checks for this phase.
+
+### 2026-06-24 - Codex
 **Summary:** Fixed Profile database-mode rendering gaps and tightened Profile Admin to match the homepage About section.
 
 **Profile follow-up scope:**

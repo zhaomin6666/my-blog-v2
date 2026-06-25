@@ -1,5 +1,32 @@
 ﻿# AI 变更记录中文摘要
 
+### 2026-06-24 - Codex
+**摘要：** Phase 11.7 已完成，新增 PostgreSQL-backed Projects Admin MVP。
+
+**Phase 11.7 范围：**
+- 新增 `/admin/projects`、`/admin/projects/new`、`/admin/projects/[id]`。
+- 新增 Project Admin service、repository、validation、Server Actions、列表页、新建页、编辑页和后台表单。
+- Projects Admin 写入 PostgreSQL `projects`。
+- 支持列表、搜索、published / featured / language 筛选、empty state、新建、编辑、保存、发布和下架。
+- 支持字段：title、slug、subtitle、summary、status、type、timeline、language、published、featured、display order、Markdown content、role、tech stack、features、highlights、links、related posts、related series slug、SEO title、SEO description。
+- JSON 字段使用普通 textarea 编辑并在写入前校验；Markdown content 使用普通 textarea。
+- 新增 slug 格式校验和 active database project slug 唯一校验。
+- database mode 下公开 Projects 继续通过 `ProjectService` / `DatabaseProjectRepository` 读取，`/projects`、`/projects/[slug]`、sitemap 和 Agent Demo project retrieval 都保持 published-only。
+- database mode 下首页 Featured Projects 要求 `published=true`、`featured=true` 且 `deleted_at is null`。
+- `/projects/[slug]` 允许动态参数，后台新发布的 database project 保存后可以访问详情页。
+- file mode 保持不变，继续读取 `content/projects`。
+
+**范围边界：**
+- 未新增 Content Import / Export。
+- 未迁移、删除、覆盖或导入 `content/projects`。
+- 未修改 Agent Demo 回答范围。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx 部署配置。
+
+**验证：**
+- 新增 Project Admin service、Project Admin validation 和 project database mapper 聚焦测试。
+- `pnpm test`、`pnpm lint`、`pnpm build` 是本阶段发布检查。
 ### 2026-06-23 - Codex
 **摘要：** Phase 11.6 已完成，新增 Homepage / Profile Admin MVP，支持 PostgreSQL 管理公开首页与个人资料相关内容。
 

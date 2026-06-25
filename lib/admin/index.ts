@@ -6,6 +6,13 @@ export type {
   AdminBlogStatus,
 } from './blog-admin-types';
 export type {
+  AdminProject,
+  AdminProjectInput,
+  AdminProjectLanguage,
+  AdminProjectListParams,
+  AdminProjectStatus,
+} from './project-admin-types';
+export type {
   AdminContactChannel,
   AdminContactChannelInput,
   AdminContentLanguage,

@@ -523,11 +523,20 @@
 - 未实现 Projects Admin、Import / Export。
 - 未修改 Agent Demo 回答范围、Console / CLI、窗口系统或部署配置。
 
-### Phase 11.7：Projects Admin - 计划中
+### Phase 11.7：Projects Admin - 已完成
 
-- Project list
-- create / edit project
-- featured / order / published controls
+- 新增 database-backed Projects Admin 路由：`/admin/projects`、`/admin/projects/new`、`/admin/projects/[id]`。
+- 新增 `lib/admin` 下的 Project Admin service / repository / validation。
+- Projects Admin 写入 PostgreSQL `projects`。
+- 公开 Projects 只有在 `PROJECT_CONTENT_SOURCE=database` 或 `CONTENT_SOURCE=database` 时读取这些数据库项目。
+- 默认 file 内容源保持不变，继续读取 `content/projects`。
+- 支持列表、搜索、published / featured / lang 筛选、empty state、新建、编辑、保存、发布和下架。
+- 支持字段：title、slug、subtitle、summary、status、type、timeline、lang、published、featured、display order、Markdown content、role、tech stack、features、highlights、links、related posts、related series slug、SEO title、SEO description。
+- JSON 字段使用普通 textarea 并做格式校验；Markdown 正文使用普通 textarea。
+- 新增 slug 格式校验和 active database project slug 唯一校验。
+- database mode 下 `/projects`、`/projects/[slug]`、首页 Featured Projects、sitemap 和 Agent Demo 项目检索继续通过 published-only `ProjectService` 方法读取。
+- `/projects/[slug]` 允许动态参数，方便后台新发布的 database project 在保存后可访问详情页。
+- 未迁移、删除、覆盖或导入 `content/projects`，未实现 Import / Export，未修改 Console / CLI、窗口系统、Agent Demo 范围、Docker 或 Nginx。
 
 ### Phase 11.8：Content Import / Export - 计划中
 

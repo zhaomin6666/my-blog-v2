@@ -53,6 +53,8 @@ export interface ProjectRow {
   lang: string;
   seo_title: string | null;
   seo_description: string | null;
+  created_at?: DbDateValue;
+  updated_at?: DbDateValue;
 }
 
 export interface ProfilePageRow {

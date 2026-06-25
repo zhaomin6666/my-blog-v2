@@ -461,11 +461,16 @@ Recommended MVP routes:
 /admin/blog
 /admin/blog/new
 /admin/blog/[id]
+/admin/projects
+/admin/projects/new
+/admin/projects/[id]
 /admin/profile
-/admin/homepage
+/admin/hero
+/admin/contact
+/admin/stack
 ```
 
-Projects Admin can wait until Blog, Profile, and Homepage editing are stable.
+Projects Admin is implemented as the Phase 11.7 database-backed MVP.
 
 ## Admin Authentication
 
@@ -878,7 +883,6 @@ Public content-source behavior:
 
 Not included in this MVP:
 
-- Projects Admin.
 - Content import / export.
 - Migration, deletion, or overwrite of `content/profile`.
 - Image upload or file upload.
@@ -891,9 +895,25 @@ Not included in this MVP:
 
 ### Phase 11.7: Projects Admin
 
-- Project list.
-- Create / edit project.
-- Featured / order / published controls.
+- Added `/admin/projects`, `/admin/projects/new`, and `/admin/projects/[id]`.
+- Projects Admin writes only to PostgreSQL `projects`.
+- Supported list, search, published / featured / language filters, create, edit,
+  save, publish, and unpublish.
+- Supported fields include title, slug, subtitle, summary, status, type,
+  timeline, language, published, featured, display order, Markdown content,
+  role, tech stack, features, highlights, links, related posts, related series
+  slug, SEO title, and SEO description.
+- JSON fields are managed with plain textareas and validated before database
+  writes. Markdown content uses a plain textarea.
+- Slug format and active-project uniqueness are validated at the admin service
+  boundary.
+- Published database projects enter `/projects`, `/projects/[slug]`, homepage
+  Featured Projects, sitemap, and Agent Demo public project retrieval only when
+  the project content source is `database`.
+- File mode continues reading `content/projects`; no project Markdown files are
+  migrated, deleted, overwritten, imported, or exported in this phase.
+- No Agent Demo answer-scope, Console / CLI, window-system, Docker, or Nginx
+  deployment config changes were made.
 
 ### Phase 11.8: Content Import / Export
 
