@@ -1,13 +1,15 @@
 # Admin Content Transfer
 
 Phase 11.8 adds protected Admin Markdown import / export for database-backed
-Blog Posts and Projects.
+Blog Posts and Projects. Phase 11.8-fix moved those tools into the matching
+content admin pages and removed the standalone `/admin/content` page.
 
 ## Scope
 
 Supported:
 
-- `/admin/content`
+- Blog Markdown import / export in `/admin/blog`
+- Project Markdown import / export in `/admin/projects`
 - Blog Posts import from `.md` files into PostgreSQL `blog_posts`
 - Projects import from `.md` files into PostgreSQL `projects`
 - dry-run preview before writes
@@ -50,9 +52,9 @@ added in Phase 11.8.
 - `create_or_update`: create missing active slugs and update existing active
   slugs.
 
-Non-dry-run imports require an explicit confirmation checkbox in `/admin/content`.
-Each file is handled independently, so one invalid file does not stop other valid
-files from being processed.
+Non-dry-run imports require an explicit confirmation checkbox in the matching
+Admin page. Each file is handled independently, so one invalid file does not stop
+other valid files from being processed.
 
 ## Upload Limits
 
@@ -121,20 +123,20 @@ to `false` with a warning; missing `featured` defaults to `false`.
 
 Single-row export routes:
 
-- `/admin/content/export/blog/[id]`
-- `/admin/content/export/projects/[id]`
+- `/admin/blog/export/[id]`
+- `/admin/projects/export/[id]`
 
 Bulk zip export routes:
 
-- `/admin/content/export/blog`
-- `/admin/content/export/projects`
+- `/admin/blog/export`
+- `/admin/projects/export`
 
 Bulk export supports `scope=all`, `scope=published`, and `scope=draft`.
 Soft-deleted rows are excluded. Bulk export is limited to 100 rows per request.
 
 ## Security Boundaries
 
-- All `/admin/content*` routes are protected by Admin Auth.
+- All Blog and Project Admin import / export routes are protected by Admin Auth.
 - Export routes verify the Admin session before returning downloads.
 - SQL queries are parameterized.
 - Markdown is parsed as text; no code is executed.

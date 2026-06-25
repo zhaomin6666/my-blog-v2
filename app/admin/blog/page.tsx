@@ -1,9 +1,11 @@
 import Link from 'next/link';
-import { Plus, Search } from 'lucide-react';
+import { Download, Plus, Search } from 'lucide-react';
 import { requireAdminSession } from '@/lib/admin/admin-auth';
 import { BlogAdminDatabaseConfigError, blogAdminService } from '@/lib/admin/blog-admin-service';
 import type { AdminBlogLanguage, AdminBlogPost, AdminBlogStatus } from '@/lib/admin';
+import { MarkdownImportForm } from '../MarkdownImportForm';
 import { AdminShell } from '../AdminShell';
+import { importBlogMarkdownAction } from './actions';
 
 interface AdminBlogPageProps {
   searchParams: Promise<{
@@ -17,6 +19,18 @@ function statusBadge(status: AdminBlogStatus): string {
   return status === 'published'
     ? 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/70 dark:bg-emerald-950/40 dark:text-emerald-200'
     : 'border-zinc-200 bg-zinc-50 text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300';
+}
+
+function exportButton(href: string, label: string) {
+  return (
+    <a
+      href={href}
+      className="inline-flex items-center gap-2 rounded-md border border-zinc-300 px-3 py-2 text-sm font-medium hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+    >
+      <Download size={14} />
+      {label}
+    </a>
+  );
 }
 
 export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps) {
@@ -51,6 +65,30 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
         </Link>
       }
     >
+      <section className="mb-5 grid gap-4 rounded-lg border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 md:grid-cols-[1fr_auto] md:items-center">
+        <div>
+          <h2 className="font-semibold">Blog Markdown Import / Export</h2>
+          <p className="mt-1 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            Import Blog Markdown into PostgreSQL, dry-run changes first, and export active Blog
+            rows. Existing content/blog files remain untouched.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {exportButton('/admin/blog/export?scope=all', 'Export all zip')}
+          {exportButton('/admin/blog/export?scope=published', 'Published zip')}
+          {exportButton('/admin/blog/export?scope=draft', 'Draft zip')}
+        </div>
+      </section>
+
+      <div className="mb-5">
+        <MarkdownImportForm
+          title="Import Blog Markdown"
+          description="Upload Blog .md files into PostgreSQL. Dry-run is the default and writes nothing."
+          submitLabel="Run Blog Import"
+          importAction={importBlogMarkdownAction}
+        />
+      </div>
+
       <form className="mb-5 grid gap-3 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 md:grid-cols-[1fr_160px_160px_auto]">
         <label className="relative block">
           <Search className="pointer-events-none absolute left-3 top-2.5 text-zinc-400" size={15} />
@@ -135,10 +173,16 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/blog/${post.id}`}
-                        className="rounded-md border border-zinc-300 px-2.5 py-1.5 text-xs font-medium hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                        className="mr-2 rounded-md border border-zinc-300 px-2.5 py-1.5 text-xs font-medium hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
                       >
                         Edit
                       </Link>
+                      <a
+                        href={`/admin/blog/export/${post.id}`}
+                        className="rounded-md border border-zinc-300 px-2.5 py-1.5 text-xs font-medium hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                      >
+                        Export Markdown
+                      </a>
                     </td>
                   </tr>
                 ))}

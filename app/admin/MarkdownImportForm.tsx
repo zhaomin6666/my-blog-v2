@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react';
 import { Upload } from 'lucide-react';
-import { importMarkdownAction, type ContentImportActionState } from './actions';
+import type { ContentImportActionState } from './markdown-import-actions';
 
 const initialContentImportState: ContentImportActionState = {
   ok: false,
@@ -17,11 +17,23 @@ function actionTone(action: string): string {
   return 'text-zinc-600 dark:text-zinc-300';
 }
 
-export function ContentImportForm() {
-  const [state, formAction, pending] = useActionState(
-    importMarkdownAction,
-    initialContentImportState,
-  );
+interface MarkdownImportFormProps {
+  title: string;
+  description: string;
+  submitLabel: string;
+  importAction: (
+    previousState: ContentImportActionState,
+    formData: FormData,
+  ) => Promise<ContentImportActionState>;
+}
+
+export function MarkdownImportForm({
+  title,
+  description,
+  submitLabel,
+  importAction,
+}: MarkdownImportFormProps) {
+  const [state, formAction, pending] = useActionState(importAction, initialContentImportState);
 
   return (
     <section className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
@@ -30,39 +42,25 @@ export function ContentImportForm() {
           <Upload size={17} />
         </div>
         <div>
-          <h2 className="font-semibold">Markdown Import</h2>
-          <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-            Upload .md files into PostgreSQL. Dry-run is the default and writes nothing.
-          </p>
+          <h2 className="font-semibold">{title}</h2>
+          <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{description}</p>
         </div>
       </div>
 
       <form action={formAction} className="grid gap-4">
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="grid gap-1.5 text-sm">
-            <span className="font-medium">Content Type</span>
-            <select
-              name="contentType"
-              className="rounded-md border border-zinc-300 bg-white px-3 py-2 outline-none focus:border-zinc-950 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-100"
-            >
-              <option value="blog">Blog Posts</option>
-              <option value="projects">Projects</option>
-            </select>
-          </label>
-          <label className="grid gap-1.5 text-sm">
-            <span className="font-medium">Import Mode</span>
-            <select
-              name="mode"
-              defaultValue="dry-run"
-              className="rounded-md border border-zinc-300 bg-white px-3 py-2 outline-none focus:border-zinc-950 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-100"
-            >
-              <option value="dry-run">dry-run</option>
-              <option value="create_only">create_only</option>
-              <option value="update_by_slug">update_by_slug</option>
-              <option value="create_or_update">create_or_update</option>
-            </select>
-          </label>
-        </div>
+        <label className="grid gap-1.5 text-sm">
+          <span className="font-medium">Import Mode</span>
+          <select
+            name="mode"
+            defaultValue="dry-run"
+            className="rounded-md border border-zinc-300 bg-white px-3 py-2 outline-none focus:border-zinc-950 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-100"
+          >
+            <option value="dry-run">dry-run</option>
+            <option value="create_only">create_only</option>
+            <option value="update_by_slug">update_by_slug</option>
+            <option value="create_or_update">create_or_update</option>
+          </select>
+        </label>
 
         <label className="grid gap-1.5 text-sm">
           <span className="font-medium">Markdown Files</span>
@@ -89,7 +87,7 @@ export function ContentImportForm() {
           className="inline-flex w-fit items-center gap-2 rounded-md bg-zinc-950 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-200"
         >
           <Upload size={15} />
-          {pending ? 'Processing...' : 'Run Import'}
+          {pending ? 'Processing...' : submitLabel}
         </button>
       </form>
 
@@ -136,7 +134,9 @@ export function ContentImportForm() {
                 {state.report.files.map((file) => (
                   <tr key={file.filename}>
                     <td className="px-4 py-3 font-mono text-xs">{file.filename}</td>
-                    <td className="px-4 py-3 font-mono text-xs text-zinc-500">{file.slug || '-'}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-zinc-500">
+                      {file.slug || '-'}
+                    </td>
                     <td className="max-w-[220px] px-4 py-3">{file.title || '-'}</td>
                     <td className={`px-4 py-3 font-medium ${actionTone(file.action)}`}>
                       {file.action}

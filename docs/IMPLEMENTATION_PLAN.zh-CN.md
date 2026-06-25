@@ -540,7 +540,7 @@
 
 ### Phase 11.8：Admin Markdown Import / Export - 已完成
 
-- 新增受登录保护的 `/admin/content`。
+- Markdown 导入导出入口已移动到 `/admin/blog` 和 `/admin/projects`，独立 `/admin/content` 访问已移除。
 - 支持上传 Markdown 导入 Blog Posts 到 PostgreSQL `blog_posts`。
 - 支持上传 Markdown 导入 Projects 到 PostgreSQL `projects`。
 - 默认导入模式为 `dry-run`，只解析、校验和预览，不写数据库。
@@ -560,6 +560,18 @@
 - Profile / Contact / Stack 导入导出仍不在本阶段范围内。
 - 未修改 Agent Demo 回答范围、Console / CLI、窗口系统、Docker 或 Nginx 部署配置。
 
+#### Phase 11.8-fix：Markdown Transfer 移入内容后台 - 已完成
+
+- Blog Markdown 导入导出入口移动到 `/admin/blog`。
+- Project Markdown 导入导出入口移动到 `/admin/projects`。
+- 删除独立 `/admin/content` 页面访问，并移除 Admin 导航 / Dashboard 中指向它的入口。
+- 旧 `/admin/content/export/*` 路由替换为 `/admin/blog/export*` 和 `/admin/projects/export*`。
+- 继续复用 `lib/admin/content-transfer` service，导入导出核心行为不变。
+- Blog Import 和 Project Import 不再显示 Content Type 选择。
+- 导入模式、dry-run、非 dry-run 显式确认、报告、上传限制和导出格式保持不变。
+- 文件型内容目录未被删除、迁移或覆盖，也没有自动切换 `CONTENT_SOURCE`。
+- 未修改公开 Blog / Projects 内容源逻辑、Agent Demo 范围、Console / CLI、窗口系统、Docker 或 Nginx 部署配置。
+
 ### Phase 11.9：Backup & Deployment Hardening - 计划中
 
 - `pg_dump`
@@ -575,5 +587,4 @@
 - 新阶段开始前先明确范围和验收标准。
 - 新功能必须保护 Developer OS 产品概念。
 - 发布相关改动必须同步检查 `docs/DEPLOYMENT.zh-CN.md`。
-
 

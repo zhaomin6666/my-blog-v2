@@ -5,6 +5,10 @@ import { redirect } from 'next/navigation';
 import { requireAdminSession } from '@/lib/admin/admin-auth';
 import { blogAdminService } from '@/lib/admin/blog-admin-service';
 import {
+  runMarkdownImportAction,
+  type ContentImportActionState,
+} from '../markdown-import-actions';
+import {
   AdminBlogValidationError,
   readAdminBlogInputFromFormData,
 } from '@/lib/admin/blog-admin-validation';
@@ -108,4 +112,11 @@ export async function unpublishBlogPostAction(formData: FormData): Promise<void>
   const post = await blogAdminService.unpublishBlogPost(id);
   revalidateBlogPaths(post.slug);
   redirect(`/admin/blog/${post.id}`);
+}
+
+export async function importBlogMarkdownAction(
+  _previousState: ContentImportActionState,
+  formData: FormData,
+): Promise<ContentImportActionState> {
+  return runMarkdownImportAction('blog', formData);
 }

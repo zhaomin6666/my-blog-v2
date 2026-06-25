@@ -3,11 +3,16 @@
 Phase 11.8 新增受登录保护的后台 Markdown 导入 / 导出能力，用于把 Blog Posts 和
 Projects 在 PostgreSQL 与 Markdown 文件之间转换。
 
+Phase 11.8-fix 后，导入导出入口已移动到对应内容后台：Blog Markdown 工具位于
+`/admin/blog`，Project Markdown 工具位于 `/admin/projects`。独立 `/admin/content`
+页面已按方案 B 移除，底层 import/export service 行为保持不变。
+
 ## 能力范围
 
 已支持：
 
-- `/admin/content`
+- `/admin/blog` 中的 Blog Markdown 导入导出
+- `/admin/projects` 中的 Project Markdown 导入导出
 - 上传 `.md` 文件导入 Blog Posts 到 PostgreSQL `blog_posts`
 - 上传 `.md` 文件导入 Projects 到 PostgreSQL `projects`
 - dry-run 预览，不写数据库
@@ -46,7 +51,7 @@ Phase 11.8 不新增 `scripts/content/*.ts` 迁移脚本，也不新增 `pnpm co
 - `update_by_slug`：只更新 active slug 已存在的内容；不存在则跳过。
 - `create_or_update`：slug 存在则更新，不存在则创建。
 
-非 dry-run 导入必须在 `/admin/content` 勾选确认框。每个文件独立处理，一个文件失败
+非 dry-run 导入必须在对应 Admin 页面勾选确认框。每个文件独立处理，一个文件失败
 不会影响其它有效文件继续处理。
 
 ## 上传限制
@@ -115,20 +120,20 @@ Project 导入字段映射：
 
 单篇导出路由：
 
-- `/admin/content/export/blog/[id]`
-- `/admin/content/export/projects/[id]`
+- `/admin/blog/export/[id]`
+- `/admin/projects/export/[id]`
 
 批量 zip 导出路由：
 
-- `/admin/content/export/blog`
-- `/admin/content/export/projects`
+- `/admin/blog/export`
+- `/admin/projects/export`
 
 批量导出支持 `scope=all`、`scope=published`、`scope=draft`。软删除记录不会导出。
 单次批量导出最多 100 条记录。
 
 ## 安全边界
 
-- 所有 `/admin/content*` 路由都受 Admin Auth 保护。
+- 所有 Blog / Project Admin 导入导出路由都受 Admin Auth 保护。
 - Export route 下载前会重新校验 admin session。
 - SQL 使用参数化查询。
 - Markdown 只当作文本解析，不执行其中任何代码。

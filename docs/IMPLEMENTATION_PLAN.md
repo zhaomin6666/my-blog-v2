@@ -945,7 +945,6 @@
 - No `content/projects` migration, deletion, overwrite, import/export, Console / CLI change, window-system change, Agent Demo scope change, Docker change, or Nginx change was made.
 
 ### Phase 11.8: Admin Markdown Import / Export COMPLETED
-- Added protected `/admin/content`.
 - Added Markdown Import for Blog Posts and Projects into PostgreSQL.
 - Added dry-run preview as the default import mode.
 - Added non-dry-run import modes:
@@ -966,6 +965,17 @@
 - No automatic `CONTENT_SOURCE` switching was added.
 - Profile, Contact, and Stack import/export remain out of scope for this phase.
 - No Agent Demo answer-scope, Console / CLI, window-system, Docker, or Nginx deployment config changes were made.
+
+#### Phase 11.8-fix: Move Markdown Transfer Into Content Admins COMPLETED
+- Moved Blog Markdown import/export into `/admin/blog`.
+- Moved Project Markdown import/export into `/admin/projects`.
+- Removed standalone `/admin/content` page access and removed Admin navigation/dashboard links to it.
+- Replaced old `/admin/content/export/*` routes with `/admin/blog/export*` and `/admin/projects/export*`.
+- Kept the existing `lib/admin/content-transfer` service behavior unchanged.
+- Blog Import and Project Import no longer expose a Content Type selector.
+- Import modes, dry-run behavior, explicit non-dry-run confirmation, reports, upload limits, and export formats remain unchanged.
+- File content directories remain untouched and no automatic `CONTENT_SOURCE` switching was added.
+- No public Blog / Projects source logic, Agent Demo scope, Console / CLI, window-system, Docker, or Nginx deployment config changes were made.
 
 ### Phase 11.9: Backup & Deployment Hardening PLANNED
 - `pg_dump`.

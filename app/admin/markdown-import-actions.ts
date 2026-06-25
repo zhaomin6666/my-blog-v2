@@ -18,10 +18,6 @@ export interface ContentImportActionState {
   report: ImportReport | null;
 }
 
-function readContentType(value: FormDataEntryValue | null): ContentTransferType {
-  return value === 'projects' ? 'projects' : 'blog';
-}
-
 function readImportMode(value: FormDataEntryValue | null): ImportMode {
   if (value === 'create_only' || value === 'update_by_slug' || value === 'create_or_update') {
     return value;
@@ -80,13 +76,12 @@ async function readMarkdownUploads(formData: FormData): Promise<MarkdownUploadFi
   return uploads;
 }
 
-export async function importMarkdownAction(
-  _previousState: ContentImportActionState,
+export async function runMarkdownImportAction(
+  contentType: ContentTransferType,
   formData: FormData,
 ): Promise<ContentImportActionState> {
   await requireAdminSession();
 
-  const contentType = readContentType(formData.get('contentType'));
   const mode = readImportMode(formData.get('mode'));
   const confirmed = formData.get('confirmWrite') === 'on';
 

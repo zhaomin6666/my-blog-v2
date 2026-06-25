@@ -917,7 +917,10 @@ Not included in this MVP:
 
 ### Phase 11.8: Admin Markdown Import / Export
 
-Completed through the authenticated Admin page `/admin/content`.
+Completed as authenticated Admin Markdown import / export for Blog Posts and
+Projects. Phase 11.8-fix moved the workflow out of the standalone content page:
+Blog tools now live in `/admin/blog`, Project tools now live in
+`/admin/projects`, and `/admin/content` is no longer a route.
 
 Implemented:
 

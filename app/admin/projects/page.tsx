@@ -1,9 +1,11 @@
 import Link from 'next/link';
-import { Plus, Search } from 'lucide-react';
+import { Download, Plus, Search } from 'lucide-react';
 import { requireAdminSession } from '@/lib/admin/admin-auth';
 import { ProjectAdminDatabaseConfigError, projectAdminService } from '@/lib/admin/project-admin-service';
 import type { AdminProject, AdminProjectLanguage } from '@/lib/admin';
+import { MarkdownImportForm } from '../MarkdownImportForm';
 import { AdminShell } from '../AdminShell';
+import { importProjectMarkdownAction } from './actions';
 
 interface AdminProjectsPageProps {
   searchParams: Promise<{
@@ -24,6 +26,18 @@ function stateBadge(active: boolean): string {
   return active
     ? `rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-xs text-emerald-700 dark:border-emerald-900/70 dark:bg-emerald-950/40 dark:text-emerald-200`
     : `rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300`;
+}
+
+function exportButton(href: string, label: string) {
+  return (
+    <a
+      href={href}
+      className="inline-flex items-center gap-2 rounded-md border border-zinc-300 px-3 py-2 text-sm font-medium hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+    >
+      <Download size={14} />
+      {label}
+    </a>
+  );
 }
 
 export default async function AdminProjectsPage({ searchParams }: AdminProjectsPageProps) {
@@ -64,6 +78,30 @@ export default async function AdminProjectsPage({ searchParams }: AdminProjectsP
         </Link>
       }
     >
+      <section className="mb-5 grid gap-4 rounded-lg border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 md:grid-cols-[1fr_auto] md:items-center">
+        <div>
+          <h2 className="font-semibold">Project Markdown Import / Export</h2>
+          <p className="mt-1 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            Import Project Markdown into PostgreSQL, dry-run changes first, and export active
+            Project rows. Existing content/projects files remain untouched.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {exportButton('/admin/projects/export?scope=all', 'Export all zip')}
+          {exportButton('/admin/projects/export?scope=published', 'Published zip')}
+          {exportButton('/admin/projects/export?scope=draft', 'Draft zip')}
+        </div>
+      </section>
+
+      <div className="mb-5">
+        <MarkdownImportForm
+          title="Import Project Markdown"
+          description="Upload Project .md files into PostgreSQL. Dry-run is the default and writes nothing."
+          submitLabel="Run Project Import"
+          importAction={importProjectMarkdownAction}
+        />
+      </div>
+
       <form className="mb-5 grid gap-3 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 md:grid-cols-[1fr_150px_150px_150px_auto]">
         <label className="relative block">
           <Search className="pointer-events-none absolute left-3 top-2.5 text-zinc-400" size={15} />
@@ -160,10 +198,16 @@ export default async function AdminProjectsPage({ searchParams }: AdminProjectsP
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/projects/${project.id}`}
-                        className="rounded-md border border-zinc-300 px-2.5 py-1.5 text-xs font-medium hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                        className="mr-2 rounded-md border border-zinc-300 px-2.5 py-1.5 text-xs font-medium hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
                       >
                         Edit
                       </Link>
+                      <a
+                        href={`/admin/projects/export/${project.id}`}
+                        className="rounded-md border border-zinc-300 px-2.5 py-1.5 text-xs font-medium hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                      >
+                        Export Markdown
+                      </a>
                     </td>
                   </tr>
                 ))}

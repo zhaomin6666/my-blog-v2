@@ -1,6 +1,29 @@
 # AI Development Changelog
 
 ### 2026-06-25 - Codex
+**Summary:** Phase 11.8-fix completed with Option B. Removed `/admin/content` access and moved Markdown transfer into Blog / Projects Admin.
+
+**Fix scope:**
+- Moved Blog Markdown import/export UI into `/admin/blog`.
+- Moved Project Markdown import/export UI into `/admin/projects`.
+- Removed the standalone `/admin/content` page and old `/admin/content/export/*` route handlers.
+- Added replacement export routes under `/admin/blog/export*` and `/admin/projects/export*`.
+- Removed Admin navigation and dashboard links to `/admin/content`.
+- Kept the existing `lib/admin/content-transfer` service behavior unchanged.
+- Removed the Content Type selector from import UI; Blog and Project import now use fixed content types.
+
+**Scope guard:**
+- No `content/blog` or `content/projects` files were deleted or migrated.
+- No automatic `CONTENT_SOURCE` switching was added.
+- No public Blog / Projects content-source logic was changed.
+- No Agent Demo, Console / CLI, window-system, Docker, or Nginx deployment config changes were made.
+
+**Verification:**
+- `pnpm test`
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-25 - Codex
 **Summary:** Fixed Admin Blog Markdown export/import round-trip and hardened export download links.
 
 **Fix scope:**

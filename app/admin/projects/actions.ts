@@ -5,6 +5,10 @@ import { redirect } from 'next/navigation';
 import { requireAdminSession } from '@/lib/admin/admin-auth';
 import { projectAdminService } from '@/lib/admin/project-admin-service';
 import {
+  runMarkdownImportAction,
+  type ContentImportActionState,
+} from '../markdown-import-actions';
+import {
   AdminProjectValidationError,
   readAdminProjectInputFromFormData,
 } from '@/lib/admin/project-admin-validation';
@@ -106,4 +110,11 @@ export async function unpublishProjectAction(formData: FormData): Promise<void> 
   const project = await projectAdminService.unpublishProject(id);
   revalidateProjectPaths(project.slug);
   redirect(`/admin/projects/${project.id}`);
+}
+
+export async function importProjectMarkdownAction(
+  _previousState: ContentImportActionState,
+  formData: FormData,
+): Promise<ContentImportActionState> {
+  return runMarkdownImportAction('projects', formData);
 }

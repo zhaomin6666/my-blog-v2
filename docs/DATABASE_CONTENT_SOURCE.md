@@ -286,10 +286,14 @@ Recommended backup baseline:
 
 ## Admin Markdown Import / Export
 
-Phase 11.8 adds `/admin/content` for database-backed Markdown import/export.
+Phase 11.8 added database-backed Markdown import/export. Phase 11.8-fix moved
+the workflow into the matching content admin pages and removed standalone
+`/admin/content` access.
 
 - Blog Posts can be imported from `.md` files into PostgreSQL `blog_posts`.
 - Projects can be imported from `.md` files into PostgreSQL `projects`.
+- Blog import/export now lives in `/admin/blog`.
+- Project import/export now lives in `/admin/projects`.
 - Imports support `dry-run`, `create_only`, `update_by_slug`, and
   `create_or_update`.
 - Dry-run is the default and does not write to the database.

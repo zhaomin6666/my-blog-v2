@@ -1,6 +1,29 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-25 - Codex
+**摘要：** Phase 11.8-fix 已完成，使用方案 B 移除 `/admin/content` 访问，并把 Markdown 导入导出移动到 Blog / Projects Admin。
+
+**调整范围：**
+- Blog Markdown 导入导出入口移动到 `/admin/blog`。
+- Project Markdown 导入导出入口移动到 `/admin/projects`。
+- 删除独立 `/admin/content` 页面和旧 `/admin/content/export/*` route handler。
+- 新增 `/admin/blog/export*` 和 `/admin/projects/export*` 替代导出 route。
+- 移除 Admin 导航和 Dashboard 中指向 `/admin/content` 的入口。
+- 继续复用 `lib/admin/content-transfer` service，导入导出核心行为不变。
+- 导入 UI 不再显示 Content Type 选择；Blog / Project 页面各自固定内容类型。
+
+**边界：**
+- 未删除或迁移 `content/blog`、`content/projects`。
+- 未自动切换 `CONTENT_SOURCE`。
+- 未修改公开 Blog / Projects 内容源读取逻辑。
+- 未修改 Agent Demo、Console / CLI、窗口系统、Docker 或 Nginx 部署配置。
+
+**验证：**
+- `pnpm test`
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-25 - Codex
 **摘要：** Phase 11.8 已完成，新增后台 Markdown 导入导出能力。
 
 **Phase 11.8 范围：**
