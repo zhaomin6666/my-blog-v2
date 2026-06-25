@@ -1024,3 +1024,55 @@
 - Confirmed docs / env / deployment checklist coverage exists across `.env.example`, database content-source docs, Admin content-transfer docs, production CMS deployment docs, PostgreSQL backup / restore docs, and deployment docs.
 - Verification passed: `pnpm test`, `pnpm lint`, `pnpm build`, file-mode `pnpm build` with database URL cleared, database-mode `pnpm build`, standalone route smoke check, and unauthenticated Admin redirect smoke check.
 - No new feature, public UI change, Agent Demo scope change, Console / CLI change, window-system change, content migration, Docker change, or tracked Nginx change was made.
+
+## Phase 12: Production CMS Switch IN PROGRESS
+- Prepare and execute the production switch from file content sources to PostgreSQL-backed CMS content sources.
+- Keep the current production safety baseline in file mode until each domain-level switch is explicitly performed.
+- Switch Blog, Projects, and Profile / Homepage domains gradually instead of relying on a single global flip first.
+- Preserve public routes, sitemap, RSS, Agent Demo answer scope, Console / CLI, window-system behavior, and tracked Docker / Nginx deployment config.
+
+### Phase 12.1: Production CMS Preflight COMPLETED
+- Added `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.md` and `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.zh-CN.md`.
+- Documented current production status checks for `/`, `/blog`, `/projects`, `/sitemap.xml`, `/rss.xml`, `/agent-demo`, Docker, Nginx, and HTTPS.
+- Documented production env requirements while keeping `CONTENT_SOURCE`, `BLOG_CONTENT_SOURCE`, `PROJECT_CONTENT_SOURCE`, and `PROFILE_CONTENT_SOURCE` in `file` mode.
+- Documented PostgreSQL readiness, backup directory, migration preparation, Admin readiness, Nginx upload limits, domain-level switch order, rollback strategy, and Go / No-Go gates.
+- Linked the checklist from the production CMS deployment runbooks and added the Phase 12 switch order there.
+- Updated `.env.example` so domain-specific content sources default explicitly to `file`.
+- No production migration was executed.
+- No real production content was imported.
+- No production content source was switched.
+- No Agent Demo answer-scope, Console / CLI, window-system, public UI, Docker, or tracked Nginx deployment config change was made.
+
+### Phase 12.2: Production Migration Execution PLANNED
+- Back up production PostgreSQL.
+- Run required production migrations manually.
+- Record migration timestamp, operator, and result.
+- Keep production content sources in file mode after migration until Admin connectivity and content import are verified.
+
+### Phase 12.3: Production Admin Database Verification PLANNED
+- Verify Admin login and database health in production.
+- Confirm `/admin/blog`, `/admin/projects`, `/admin/hero`, `/admin/profile`, `/admin/contact`, and `/admin/stack` can access PostgreSQL.
+- Keep public pages in file mode.
+
+### Phase 12.4: Blog Database Source Switch PLANNED
+- Import Blog content into PostgreSQL.
+- Switch only `BLOG_CONTENT_SOURCE=database`.
+- Verify `/blog`, article routes, RSS, sitemap, search, tags, series, and Agent Demo.
+
+### Phase 12.5: Projects Database Source Switch PLANNED
+- Import Projects content into PostgreSQL.
+- Switch only `PROJECT_CONTENT_SOURCE=database`.
+- Verify `/projects`, project detail routes, homepage Featured Projects, sitemap, and Agent Demo.
+
+### Phase 12.6: Profile / Homepage Database Source Switch PLANNED
+- Enter or verify Hero, Profile, Contact, and Stack content in Admin.
+- Switch only `PROFILE_CONTENT_SOURCE=database`.
+- Verify homepage Profile / Contact / Stack / Hero rendering and Agent Demo.
+
+### Phase 12.7: Global Database Source Review PLANNED
+- Review whether `CONTENT_SOURCE=database` is still needed after domain-level switches.
+- Only consider global database mode after Blog, Projects, and Profile domains are stable.
+
+### Phase 12.8: Production CMS Switch Final Review PLANNED
+- Re-run production acceptance for public pages, Admin routes, sitemap, RSS, Agent Demo, rollback, backup, and deployment docs.
+- Archive Phase 12 only after all production checks pass.

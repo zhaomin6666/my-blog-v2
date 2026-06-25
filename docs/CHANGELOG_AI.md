@@ -1,6 +1,38 @@
 # AI Development Changelog
 
 ### 2026-06-25 - Codex
+**Summary:** Phase 12 started. Phase 12.1 Production CMS Preflight completed with production CMS switch checklists.
+
+**Phase 12.1 scope:**
+- Added `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.md`.
+- Added `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.zh-CN.md`.
+- Documented current production status checks for file mode, public routes, Docker, Nginx, and HTTPS.
+- Documented production env requirements for PostgreSQL, Admin auth, and explicit file-mode content sources.
+- Documented PostgreSQL readiness, backup directory, migration preparation, Admin readiness, Nginx upload limits, switch order, rollback, and Go / No-Go gates.
+- Updated production CMS deployment runbooks with checklist links, Phase 12 switch order, file-mode-first deployment guidance, and rollback notes.
+- Updated `.env.example` so `BLOG_CONTENT_SOURCE`, `PROJECT_CONTENT_SOURCE`, and `PROFILE_CONTENT_SOURCE` explicitly default to `file`.
+
+**Status notes:**
+- Phase 11.10 is completed and Phase 11 remains archived as completed.
+- Phase 12 is now in progress.
+- No production source switch was performed.
+- No production migration was executed.
+- No real production content was imported.
+
+**Scope guard:**
+- No public UI change was made.
+- No Agent Demo answer-scope change was made.
+- No Console / CLI change was made.
+- No window-system change was made.
+- No tracked Docker / Nginx deployment config change was made.
+- No real env, secrets, database URLs, or backup dump files were committed.
+
+**Verification:**
+- `pnpm test`
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-25 - Codex
 **Summary:** Phase 11.10 completed. Finished the Phase 11 Admin / CMS final review and archived Phase 11 as completed.
 
 **Final review coverage:**

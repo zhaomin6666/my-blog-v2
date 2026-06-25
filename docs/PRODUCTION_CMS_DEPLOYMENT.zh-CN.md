@@ -3,6 +3,14 @@
 Phase 11.9 用于加固 database-backed CMS 的生产部署流程。本阶段不新增 CMS 业务页面，
 不修改公开页面 UI，也不会自动切换任何内容源。
 
+Phase 12 使用本 runbook，并配合实际执行清单：
+
+- `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.md`
+- `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.zh-CN.md`
+
+Phase 12.1 只做 preflight。它保持生产环境为 file mode，不执行生产 migration，
+不导入真实生产内容，也不切换 `CONTENT_SOURCE`。
+
 ## 当前 CMS 能力概览
 
 Admin 是作者自用后台，写入 PostgreSQL：
@@ -35,9 +43,9 @@ Admin 是作者自用后台，写入 PostgreSQL：
 NEXT_PUBLIC_SITE_URL=https://your-domain.example
 PERSONAL_SITE_DATABASE_URL=<postgres-connection-url>
 CONTENT_SOURCE=file
-BLOG_CONTENT_SOURCE=
-PROJECT_CONTENT_SOURCE=
-PROFILE_CONTENT_SOURCE=
+BLOG_CONTENT_SOURCE=file
+PROJECT_CONTENT_SOURCE=file
+PROFILE_CONTENT_SOURCE=file
 ADMIN_USERNAME=<admin_username>
 ADMIN_PASSWORD_HASH=<sha256_password_hash>
 ADMIN_SESSION_SECRET=<random_32_chars_or_longer>
@@ -87,6 +95,9 @@ psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/004_reset_system_stack
 
 可以按领域逐步切换，不必一次全切。
 
+Phase 12 的策略是先部署带 Admin + database 基础能力的代码，但生产仍保持 file mode。
+只有在备份、migration 和 Go / No-Go 检查完成后，才按领域逐步导入和切换。
+
 file mode 基线：
 
 ```text
@@ -127,6 +138,29 @@ PROFILE_CONTENT_SOURCE=database
 
 Agent Demo sources 仍只来自公开 Profile、Stack、published Projects、published Blog、
 AI Agent 学习路径和 Personal Developer OS 实现笔记。本阶段不扩大回答范围。
+
+## Phase 12 生产切换顺序
+
+Phase 12.1 preflight 通过后，按以下顺序执行：
+
+```text
+1. 先部署带 Admin + database 基础能力的代码，但保持 file mode。
+2. 执行生产 migration。
+3. 验证 Admin 可以连接数据库。
+4. 导入 Blog 内容。
+5. 单独切换 BLOG_CONTENT_SOURCE=database。
+6. 验证 Blog / RSS / sitemap / Agent Demo。
+7. 导入 Projects 内容。
+8. 单独切换 PROJECT_CONTENT_SOURCE=database。
+9. 验证 Projects / 首页 Featured Projects / sitemap / Agent Demo。
+10. 录入 Hero / Profile / Contact / Stack。
+11. 单独切换 PROFILE_CONTENT_SOURCE=database。
+12. 验证首页和 Agent Demo。
+13. 最后再考虑 CONTENT_SOURCE=database 全局切换。
+```
+
+不要把全局 `CONTENT_SOURCE=database` 作为生产第一步。file mode 基线是回滚路径，
+应在整个 Phase 12 中保持可用。
 
 ## database mode -> file mode 回滚步骤
 
@@ -209,4 +243,3 @@ docker exec nginx-proxy nginx -s reload
 - Export 提示记录数过多：缩小 `scope` 或改用单篇导出。
 - 公开页面仍显示文件内容：确认对应领域内容源是 `database`，然后重新构建或重启。
 - Nginx 返回 413：配置较小的 `client_max_body_size`，检查配置并 reload。
-

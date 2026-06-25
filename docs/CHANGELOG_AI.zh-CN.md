@@ -1,6 +1,38 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-25 - Codex
+**摘要：** Phase 12 已开始，Phase 12.1 Production CMS Preflight 已完成，新增生产 CMS 切换执行清单。
+
+**Phase 12.1 范围：**
+- 新增 `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.md`。
+- 新增 `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.zh-CN.md`。
+- 文档化当前生产状态检查：file mode、公开路由、Docker、Nginx 和 HTTPS。
+- 文档化生产环境变量要求：PostgreSQL、Admin auth，以及显式 file-mode 内容源。
+- 文档化 PostgreSQL 准备、备份目录、migration 准备、Admin 功能准备、Nginx 上传限制、切换顺序、回滚策略和 Go / No-Go 判断。
+- 更新生产 CMS 部署 runbook，补充 checklist 链接、Phase 12 切换顺序、先 file mode 部署再分领域切换，以及回滚说明。
+- 更新 `.env.example`，让 `BLOG_CONTENT_SOURCE`、`PROJECT_CONTENT_SOURCE`、`PROFILE_CONTENT_SOURCE` 显式默认到 `file`。
+
+**状态说明：**
+- Phase 11.10 已完成，Phase 11 继续归档为 completed。
+- Phase 12 已进入 in progress。
+- 未执行生产内容源切换。
+- 未执行生产 migration。
+- 未导入真实生产内容。
+
+**范围守卫：**
+- 未修改公开页面 UI。
+- 未修改 Agent Demo 回答范围。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改已跟踪 Docker / Nginx 部署配置。
+- 未提交真实 env、密钥、数据库连接串或备份 dump 文件。
+
+**验证：**
+- `pnpm test`
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-25 - Codex
 **摘要：** Phase 11.10 已完成，结束 Phase 11 Admin / CMS 最终验收，并将 Phase 11 归档为已完成。
 
 **最终验收覆盖：**

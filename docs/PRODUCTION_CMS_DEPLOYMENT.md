@@ -4,6 +4,15 @@ Phase 11.9 hardens the database-backed CMS path for production use. It does not
 add new CMS business pages, does not change public UI, and does not
 automatically switch any content source.
 
+Phase 12 uses this runbook together with the executable switch checklist:
+
+- `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.md`
+- `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.zh-CN.md`
+
+Phase 12.1 is preflight only. It keeps production in file mode, does not run
+production migrations, does not import real production content, and does not
+switch `CONTENT_SOURCE`.
+
 ## Current CMS Capabilities
 
 The Admin surface is author-only and writes to PostgreSQL:
@@ -39,9 +48,9 @@ the matching source is set to `database`.
 NEXT_PUBLIC_SITE_URL=https://your-domain.example
 PERSONAL_SITE_DATABASE_URL=<postgres-connection-url>
 CONTENT_SOURCE=file
-BLOG_CONTENT_SOURCE=
-PROJECT_CONTENT_SOURCE=
-PROFILE_CONTENT_SOURCE=
+BLOG_CONTENT_SOURCE=file
+PROJECT_CONTENT_SOURCE=file
+PROFILE_CONTENT_SOURCE=file
 ADMIN_USERNAME=<admin_username>
 ADMIN_PASSWORD_HASH=<sha256_password_hash>
 ADMIN_SESSION_SECRET=<random_32_chars_or_longer>
@@ -97,6 +106,10 @@ does not add an automatic migration runner.
 
 You can switch by domain instead of switching everything at once.
 
+For Phase 12, deploy the Admin + database-capable code first while keeping file
+mode. Run migrations and imports only after backups and Go / No-Go checks pass.
+Then switch one domain at a time.
+
 Baseline file mode:
 
 ```text
@@ -139,6 +152,30 @@ Switch steps:
 Agent Demo sources should still come only from public Profile, Stack, published
 Projects, published Blog, AI Agent learning journey, and Personal Developer OS
 implementation notes. This phase does not expand the answer scope.
+
+## Phase 12 Production Switch Order
+
+Use this order after Phase 12.1 preflight passes:
+
+```text
+1. Deploy code with Admin + database foundation, but keep file mode.
+2. Run production migration.
+3. Verify Admin can connect to PostgreSQL.
+4. Import Blog content.
+5. Switch only BLOG_CONTENT_SOURCE=database.
+6. Verify Blog / RSS / sitemap / Agent Demo.
+7. Import Projects content.
+8. Switch only PROJECT_CONTENT_SOURCE=database.
+9. Verify Projects / homepage Featured Projects / sitemap / Agent Demo.
+10. Enter Hero / Profile / Contact / Stack content.
+11. Switch only PROFILE_CONTENT_SOURCE=database.
+12. Verify homepage and Agent Demo.
+13. Consider CONTENT_SOURCE=database only after domain-level switches are stable.
+```
+
+Do not use the global `CONTENT_SOURCE=database` switch as the first production
+move. The file-mode baseline is the rollback path and should remain available
+throughout Phase 12.
 
 ## Database Mode To File Mode Rollback
 
@@ -233,4 +270,3 @@ body-size or rate-limit policy.
 - Public pages still show file content: confirm the domain source is
   `database` and rebuild/restart.
 - 413 from Nginx: set a small `client_max_body_size`, validate, and reload.
-
