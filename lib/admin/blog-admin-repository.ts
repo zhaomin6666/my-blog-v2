@@ -80,6 +80,7 @@ export interface BlogAdminRepository {
   create(input: AdminBlogPostInput): Promise<AdminBlogPost>;
   update(id: string, input: AdminBlogPostInput): Promise<AdminBlogPost>;
   setStatus(id: string, status: AdminBlogStatus): Promise<AdminBlogPost>;
+  softDelete(id: string): Promise<AdminBlogPost>;
 }
 
 export class PostgresBlogAdminRepository implements BlogAdminRepository {
@@ -281,6 +282,25 @@ export class PostgresBlogAdminRepository implements BlogAdminRepository {
         returning ${ADMIN_BLOG_COLUMNS}
       `,
       [id, status],
+    );
+
+    const row = result.rows[0];
+    if (!row) throw new Error('Blog post not found.');
+
+    return mapAdminBlogPostRow(row);
+  }
+
+  async softDelete(id: string): Promise<AdminBlogPost> {
+    assertUuid(id);
+
+    const result = await queryPostgres<BlogPostRow>(
+      `
+        update blog_posts
+        set deleted_at = now()
+        where id = $1 and deleted_at is null
+        returning ${ADMIN_BLOG_COLUMNS}
+      `,
+      [id],
     );
 
     const row = result.rows[0];

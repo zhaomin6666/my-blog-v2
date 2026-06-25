@@ -706,7 +706,6 @@ Demo 范围变更、Console / CLI 变更、窗口系统变更、Docker 变更或
 - 默认仍保留 FileRepository。
 - 未实现后台 UI。
 
-
 ### Phase 11.4：Admin Auth Foundation - 已实现
 
 已实现基础能力：
@@ -741,6 +740,7 @@ Demo 范围变更、Console / CLI 变更、窗口系统变更、Docker 变更或
 - Blog Admin 管理 PostgreSQL `blog_posts`。
 - 公开 Blog 页面只有在 `BLOG_CONTENT_SOURCE=database` 或 `CONTENT_SOURCE=database` 时读取这些数据库文章。
 - 默认 file 内容源保持不变。
+- 删除使用 `blog_posts.deleted_at` 做 soft delete；已删除记录会从普通 Admin 列表和公开 Blog 读取中隐藏，但不会物理删除数据库记录。
 - 本阶段不会迁移、导入、删除或覆盖 `content/blog`。
 
 支持编辑范围：
@@ -800,6 +800,8 @@ Slug 规则：
 
 - Blog Posts Markdown 导入 PostgreSQL `blog_posts`。
 - Projects Markdown 导入 PostgreSQL `projects`。
+- `/admin/blog` 新增 Blog Posts 行级 Delete 操作；删除只做 soft delete，需要浏览器二次确认，删除后从普通列表、公开 Blog、RSS 和 sitemap 中隐藏，本阶段不做回收站或恢复。
+- `/admin/blog` 行操作区已优化为可换行按钮组，Edit、Export 和 Delete 不再挤在一起，Delete 使用危险操作样式。
 - 默认 `dry-run` 预览，不写数据库。
 - 正式导入模式：`create_only`、`update_by_slug`、`create_or_update`。
 - 非 dry-run 写入前必须在 Admin UI 显式确认。
@@ -812,6 +814,7 @@ Slug 规则：
 - 不新增本地迁移脚本或 `pnpm content:*` 命令。
 - 不做 zip 导入、文件夹上传、远程 URL 导入、图片上传或媒体库。
 - 不做 Profile / Contact / Stack 导入导出。
+- 不做 Blog Posts hard delete、批量删除、回收站或恢复。
 - 不删除 `content/blog`、`content/projects` 或数据库记录。
 - 不自动切换内容源。
 - 不修改 Agent Demo 回答范围、Console / CLI、窗口系统、Docker 或 Nginx 部署配置。

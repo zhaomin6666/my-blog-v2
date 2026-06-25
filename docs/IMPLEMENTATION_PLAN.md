@@ -974,8 +974,11 @@
 - Kept the existing `lib/admin/content-transfer` service behavior unchanged.
 - Blog Import and Project Import no longer expose a Content Type selector.
 - Import modes, dry-run behavior, explicit non-dry-run confirmation, reports, upload limits, and export formats remain unchanged.
+- Added `/admin/blog` row-level Blog soft delete using `blog_posts.deleted_at`, with browser confirmation and safe Admin-session-checked Server Action handling.
+- Deleted Blog rows disappear from the normal `/admin/blog` list and remain excluded from public Blog, RSS, sitemap, tags, series, search, and Markdown export scopes.
+- `/admin/blog` row actions now wrap with clearer spacing, and Delete uses danger styling separate from Edit / Export.
 - File content directories remain untouched and no automatic `CONTENT_SOURCE` switching was added.
-- No public Blog / Projects source logic, Agent Demo scope, Console / CLI, window-system, Docker, or Nginx deployment config changes were made.
+- No Projects delete behavior, public Blog UI, Agent Demo scope, Console / CLI, window-system, Docker, or Nginx deployment config changes were made.
 
 ### Phase 11.9: Backup & Deployment Hardening PLANNED
 - `pg_dump`.

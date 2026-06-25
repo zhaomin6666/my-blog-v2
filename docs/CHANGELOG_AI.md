@@ -1,6 +1,29 @@
 # AI Development Changelog
 
 ### 2026-06-25 - Codex
+**Summary:** Added Blog Admin soft delete and improved `/admin/blog` row actions.
+
+**Fix scope:**
+- Added `/admin/blog` row-level Delete for database Blog Posts.
+- Delete uses soft delete by setting `blog_posts.deleted_at`; no hard delete is performed.
+- Delete requires browser confirmation and a Server Action that re-checks the Admin session.
+- Deleted rows disappear from the normal Blog Admin list.
+- Public database Blog reads already require `deleted_at is null`, so deleted published posts stay out of `/blog`, RSS, sitemap, tags, series, and search.
+- Revalidated Admin Blog, public Blog, search, tags, series, sitemap, RSS, and the affected article slug after deletion.
+- Improved `/admin/blog` row actions with wrapping button layout and danger styling for Delete.
+
+**Scope guard:**
+- No `content/blog` files were modified, deleted, or migrated.
+- No hard delete, recycle bin, restore flow, or bulk delete was added.
+- No Projects Admin delete behavior was added.
+- No import/export core service behavior was changed.
+- No public Blog UI, Agent Demo, Console / CLI, window-system, Docker, or Nginx deployment config changes were made.
+
+**Verification:**
+- Targeted Vitest coverage for Blog Admin soft delete, SQL shape, action auth/revalidation, and public repository deleted-row filtering passed.
+- `pnpm test`, `pnpm lint`, and `pnpm build` are the final release checks for this phase.
+
+### 2026-06-25 - Codex
 **Summary:** Phase 11.8-fix completed with Option B. Removed `/admin/content` access and moved Markdown transfer into Blog / Projects Admin.
 
 **Fix scope:**

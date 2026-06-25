@@ -114,6 +114,22 @@ export async function unpublishBlogPostAction(formData: FormData): Promise<void>
   redirect(`/admin/blog/${post.id}`);
 }
 
+export async function softDeleteBlogPostAction(formData: FormData): Promise<void> {
+  await requireAdminSession();
+
+  const id = String(formData.get('id') || '');
+  let redirectPath = '/admin/blog';
+
+  try {
+    const post = await blogAdminService.softDeleteBlogPost(id);
+    revalidateBlogPaths(post.slug);
+  } catch {
+    redirectPath = '/admin/blog?error=delete-failed';
+  }
+
+  redirect(redirectPath);
+}
+
 export async function importBlogMarkdownAction(
   _previousState: ContentImportActionState,
   formData: FormData,

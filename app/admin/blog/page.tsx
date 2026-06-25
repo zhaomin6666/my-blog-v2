@@ -6,12 +6,14 @@ import type { AdminBlogLanguage, AdminBlogPost, AdminBlogStatus } from '@/lib/ad
 import { MarkdownImportForm } from '../MarkdownImportForm';
 import { AdminShell } from '../AdminShell';
 import { importBlogMarkdownAction } from './actions';
+import { DeleteBlogPostButton } from './DeleteBlogPostButton';
 
 interface AdminBlogPageProps {
   searchParams: Promise<{
     status?: AdminBlogStatus;
     lang?: AdminBlogLanguage;
     q?: string;
+    error?: string;
   }>;
 }
 
@@ -33,12 +35,19 @@ function exportButton(href: string, label: string) {
   );
 }
 
+const rowActionClass =
+  'inline-flex items-center rounded-md border border-zinc-300 px-2.5 py-1.5 text-xs font-medium transition hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800';
+
 export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps) {
   await requireAdminSession();
   const params = await searchParams;
   const status = params.status === 'draft' || params.status === 'published' ? params.status : undefined;
   const lang = params.lang === 'zh' || params.lang === 'en' ? params.lang : undefined;
   const keyword = params.q?.trim() || undefined;
+  const actionError =
+    params.error === 'delete-failed'
+      ? 'Unable to delete the post. Check the database configuration and try again.'
+      : '';
   let posts: AdminBlogPost[] = [];
   let databaseError = '';
 
@@ -88,6 +97,12 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
           importAction={importBlogMarkdownAction}
         />
       </div>
+
+      {actionError ? (
+        <div className="mb-5 rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-6 text-red-800 dark:border-red-900/70 dark:bg-red-950/40 dark:text-red-200">
+          {actionError}
+        </div>
+      ) : null}
 
       <form className="mb-5 grid gap-3 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 md:grid-cols-[1fr_160px_160px_auto]">
         <label className="relative block">
@@ -150,7 +165,7 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
                   <th className="px-4 py-3">Updated</th>
                   <th className="px-4 py-3">Tags</th>
                   <th className="px-4 py-3">Series</th>
-                  <th className="px-4 py-3">Action</th>
+                  <th className="min-w-[230px] px-4 py-3">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
@@ -171,18 +186,21 @@ export default async function AdminBlogPage({ searchParams }: AdminBlogPageProps
                     </td>
                     <td className="px-4 py-3">{post.series || '-'}</td>
                     <td className="px-4 py-3">
+                      <div className="flex flex-wrap items-center gap-2">
                       <Link
                         href={`/admin/blog/${post.id}`}
-                        className="mr-2 rounded-md border border-zinc-300 px-2.5 py-1.5 text-xs font-medium hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                        className={rowActionClass}
                       >
                         Edit
                       </Link>
                       <a
                         href={`/admin/blog/export/${post.id}`}
-                        className="rounded-md border border-zinc-300 px-2.5 py-1.5 text-xs font-medium hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                        className={`${rowActionClass} text-zinc-600 dark:text-zinc-300`}
                       >
                         Export Markdown
                       </a>
+                      <DeleteBlogPostButton postId={post.id} />
+                      </div>
                     </td>
                   </tr>
                 ))}

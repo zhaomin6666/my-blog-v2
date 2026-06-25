@@ -138,11 +138,14 @@ Status behavior:
   returning it.
 - Soft-deleted rows remain excluded from both Admin list results and public
   reads.
+- `/admin/blog` Delete sets `blog_posts.deleted_at = now()` only. It does not
+  run `DELETE FROM blog_posts`, does not remove Markdown files, and does not add
+  recycle-bin, restore, or bulk-delete flows in this phase.
 
-Admin save, publish, and unpublish actions call `revalidatePath()` for `/blog`,
-Blog Search, Tags, Series, sitemap, RSS, and the affected article path when the
-slug is known. In file mode this does not make database posts public; it only
-keeps the cache behavior ready for database mode.
+Admin save, publish, unpublish, and soft-delete actions call `revalidatePath()`
+for `/blog`, Blog Search, Tags, Series, sitemap, RSS, and the affected article
+path when the slug is known. In file mode this does not make database posts
+public; it only keeps the cache behavior ready for database mode.
 
 ## Hero / Profile Admin Writes
 
@@ -300,6 +303,8 @@ the workflow into the matching content admin pages and removed standalone
 - Non-dry-run imports require explicit Admin confirmation.
 - Blog Posts and Projects can be exported as single Markdown files or bulk zip
   downloads from active database rows.
+- Deleted Blog rows are excluded from ordinary Admin lists, public Blog, RSS,
+  sitemap, and Markdown export scopes because those flows read active rows only.
 
 Important boundaries:
 

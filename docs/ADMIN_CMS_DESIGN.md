@@ -779,6 +779,8 @@ Data-source rules:
 - Public Blog pages read these posts only when `BLOG_CONTENT_SOURCE=database`
   or `CONTENT_SOURCE=database`.
 - The default file content source remains unchanged.
+- Soft delete uses `blog_posts.deleted_at`; deleted rows disappear from the
+  normal Admin list and all public Blog reads without being physically removed.
 - This phase does not migrate, import, delete, or overwrite `content/blog`.
 
 Supported editing scope:
@@ -926,6 +928,12 @@ Implemented:
 
 - Blog Posts Markdown import into PostgreSQL `blog_posts`.
 - Projects Markdown import into PostgreSQL `projects`.
+- `/admin/blog` also has a row-level Delete action for Blog Posts. It is a
+  soft delete only, requires browser confirmation, hides the row from the
+  normal list and public Blog/RSS/sitemap output, and does not add recycle-bin
+  or restore flows in this phase.
+- `/admin/blog` row actions use a wrapping button layout so Edit, Export, and
+  Delete remain readable on narrow screens; Delete uses danger styling.
 - Dry-run preview as the default mode.
 - Formal import modes: `create_only`, `update_by_slug`, and
   `create_or_update`.
@@ -942,6 +950,7 @@ Boundaries:
 - No zip import, folder upload, remote URL import, image upload, or media
   library.
 - No Profile / Contact / Stack import/export.
+- No hard delete, recycle bin, restore flow, or bulk delete for Blog Posts.
 - No deletion of `content/blog`, `content/projects`, or database rows.
 - No automatic content-source switching.
 - No Agent Demo answer-scope, Console / CLI, window-system, Docker, or Nginx

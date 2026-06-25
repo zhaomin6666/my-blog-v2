@@ -64,6 +64,11 @@ export class BlogAdminService {
     return this.repository.setStatus(id, 'draft');
   }
 
+  async softDeleteBlogPost(id: string): Promise<AdminBlogPost> {
+    this.assertDatabaseConfigured();
+    return this.repository.softDelete(id);
+  }
+
   private async assertSlugUnique(slug: string, currentId?: string): Promise<void> {
     const existing = await this.repository.findBySlug(slug);
     if (existing && existing.id !== currentId) {

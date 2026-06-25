@@ -1,6 +1,29 @@
 ﻿# AI 变更记录中文摘要
 
 ### 2026-06-25 - Codex
+**摘要：** 新增 Blog Admin soft delete，并优化 `/admin/blog` 行操作区。
+
+**修复范围：**
+- `/admin/blog` 数据库文章列表新增行级 Delete。
+- Delete 使用 `blog_posts.deleted_at` 做 soft delete，不做 hard delete。
+- 删除前使用浏览器二次确认，Server Action 内部再次校验 Admin session。
+- 删除后的文章会从普通 Blog Admin 列表消失。
+- 公开 database Blog 读取已经要求 `deleted_at is null`，因此已删除的 published 文章不会进入 `/blog`、RSS、sitemap、tags、series 或 search。
+- 删除后 revalidate Admin Blog、公开 Blog、search、tags、series、sitemap、RSS 和对应文章 slug。
+- `/admin/blog` 行操作区改为可换行按钮布局，Delete 使用危险操作样式，与 Edit / Export 区分。
+
+**范围守卫：**
+- 未修改、删除或迁移 `content/blog` 文件。
+- 未新增 hard delete、回收站、恢复功能或批量删除。
+- 未给 Projects Admin 新增删除能力。
+- 未修改 import/export 核心 service 行为。
+- 未修改公开 Blog UI、Agent Demo、Console / CLI、窗口系统、Docker 或 Nginx 部署配置。
+
+**验证：**
+- Blog Admin soft delete、SQL 形态、action 鉴权 / revalidate、公开 repository 排除 deleted rows 的定向 Vitest 已通过。
+- `pnpm test`、`pnpm lint` 和 `pnpm build` 是本阶段最终验收命令。
+
+### 2026-06-25 - Codex
 **摘要：** Phase 11.8-fix 已完成，使用方案 B 移除 `/admin/content` 访问，并把 Markdown 导入导出移动到 Blog / Projects Admin。
 
 **调整范围：**
@@ -358,7 +381,6 @@
 - `pnpm lint` 通过。
 - `pnpm build` 通过。
 
-
 ### 2026-06-15 - Codex
 **摘要：** Phase 10.3 已完成，新增只读 Agent API MVP。
 
@@ -663,8 +685,6 @@
 - `pnpm lint` 通过，零警告零错误。
 - `pnpm build` 通过，生成 18 个标签详情页。
 
-
-
 ## 2026-06-12 - Phase 8.6 最终验收与收口
 
 Codex 完成 Phase 8 的最终验收，并将 Phase 8 标记为 completed。
@@ -918,7 +938,6 @@ Claude Code 完成视觉打磨。
 - 设计影响。
 - 验证结果。
 - 后续注意事项。
-
 
 ### 2026-06-17 - Codex
 **摘要：** Phase 11.1 已完成，为 Agent Demo 增加隐私安全的最小化观测事件和反馈闭环。

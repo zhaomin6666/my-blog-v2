@@ -60,9 +60,11 @@ function makePost(input: AdminBlogPostInput, id = 'post-1'): AdminBlogPost {
 
 class MemoryBlogAdminRepository implements BlogAdminRepository {
   posts: AdminBlogPost[] = [];
+  deletedPostIds = new Set<string>();
 
   async list(params: AdminBlogListParams = {}): Promise<AdminBlogPost[]> {
     return this.posts.filter((post) => {
+      if (this.deletedPostIds.has(post.id)) return false;
       if (params.status && post.status !== params.status) return false;
       if (params.lang && post.lang !== params.lang) return false;
       if (params.keyword) {
@@ -76,11 +78,14 @@ class MemoryBlogAdminRepository implements BlogAdminRepository {
   }
 
   async getById(id: string): Promise<AdminBlogPost | null> {
+    if (this.deletedPostIds.has(id)) return null;
     return this.posts.find((post) => post.id === id) ?? null;
   }
 
   async findBySlug(slug: string): Promise<AdminBlogPost | null> {
-    return this.posts.find((post) => post.slug === slug) ?? null;
+    return (
+      this.posts.find((post) => post.slug === slug && !this.deletedPostIds.has(post.id)) ?? null
+    );
   }
 
   async create(input: AdminBlogPostInput): Promise<AdminBlogPost> {
@@ -113,6 +118,14 @@ class MemoryBlogAdminRepository implements BlogAdminRepository {
     if (status === 'published' && !post.publishedAt) {
       post.publishedAt = '2026-06-23';
     }
+    return post;
+  }
+
+  async softDelete(id: string): Promise<AdminBlogPost> {
+    const post = this.posts.find((item) => item.id === id);
+    if (!post || this.deletedPostIds.has(id)) throw new Error('Blog post not found.');
+
+    this.deletedPostIds.add(id);
     return post;
   }
 }
@@ -187,6 +200,19 @@ describe('BlogAdminService', () => {
     const draft = await service.unpublishBlogPost(post.id);
     expect(draft.status).toBe('draft');
     expect(draft.publishedAt).toBe('2026-06-23');
+  });
+
+  it('soft deletes posts without removing the stored record', async () => {
+    const repository = new MemoryBlogAdminRepository();
+    const service = new BlogAdminService(repository);
+    const post = await service.createBlogPost({ ...baseInput, status: 'published' });
+
+    const deleted = await service.softDeleteBlogPost(post.id);
+
+    expect(deleted.id).toBe(post.id);
+    expect(repository.posts).toHaveLength(1);
+    await expect(service.listAdminBlogPosts()).resolves.toEqual([]);
+    await expect(service.getAdminBlogPostById(post.id)).resolves.toBeNull();
   });
 
   it('throws a clear database configuration error when database url is missing', async () => {

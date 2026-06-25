@@ -569,8 +569,11 @@
 - 继续复用 `lib/admin/content-transfer` service，导入导出核心行为不变。
 - Blog Import 和 Project Import 不再显示 Content Type 选择。
 - 导入模式、dry-run、非 dry-run 显式确认、报告、上传限制和导出格式保持不变。
+- `/admin/blog` 新增基于 `blog_posts.deleted_at` 的行级 Blog soft delete，使用浏览器二次确认，并由 Server Action 再次校验 Admin session。
+- 已删除 Blog rows 会从普通 `/admin/blog` 列表隐藏，并继续从公开 Blog、RSS、sitemap、tags、series、search 和 Markdown 导出范围中排除。
+- `/admin/blog` 行操作区改为可换行按钮组，Edit / Export / Delete 间距更清晰，Delete 使用危险操作样式。
 - 文件型内容目录未被删除、迁移或覆盖，也没有自动切换 `CONTENT_SOURCE`。
-- 未修改公开 Blog / Projects 内容源逻辑、Agent Demo 范围、Console / CLI、窗口系统、Docker 或 Nginx 部署配置。
+- 未新增 Projects 删除能力，未修改公开 Blog UI、Agent Demo 范围、Console / CLI、窗口系统、Docker 或 Nginx 部署配置。
 
 ### Phase 11.9：Backup & Deployment Hardening - 计划中
 
@@ -587,4 +590,3 @@
 - 新阶段开始前先明确范围和验收标准。
 - 新功能必须保护 Developer OS 产品概念。
 - 发布相关改动必须同步检查 `docs/DEPLOYMENT.zh-CN.md`。
-
