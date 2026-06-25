@@ -284,10 +284,25 @@ Recommended backup baseline:
 - Test restore on a non-production database.
 - Document restore commands before relying on the database as the primary source.
 
-## Future Import Script
+## Admin Markdown Import / Export
 
-`scripts/content-import/README.md` is a placeholder only.
+Phase 11.8 adds `/admin/content` for database-backed Markdown import/export.
 
-Later phases may add an external Markdown import workflow, but Phase 11.3 does
-not scan external directories, write content into PostgreSQL, overwrite
-Markdown, delete `content/blog`, or migrate real content.
+- Blog Posts can be imported from `.md` files into PostgreSQL `blog_posts`.
+- Projects can be imported from `.md` files into PostgreSQL `projects`.
+- Imports support `dry-run`, `create_only`, `update_by_slug`, and
+  `create_or_update`.
+- Dry-run is the default and does not write to the database.
+- Non-dry-run imports require explicit Admin confirmation.
+- Blog Posts and Projects can be exported as single Markdown files or bulk zip
+  downloads from active database rows.
+
+Important boundaries:
+
+- No local import/export scripts were added.
+- No `pnpm content:*` commands were added.
+- `content/blog` and `content/projects` are not deleted, migrated, or
+  overwritten.
+- `CONTENT_SOURCE`, `BLOG_CONTENT_SOURCE`, and `PROJECT_CONTENT_SOURCE` are not
+  changed automatically.
+- Profile, Contact, and Stack import/export remain out of scope.

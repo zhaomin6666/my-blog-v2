@@ -915,11 +915,34 @@ Not included in this MVP:
 - No Agent Demo answer-scope, Console / CLI, window-system, Docker, or Nginx
   deployment config changes were made.
 
-### Phase 11.8: Content Import / Export
+### Phase 11.8: Admin Markdown Import / Export
 
-- External blog directory import.
-- Markdown export.
-- JSON backup.
+Completed through the authenticated Admin page `/admin/content`.
+
+Implemented:
+
+- Blog Posts Markdown import into PostgreSQL `blog_posts`.
+- Projects Markdown import into PostgreSQL `projects`.
+- Dry-run preview as the default mode.
+- Formal import modes: `create_only`, `update_by_slug`, and
+  `create_or_update`.
+- Explicit Admin confirmation before any non-dry-run write.
+- Frontmatter validation, slug checks, per-file reports, and upload limits.
+- Single Markdown export for Blog Posts and Projects.
+- Bulk zip export for active Blog Posts and Projects.
+- Documentation in `docs/ADMIN_CONTENT_TRANSFER.md` and
+  `docs/ADMIN_CONTENT_TRANSFER.zh-CN.md`.
+
+Boundaries:
+
+- No local migration scripts or `pnpm content:*` commands.
+- No zip import, folder upload, remote URL import, image upload, or media
+  library.
+- No Profile / Contact / Stack import/export.
+- No deletion of `content/blog`, `content/projects`, or database rows.
+- No automatic content-source switching.
+- No Agent Demo answer-scope, Console / CLI, window-system, Docker, or Nginx
+  deployment config changes.
 
 ### Phase 11.9: Backup & Deployment Hardening
 

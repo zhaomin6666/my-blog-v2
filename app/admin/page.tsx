@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Contact, FileText, Layers3, LayoutDashboard, PanelsTopLeft, UserRound } from 'lucide-react';
+import { Contact, FileArchive, FileText, Layers3, LayoutDashboard, PanelsTopLeft, UserRound } from 'lucide-react';
 import { requireAdminSession } from '@/lib/admin/admin-auth';
 import { AdminShell } from './AdminShell';
 
@@ -46,6 +46,18 @@ export default async function AdminDashboardPage() {
           <h2 className="font-semibold">Projects Admin</h2>
           <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
             Create, edit, publish, feature, and order database-backed project case studies.
+          </p>
+        </Link>
+        <Link
+          href="/admin/content"
+          className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
+        >
+          <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-md bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950">
+            <FileArchive size={18} />
+          </div>
+          <h2 className="font-semibold">Content Import / Export</h2>
+          <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            Import Blog and Projects Markdown into PostgreSQL, dry-run changes, and export active rows back to Markdown.
           </p>
         </Link>
         <Link

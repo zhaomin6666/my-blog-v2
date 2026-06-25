@@ -538,11 +538,27 @@
 - `/projects/[slug]` 允许动态参数，方便后台新发布的 database project 在保存后可访问详情页。
 - 未迁移、删除、覆盖或导入 `content/projects`，未实现 Import / Export，未修改 Console / CLI、窗口系统、Agent Demo 范围、Docker 或 Nginx。
 
-### Phase 11.8：Content Import / Export - 计划中
+### Phase 11.8：Admin Markdown Import / Export - 已完成
 
-- external blog directory import
-- Markdown export
-- JSON backup
+- 新增受登录保护的 `/admin/content`。
+- 支持上传 Markdown 导入 Blog Posts 到 PostgreSQL `blog_posts`。
+- 支持上传 Markdown 导入 Projects 到 PostgreSQL `projects`。
+- 默认导入模式为 `dry-run`，只解析、校验和预览，不写数据库。
+- 支持正式导入模式：`create_only`、`update_by_slug`、`create_or_update`。
+- 非 dry-run 导入必须在后台页面显式勾选确认。
+- 支持 active / soft-deleted slug 冲突检查。
+- 支持 Blog frontmatter 校验和字段映射。
+- 支持 Project frontmatter 校验和字段映射。
+- 支持每个文件的导入报告，包含 scanned、valid、invalid、created、updated、skipped、warnings、failed 和 dry-run 统计。
+- 支持 Blog / Projects 单篇 Markdown 导出。
+- 支持 Blog / Projects active rows 批量 zip 导出。
+- 上传限制：只允许 `.md`，单次最多 20 个文件，单文件最大 1MB。
+- 新增 `docs/ADMIN_CONTENT_TRANSFER.md` 和 `docs/ADMIN_CONTENT_TRANSFER.zh-CN.md`。
+- 未新增本地迁移脚本或 `pnpm content:*` 命令。
+- 未删除、迁移或覆盖 `content/blog` 和 `content/projects`。
+- 未自动切换 `CONTENT_SOURCE`。
+- Profile / Contact / Stack 导入导出仍不在本阶段范围内。
+- 未修改 Agent Demo 回答范围、Console / CLI、窗口系统、Docker 或 Nginx 部署配置。
 
 ### Phase 11.9：Backup & Deployment Hardening - 计划中
 

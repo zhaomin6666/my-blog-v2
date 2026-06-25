@@ -944,10 +944,28 @@
 - `/projects/[slug]` now allows dynamic params so newly published database projects can be served after Admin saves.
 - No `content/projects` migration, deletion, overwrite, import/export, Console / CLI change, window-system change, Agent Demo scope change, Docker change, or Nginx change was made.
 
-### Phase 11.8: Content Import / Export PLANNED
-- External blog directory import.
-- Markdown export.
-- JSON backup.
+### Phase 11.8: Admin Markdown Import / Export COMPLETED
+- Added protected `/admin/content`.
+- Added Markdown Import for Blog Posts and Projects into PostgreSQL.
+- Added dry-run preview as the default import mode.
+- Added non-dry-run import modes:
+  - `create_only`
+  - `update_by_slug`
+  - `create_or_update`
+- Non-dry-run import requires explicit confirmation in the Admin UI.
+- Added slug conflict checks for active and soft-deleted rows.
+- Added Blog frontmatter validation and mapping into `blog_posts`.
+- Added Project frontmatter validation and mapping into `projects`.
+- Added per-file import reports with scanned, valid, invalid, created, updated, skipped, warnings, failed, and dry-run counts.
+- Added single-row Markdown export routes for Blog Posts and Projects.
+- Added bulk zip export routes for active Blog Posts and Projects.
+- Added upload limits: `.md` only, 20 files per request, 1MB per file.
+- Added `docs/ADMIN_CONTENT_TRANSFER.md` and `docs/ADMIN_CONTENT_TRANSFER.zh-CN.md`.
+- No local content migration scripts or `pnpm content:*` commands were added.
+- No `content/blog` or `content/projects` files were deleted, migrated, or overwritten.
+- No automatic `CONTENT_SOURCE` switching was added.
+- Profile, Contact, and Stack import/export remain out of scope for this phase.
+- No Agent Demo answer-scope, Console / CLI, window-system, Docker, or Nginx deployment config changes were made.
 
 ### Phase 11.9: Backup & Deployment Hardening PLANNED
 - `pg_dump`.

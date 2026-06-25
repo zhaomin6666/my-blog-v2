@@ -1,5 +1,41 @@
 ﻿# AI 变更记录中文摘要
 
+### 2026-06-25 - Codex
+**摘要：** Phase 11.8 已完成，新增后台 Markdown 导入导出能力。
+
+**Phase 11.8 范围：**
+- 新增受登录保护的 `/admin/content`。
+- 支持上传 Markdown 导入 Blog Posts 到 PostgreSQL `blog_posts`。
+- 支持上传 Markdown 导入 Projects 到 PostgreSQL `projects`。
+- 默认导入模式为 `dry-run`，只解析、校验和预览，不写数据库。
+- 支持正式导入模式：`create_only`、`update_by_slug`、`create_or_update`。
+- 非 dry-run 导入必须在 Admin UI 显式确认。
+- 新增上传限制：只允许 `.md`，单次最多 20 个文件，单文件最大 1MB。
+- 新增 Blog frontmatter 校验、slug 检查和字段映射。
+- 新增 Project frontmatter 校验、slug 检查和字段映射。
+- 新增逐文件导入报告，包含 summary、warnings 和 errors。
+- 新增 Blog / Projects 单篇 Markdown 导出。
+- 新增 Blog / Projects active rows 批量 zip 导出。
+- 新增 `lib/admin/content-transfer` 服务层和聚焦单元测试。
+- 新增 `docs/ADMIN_CONTENT_TRANSFER.md` 和 `docs/ADMIN_CONTENT_TRANSFER.zh-CN.md`。
+
+**范围边界：**
+- 未新增本地迁移脚本。
+- 未新增 `pnpm content:*` 命令。
+- 未删除、迁移或覆盖 `content/blog` 和 `content/projects`。
+- 未自动切换 `CONTENT_SOURCE`。
+- 未新增 Profile / Contact / Stack 导入导出。
+- 未修改 Agent Demo 回答范围。
+- 未修改 Console / CLI。
+- 未修改窗口系统。
+- 未修改 Docker / Nginx 部署配置。
+
+**验证：**
+- 新增 frontmatter 校验、文件名安全、导入模式、dry-run 行为和 Markdown 导出测试。
+- `pnpm vitest run lib/admin/content-transfer` 通过。
+- `pnpm lint` 通过。
+- `pnpm test` 和 `pnpm build` 是本阶段最终发布检查。
+
 ### 2026-06-24 - Codex
 **摘要：** Phase 11.7 已完成，新增 PostgreSQL-backed Projects Admin MVP。
 

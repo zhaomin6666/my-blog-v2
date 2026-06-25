@@ -1,5 +1,54 @@
 # AI Development Changelog
 
+### 2026-06-25 - Codex
+**Summary:** Fixed Admin Blog Markdown export/import round-trip and hardened export download links.
+
+**Fix scope:**
+- Fixed Blog Markdown export so nullable and empty optional frontmatter fields are omitted instead of being serialized as `null` or empty values.
+- This specifically fixes self-exported Blog files failing re-import validation when `seriesOrder` is absent in the source row.
+- Switched Admin Content export controls from `next/link` to plain anchor downloads so export requests use normal file GET navigation.
+- Added a regression test covering Blog export -> import round-trip.
+
+**Verification:**
+- `pnpm vitest run lib/admin/content-transfer/content-transfer-service.test.ts`
+- `pnpm lint`
+
+### 2026-06-25 - Codex
+**Summary:** Phase 11.8 completed. Added Admin Markdown import/export for Blog Posts and Projects.
+
+**Phase 11.8 scope:**
+- Added protected `/admin/content`.
+- Added Markdown import for Blog Posts into PostgreSQL `blog_posts`.
+- Added Markdown import for Projects into PostgreSQL `projects`.
+- Added dry-run preview as the default import mode.
+- Added formal import modes: `create_only`, `update_by_slug`, and `create_or_update`.
+- Required explicit Admin confirmation before any non-dry-run import writes to PostgreSQL.
+- Added upload validation: `.md` only, 20 files per request, 1MB per file.
+- Added Blog frontmatter validation, slug checks, and field mapping.
+- Added Project frontmatter validation, slug checks, and field mapping.
+- Added per-file import reports with summary counts and warnings/errors.
+- Added single Markdown export routes for Blog Posts and Projects.
+- Added bulk zip export routes for active Blog Posts and Projects.
+- Added `lib/admin/content-transfer` service layer and focused unit tests.
+- Added `docs/ADMIN_CONTENT_TRANSFER.md` and `docs/ADMIN_CONTENT_TRANSFER.zh-CN.md`.
+
+**Scope guard:**
+- No local migration scripts were added.
+- No `pnpm content:*` commands were added.
+- No `content/blog` or `content/projects` files were deleted, migrated, or overwritten.
+- No automatic `CONTENT_SOURCE` switching was added.
+- No Profile / Contact / Stack import/export was added.
+- No Agent Demo answer-scope change was made.
+- No Console / CLI change was made.
+- No window-system change was made.
+- No Docker / Nginx deployment config change was made.
+
+**Verification:**
+- Added focused tests for frontmatter validation, filename safety, import modes, dry-run behavior, and Markdown export.
+- `pnpm vitest run lib/admin/content-transfer` passed.
+- `pnpm lint` passed.
+- `pnpm test` and `pnpm build` are the final release checks for this phase.
+
 ### 2026-06-24 - Codex
 **Summary:** Phase 11.7 completed. Added PostgreSQL-backed Projects Admin MVP.
 
