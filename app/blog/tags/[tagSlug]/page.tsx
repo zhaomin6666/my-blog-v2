@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { blogService } from '@/lib/blog';
 import { buildMetadata } from '@/lib/seo';
+import { siteConfigService } from '@/lib/site-config';
 import { BlogTagDetailPageClient } from './BlogTagDetailPageClient';
 
 interface BlogTagDetailPageProps {
@@ -15,7 +16,10 @@ export async function generateStaticParams(): Promise<Array<{ tagSlug: string }>
 
 export async function generateMetadata({ params }: BlogTagDetailPageProps): Promise<Metadata> {
   const { tagSlug } = await params;
-  const result = await blogService.getPostsByTagSlug(tagSlug);
+  const [result, siteConfig] = await Promise.all([
+    blogService.getPostsByTagSlug(tagSlug),
+    siteConfigService.getSiteConfig(),
+  ]);
 
   if (!result) {
     return {
@@ -29,9 +33,9 @@ export async function generateMetadata({ params }: BlogTagDetailPageProps): Prom
 
   return buildMetadata({
     title: result.tag.name,
-    description: `${result.tag.count} published posts tagged "${result.tag.name}" from the Personal Developer OS.`,
+    description: `${result.tag.count} published posts tagged "${result.tag.name}".`,
     path: `/blog/tags/${result.tag.slug}`,
-  });
+  }, siteConfig);
 }
 
 export default async function BlogTagDetailPage({ params }: BlogTagDetailPageProps) {

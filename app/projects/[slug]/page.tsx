@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { blogService, renderMarkdownToHtml } from '@/lib/blog';
 import { projectService } from '@/lib/projects';
 import { buildMetadata } from '@/lib/seo';
+import { siteConfigService } from '@/lib/site-config';
 import { ProjectDetailPageClient } from './ProjectDetailPageClient';
 
 interface ProjectPageProps {
@@ -23,21 +24,24 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = await projectService.getPublishedProjectBySlug(slug);
+  const [project, siteConfig] = await Promise.all([
+    projectService.getPublishedProjectBySlug(slug),
+    siteConfigService.getSiteConfig(),
+  ]);
 
   if (!project) {
     return buildMetadata({
       title: 'Project Not Found',
       description: 'The requested project case study could not be found.',
       path: `/projects/${slug}`,
-    });
+    }, siteConfig);
   }
 
   return buildMetadata({
     title: project.seoTitle || project.title,
     description: project.seoDescription || project.summary,
     path: `/projects/${project.slug}`,
-  });
+  }, siteConfig);
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {

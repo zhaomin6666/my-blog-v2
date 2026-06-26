@@ -1,41 +1,59 @@
 import type { Metadata } from 'next';
+import type { SiteConfig } from '@/lib/site-config/site-config-types';
 
 const fallbackSiteUrl = 'http://localhost:3000';
 
-function normalizeSiteUrl(url: string): string {
+export function normalizeSiteUrl(url: string): string {
   return url.replace(/\/+$/, '');
 }
 
-export const seoConfig = {
-  siteName: 'Personal Developer OS',
+export const fallbackSeoConfig: SiteConfig = {
+  key: 'default',
+  siteName: 'AI Native Portfolio CMS',
   siteUrl: normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL || fallbackSiteUrl),
-  defaultTitle: 'Personal Developer OS | Backend Developer in the AI Era',
+  defaultTitle: 'AI Native Portfolio CMS | Developer Portfolio Starter',
   defaultDescription:
-    'A browser-based Personal Developer OS for a backend developer building AI-era products, engineering logs, and portfolio projects.',
-  zhDescription:
-    'A Personal Developer OS focused on backend development, AI Agents, engineering learning, and personal project showcases.',
+    'A starter for building a developer portfolio, technical blog, project showcase, and optional Admin CMS.',
   defaultLocale: 'en_US',
-  author: 'Personal Developer OS',
+  author: 'AI Native Portfolio CMS',
   twitterHandle: '',
+  data: {},
+  published: true,
+  lang: 'en',
 };
 
-export function getAbsoluteUrl(path = '/'): string {
+export const seoConfig = fallbackSeoConfig;
+
+function resolveSiteConfig(siteConfig?: SiteConfig): SiteConfig {
+  return siteConfig ?? fallbackSeoConfig;
+}
+
+export function getAbsoluteUrl(
+  path = '/',
+  siteConfigOrUrl?: SiteConfig | string,
+): string {
   if (/^https?:\/\//.test(path)) {
     return path;
   }
 
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  return `${seoConfig.siteUrl}${normalizedPath}`;
+  const siteUrl = typeof siteConfigOrUrl === 'string'
+    ? siteConfigOrUrl
+    : resolveSiteConfig(siteConfigOrUrl).siteUrl;
+
+  return `${normalizeSiteUrl(siteUrl)}${normalizedPath}`;
 }
 
-export function buildPageTitle(title?: string): string {
+export function buildPageTitle(title?: string, siteConfig?: SiteConfig): string {
+  const config = resolveSiteConfig(siteConfig);
+
   if (!title) {
-    return seoConfig.defaultTitle;
+    return config.defaultTitle;
   }
 
-  return title === seoConfig.siteName
-    ? seoConfig.defaultTitle
-    : `${title} | ${seoConfig.siteName}`;
+  return title === config.siteName
+    ? config.defaultTitle
+    : `${title} | ${config.siteName}`;
 }
 
 interface BuildMetadataOptions {
@@ -50,31 +68,33 @@ interface BuildMetadataOptions {
 
 export function buildMetadata({
   title,
-  description = seoConfig.defaultDescription,
+  description,
   path = '/',
   type = 'website',
   publishedTime,
   modifiedTime,
   tags,
-}: BuildMetadataOptions = {}): Metadata {
-  const pageTitle = title ? buildPageTitle(title) : seoConfig.defaultTitle;
-  const metadataTitle = !title || title === seoConfig.siteName
-    ? { absolute: seoConfig.defaultTitle }
+}: BuildMetadataOptions = {}, siteConfig?: SiteConfig): Metadata {
+  const config = resolveSiteConfig(siteConfig);
+  const resolvedDescription = description || config.defaultDescription;
+  const pageTitle = title ? buildPageTitle(title, config) : config.defaultTitle;
+  const metadataTitle = !title || title === config.siteName
+    ? { absolute: config.defaultTitle }
     : title;
-  const url = getAbsoluteUrl(path);
+  const url = getAbsoluteUrl(path, config);
 
   return {
     title: metadataTitle,
-    description,
+    description: resolvedDescription,
     alternates: {
       canonical: url,
     },
     openGraph: {
       title: pageTitle,
-      description,
+      description: resolvedDescription,
       url,
-      siteName: seoConfig.siteName,
-      locale: seoConfig.defaultLocale,
+      siteName: config.siteName,
+      locale: config.defaultLocale,
       type,
       ...(type === 'article'
         ? {
@@ -87,8 +107,8 @@ export function buildMetadata({
     twitter: {
       card: 'summary',
       title: pageTitle,
-      description,
-      ...(seoConfig.twitterHandle ? { creator: seoConfig.twitterHandle } : {}),
+      description: resolvedDescription,
+      ...(config.twitterHandle ? { creator: config.twitterHandle } : {}),
     },
   };
 }

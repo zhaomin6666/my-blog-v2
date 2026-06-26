@@ -4,13 +4,18 @@ import { blogService } from '@/lib/blog/blog-service';
 import { homepageService } from '@/lib/homepage';
 import { projectService } from '@/lib/projects';
 import { profileService } from '@/lib/profile';
-import { buildMetadata, seoConfig } from '@/lib/seo';
+import { buildMetadata } from '@/lib/seo';
+import { siteConfigService } from '@/lib/site-config';
 
-export const metadata: Metadata = buildMetadata({
-  title: seoConfig.siteName,
-  description: seoConfig.defaultDescription,
-  path: '/',
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const siteConfig = await siteConfigService.getSiteConfig();
+
+  return buildMetadata({
+    title: siteConfig.siteName,
+    description: siteConfig.defaultDescription,
+    path: '/',
+  }, siteConfig);
+}
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;

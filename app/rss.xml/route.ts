@@ -1,5 +1,6 @@
 import { blogService } from '@/lib/blog';
-import { getAbsoluteUrl, seoConfig } from '@/lib/seo';
+import { getAbsoluteUrl } from '@/lib/seo';
+import { siteConfigService } from '@/lib/site-config';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -28,12 +29,15 @@ function toRssDate(value: string): string {
 }
 
 export async function GET(): Promise<Response> {
-  const posts = await blogService.getPublishedPosts();
-  const siteUrl = getAbsoluteUrl('/');
-  const feedUrl = getAbsoluteUrl('/rss.xml');
+  const [posts, siteConfig] = await Promise.all([
+    blogService.getPublishedPosts(),
+    siteConfigService.getSiteConfig(),
+  ]);
+  const siteUrl = getAbsoluteUrl('/', siteConfig);
+  const feedUrl = getAbsoluteUrl('/rss.xml', siteConfig);
 
   const items = posts.map((post) => {
-    const postUrl = getAbsoluteUrl(`/blog/${post.slug}`);
+    const postUrl = getAbsoluteUrl(`/blog/${post.slug}`, siteConfig);
     const categories = post.tags
       .map((tag) => `<category>${escapeXml(tag)}</category>`)
       .join('');
@@ -54,8 +58,8 @@ export async function GET(): Promise<Response> {
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<rss version="2.0">',
     '<channel>',
-    `<title>${escapeXml(seoConfig.siteName)}</title>`,
-    `<description>${escapeXml(seoConfig.defaultDescription)}</description>`,
+    `<title>${escapeXml(siteConfig.siteName)}</title>`,
+    `<description>${escapeXml(siteConfig.defaultDescription)}</description>`,
     `<link>${escapeXml(siteUrl)}</link>`,
     `<atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="${escapeXml(feedUrl)}" rel="self" type="application/rss+xml" />`,
     `<lastBuildDate>${new Date().toUTCString()}</lastBuildDate>`,

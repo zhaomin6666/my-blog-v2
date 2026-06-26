@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { SettingsProvider } from "@/lib/settings-context";
-import { seoConfig } from "@/lib/seo";
+import { siteConfigService } from "@/lib/site-config";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -14,41 +14,46 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(seoConfig.siteUrl),
-  applicationName: seoConfig.siteName,
-  title: {
-    default: seoConfig.defaultTitle,
-    template: `%s | ${seoConfig.siteName}`,
-  },
-  description: seoConfig.defaultDescription,
-  authors: [{ name: seoConfig.author }],
-  creator: seoConfig.author,
-  openGraph: {
-    title: seoConfig.defaultTitle,
-    description: seoConfig.defaultDescription,
-    url: seoConfig.siteUrl,
-    siteName: seoConfig.siteName,
-    locale: seoConfig.defaultLocale,
-    type: "website",
-  },
-  twitter: {
-    card: "summary",
-    title: seoConfig.defaultTitle,
-    description: seoConfig.defaultDescription,
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+export async function generateMetadata(): Promise<Metadata> {
+  const siteConfig = await siteConfigService.getSiteConfig();
+
+  return {
+    metadataBase: new URL(siteConfig.siteUrl),
+    applicationName: siteConfig.siteName,
+    title: {
+      default: siteConfig.defaultTitle,
+      template: `%s | ${siteConfig.siteName}`,
+    },
+    description: siteConfig.defaultDescription,
+    authors: [{ name: siteConfig.author }],
+    creator: siteConfig.author,
+    openGraph: {
+      title: siteConfig.defaultTitle,
+      description: siteConfig.defaultDescription,
+      url: siteConfig.siteUrl,
+      siteName: siteConfig.siteName,
+      locale: siteConfig.defaultLocale,
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title: siteConfig.defaultTitle,
+      description: siteConfig.defaultDescription,
+      ...(siteConfig.twitterHandle ? { creator: siteConfig.twitterHandle } : {}),
+    },
+    robots: {
       index: true,
       follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
-  },
-};
+  };
+}
 
 export default function RootLayout({
   children,

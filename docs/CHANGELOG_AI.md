@@ -1,6 +1,32 @@
 # AI Development Changelog
 
 ### 2026-06-26 - Codex
+**Summary:** Step 6B-4A completed. Moved Site Identity / default SEO reads to file/database Site Config.
+
+**Scope:**
+- Added `database/migrations/006_create_site_configs.sql` for PostgreSQL-backed `site_configs`.
+- Added file-mode Site Config content under `content/site/settings.en.md` and `content/site/settings.zh.md`.
+- Added `lib/site-config` with shared types, file repository, database repository, service, and neutral fallback.
+- Refactored `lib/seo.ts` so metadata builders accept an explicit `siteConfig` while keeping URL helpers pure and synchronous.
+- Wired public metadata, RSS, sitemap, and robots to read `siteConfigService`.
+- Replaced remaining public metadata descriptions that contained old personal site identity wording.
+
+**Behavior notes:**
+- `siteUrl` remains deployment configuration from `NEXT_PUBLIC_SITE_URL`, with `http://localhost:3000` fallback.
+- Site Config uses database mode when `CONTENT_SOURCE=database` or `PROFILE_CONTENT_SOURCE=database`; otherwise it reads `content/site`.
+- Missing file/database Site Config returns a neutral built-in fallback and does not crash the build.
+- No Admin UI was added in this step.
+
+**Scope guard:**
+- No `content/pages`, `content/blog`, `content/projects`, Hero, Profile, Contact, Stack, Agent Demo runtime, Docker, or Nginx behavior was changed.
+
+**Verification:**
+- `pnpm lint`
+- `pnpm build`
+- file-mode `pnpm build`
+- `rg -n "Personal Developer OS|Backend Developer|backend developer|AI Agent learning|personal project showcases" lib/seo.ts app lib/site-config content/site`
+
+### 2026-06-26 - Codex
 **Summary:** Fixed Console profile command formatting to match Main App visibility rules.
 
 **Scope:**

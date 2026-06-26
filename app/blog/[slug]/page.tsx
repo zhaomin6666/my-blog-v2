@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { blogService, extractBlogToc, renderMarkdownToHtml } from '@/lib/blog';
 import { projectService } from '@/lib/projects';
 import { buildMetadata } from '@/lib/seo';
+import { siteConfigService } from '@/lib/site-config';
 import { BlogArticlePageClient } from './BlogArticlePageClient';
 
 interface BlogArticlePageProps {
@@ -16,7 +17,10 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
 
 export async function generateMetadata({ params }: BlogArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await blogService.getPublishedPostBySlug(slug);
+  const [post, siteConfig] = await Promise.all([
+    blogService.getPublishedPostBySlug(slug),
+    siteConfigService.getSiteConfig(),
+  ]);
 
   if (!post) {
     return {
@@ -36,7 +40,7 @@ export async function generateMetadata({ params }: BlogArticlePageProps): Promis
     publishedTime: post.date,
     modifiedTime: post.updatedAt,
     tags: post.tags,
-  });
+  }, siteConfig);
 }
 
 export default async function BlogArticlePage({ params }: BlogArticlePageProps) {

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { blogService } from '@/lib/blog';
 import { projectService } from '@/lib/projects';
 import { buildMetadata } from '@/lib/seo';
+import { siteConfigService } from '@/lib/site-config';
 import { BlogSeriesDetailPageClient } from './BlogSeriesDetailPageClient';
 
 interface BlogSeriesDetailPageProps {
@@ -16,7 +17,11 @@ export async function generateStaticParams(): Promise<Array<{ seriesSlug: string
 
 export async function generateMetadata({ params }: BlogSeriesDetailPageProps): Promise<Metadata> {
   const { seriesSlug } = await params;
-  const series = (await blogService.getAllSeries()).find((item) => item.slug === seriesSlug);
+  const [allSeries, siteConfig] = await Promise.all([
+    blogService.getAllSeries(),
+    siteConfigService.getSiteConfig(),
+  ]);
+  const series = allSeries.find((item) => item.slug === seriesSlug);
 
   if (!series) {
     return {
@@ -30,9 +35,9 @@ export async function generateMetadata({ params }: BlogSeriesDetailPageProps): P
 
   return buildMetadata({
     title: series.title,
-    description: `${series.title} series with ${series.count} published engineering logs.`,
+    description: `${series.title} series with ${series.count} published posts.`,
     path: `/blog/series/${series.slug}`,
-  });
+  }, siteConfig);
 }
 
 export default async function BlogSeriesDetailPage({ params }: BlogSeriesDetailPageProps) {
