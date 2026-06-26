@@ -1,6 +1,29 @@
 # AI Development Changelog
 
 ### 2026-06-26 - Codex
+**Summary:** Step 6B-4B completed. Added database-backed Site Config Admin.
+
+**Scope:**
+- Added `lib/admin/site-config-admin-*` types, validation, repository, and service for PostgreSQL `site_configs`.
+- Added protected `/admin/site` with separate Site / zh and Site / en forms.
+- Added protected `saveSiteConfigAction` with Server Action auth re-check, validation, upsert, and public metadata revalidation.
+- Added Site Config entries to the Admin shell navigation and Admin dashboard.
+
+**Behavior notes:**
+- Site Config Admin writes only content fields: site name, default title, default description, author, Twitter handle, locale, published, and hidden JSON data.
+- `siteUrl` is not editable in Admin and remains controlled by `NEXT_PUBLIC_SITE_URL`.
+- Upsert uses the existing `(key, lang)` unique constraint, always writes `key='default'`, and restores `deleted_at` to `null`.
+- Empty database rows render neutral defaults for first save.
+
+**Scope guard:**
+- No migration, file content, Page Config Admin, Blog posts, Project content, Hero, Profile, Contact, Stack, Agent Demo runtime, Docker, or Nginx behavior was changed.
+
+**Verification:**
+- `pnpm security:admin`
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-26 - Codex
 **Summary:** Step 6B-4A completed. Moved Site Identity / default SEO reads to file/database Site Config.
 
 **Scope:**

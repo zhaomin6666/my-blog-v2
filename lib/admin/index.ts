@@ -19,6 +19,12 @@ export type {
   AdminPageConfigLanguage,
 } from './page-config-admin-types';
 export type {
+  AdminSiteConfig,
+  AdminSiteConfigInput,
+  AdminSiteConfigKey,
+  AdminSiteConfigLanguage,
+} from './site-config-admin-types';
+export type {
   AdminContactChannel,
   AdminContactChannelInput,
   AdminContentLanguage,
