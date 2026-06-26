@@ -3,12 +3,14 @@
 import Link from 'next/link';
 import { ArrowUpRight, BookOpen, CheckCircle2, ExternalLink, Github } from 'lucide-react';
 import { getStyleTokens } from '@/lib/stylePresets';
+import type { PageConfig } from '@/lib/page-config/page-config-types';
 import type { ProjectLinkData, ProjectMeta } from '@/lib/projects';
 import type { Lang } from '@/lib/types';
 import { t } from '@/lib/translations';
 
 interface ProjectListPageProps {
   projects: ProjectMeta[];
+  pageConfig: PageConfig;
   stylePreset: 'macos' | 'vercel';
   lang: Lang;
 }
@@ -56,9 +58,15 @@ function QuickLink({ link, isMacos }: { link: ProjectLinkData; isMacos: boolean 
   );
 }
 
-export function ProjectListPage({ projects, stylePreset, lang }: ProjectListPageProps) {
+export function ProjectListPage({
+  projects,
+  pageConfig,
+  stylePreset,
+  lang,
+}: ProjectListPageProps) {
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
+  const title = pageConfig.title || t('projects.pageTitle', lang);
 
   return (
     <div className="space-y-5">
@@ -69,11 +77,13 @@ export function ProjectListPage({ projects, stylePreset, lang }: ProjectListPage
               projects/
             </div>
             <h1 className={`${isMacos ? 'text-2xl font-semibold md:text-3xl' : 'font-mono text-xl font-bold uppercase md:text-2xl'} ${tokens.textPrimary}`}>
-              {t('projects.pageTitle', lang)}
+              {title}
             </h1>
-            <p className={`mt-3 max-w-2xl ${isMacos ? 'text-sm leading-relaxed' : 'font-mono text-xs leading-relaxed'} ${tokens.textSecondary}`}>
-              {t('projects.pageSubtitle', lang)}
-            </p>
+            {pageConfig.subtitle ? (
+              <p className={`mt-3 max-w-2xl ${isMacos ? 'text-sm leading-relaxed' : 'font-mono text-xs leading-relaxed'} ${tokens.textSecondary}`}>
+                {pageConfig.subtitle}
+              </p>
+            ) : null}
           </div>
           <span className={`w-fit px-2.5 py-1 text-[11px] ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius}`}>
             {projects.length} {t('projects.count', lang)}

@@ -10,9 +10,15 @@ interface ProjectLayoutProps {
   children: React.ReactNode;
   backHref?: string;
   backLabel?: string;
+  footerText?: string;
 }
 
-export function ProjectLayout({ children, backHref = '/', backLabel }: ProjectLayoutProps) {
+export function ProjectLayout({
+  children,
+  backHref = '/',
+  backLabel,
+  footerText,
+}: ProjectLayoutProps) {
   const { theme, lang, stylePreset, toggleTheme, toggleLang, toggleStylePreset, mounted } = useSettings();
 
   if (!mounted) {
@@ -76,7 +82,9 @@ export function ProjectLayout({ children, backHref = '/', backLabel }: ProjectLa
       </main>
 
       <footer className={`${tokens.statusBarHeight} ${tokens.statusBarClass} ${tokens.statusBarFont} flex items-center justify-center px-4`}>
-        <span className="text-[11px] text-zinc-400 dark:text-zinc-500">{t('projects.footer', lang)}</span>
+        {footerText ? (
+          <span className="text-[11px] text-zinc-400 dark:text-zinc-500">{footerText}</span>
+        ) : null}
       </footer>
     </div>
   );

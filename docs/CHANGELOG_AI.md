@@ -1,5 +1,29 @@
 # AI Development Changelog
 
+### 2026-06-26 - Codex
+**Summary:** Step 6B-2A completed. Added file/database Page Config reads for Projects and Blog page-level copy.
+
+**Scope:**
+- Added `database/migrations/005_create_page_configs.sql` for the `page_configs` table, indexes, and `updated_at` trigger.
+- Added file-mode page config Markdown under `content/pages/` for Projects and Blog in `zh` / `en`.
+- Added `lib/page-config` with shared types, file repository, database repository, service, and barrel exports.
+- Wired `/projects` to read Page Config for metadata, list title/subtitle, and layout footer.
+- Wired `/blog` to read Page Config for metadata and layout footer.
+- Removed `projects.pageSubtitle`, `projects.footer`, and `blog.footer` from `lib/translations.ts`.
+
+**Behavior notes:**
+- File mode reads `content/pages/{projects|blog}.{zh|en}.md`.
+- Database mode reads published, non-deleted `page_configs` rows and falls back by language from preferred language to `en`, then `zh`.
+- If no Page Config record/file is found, the service returns a neutral built-in fallback without personal information.
+
+**Scope guard:**
+- No Admin UI was added.
+- No Blog posts, Project case studies, Profile, Contact, Stack, Agent Demo, window-system, Docker, or Nginx changes were made.
+
+**Verification:**
+- `pnpm lint`
+- `pnpm build`
+
 ### 2026-06-25 - Codex
 **Summary:** Phase 12 started. Phase 12.1 Production CMS Preflight completed with production CMS switch checklists.
 

@@ -1,17 +1,29 @@
-import type { Metadata } from 'next';
 import { projectService } from '@/lib/projects';
+import { pageConfigService } from '@/lib/page-config';
 import { buildMetadata } from '@/lib/seo';
 import { ProjectsPageClient } from './ProjectsPageClient';
 
-export const metadata: Metadata = buildMetadata({
-  title: 'Project Case Studies',
-  description:
-    'Project case studies for Personal Developer OS, AI Agent learning work, and enterprise-system experience.',
-  path: '/projects',
-});
+export async function generateMetadata() {
+  const pageConfig = await pageConfigService.getPageConfig('projects');
+
+  return buildMetadata({
+    title: pageConfig.seoTitle || pageConfig.title,
+    description: pageConfig.seoDescription || pageConfig.subtitle,
+    path: '/projects',
+  });
+}
 
 export default async function ProjectsPage() {
-  const projects = await projectService.getPublishedProjects();
+  const [projects, pageConfigZh, pageConfigEn] = await Promise.all([
+    projectService.getPublishedProjects(),
+    pageConfigService.getPageConfig('projects', 'zh'),
+    pageConfigService.getPageConfig('projects', 'en'),
+  ]);
 
-  return <ProjectsPageClient projects={projects} />;
+  return (
+    <ProjectsPageClient
+      projects={projects}
+      pageConfig={{ zh: pageConfigZh, en: pageConfigEn }}
+    />
+  );
 }

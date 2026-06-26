@@ -11,6 +11,7 @@ interface BlogLayoutProps {
   backHref?: string;
   backLabel?: string;
   contentWidth?: 'default' | 'wide';
+  footerText?: string;
 }
 
 export function BlogLayout({
@@ -18,6 +19,7 @@ export function BlogLayout({
   backHref = '/',
   backLabel,
   contentWidth = 'default',
+  footerText,
 }: BlogLayoutProps) {
   const { theme, lang, stylePreset, toggleTheme, toggleLang, toggleStylePreset, mounted } = useSettings();
 
@@ -87,7 +89,9 @@ export function BlogLayout({
       </main>
 
       <footer className={`${tokens.statusBarHeight} ${tokens.statusBarClass} ${tokens.statusBarFont} flex items-center justify-center px-4`}>
-        <span className="text-[11px] text-zinc-400 dark:text-zinc-500">{t('blog.footer', lang)}</span>
+        {footerText ? (
+          <span className="text-[11px] text-zinc-400 dark:text-zinc-500">{footerText}</span>
+        ) : null}
       </footer>
     </div>
   );
