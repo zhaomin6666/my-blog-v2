@@ -55,7 +55,7 @@ function buildAdminSessionClearCookieOptions(path: string) {
 }
 
 export function isAdminAuthDebugEnabled(): boolean {
-  return process.env.ADMIN_AUTH_DEBUG === 'true';
+  return process.env.ADMIN_AUTH_DEBUG === 'true' && process.env.NODE_ENV !== 'production';
 }
 
 export function logAdminAuth(event: string, data: AdminAuthLogData = {}): void {
