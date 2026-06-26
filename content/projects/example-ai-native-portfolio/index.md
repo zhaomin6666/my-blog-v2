@@ -3,8 +3,8 @@ title: "Example AI Native Portfolio"
 slug: "example-ai-native-portfolio"
 subtitle: "A neutral example project for the Personal Developer OS / AI Native Portfolio CMS starter."
 summary: "An example portfolio project that demonstrates how homepage modules, projects, blog posts, profile content, contact channels, and stack groups can be managed through file mode or database mode."
-status: "production"
-statusLabel: "Example / Starter Content"
+status: "mvp"
+statusLabel: "Example Project"
 type: "Example Project"
 role:
   - "Product Structure"
@@ -84,4 +84,3 @@ You can also update the related post to point at your own published article, or 
 Do not commit secrets, API keys, real production configuration, private deployment notes, server IP addresses, database connection strings, or confidential client information into project Markdown.
 
 Use placeholders for repository examples, keep production values in environment variables, and only publish project information that is safe to share publicly.
-
