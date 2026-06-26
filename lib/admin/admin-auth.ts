@@ -30,6 +30,9 @@ export interface AdminCredentialsConfig {
 type AdminAuthLogValue = string | number | boolean | null | undefined;
 type AdminAuthLogData = Record<string, AdminAuthLogValue>;
 
+const ADMIN_SESSION_COOKIE_PATH = '/admin';
+const ADMIN_SESSION_LEGACY_COOKIE_PATH = '/';
+
 export function isAdminAuthDebugEnabled(): boolean {
   return process.env.ADMIN_AUTH_DEBUG === 'true';
 }
@@ -136,7 +139,7 @@ export async function setAdminSessionCookie(username: string): Promise<void> {
     httpOnly: true,
     sameSite: 'lax' as const,
     secure: process.env.NODE_ENV === 'production',
-    path: '/admin',
+    path: ADMIN_SESSION_LEGACY_COOKIE_PATH,
     maxAge: 0,
   };
   const token = await createSignedSessionToken(
@@ -147,7 +150,7 @@ export async function setAdminSessionCookie(username: string): Promise<void> {
     httpOnly: true,
     sameSite: 'lax' as const,
     secure: process.env.NODE_ENV === 'production',
-    path: '/',
+    path: ADMIN_SESSION_COOKIE_PATH,
     maxAge: getAdminSessionMaxAgeSeconds(),
   };
 
@@ -175,12 +178,12 @@ export async function clearAdminSessionCookie(): Promise<void> {
     httpOnly: true,
     sameSite: 'lax' as const,
     secure: process.env.NODE_ENV === 'production',
-    path: '/',
+    path: ADMIN_SESSION_COOKIE_PATH,
     maxAge: 0,
   };
   const legacyCookieOptions = {
     ...cookieOptions,
-    path: '/admin',
+    path: ADMIN_SESSION_LEGACY_COOKIE_PATH,
   };
 
   logAdminAuth('session.clear_cookie', {
