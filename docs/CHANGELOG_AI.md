@@ -1,6 +1,24 @@
 # AI Development Changelog
 
 ### 2026-06-26 - Codex
+**Summary:** Phase 14.1 completed. Added public release checklist docs and release scan tooling.
+
+**Scope:**
+- Added English and Chinese release checklist docs for maintainers.
+- Added `scripts/security-public-scan.mjs` to scan public release files for private terms, real secret-style values, and live demo domain spread outside README.
+- Added `security:public` and `release:check` scripts.
+- Linked the release checklist from both READMEs.
+- Updated implementation plans to mark Phase 14.1 completed and keep Phase 14.2 planned as the next step.
+
+**Scope guard:**
+- No runtime business logic, `content/**` sample content, database migrations, or package dependencies were changed.
+- README may keep the live demo domain; docs and runtime should not spread it.
+
+**Verification:**
+- `pnpm security:public`
+- `pnpm release:check`
+
+### 2026-06-26 - Codex
 **Summary:** Expanded Phase 13.1 with the concrete Step 1-5 productization archive.
 
 **Scope:**

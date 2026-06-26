@@ -78,6 +78,7 @@ database mode 使用 Admin CMS 和 PostgreSQL：
 1. [快速上手](docs/GETTING_STARTED.zh-CN.md)
 2. [部署指南](docs/DEPLOYMENT.zh-CN.md)
 3. [数据库内容源说明](docs/DATABASE_CONTENT_SOURCE.zh-CN.md)
+4. [发布检查清单](docs/RELEASE_CHECKLIST.zh-CN.md)
 
 ## 文档
 
@@ -87,6 +88,7 @@ database mode 使用 Admin CMS 和 PostgreSQL：
 - [部署指南](docs/DEPLOYMENT.zh-CN.md)
 - [内容维护流程](docs/CONTENT_WORKFLOW.zh-CN.md)
 - [数据库内容源说明](docs/DATABASE_CONTENT_SOURCE.zh-CN.md)
+- [发布检查清单](docs/RELEASE_CHECKLIST.zh-CN.md)
 
 ### 开发记录
 
@@ -103,6 +105,8 @@ pnpm dev
 pnpm lint
 pnpm build
 pnpm security:admin
+pnpm security:public
+pnpm release:check
 pnpm admin:secrets
 ```
 

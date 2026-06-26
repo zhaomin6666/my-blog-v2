@@ -1,6 +1,24 @@
 # AI 变更记录中文摘要
 
 ### 2026-06-26 - Codex
+**摘要：** Phase 14.1 已完成，新增开源发布检查清单和 public release 扫描脚本。
+
+**范围：**
+- 新增中英文发布检查清单，供维护者发布开源版本前使用。
+- 新增 `scripts/security-public-scan.mjs`，扫描公开发布文件中的私有词、真实 secret-style 赋值，以及 README 之外的 live demo 域名扩散。
+- 新增 `security:public` 和 `release:check` scripts。
+- 在中英文 README 中补充 Release Checklist / 发布检查清单入口。
+- 更新中英文实施计划，将 Phase 14.1 标记为已完成，并保留 Phase 14.2 作为下一步规划。
+
+**范围守卫：**
+- 未修改 runtime 业务逻辑、`content/**` 示例内容、database migrations 或 package 依赖。
+- README 可以保留 live demo 域名；docs 和 runtime 不应扩散该真实域名。
+
+**验证：**
+- `pnpm security:public`
+- `pnpm release:check`
+
+### 2026-06-26 - Codex
 **摘要：** 补充 Phase 13.1 中 Step 1～5 的具体产品化归档内容。
 
 **范围：**

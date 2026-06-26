@@ -3,7 +3,7 @@
 ## Current Status
 - Phase 1 through Phase 12 are completed.
 - Phase 13 is completed: open-source productization cleanup, covering the Step 1-8 cleanup work after the production CMS switch.
-- The next phase is Phase 14: open-source onboarding and release tooling.
+- Phase 14 is in progress: open-source onboarding and release tooling.
 - Phase 15 is planned as a follow-up operations and optional configuration enhancement phase.
 
 ## Phase 1: Project Foundation & OS Shell ✅ COMPLETED
@@ -1203,19 +1203,23 @@
 - Confirmed follow-up work should move into Phase 14 and Phase 15.
 - No standalone Phase 13 productization document was added.
 
-## Phase 14: Open-source Onboarding And Release Tooling PLANNED
+## Phase 14: Open-source Onboarding And Release Tooling IN PROGRESS
 - Goal: make sure a new user can clone the project and complete local setup, file mode usage, database mode initialization, deployment checks, and release checks.
 - Phase 14 focuses on first-use experience and release tooling, not broad feature expansion.
 
-### Phase 14.1: Release Checklist And Scan Scripts PLANNED
-- Add or organize the release checklist.
-- Require these checks before release:
+### Phase 14.1: Release Checklist And Scan Scripts COMPLETED
+- Added `docs/RELEASE_CHECKLIST.md` and `docs/RELEASE_CHECKLIST.zh-CN.md`.
+- Added `scripts/security-public-scan.mjs` for public release file scanning.
+- Added `pnpm security:public`.
+- Added `pnpm release:check`.
+- Required checks before release:
   - `pnpm lint`
   - `pnpm build`
   - `pnpm security:admin`
-  - `pnpm admin:secrets`
-- Add or document sensitive-information scan scripts.
-- Scan README, docs, runtime code, and content for real accounts, real domains, real servers, private business context, and secrets.
+  - `pnpm security:public`
+- Public release scanning covers README, docs, runtime code, database files, content files, scripts, `package.json`, and `.env.example`.
+- README may keep the live demo domain; other scanned files should not spread it.
+- No runtime business logic, `content/**` sample content, or database migrations were changed.
 
 ### Phase 14.2: File Mode First-run Validation PLANNED
 - Validate the first-run experience without PostgreSQL.

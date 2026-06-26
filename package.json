@@ -10,6 +10,8 @@
     "lint": "next lint",
     "admin:secrets": "node scripts/generate-admin-secrets.mjs",
     "security:admin": "node scripts/check-admin-auth-boundary.mjs",
+    "security:public": "node scripts/security-public-scan.mjs",
+    "release:check": "pnpm lint && pnpm build && pnpm security:admin && pnpm security:public",
     "test": "vitest run",
     "test:watch": "vitest"
   },

@@ -78,6 +78,7 @@ Recommended reading order:
 1. [Getting Started](docs/GETTING_STARTED.md)
 2. [Deployment](docs/DEPLOYMENT.md)
 3. [Database Content Source](docs/DATABASE_CONTENT_SOURCE.md)
+4. [Release Checklist](docs/RELEASE_CHECKLIST.md)
 
 ## Documentation
 
@@ -87,6 +88,7 @@ Recommended reading order:
 - [Deployment](docs/DEPLOYMENT.md)
 - [Content Workflow](docs/CONTENT_WORKFLOW.md)
 - [Database Content Source](docs/DATABASE_CONTENT_SOURCE.md)
+- [Release Checklist](docs/RELEASE_CHECKLIST.md)
 
 ### Development Notes
 
@@ -103,6 +105,8 @@ pnpm dev
 pnpm lint
 pnpm build
 pnpm security:admin
+pnpm security:public
+pnpm release:check
 pnpm admin:secrets
 ```
 

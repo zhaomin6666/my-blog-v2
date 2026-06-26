@@ -11,7 +11,7 @@
 - Phase 11 已完成：Admin / CMS 架构与实施完成最终验收，覆盖 Admin Auth、Blog / Projects / Hero / Profile / Contact / Stack Admin、Markdown Import / Export、soft delete、file mode、database mode、Agent Demo sources、sitemap / RSS、docs / env / deployment checklist。
 - Phase 12 已完成：生产环境已从 file 内容源逐步切换到 PostgreSQL-backed database mode，Blog、Projects、Hero / Profile / Contact / Stack 已通过 Admin / database 维护，最终生产内容源进入 `CONTENT_SOURCE=database`。
 - Phase 13 已完成：开源产品化收口，覆盖 Phase 12 之后的 Step 1～8。
-- 下一阶段是 Phase 14：开源首次使用体验与发布工具。
+- Phase 14 已进入进行中：开源首次使用体验与发布工具。
 - Phase 15 为后续运维与可配置能力增强。
 - 当前生产地址：`https://example.com`。
 - 当前发布方式：Linux server Linux production server + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
@@ -806,23 +806,27 @@
 - 确认后续工作进入 Phase 14 / Phase 15。
 - 未新增独立 Phase 13 产品化收口文档。
 
-## Phase 14：开源首次使用体验与发布工具 - 规划中
+## Phase 14：开源首次使用体验与发布工具 - 进行中
 
 目标：
 
 - 让陌生用户 clone 项目后，可以顺利完成本地运行、file mode 使用、database mode 初始化、部署和 release 检查。
 - Phase 14 聚焦首次使用体验和发布工具，不做大规模功能扩展。
 
-### Phase 14.1：Release Checklist And Scan Scripts - 规划中
+### Phase 14.1：Release Checklist And Scan Scripts - 已完成
 
-- 增加或整理发布检查清单。
-- 明确必须运行：
+- 新增 `docs/RELEASE_CHECKLIST.md` 和 `docs/RELEASE_CHECKLIST.zh-CN.md`。
+- 新增 `scripts/security-public-scan.mjs`，用于公开发布文件扫描。
+- 新增 `pnpm security:public`。
+- 新增 `pnpm release:check`。
+- 明确发布前必须运行：
   - `pnpm lint`
   - `pnpm build`
   - `pnpm security:admin`
-  - `pnpm admin:secrets`
-- 增加或文档化敏感信息扫描脚本。
-- 扫描 README / docs / runtime / content 中的真实账号、真实域名、真实服务器、真实业务经历和 secret。
+  - `pnpm security:public`
+- public release scan 覆盖 README、docs、runtime code、database、content、scripts、`package.json` 和 `.env.example`。
+- README 可以保留 live demo 域名；其他扫描文件不应扩散该真实域名。
+- 未修改 runtime 业务逻辑、`content/**` 示例内容或 database migrations。
 
 ### Phase 14.2：File Mode First-run Validation - 规划中
 
