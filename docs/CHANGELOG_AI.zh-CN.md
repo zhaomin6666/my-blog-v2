@@ -1,5 +1,31 @@
 # AI 变更记录中文摘要
 
+### 2026-06-26 - Codex
+**摘要：** Step 8 已完成，整理开源文档信息架构，并按当前 AI Native Portfolio CMS 定位重写 README。
+
+**范围：**
+- 重写 `README.md`，作为 GitHub 项目首页，说明 file/database 双模式、Admin CMS 路由、部署入口和文档分组。
+- 新增 `README.zh-CN.md`，结构与英文 README 对齐，并优先链接中文文档。
+- 新增 `docs/GETTING_STARTED.md` 和 `docs/GETTING_STARTED.zh-CN.md`，作为用户首次运行和部署决策入口。
+- 收敛 `docs/DEPLOYMENT.md` 和 `docs/DEPLOYMENT.zh-CN.md`，覆盖 file mode、database mode、`NEXT_PUBLIC_SITE_URL`、Admin auth、PostgreSQL、Docker、Nginx 和生产检查。
+- 收敛 `docs/CONTENT_WORKFLOW.md` 和 `docs/CONTENT_WORKFLOW.zh-CN.md`，保持为用户侧内容维护指南。
+- 收敛 `docs/DATABASE_CONTENT_SOURCE.md` 和 `docs/DATABASE_CONTENT_SOURCE.zh-CN.md`，明确当前 database mode 覆盖范围、Admin 路由和数据表对应关系。
+- 新增 `docs/README.md`，并刷新 `docs/README.zh-CN.md`，按用户文档和开发记录分组。
+
+**修正的过时部署说明：**
+- 第一层部署文档已匹配当前 `docker-compose.yml`：service 为 `personal-dev-os`，外部网络为 `web-proxy`，Nginx upstream 为 `http://personal-dev-os:3000`。
+- 从用户部署文档移除冗长生产归档和 Agent Demo 观测 SQL，改为链接到高级 runbook。
+
+**文档分层：**
+- 用户与部署文档：README、Getting Started、Deployment、Content Workflow、Database Content Source、docs index。
+- 开发记录：Implementation Plan、AI Changelog、Admin CMS Design、Admin Content Transfer、Production CMS Deployment、Production CMS Switch Checklist、Agent Demo Architecture、Development Rules、Admin Security Audit、PostgreSQL Backup / Restore。
+
+**范围守卫：**
+- 未修改 runtime code、`content/**`、database migrations 或 package 依赖。
+
+**验证：**
+- 本轮最终检查待执行：`pnpm lint`、`pnpm build`、`pnpm security:admin` 和 docs 关键词扫描。
+
 ### 2026-06-25 - Codex
 **摘要：** Phase 12 已开始，Phase 12.1 Production CMS Preflight 已完成，新增生产 CMS 切换执行清单。
 
@@ -848,7 +874,7 @@ Codex 为 docs 添加中文工作文档。
 
 - 部署手册改写为中文发布操作手册。
 - 明确 `NEXT_PUBLIC_SITE_URL` 同时影响构建期和运行期。
-- 明确当前 Docker Compose 使用 `app-proxy` 外部网络，Nginx 应代理到 `app:3000`。
+- 记录了当时发布路径中的 Docker Compose 拓扑；后续部署文档已按当前仓库中的 Compose service 和代理网络名称修正。
 - 补充每次发布、无缓存构建、日志、Nginx 重载、证书续期、线上验证和回滚流程。
 
 ## 当前状态

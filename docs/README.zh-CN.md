@@ -1,44 +1,42 @@
-# docs 中文文档入口
+# 文档索引
 
-本目录已添加中文工作文档，方便后续开发、发布和 AI 协作时直接阅读。
+docs 目录里的文档分成两类：一类给运行、配置、部署项目的人看；另一类记录项目工程演进和设计决策。
 
-## 当前阶段
+## 用户与部署文档
 
-- Phase 1 到 Phase 9 已完成。
-- Phase 9 Blog System Enhancement 已收口：Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 均已完成。
-- Phase 10 AI Agent Demo Integration 已完成第一版公开验收：`/agent-demo`、`POST /api/agent-demo`、只读公开知识边界、限流、超时、日志、部署说明和中英文架构文档均已收口。
+如果你刚克隆项目，想先跑起来或部署上线，从这里开始：
 
-## 优先阅读
+- [快速上手](GETTING_STARTED.zh-CN.md)
+- [部署指南](DEPLOYMENT.zh-CN.md)
+- [内容维护流程](CONTENT_WORKFLOW.zh-CN.md)
+- [数据库内容源说明](DATABASE_CONTENT_SOURCE.zh-CN.md)
 
-- [内容发布流程](CONTENT_WORKFLOW.zh-CN.md) / [Content Workflow](CONTENT_WORKFLOW.md)：维护 Blog、Projects、Profile 三类文件型内容源时优先阅读。
-- [部署手册](DEPLOYMENT.zh-CN.md)：每次发布前优先看这份，特别注意 `NEXT_PUBLIC_SITE_URL` 的构建期和运行期要求。
-- [Agent Demo 架构说明](AGENT_DEMO_ARCHITECTURE.zh-CN.md) / [Agent Demo Architecture](AGENT_DEMO_ARCHITECTURE.md)：维护 `/agent-demo`、模型配置、安全边界、trace / sources 契约和生产验收时优先阅读。
-- [开发规则](DEVELOPMENT_RULES.zh-CN.md)：编码、架构、博客、SEO、生产维护规则。
-- [设计简报](DESIGN_BRIEF.zh-CN.md)：Personal Developer OS 的产品概念和设计底线。
-- [实施计划](IMPLEMENTATION_PLAN.zh-CN.md)：项目阶段进度和当前状态。
-- [AI 变更记录中文摘要](CHANGELOG_AI.zh-CN.md)：项目历史的中文速览。
+## 开发记录
 
-## 发布时最重要的三件事
+如果你想了解项目是怎么演进到当前版本的，或者某个功能为什么这样设计，看这些文档：
 
-1. `NEXT_PUBLIC_SITE_URL` 必须是生产域名：
+- [实施计划](IMPLEMENTATION_PLAN.zh-CN.md)
+- [AI 变更记录](CHANGELOG_AI.zh-CN.md)
+- [Admin CMS 设计](ADMIN_CMS_DESIGN.zh-CN.md)
+- [Admin 内容导入导出](ADMIN_CONTENT_TRANSFER.zh-CN.md)
+- [Production CMS 部署手册](PRODUCTION_CMS_DEPLOYMENT.zh-CN.md)
+- [Production CMS 切换清单](PRODUCTION_CMS_SWITCH_CHECKLIST.zh-CN.md)
+- [Agent Demo 架构说明](AGENT_DEMO_ARCHITECTURE.zh-CN.md)
+- [开发规则](DEVELOPMENT_RULES.zh-CN.md)
+- [Admin Security Audit](ADMIN_SECURITY_AUDIT.md)
+- [PostgreSQL 备份与恢复](POSTGRES_BACKUP_RESTORE.zh-CN.md)
 
-```text
-NEXT_PUBLIC_SITE_URL=https://oli6666.top
-```
+## 推荐阅读顺序
 
-2. 更新生产环境时使用：
+简单 file-mode 部署：
 
-```bash
-cd /opt/apps/personal-dev-os
-git pull
-docker compose --env-file .env.production up -d --build
-```
+1. [快速上手](GETTING_STARTED.zh-CN.md)
+2. [内容维护流程](CONTENT_WORKFLOW.zh-CN.md)
+3. [部署指南](DEPLOYMENT.zh-CN.md)
 
-3. 如果改过域名、SEO、sitemap、RSS 或 `.env.production`，使用无缓存构建：
+启用 Admin CMS 和 PostgreSQL：
 
-```bash
-docker compose --env-file .env.production build --no-cache
-docker compose --env-file .env.production up -d
-```
-
-只改 `.env.production` 但不重建镜像，不会刷新 Next.js 构建期内联的公开变量。
+1. [快速上手](GETTING_STARTED.zh-CN.md)
+2. [数据库内容源说明](DATABASE_CONTENT_SOURCE.zh-CN.md)
+3. [部署指南](DEPLOYMENT.zh-CN.md)
+4. [Production CMS 部署手册](PRODUCTION_CMS_DEPLOYMENT.zh-CN.md)

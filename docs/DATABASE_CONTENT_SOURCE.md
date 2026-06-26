@@ -1,47 +1,48 @@
 # Database Content Source
 
-Phase 11.3 adds the foundation for optional PostgreSQL-backed content while
-keeping file content as the default production-safe source.
+This is a user-facing guide for database mode. If you only use file mode, you do not need PostgreSQL and can keep all content source variables set to `file`.
 
-## Goal
+Database mode lets the public site read content from PostgreSQL through the same service layer used by file mode. Pages and client components do not query PostgreSQL directly.
 
-The public site still reads content through services:
+## When To Use Database Mode
 
-```text
-SiteConfigService -> SiteConfigRepository -> FileSiteConfigRepository | DatabaseSiteConfigRepository
-HomepageService   -> HomepageRepository   -> FileHomepageRepository   | DatabaseHomepageRepository
-PageConfigService -> PageConfigRepository -> FilePageConfigRepository | DatabasePageConfigRepository
-BlogService       -> BlogRepository       -> FileBlogRepository       | DatabaseBlogRepository
-ProjectService    -> ProjectRepository    -> FileProjectRepository    | DatabaseProjectRepository
-ProfileService    -> ProfileRepository    -> FileProfileRepository    | DatabaseProfileRepository
-```
+Use database mode when you want to manage content through the Admin CMS:
 
-Pages, sitemap, RSS, Blog Search, Tags, Series, Projects, Profile, and Agent
-Demo continue to call the service layer. They do not query PostgreSQL directly.
+- Site identity and default SEO.
+- Homepage Hero.
+- Blog and Projects page config.
+- Profile.
+- Stack.
+- Contact channels.
+- Blog posts and series.
+- Project case studies.
+
+Use file mode when you prefer editing `content/**` files and deploying from Git.
 
 ## Environment Variables
 
 ```text
-PERSONAL_SITE_DATABASE_URL=
+PERSONAL_SITE_DATABASE_URL=<postgres-connection-url>
 CONTENT_SOURCE=file
-BLOG_CONTENT_SOURCE=
-PROJECT_CONTENT_SOURCE=
-PROFILE_CONTENT_SOURCE=
+BLOG_CONTENT_SOURCE=file
+PROJECT_CONTENT_SOURCE=file
+PROFILE_CONTENT_SOURCE=file
+```
+
+Allowed content source values:
+
+```text
+file
+database
 ```
 
 Source precedence:
 
-1. Domain-specific source, such as `BLOG_CONTENT_SOURCE`.
-2. Global `CONTENT_SOURCE`.
+1. Domain-specific source: `BLOG_CONTENT_SOURCE`, `PROJECT_CONTENT_SOURCE`, or `PROFILE_CONTENT_SOURCE`.
+2. Global source: `CONTENT_SOURCE`.
 3. Default: `file`.
 
-Allowed source values are `file` and `database`.
-
-Examples:
-
-```text
-CONTENT_SOURCE=file
-```
+Switch one domain at a time:
 
 ```text
 CONTENT_SOURCE=file
@@ -50,362 +51,190 @@ PROJECT_CONTENT_SOURCE=file
 PROFILE_CONTENT_SOURCE=file
 ```
 
-When a source is set to `database`, `PERSONAL_SITE_DATABASE_URL` must be
-configured. File mode does not require a database connection and should continue
-to build normally without PostgreSQL.
+Switch everything to database mode:
+
+```text
+CONTENT_SOURCE=database
+BLOG_CONTENT_SOURCE=database
+PROJECT_CONTENT_SOURCE=database
+PROFILE_CONTENT_SOURCE=database
+```
+
+When any active source is `database`, `PERSONAL_SITE_DATABASE_URL` must be configured.
+
+## Current Database Coverage
+
+Database mode currently covers these PostgreSQL tables:
+
+- `site_configs`
+- `homepage_sections`
+- `page_configs`
+- `profile_pages`
+- `contact_channels`
+- `system_stack_groups`
+- `system_stack_items`
+- `blog_posts`
+- `blog_series`
+- `projects`
+
+## Admin Route To Table Map
+
+```text
+/admin/site      -> site_configs
+/admin/hero      -> homepage_sections
+/admin/pages     -> page_configs
+/admin/profile   -> profile_pages
+/admin/stack     -> system_stack_groups / system_stack_items
+/admin/contact   -> contact_channels
+/admin/blog      -> blog_posts / blog_series
+/admin/projects  -> projects
+```
+
+## Public Service Boundaries
+
+The public site still reads through services:
+
+```text
+SiteConfigService -> FileSiteConfigRepository | DatabaseSiteConfigRepository
+HomepageService   -> FileHomepageRepository   | DatabaseHomepageRepository
+PageConfigService -> FilePageConfigRepository | DatabasePageConfigRepository
+BlogService       -> FileBlogRepository       | DatabaseBlogRepository
+ProjectService    -> FileProjectRepository    | DatabaseProjectRepository
+ProfileService    -> FileProfileRepository    | DatabaseProfileRepository
+```
+
+Public pages, sitemap, RSS, search, tags, series, projects, profile sections, and Agent Demo call the service layer. They do not call PostgreSQL directly.
 
 ## Migration
 
-Migration files:
+Migrations are not executed automatically. The app does not run them during `pnpm build` or on startup.
 
-```text
-database/migrations/001_create_cms_tables.sql
-database/migrations/002_add_translation_keys_to_contact_and_stack.sql
-database/migrations/003_reset_contact_channels_single_source.sql
-database/migrations/004_reset_system_stack_single_source.sql
-database/migrations/005_create_page_configs.sql
-database/migrations/006_create_site_configs.sql
-```
-
-Migrations are not executed automatically. Run them manually against the
-dedicated personal-site database when database-mode testing begins:
+Run migration files manually and in numeric order:
 
 ```bash
 psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/001_create_cms_tables.sql
 psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/002_add_translation_keys_to_contact_and_stack.sql
 psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/003_reset_contact_channels_single_source.sql
 psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/004_reset_system_stack_single_source.sql
-database/migrations/005_create_page_configs.sql
-database/migrations/006_create_site_configs.sql
+psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/005_create_page_configs.sql
+psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/006_create_site_configs.sql
 ```
 
 Production rules:
 
-- Migration filenames must use increasing numeric prefixes.
-- Append new migration files; do not modify migrations that have already run in
-  production.
 - Back up PostgreSQL before running migrations.
+- Run migrations against the dedicated project database.
+- Append new migration files instead of editing old ones that may have run in production.
 - Record migration execution in release notes or an operations log.
-- `pnpm build` must not require a database connection.
-- The app must not run migrations automatically at startup.
+- Keep `.env.production`, database URLs, dump files, and credentials out of Git.
 
-See `docs/PRODUCTION_CMS_DEPLOYMENT.md` for the production migration workflow.
+See [PostgreSQL Backup / Restore](POSTGRES_BACKUP_RESTORE.md) for backup details.
 
-## Tables
+## Public Read Rules
 
-The MVP schema includes:
+Blog:
 
-- `blog_posts`
-- `blog_series`
-- `projects`
-- `profile_pages`
-- `contact_channels`
-- `system_stack_groups`
-- `system_stack_items`
-- `homepage_sections`
-- `page_configs`
-- `site_configs`
+- Public reads use `blog_posts`.
+- `published` posts are public.
+- `draft` posts are Admin-only.
+- Soft-deleted rows are excluded.
+- Blog series data uses `blog_series` when present.
+- RSS remains blog-only.
 
-The migration also adds common indexes for public reads, including slug,
-published/status, language, display order, soft delete, series, and blog tag GIN
-indexes. All MVP tables with mutable public content have an `updated_at` trigger.
+Projects:
 
-## Repository Switching
+- Public reads use `projects`.
+- `published = true` projects are public.
+- Homepage projects also require `featured = true`.
+- Soft-deleted rows are excluded.
+- `/projects/[slug]` supports database-created published projects.
 
-Repository selection lives in `lib/content/contentSource.ts` and the pure env
-resolver lives in `lib/content/contentSourceConfig.ts`.
+Profile, Contact, and Stack:
 
-Factory methods:
+- Profile uses `profile_pages`.
+- Contact uses `contact_channels`.
+- Stack uses `system_stack_groups` and `system_stack_items`.
+- Contact and Stack are global datasets, not per-language row pairs.
+- Empty database results render empty states where supported; they do not automatically fall back to files.
 
-- `getBlogRepository()`
-- `getProjectRepository()`
-- `getProfileRepository()`
+Site, Homepage, and Pages:
 
-The service singletons use those factories:
-
-- `blogService`
-- `projectService`
-- `profileService`
-
-Public route code remains unchanged at the service boundary.
-
-## File Fallback
-
-Default mode remains `file`.
-
-File mode:
-
-- Reads from `content/site`, `content/homepage`, `content/pages`, `content/profile`, `content/blog`, and `content/projects`.
-- Does not require `PERSONAL_SITE_DATABASE_URL`.
-- Does not create a PostgreSQL Pool.
-- Keeps current public URLs and rendering behavior.
-
-
-## Site / Homepage / Page Config Sources
-
-Step 6A through Step 6B-4B moved public site copy out of runtime code and into explicit content/config sources.
-
-File mode:
-
-```text
-content/site      -> Site Identity / default SEO
-content/homepage  -> Homepage Hero
-content/pages     -> Blog / Projects page config
-```
-
-Database mode:
-
-```text
-/admin/site   -> site_configs
-/admin/hero   -> homepage_sections
-/admin/pages  -> page_configs
-```
-
-Important boundaries:
-
-- `siteUrl` is not Admin-managed content. It remains deployment configuration from `NEXT_PUBLIC_SITE_URL`.
-- `translations.ts` owns UI labels and prompts only; it does not own Hero, page-level copy, Site Identity, or default SEO content.
-- Missing Hero content should surface as a configuration-missing state instead of silently falling back to old translation keys.
-
-## Blog Admin Writes
-
-Phase 11.5 adds Blog Admin writes to PostgreSQL `blog_posts`.
-
-Important boundaries:
-
-- `/admin/blog` manages database content only.
-- Public Blog pages read database posts only when `BLOG_CONTENT_SOURCE=database`
-  or `CONTENT_SOURCE=database`.
-- If public pages still run in file mode, newly created database posts will not
-  appear on `/blog`; this is expected.
-- The phase does not automatically switch production content source.
-- The phase does not import old Markdown files from `content/blog`.
-- The phase does not delete or overwrite file-based content.
-
-Status behavior:
-
-- `draft` database posts are visible in Admin, but excluded from public
-  published-only queries.
-- `published` database posts are included by `DatabaseBlogRepository` public
-  reads when database mode is active.
-- Unpublish changes the post back to `draft`, so public database-mode reads stop
-  returning it.
-- Soft-deleted rows remain excluded from both Admin list results and public
-  reads.
-- `/admin/blog` Delete sets `blog_posts.deleted_at = now()` only. It does not
-  run `DELETE FROM blog_posts`, does not remove Markdown files, and does not add
-  recycle-bin, restore, or bulk-delete flows in this phase.
-
-Admin save, publish, unpublish, and soft-delete actions call `revalidatePath()`
-for `/blog`, Blog Search, Tags, Series, sitemap, RSS, and the affected article
-path when the slug is known. In file mode this does not make database posts
-public; it only keeps the cache behavior ready for database mode.
-
-## Hero / Profile Admin Writes
-
-Phase 11.6 adds Homepage / Profile Admin writes to PostgreSQL.
-
-Important boundaries:
-
-- `/admin/hero` manages homepage Hero content in `homepage_sections`.
-- `/admin/profile` manages `profile_pages` with `key = 'profile'`.
-- `/admin/contact` manages `contact_channels`.
-- `/admin/stack` manages `system_stack_groups` and `system_stack_items`.
-- Public pages still read through services. Admin pages and Client Components do
-  not query PostgreSQL directly.
-- The phase does not migrate, delete, import, or overwrite `content/profile`.
-- Content Import / Export remains deferred.
-
-Public database-mode behavior:
-
-- `profile_pages key='profile'` feeds the public Profile section through
-  `ProfileService`.
-- Profile Admin is aligned to the homepage About section fields that are
-  actually rendered; unused generic metadata is no longer exposed in the
-  visible editor.
-- `contact_channels` feeds the public Contact section directly in database mode.
-- `system_stack_groups` and `system_stack_items` feed the public Stack section,
-  ordered by `display_order`.
-- `homepage_sections.visible = true` rows feed the lightweight
-  `HomepageService`, ordered by `display_order`.
-- The Hero mapping now reads only the `hero` key for the Main App Hero title /
-  subtitle. `overview` and other legacy keys may remain in the table, but they
-  are not used by the public homepage Hero.
-- Homepage logs continue to come from published Blog content through
-  `BlogService`, not from `homepage_sections`.
-- Contact is now a single global dataset and no longer depends on `lang` or
-  `profile_pages('contact-channels')`.
-- Stack is now a single global dataset and no longer depends on `lang`,
-  `translation_key`, or `profile_pages('system-stack')`.
-- Soft-deleted Contact and Stack rows are excluded from public reads.
-
-Admin save actions revalidate `/`, `/agent-demo`, `/projects/ai-agent-demo`,
-and `sitemap.xml` so database-mode public content can refresh after edits. File
-mode remains independent from these database rows.
-
-## Projects Admin Writes
-
-Phase 11.7 adds author-only Projects Admin writes to PostgreSQL `projects`.
-
-Admin routes:
-
-- `/admin/projects`
-- `/admin/projects/new`
-- `/admin/projects/[id]`
-
-Important boundaries:
-
-- Projects Admin writes database rows only. It does not read, migrate, delete,
-  overwrite, import, or export `content/projects`.
-- Public project pages still read through `ProjectService`.
-- File mode continues reading `content/projects` through `FileProjectRepository`.
-- Database mode reads PostgreSQL through `DatabaseProjectRepository` only when
-  `PROJECT_CONTENT_SOURCE=database` or `CONTENT_SOURCE=database`.
-- Database mode does not automatically fall back to file content.
-
-Public database-mode project rules:
-
-- `published = true` and `deleted_at is null` projects enter `/projects`,
-  `/projects/[slug]`, sitemap, and Agent Demo public project retrieval.
-- `published = false` projects are excluded from all public project reads.
-- Homepage Featured Projects require `published = true`, `featured = true`, and
-  `deleted_at is null`.
-- Project ordering uses `display_order asc` with recent rows as a secondary
-  ordering signal.
-- `/projects/[slug]` allows dynamic params so newly published database projects
-  can be served after Admin saves.
-
-Admin save, publish, and unpublish actions revalidate `/`, `/projects`,
-`/sitemap.xml`, `/agent-demo`, and the affected `/projects/[slug]` path when
-known.
-
-## Database Mode Notes
-
-Database repositories are read-only for Phase 11.3.
-
-Current status:
-
-- `DatabaseBlogRepository`: implemented for published/draft reads, tags, series,
-  search-compatible metadata, RSS, sitemap, and article lookup.
-- `DatabaseProjectRepository`: implemented for published/featured/order reads and
-  project detail lookup.
-- `DatabaseProfileRepository`: implemented for public profile, visible contact
-  channels, and system stack reads.
-
-Database mode excludes soft-deleted rows and keeps public reads published-only or
-visible-only.
+- Site identity and default SEO use `site_configs`.
+- Homepage Hero uses the `hero` row in `homepage_sections`.
+- Blog and Projects page copy uses `page_configs`.
+- `NEXT_PUBLIC_SITE_URL` is still deployment configuration, not Admin-managed content.
 
 ## Empty Database Behavior
 
-An empty database after running the migration is a valid state, not a content
-source failure.
+An empty database after migrations is valid.
 
-- Blog posts, tags, and series return empty collections. Blog pages render their
-  existing empty states; RSS contains channel metadata without article items;
-  sitemap contains no post, tag, or series detail URLs.
-- Projects return empty collections. Homepage and `/projects` render lightweight
-  empty states; unknown project slugs continue to use `notFound()`.
-- Profile, Contact Channels, and System Stack return a centralized safe empty
-  `PublicProfile` object in database mode, allowing the homepage to render empty
-  states without fabricated content.
-- Database mode does not automatically fall back to Markdown files when queries
-  succeed with no rows.
+- Blog and Projects can render empty states.
+- RSS can render channel metadata without items.
+- Sitemap excludes missing posts and projects.
+- Profile-related sections use safe empty data in database mode where the UI supports it.
 
-Only successful queries with no matching content use empty results. Missing
-`PERSONAL_SITE_DATABASE_URL`, connection failures, missing tables, invalid SQL,
-and schema mismatches still throw explicit errors. File mode keeps its existing
-strict profile validation and does not require or initialize PostgreSQL.
+These cases are still errors and should not be hidden:
 
-The Phase 11.3-fix smoke test applies the migration to an empty local PostgreSQL
-database and verifies both `CONTENT_SOURCE=database` and an invalid-database-URL
-`CONTENT_SOURCE=file` production build.
-
-## Production Recommendations
-
-Use an isolated PostgreSQL setup for the personal site:
-
-- Dedicated database.
-- Dedicated database user.
-- Least-privilege permissions.
-- Do not reuse the `another application` business database.
-- Do not commit real connection strings.
-- Keep `.env.production` outside Git.
-
-## Backups
-
-Recommended backup baseline:
-
-- Run scheduled `pg_dump`.
-- Store backups outside the repository.
-- Restrict backup directory permissions.
-- Test restore on a non-production database.
-- Document restore commands before relying on the database as the primary source.
-
-The full backup and restore runbook is in `docs/POSTGRES_BACKUP_RESTORE.md`.
-
-## Production Source Switch And Rollback
-
-File mode remains the safe default:
-
-```text
-CONTENT_SOURCE=file
-BLOG_CONTENT_SOURCE=file
-PROJECT_CONTENT_SOURCE=file
-PROFILE_CONTENT_SOURCE=file
-```
-
-Database mode can be enabled gradually:
-
-```text
-CONTENT_SOURCE=file
-BLOG_CONTENT_SOURCE=database
-PROJECT_CONTENT_SOURCE=file
-PROFILE_CONTENT_SOURCE=file
-```
-
-Before switching a production domain to `database`, confirm PostgreSQL
-connectivity, migrations, backup, Admin content review, local or staging build,
-and `.env.production` values. After switching, rebuild or restart and verify
-public pages, sitemap, RSS, and Agent Demo sources.
-
-Rollback to file mode uses:
-
-```text
-CONTENT_SOURCE=file
-BLOG_CONTENT_SOURCE=file
-PROJECT_CONTENT_SOURCE=file
-PROFILE_CONTENT_SOURCE=file
-```
-
-Rollback does not delete database rows. Public pages return to the old
-`content/blog`, `content/projects`, and `content/profile` files. See
-`docs/PRODUCTION_CMS_DEPLOYMENT.md` for the detailed checklist.
+- Missing `PERSONAL_SITE_DATABASE_URL` when database mode is active.
+- Connection failure.
+- Missing tables.
+- Invalid SQL.
+- Schema mismatch.
 
 ## Admin Markdown Import / Export
 
-Phase 11.8 added database-backed Markdown import/export. Phase 11.8-fix moved
-the workflow into the matching content admin pages and removed standalone
-`/admin/content` access.
+Blog and Project Markdown transfer lives inside the matching Admin pages:
 
-- Blog Posts can be imported from `.md` files into PostgreSQL `blog_posts`.
-- Projects can be imported from `.md` files into PostgreSQL `projects`.
-- Blog import/export now lives in `/admin/blog`.
-- Project import/export now lives in `/admin/projects`.
-- Imports support `dry-run`, `create_only`, `update_by_slug`, and
-  `create_or_update`.
-- Dry-run is the default and does not write to the database.
-- Non-dry-run imports require explicit Admin confirmation.
-- Blog Posts and Projects can be exported as single Markdown files or bulk zip
-  downloads from active database rows.
-- Deleted Blog rows are excluded from ordinary Admin lists, public Blog, RSS,
-  sitemap, and Markdown export scopes because those flows read active rows only.
+```text
+/admin/blog
+/admin/projects
+```
 
-Important boundaries:
+Supported:
 
-- No local import/export scripts were added.
-- No `pnpm content:*` commands were added.
-- `content/blog` and `content/projects` are not deleted, migrated, or
-  overwritten.
-- `CONTENT_SOURCE`, `BLOG_CONTENT_SOURCE`, and `PROJECT_CONTENT_SOURCE` are not
-  changed automatically.
-- Profile, Contact, and Stack import/export remain out of scope.
+- Import `.md` files into PostgreSQL.
+- Dry-run preview by default.
+- `create_only`, `update_by_slug`, and `create_or_update` import modes.
+- Single-row Markdown export.
+- Bulk zip export for active database rows.
+
+Limits:
+
+- `.md` files only.
+- 20 files per import request.
+- 1MB per file.
+- 100 active records per bulk export.
+
+Not included:
+
+- No automatic import from `content/**`.
+- No automatic content source switching.
+- No deletion or overwrite of local Markdown files.
+- No Profile, Contact, or Stack Markdown import/export.
+
+See [Admin Content Transfer](ADMIN_CONTENT_TRANSFER.md) for the detailed transfer workflow.
+
+## Production Switch And Rollback
+
+Recommended production switch order:
+
+1. Keep public sources in file mode.
+2. Configure PostgreSQL and Admin auth.
+3. Run migrations manually.
+4. Review Admin content.
+5. Switch one domain source to `database`.
+6. Rebuild or restart.
+7. Verify public pages, sitemap, RSS, and Agent Demo sources.
+
+Rollback to file mode:
+
+```text
+CONTENT_SOURCE=file
+BLOG_CONTENT_SOURCE=file
+PROJECT_CONTENT_SOURCE=file
+PROFILE_CONTENT_SOURCE=file
+```
+
+Rollback does not delete database rows. The public site returns to reading `content/**` files.
+
+For the longer production runbook, see [Production CMS Deployment](PRODUCTION_CMS_DEPLOYMENT.md).

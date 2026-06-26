@@ -1,11 +1,37 @@
 # AI Development Changelog
 
 ### 2026-06-26 - Codex
+**Summary:** Step 8 completed. Cleaned up documentation IA and rewrote the project README for the current AI Native Portfolio CMS positioning.
+
+**Scope:**
+- Rewrote `README.md` as the GitHub-facing project entry with current file/database content modes, Admin CMS routes, deployment links, and grouped documentation.
+- Added `README.zh-CN.md` with matching Chinese project positioning and Chinese-first doc links.
+- Added `docs/GETTING_STARTED.md` and `docs/GETTING_STARTED.zh-CN.md` as the first user setup and deployment decision entry.
+- Reworked `docs/DEPLOYMENT.md` and `docs/DEPLOYMENT.zh-CN.md` into concise deployment guides covering file mode, database mode, `NEXT_PUBLIC_SITE_URL`, Admin auth, PostgreSQL, Docker, Nginx, and production checks.
+- Reworked `docs/CONTENT_WORKFLOW.md` and `docs/CONTENT_WORKFLOW.zh-CN.md` as user-facing content maintenance guides.
+- Reworked `docs/DATABASE_CONTENT_SOURCE.md` and `docs/DATABASE_CONTENT_SOURCE.zh-CN.md` as database-mode usage guides with current Admin route and table coverage.
+- Added `docs/README.md` and refreshed `docs/README.zh-CN.md` as documentation indexes split into user-facing docs and development notes.
+
+**Outdated deployment notes corrected:**
+- Updated first-layer deployment docs to match the current `docker-compose.yml`: service `personal-dev-os`, external network `web-proxy`, and Nginx upstream `http://personal-dev-os:3000`.
+- Removed long production archive and Agent Demo observability SQL from the user-facing deployment guide, linking to advanced runbooks instead.
+
+**Documentation IA:**
+- User-facing docs: README, Getting Started, Deployment, Content Workflow, Database Content Source, and docs index.
+- Development notes: Implementation Plan, AI Changelog, Admin CMS Design, Admin Content Transfer, Production CMS Deployment, Production CMS Switch Checklist, Agent Demo Architecture, Development Rules, Admin Security Audit, and PostgreSQL Backup / Restore.
+
+**Scope guard:**
+- No runtime code, `content/**`, database migrations, or package dependencies were changed.
+
+**Verification:**
+- Pending final checks in this pass: `pnpm lint`, `pnpm build`, `pnpm security:admin`, and docs keyword scan.
+
+### 2026-06-26 - Codex
 **Summary:** Step 7A completed. Sanitized public docs and backfilled Step 6A through Step 6B-5 content-source evolution records.
 
 **Scope:**
 - Sanitized docs-only references to the previous live domain, server region, server OS wording, deployment paths, backup paths, container names, and private career/business wording.
-- Kept the engineering history intact while replacing production-specific details with reusable example values such as `https://example.com`, `/srv/example-app`, `/srv/example-nginx`, `/srv/example-backups/postgres`, `app`, and `app-proxy`.
+- Kept the engineering history intact while replacing production-specific details with reusable example values such as `https://example.com`, `/srv/example-app`, `/srv/example-nginx`, and `/srv/example-backups/postgres`.
 - Backfilled Step 6A through Step 6B-5 in the changelog and implementation plans.
 - Updated content-source documentation with the current file-mode and database-mode source matrix.
 
@@ -1712,7 +1738,7 @@
 **Deployment documentation focus:**
 - Rewrote the deployment guide in Chinese as an operational release manual.
 - Highlighted that `NEXT_PUBLIC_SITE_URL` is required at both Docker build time and runtime.
-- Documented the current Docker Compose topology: app service on the external `app-proxy` network, with Nginx proxying to `app:3000`.
+- Documented the Docker Compose topology used by that release path; later documentation was corrected to match the tracked Compose service and proxy network names.
 - Added Chinese release, no-cache rebuild, log check, Nginx reload, certificate renewal, online validation, and rollback guidance.
 - Corrected the English deployment guide to match the current `docker-compose.yml` network topology.
 

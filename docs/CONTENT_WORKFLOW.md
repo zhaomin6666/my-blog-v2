@@ -1,19 +1,23 @@
 # Content Workflow
 
-This document explains how to maintain the file-based content sources for the Personal Developer OS.
+This is a user-facing content maintenance guide. It explains where content lives, how public routes are generated, and what to check before release.
 
-The current file-mode site has six content-source areas:
+For database-backed editing, see [Database Content Source](DATABASE_CONTENT_SOURCE.md).
+
+## Content Source Matrix
+
+File mode:
 
 ```text
-content/site      -> SiteConfigService    -> Site Identity / default SEO
-content/homepage  -> HomepageService      -> Homepage Hero
-content/pages     -> PageConfigService    -> Blog / Projects page config
-content/profile   -> ProfileService       -> Profile / Stack / Contact
-content/blog      -> BlogService          -> Blog posts
-content/projects  -> ProjectService       -> Project cases
+content/site      -> Site identity and default SEO
+content/homepage  -> Homepage Hero
+content/pages     -> Blog / Projects page config
+content/profile   -> Profile / Stack / Contact
+content/blog      -> Blog posts
+content/projects  -> Project case studies
 ```
 
-Database mode uses the matching Admin and PostgreSQL sources:
+Database mode:
 
 ```text
 /admin/site      -> site_configs
@@ -26,26 +30,17 @@ Database mode uses the matching Admin and PostgreSQL sources:
 /admin/projects  -> projects
 ```
 
-Keep this document close to daily publishing work. It is intentionally practical: where to put files, which frontmatter fields matter, how public routes are generated, and how to validate before release.
+## General Rules
 
-## 1. Content Architecture Overview
+- Public pages read content through services, not directly from Markdown files or PostgreSQL.
+- Public URLs come from `slug` fields, not file names.
+- Draft or unpublished content must stay out of public pages, sitemap, RSS, and metadata.
+- `NEXT_PUBLIC_SITE_URL` controls canonical, sitemap, robots, and RSS URLs.
+- `lib/translations.ts` is for UI labels, buttons, empty states, aria labels, validation messages, and command prompts. Website content belongs in content sources.
 
-Content data is separated from UI components.
+## Site, Homepage, And Page Config
 
-Pages and client components should not read Markdown files directly. Server-side services load content through repository interfaces, normalize frontmatter, filter unpublished content, and pass serializable data into pages and components.
-
-Key principles:
-
-- Content files are the current storage layer.
-- Public URLs come from `frontmatter.slug`, not from folder or file names.
-- Published-only queries power public pages, sitemap, RSS, SEO output, and Console metadata.
-- Repository interfaces should stay stable so future CMS or database implementations can replace file repositories.
-- Do not duplicate Blog, Project, or Profile data inside React components.
-
-
-### Site, Homepage, And Page Config
-
-These files own site-level and page-level copy that should not live in `lib/translations.ts`:
+File-mode files:
 
 ```text
 content/site/settings.en.md
@@ -58,15 +53,14 @@ content/pages/projects.en.md
 content/pages/projects.zh.md
 ```
 
-Rules:
+Ownership:
 
-- Site Identity and default SEO come from `content/site` in file mode or `/admin/site` in database mode.
-- `siteUrl` is deployment configuration and remains controlled by `NEXT_PUBLIC_SITE_URL`; do not edit it through Admin CMS.
-- Homepage Hero title, subtitle, and badge come from `content/homepage` in file mode or `/admin/hero` in database mode.
-- Blog and Projects page titles, subtitles, footer copy, and default metadata come from `content/pages` in file mode or `/admin/pages` in database mode.
-- `lib/translations.ts` is for UI chrome: labels, buttons, empty states, aria labels, validation messages, and command prompts. Do not put website content there.
+- `content/site`: site identity and default SEO.
+- `content/homepage`: homepage Hero title, subtitle, badge, and supporting data.
+- `content/pages`: Blog and Projects page titles, subtitles, footer copy, and default metadata.
+- `NEXT_PUBLIC_SITE_URL`: deployment URL only; do not treat it as editable content.
 
-## 2. Blog Workflow
+## Blog Posts
 
 Blog files live under:
 
@@ -77,28 +71,18 @@ content/blog
 The repository scans Markdown files recursively, so series can be organized in subdirectories:
 
 ```text
-content/blog/personal-developer-os/08-v1-review.md
-content/blog/ai-agent-learning/01-intent-classifier.md
+content/blog/my-series/01-first-post.md
 ```
 
-The public article URL is decided by `slug`:
+Public article route:
 
 ```text
 /blog/[slug]
 ```
 
-Moving a file between folders does not change the public URL as long as `slug` stays the same.
+Moving a file does not change the public route as long as `slug` stays the same.
 
-### Add A Standalone Post
-
-1. Create a Markdown file under `content/blog`.
-2. Fill in frontmatter.
-3. Write the Markdown body below the closing `---`.
-4. Set `status: "draft"` while drafting.
-5. Change to `status: "published"` only when ready.
-6. Run `pnpm lint` and `pnpm build`.
-
-Minimal example:
+Minimal post:
 
 ```md
 ---
@@ -120,17 +104,7 @@ seoDescription: "A practical AI Agent development note about intent classificati
 Write the article here.
 ```
 
-### Add A Series Post
-
-Use a subdirectory for readability and add `series`, `seriesSlug`, and `seriesOrder`.
-
-Example path:
-
-```text
-content/blog/ai-agent-learning/01-intent-classifier.md
-```
-
-Example frontmatter additions:
+Series fields:
 
 ```yaml
 series: "AI Agent Learning"
@@ -138,52 +112,28 @@ seriesSlug: "ai-agent-learning"
 seriesOrder: 1
 ```
 
-Rules:
-
-- `series` is the display name.
-- `seriesSlug` controls the series page route: `/blog/series/[seriesSlug]`.
-- `seriesOrder` controls article order inside the series.
-- Keep `seriesSlug` stable once public.
-- Do not reuse a `slug` that already exists in another post.
-
-### Blog Frontmatter
+Blog frontmatter:
 
 | Field | Purpose |
 | --- | --- |
 | `title` | Article title. |
 | `slug` | Public URL segment for `/blog/[slug]`. Must be unique. |
 | `summary` | List card, metadata fallback, and preview text. |
-| `date` | Original publish date. Use `YYYY-MM-DD`. |
-| `updatedAt` | Last meaningful content update. Use `YYYY-MM-DD`. |
-| `tags` | Tag labels shown on blog cards and article pages. |
+| `date` | Original publish date, `YYYY-MM-DD`. |
+| `updatedAt` | Last meaningful content update, `YYYY-MM-DD`. |
+| `tags` | Tags shown on cards and article pages. |
 | `series` | Optional series display name. |
 | `seriesSlug` | Optional series route segment. |
 | `seriesOrder` | Optional numeric order inside a series. |
-| `status` | `published` or `draft`. Drafts are excluded from public outputs. |
+| `status` | `published` or `draft`. |
 | `lang` | `zh` or `en`. |
 | `cover` | Reserved image field. Empty string is allowed. |
 | `seoTitle` | Optional SEO title override. |
 | `seoDescription` | Optional SEO description override. |
 
-Reading time and word count are generated at build time from the Markdown body. Do not maintain them manually.
+Published posts can appear in `/blog`, `/blog/[slug]`, series pages, homepage Blog, Console blog commands, sitemap, RSS, and SEO metadata.
 
-### Blog Public Outputs
-
-Published posts can appear in:
-
-- `/blog`
-- `/blog/[slug]`
-- `/blog/series`
-- `/blog/series/[seriesSlug]`
-- homepage Blog section
-- Console `blog`, `logs`, and `articles` output
-- `/sitemap.xml`
-- `/rss.xml`
-- SEO metadata
-
-Draft posts should not appear in public pages, sitemap, RSS, or metadata.
-
-## 3. Project Workflow
+## Projects
 
 Project files live under:
 
@@ -191,29 +141,19 @@ Project files live under:
 content/projects
 ```
 
-Recommended path for a new project:
+Recommended path:
 
 ```text
 content/projects/my-new-project/index.md
 ```
 
-The public project URL is decided by `slug`:
+Public project route:
 
 ```text
 /projects/[slug]
 ```
 
-### Add A Project
-
-1. Create a folder under `content/projects`.
-2. Add `index.md`.
-3. Fill in frontmatter.
-4. Write the case-study body below the frontmatter.
-5. Use `published: false` until the project is ready for public display.
-6. Use `featured: true` only for projects that should appear on the homepage Projects section.
-7. Run `pnpm lint` and `pnpm build`.
-
-Minimal example:
+Minimal project:
 
 ```md
 ---
@@ -225,8 +165,7 @@ status: "building"
 statusLabel: "Building"
 type: "Learning Project"
 role:
-  - "Backend Development"
-  - "AI-assisted Development"
+  - "Engineering"
 timeline: "2026"
 featured: false
 order: 10
@@ -251,7 +190,7 @@ seoDescription: "A short SEO description for the project."
 Write the case study here.
 ```
 
-### Project Frontmatter
+Project frontmatter:
 
 | Field | Purpose |
 | --- | --- |
@@ -259,40 +198,29 @@ Write the case study here.
 | `slug` | Public URL segment for `/projects/[slug]`. Must be unique. |
 | `subtitle` | Short supporting line. |
 | `summary` | Project cards and metadata fallback. |
-| `status` | Internal normalized status, such as `building`, `production`, or `mvp`. |
+| `status` | Normalized status, such as `building`, `production`, or `mvp`. |
 | `statusLabel` | Human-readable status label. |
 | `type` | Project category. |
-| `role` | Role list. Can be an array or comma-separated string. |
+| `role` | Role list. |
 | `timeline` | Time period or phase note. |
-| `featured` | `true` shows the project in the homepage Projects section. |
+| `featured` | `true` shows the project on the homepage. |
 | `order` | Sorting order. Lower numbers appear earlier. |
 | `techStack` | Stack tags. |
 | `features` | Current scope or user-visible capabilities. |
 | `highlights` | Engineering notes and design decisions. |
 | `links` | Link objects with `label`, `href`, and `type`. |
-| `relatedPosts` | Related blog post references with `title` and `slug`. |
+| `relatedPosts` | Related blog post references. |
 | `relatedSeriesSlug` | Connects the project to a blog series. |
 | `published` | `true` makes the project public. |
 | `lang` | `zh` or `en`. |
 | `seoTitle` | Optional SEO title override. |
 | `seoDescription` | Optional SEO description override. |
 
-### Project Public Outputs
+Published projects can appear in `/projects`, `/projects/[slug]`, homepage Projects, Console projects output, sitemap, and related project blocks.
 
-Published projects can appear in:
+## Profile, Contact, And Stack
 
-- `/projects`
-- `/projects/[slug]`
-- homepage Projects section when `featured: true`
-- Console `projects` output
-- `/sitemap.xml`
-- related project blocks on blog series and article pages
-
-Do not hardcode project data inside React components. Add or edit Markdown content instead.
-
-## 4. Profile Workflow
-
-Profile content lives under:
+File-mode profile files:
 
 ```text
 content/profile/profile.md
@@ -300,66 +228,17 @@ content/profile/contact-channels.md
 content/profile/system-stack.md
 ```
 
-All three files are loaded through `ProfileService` and passed into the Main App as `PublicProfile`.
+Guidelines:
 
-### profile.md
+- Keep public profile copy accurate and privacy-safe.
+- Use `visible: true` only for contact channels that should appear publicly.
+- Empty contact `href` values should not become active links.
+- Keep stack groups honest about current capability and learning status.
+- Do not publish private contact details, private resume files, secrets, private client names, or sensitive project details.
 
-Use this file to maintain the public profile:
+## Validation
 
-- backend engineering background
-- AI Agent / full-stack direction
-- anonymized enterprise-system experience
-- current focus
-- work style
-- active projects
-- career direction
-- profile privacy note
-
-The file already contains non-rendered HTML comments explaining how frontmatter maps to the current frontend. Keep those comments private to editors; do not convert them into visible page text.
-
-Do not add:
-
-- phone number
-- WeChat ID
-- address
-- birthday
-- ID number
-- real employer names
-- real client names
-- buyer names
-- sensitive project details
-- real private profile PDF links
-
-### contact-channels.md
-
-Use this file to maintain public contact and CTA entries.
-
-Rules:
-
-- `visible: true` means the channel can appear publicly.
-- `visible: false` hides the channel.
-- Empty `href` should not become an active link.
-- `disabled: true` shows availability/status without navigation.
-- Keep the Contact section focused. Avoid turning it into a large marketing link list.
-- Do not publish private email, phone, WeChat, address, or private profile PDF links unless the privacy policy changes.
-
-### system-stack.md
-
-Use this file to maintain stack groups.
-
-Current groups include:
-
-- Backend
-- Frontend / Full-stack
-- AI Agent
-- DevOps / Deployment
-- Learning / Exploring
-
-Keep learning-stage items in `Learning / Exploring`. Do not present exploratory topics as mature production expertise.
-
-## 5. Local Validation
-
-Run these after meaningful content changes:
+After meaningful content changes:
 
 ```bash
 pnpm lint
@@ -372,158 +251,9 @@ Recommended route checks:
 /
 /blog
 /blog/series
-/blog/series/personal-developer-os
 /projects
-/projects/personal-developer-os
-/projects/ai-agent-demo
 /sitemap.xml
 /rss.xml
 ```
 
-Because this project uses file-based content sources, content changes require a rebuild before production output changes.
-
-For a production-like local server after `pnpm build`, use the standalone output:
-
-```bash
-PORT=3100 node .next/standalone/server.js
-```
-
-Then visit:
-
-```text
-http://localhost:3100
-```
-
-On Windows PowerShell:
-
-```powershell
-$env:PORT="3100"; node .next/standalone/server.js
-```
-
-## 6. Commit Workflow
-
-Before committing:
-
-```bash
-git status
-pnpm lint
-pnpm build
-```
-
-Commit only the intended files:
-
-```bash
-git add docs/CONTENT_WORKFLOW.md docs/CONTENT_WORKFLOW.zh-CN.md
-git commit -m "docs: add content workflow"
-git push
-```
-
-Do not commit local env files, generated logs, certificates, private keys, server IPs, or private profile files.
-
-## 7. Deployment Workflow
-
-Production update path:
-
-```bash
-cd /srv/example-app
-git pull
-docker compose --env-file .env.production up -d --build
-```
-
-Important notes:
-
-- `NEXT_PUBLIC_SITE_URL` must be available at build time and runtime.
-- Changing `NEXT_PUBLIC_SITE_URL`, SEO, sitemap, RSS, or domain settings requires a rebuild.
-- Content changes also require a rebuild because content is read from files at build/server runtime.
-- If Docker cache keeps old metadata, rebuild without cache:
-
-```bash
-docker compose --env-file .env.production build --no-cache
-docker compose --env-file .env.production up -d
-```
-
-Online checks:
-
-```text
-https://example.com
-https://example.com/blog
-https://example.com/projects
-https://example.com/sitemap.xml
-https://example.com/rss.xml
-```
-
-Confirm sitemap and RSS use `https://example.com` and do not expose draft content.
-
-## 8. Privacy Rules
-
-Do not commit or publish:
-
-- `.env.production`
-- `.env.local`
-- certificate files
-- private keys
-- server IPs
-- deployment secrets
-- real private profile PDF
-- phone number
-- WeChat ID
-- address
-- ID number
-- birthday
-- real employer name
-- real client name
-- buyer name
-- sensitive project details
-- fabricated user counts, revenue, traffic, or production outcomes
-
-Allowed public wording should stay anonymized, such as:
-
-- enterprise workflow system
-- e-procurement platform
-- supplier management
-- expert management
-- procurement planning
-- enterprise system integration
-- public resource transaction service platform
-- enterprise digital service team
-- large enterprise client
-
-## 9. Future CMS / Admin / Database Migration
-
-Current implementations:
-
-```text
-FileBlogRepository
-FileProjectRepository
-FileProfileRepository
-```
-
-Future implementations can replace them:
-
-```text
-CmsBlogRepository
-CmsProjectRepository
-CmsProfileRepository
-
-DatabaseBlogRepository
-DatabaseProjectRepository
-DatabaseProfileRepository
-```
-
-Pages should continue to use:
-
-```text
-BlogService
-ProjectService
-ProfileService
-```
-
-Migration rules:
-
-- Do not let pages query a database directly.
-- Do not let client components depend on a CMS SDK.
-- Keep repository interfaces stable.
-- Keep public `slug` values stable.
-- Preserve the meaning of `published`, `draft`, `featured`, `order`, `seriesSlug`, and `seriesOrder`.
-- Keep sitemap and RSS published-only.
-
+Because file-mode content is read at build/server runtime, production updates require a rebuild.
