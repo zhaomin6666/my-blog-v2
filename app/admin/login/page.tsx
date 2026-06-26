@@ -24,7 +24,7 @@ interface AdminLoginPageProps {
 
 function getErrorMessage(error?: string, retryAfter?: string): string {
   if (error === 'not-configured') {
-    return 'Admin credentials are not configured. Set ADMIN_USERNAME, ADMIN_PASSWORD_HASH, and ADMIN_SESSION_SECRET.';
+    return 'Unable to sign in. Check the server configuration.';
   }
 
   if (error === 'rate-limited') {
