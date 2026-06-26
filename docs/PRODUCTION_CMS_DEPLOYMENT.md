@@ -42,6 +42,23 @@ the matching source is set to `database`.
 - Nginx upload limits are aligned with Admin Markdown import limits if Nginx is
   in front of Next.js.
 
+## Admin Security Checklist
+
+- [ ] Use `pnpm admin:secrets` to generate `ADMIN_PASSWORD_HASH` and
+  `ADMIN_SESSION_SECRET`.
+- [ ] Do not commit real `.env.production`, database URLs, password hashes, or
+  session secrets to the repository.
+- [ ] Keep `ADMIN_AUTH_DEBUG=false` in production.
+- [ ] Run `pnpm security:admin` before deployment.
+- [ ] Confirm `/admin/logout` deletes the session cookie.
+- [ ] Confirm the Admin session cookie `Path` is `/admin`.
+- [ ] Confirm the Next.js app port is not exposed publicly and is reachable only
+  through Nginx / HTTPS.
+- [ ] If using Cloudflare, confirm the origin IP cannot be bypassed directly.
+- [ ] Keep Nginx `client_max_body_size` aligned with the Admin Markdown import
+  limit.
+- [ ] Keep database backups and the file mode rollback path available.
+
 ## Environment Variables
 
 ```text

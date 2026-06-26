@@ -37,6 +37,19 @@ Admin 是作者自用后台，写入 PostgreSQL：
 - `NEXT_PUBLIC_SITE_URL` 在构建期和运行期都是生产域名。
 - 如果 Next.js 前面有 Nginx，Nginx 上传大小限制要与 Admin Markdown 导入限制匹配。
 
+## Admin 安全检查清单
+
+- [ ] 使用 `pnpm admin:secrets` 生成 `ADMIN_PASSWORD_HASH` 和 `ADMIN_SESSION_SECRET`。
+- [ ] 不向仓库提交真实 `.env.production`、数据库连接串、password hash 或 session secret。
+- [ ] 生产环境保持 `ADMIN_AUTH_DEBUG=false`。
+- [ ] 部署前运行 `pnpm security:admin`。
+- [ ] 确认 `/admin/logout` 后 session cookie 会被删除。
+- [ ] 确认 Admin session cookie 的 `Path` 是 `/admin`。
+- [ ] 确认 Next.js 应用端口不直接暴露公网，只通过 Nginx / HTTPS 访问。
+- [ ] 如果使用 Cloudflare，确认源站 IP 不能被绕过直连。
+- [ ] 保持 Nginx `client_max_body_size` 与 Admin Markdown import 限制一致。
+- [ ] 保留 PostgreSQL 备份和 file mode rollback 路径。
+
 ## 环境变量清单
 
 ```text
