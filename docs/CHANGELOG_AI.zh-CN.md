@@ -1,6 +1,34 @@
 # AI 变更记录中文摘要
 
 ### 2026-06-26 - Codex
+**摘要：** Phase 12 已完成，归档生产环境从 file 内容源切换到 PostgreSQL database mode 的完整过程。
+
+**范围：**
+- 生产 PostgreSQL 连接已完成，复用已有 Docker PostgreSQL 服务，并使用本项目专用数据库角色。
+- 已手动执行生产 CMS migrations，执行范围到 `004_reset_system_stack_single_source.sql`。
+- 已验证生产 PostgreSQL 中存在 8 张核心 CMS 表：`blog_posts`、`blog_series`、`projects`、`profile_pages`、`contact_channels`、`homepage_sections`、`system_stack_groups`、`system_stack_items`。
+- Admin 数据库 smoke test 已完成，受保护的 Admin 页面可访问数据库，并通过 Blog 草稿写入验证 PostgreSQL 写入链路。
+- 通过 `/admin/blog` 导入 Blog Markdown，切换 `BLOG_CONTENT_SOURCE=database`，并验证 `/blog`、文章详情、RSS、sitemap 和首页 Blog 区域。
+- 通过 `/admin/projects` 导入 Projects Markdown，切换 `PROJECT_CONTENT_SOURCE=database`，并验证 `/projects`、项目详情、首页 Featured Projects 和 sitemap。
+- 通过 Admin 录入并验证 Hero、Profile、Contact、Stack，切换 `PROFILE_CONTENT_SOURCE=database`，并验证首页 database-backed 渲染和 Agent Demo sources。
+- 最终完成 `CONTENT_SOURCE=database` 全局切换，生产内容默认从 PostgreSQL 读取。
+- 确认领域级内容源变量仍优先于 `CONTENT_SOURCE`，未配置领域级变量时会 fallback 到全局内容源。
+
+**运维记录：**
+- 本地 DBeaver 管理生产数据库时，建议通过 SSH Tunnel 连接生产主机，再连接 loopback PostgreSQL 端口；不要开放公网 `5432`。
+- Blog、首页、sitemap、RSS 在内容源切换后可能出现缓存刷新时间不一致。
+- 后续建议新增 Maintenance / Revalidate 后台页，避免为了触发缓存刷新而编辑内容。
+- 运维 SQL 需要尊重表级可见性规则：`homepage_sections` 使用 `visible`，`profile_pages` 使用 key / lang 记录，只有 Contact / Stack 相关表使用 `deleted_at`。
+
+**范围守卫：**
+- 未提交真实 env、密钥、数据库 URL、生产 IP、密码或备份 dump。
+- 未修改公开 UI、Agent Demo 回答范围、Console / CLI、窗口系统或已跟踪 Docker / Nginx 配置。
+
+**验证：**
+- 已在生产操作中验证 PostgreSQL 连通、migration、Admin 写入、Blog 数据库内容源、Projects 数据库内容源、Profile / Homepage 数据库内容源、全局 database mode、公开路由、sitemap、RSS 和回滚准备。
+- 本轮本地文档变更验证待执行：`pnpm lint`。
+
+### 2026-06-26 - Codex
 **摘要：** Step 8 已完成，整理开源文档信息架构，并按当前 AI Native Portfolio CMS 定位重写 README。
 
 **范围：**

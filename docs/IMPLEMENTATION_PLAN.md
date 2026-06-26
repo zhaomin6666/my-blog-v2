@@ -1037,11 +1037,14 @@
 - Verification passed: `pnpm test`, `pnpm lint`, `pnpm build`, file-mode `pnpm build` with database URL cleared, database-mode `pnpm build`, standalone route smoke check, and unauthenticated Admin redirect smoke check.
 - No new feature, public UI change, Agent Demo scope change, Console / CLI change, window-system change, content migration, Docker change, or tracked Nginx change was made.
 
-## Phase 12: Production CMS Switch IN PROGRESS
-- Prepare and execute the production switch from file content sources to PostgreSQL-backed CMS content sources.
-- Keep the current production safety baseline in file mode until each domain-level switch is explicitly performed.
-- Switch Blog, Projects, and Profile / Homepage domains gradually instead of relying on a single global flip first.
-- Preserve public routes, sitemap, RSS, Agent Demo answer scope, Console / CLI, window-system behavior, and tracked Docker / Nginx deployment config.
+## Phase 12: Production CMS Switch COMPLETED
+- Completed the production switch from file content sources to PostgreSQL-backed CMS content sources.
+- Kept production in file mode until each domain-level source switch was explicitly verified.
+- Switched Blog, Projects, and Profile / Homepage domains gradually before enabling the global database source.
+- Final production content source now uses database mode through `CONTENT_SOURCE=database`.
+- Domain-specific content source variables still take precedence over `CONTENT_SOURCE`; if `BLOG_CONTENT_SOURCE`, `PROJECT_CONTENT_SOURCE`, or `PROFILE_CONTENT_SOURCE` are unset, they fall back to the global source.
+- Preserved public routes, sitemap, RSS, Agent Demo answer scope, Console / CLI behavior, window-system behavior, and tracked Docker / Nginx deployment config.
+- No real environment files, PostgreSQL connection strings, credentials, production IPs, backup dump paths, or dump files were committed.
 
 ### Phase 12.1: Production CMS Preflight COMPLETED
 - Added `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.md` and `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.zh-CN.md`.
@@ -1055,36 +1058,79 @@
 - No production content source was switched.
 - No Agent Demo answer-scope, Console / CLI, window-system, public UI, Docker, or tracked Nginx deployment config change was made.
 
-### Phase 12.2: Production Migration Execution PLANNED
-- Back up production PostgreSQL.
-- Run required production migrations manually.
-- Record migration timestamp, operator, and result.
-- Keep production content sources in file mode after migration until Admin connectivity and content import are verified.
+### Phase 12.2: Production PostgreSQL Connectivity & Migration COMPLETED
+- Reused the existing production PostgreSQL Docker service instead of adding a separate database container.
+- Created a dedicated project database and role for Personal Dev OS; real credentials and connection strings are intentionally not recorded in the repository.
+- Attached the application container to the internal database Docker network.
+- Configured `.env.production` outside Git so `PERSONAL_SITE_DATABASE_URL` points to the Docker-internal PostgreSQL host and port.
+- Verified from the application container that the internal PostgreSQL hostname resolves and port `5432` is reachable.
+- Manually executed:
+  - `database/migrations/001_create_cms_tables.sql`
+  - `database/migrations/002_add_translation_keys_to_contact_and_stack.sql`
+  - `database/migrations/003_reset_contact_channels_single_source.sql`
+  - `database/migrations/004_reset_system_stack_single_source.sql`
+- Verified the eight core CMS tables exist in production PostgreSQL:
+  - `blog_posts`
+  - `blog_series`
+  - `projects`
+  - `profile_pages`
+  - `contact_channels`
+  - `homepage_sections`
+  - `system_stack_groups`
+  - `system_stack_items`
+- Confirmed the tables are owned by the dedicated project database role.
+- Kept public content sources in file mode during the migration and connectivity checks.
 
-### Phase 12.3: Production Admin Database Verification PLANNED
-- Verify Admin login and database health in production.
-- Confirm `/admin/blog`, `/admin/projects`, `/admin/hero`, `/admin/profile`, `/admin/contact`, and `/admin/stack` can access PostgreSQL.
-- Keep public pages in file mode.
+### Phase 12.3: Production Admin Database Verification COMPLETED
+- Verified the Admin UI renders normally in production.
+- Confirmed `/admin/blog`, `/admin/projects`, `/admin/hero`, `/admin/profile`, `/admin/contact`, and `/admin/stack` can access PostgreSQL.
+- Created a Blog smoke-test draft through Admin and confirmed the write reached PostgreSQL.
+- Kept public pages in file mode during the Admin database smoke test, so the test draft did not affect public content.
 
-### Phase 12.4: Blog Database Source Switch PLANNED
-- Import Blog content into PostgreSQL.
-- Switch only `BLOG_CONTENT_SOURCE=database`.
-- Verify `/blog`, article routes, RSS, sitemap, search, tags, series, and Agent Demo.
+### Phase 12.4: Blog Database Import & Source Switch COMPLETED
+- Imported Blog Markdown through `/admin/blog` Markdown Import.
+- Ran dry-run first, then used `create_only` for the production import.
+- Took a database backup before switching the Blog public source.
+- Switched `BLOG_CONTENT_SOURCE=database`.
+- Verified `/blog`, article detail routes, RSS, sitemap, and the homepage Blog section against PostgreSQL-backed content.
+- Observed cache inconsistency after the switch: `/blog`, homepage, sitemap, and RSS could refresh at different times.
+- Restored consistency by editing/saving content through Admin to trigger revalidation.
+- Recorded the follow-up need for a Maintenance / Revalidate Admin page so future operators do not have to edit content just to refresh caches.
 
-### Phase 12.5: Projects Database Source Switch PLANNED
-- Import Projects content into PostgreSQL.
-- Switch only `PROJECT_CONTENT_SOURCE=database`.
-- Verify `/projects`, project detail routes, homepage Featured Projects, sitemap, and Agent Demo.
+### Phase 12.5: Projects Database Import & Source Switch COMPLETED
+- Imported Projects Markdown through `/admin/projects` Markdown Import.
+- Switched `PROJECT_CONTENT_SOURCE=database`.
+- Verified `/projects`, project detail routes, homepage Featured Projects, and sitemap with database-backed Projects content.
+- Noted that if sitemap or homepage caches do not refresh immediately, saving the affected Project through Admin can trigger revalidation.
 
-### Phase 12.6: Profile / Homepage Database Source Switch PLANNED
-- Enter or verify Hero, Profile, Contact, and Stack content in Admin.
-- Switch only `PROFILE_CONTENT_SOURCE=database`.
-- Verify homepage Profile / Contact / Stack / Hero rendering and Agent Demo.
+### Phase 12.6: Profile / Homepage Database Source Switch COMPLETED
+- Entered and verified production content through:
+  - `/admin/hero`
+  - `/admin/profile`
+  - `/admin/contact`
+  - `/admin/stack`
+- Verified saved Hero, Profile, Contact, and Stack data in PostgreSQL before switching the public Profile / Homepage source.
+- Switched `PROFILE_CONTENT_SOURCE=database`.
+- Confirmed homepage Hero, Profile, Contact, Stack, and Agent Demo sources read from database-backed content.
+- Recorded schema-specific visibility notes:
+  - `homepage_sections` uses `visible` for public visibility.
+  - `profile_pages` uses key/language records and does not use a shared `deleted_at` filter.
+  - `contact_channels`, `system_stack_groups`, and `system_stack_items` use `deleted_at`.
+  - Operational SQL must not blindly apply `WHERE deleted_at IS NULL` to every CMS table.
 
-### Phase 12.7: Global Database Source Review PLANNED
-- Review whether `CONTENT_SOURCE=database` is still needed after domain-level switches.
-- Only consider global database mode after Blog, Projects, and Profile domains are stable.
+### Phase 12.7: Global Database Source Review COMPLETED
+- Confirmed Blog, Projects, and Profile / Homepage domains were stable in database mode.
+- Switched final production configuration to `CONTENT_SOURCE=database`.
+- Confirmed Blog, Projects, Hero, Profile, Contact, and Stack are now read from PostgreSQL.
+- Confirmed domain-specific content source variables still have higher precedence than `CONTENT_SOURCE`.
+- Confirmed unset domain-specific source variables fall back to the global `CONTENT_SOURCE`.
+- Established Admin / database editing as the production content maintenance path after the global switch.
+- Added an operational note that local database administration should use an SSH tunnel to the production host and connect to a loopback PostgreSQL port; public `5432` should not be exposed.
 
-### Phase 12.8: Production CMS Switch Final Review PLANNED
-- Re-run production acceptance for public pages, Admin routes, sitemap, RSS, Agent Demo, rollback, backup, and deployment docs.
-- Archive Phase 12 only after all production checks pass.
+### Phase 12.8: Production CMS Switch Final Review COMPLETED
+- Re-ran production acceptance for public pages, Admin routes, sitemap, RSS, Agent Demo source coverage, backups, and rollback readiness.
+- Confirmed the production content source switch from file mode to PostgreSQL-backed database mode is complete.
+- Confirmed no public UI redesign, Agent Demo answer-scope expansion, Console / CLI behavior change, window-system behavior change, or tracked Docker / Nginx config change was made.
+- Confirmed no real `.env.production`, database URL, password, IP address, backup dump path, or dump file was committed.
+- Archived the cache/revalidate observation and the follow-up recommendation for a Maintenance / Revalidate Admin page.
+- Phase 12 is archived as completed.

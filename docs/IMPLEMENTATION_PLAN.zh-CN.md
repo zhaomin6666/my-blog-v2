@@ -9,7 +9,8 @@
 - Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
 - Phase 10 已完成：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础、Phase 10.3 只读 Agent API MVP、Phase 10.4 限流 / 超时 / 滥用防护、Phase 10.5 UI 与 trace 展示、Phase 10.6 生产部署与安全验证、Phase 10.7 第一版最终验收与文档收口。
 - Phase 11 已完成：Admin / CMS 架构与实施完成最终验收，覆盖 Admin Auth、Blog / Projects / Hero / Profile / Contact / Stack Admin、Markdown Import / Export、soft delete、file mode、database mode、Agent Demo sources、sitemap / RSS、docs / env / deployment checklist。
-- Phase 12 进行中：Production CMS Switch 已进入生产切换前检查阶段，当前仍保持 file mode，不执行生产 migration，不导入真实内容，不切换生产内容源。
+- Phase 12 已完成：生产环境已从 file 内容源逐步切换到 PostgreSQL-backed database mode，Blog、Projects、Hero / Profile / Contact / Stack 已通过 Admin / database 维护，最终生产内容源进入 `CONTENT_SOURCE=database`。
+- 后续进入产品化优化阶段：Admin 安全审计、清理真实内容并保留示例内容、完善 `.env.example` 和部署文档、补充 static / cms / hybrid 模式说明、增加 Maintenance / Revalidate 后台页、AgentDemo 配置后台化，以及主题和桌面个性化后台化。
 - 当前生产地址：`https://example.com`。
 - 当前发布方式：Linux server Linux production server + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
@@ -608,69 +609,124 @@
 - 验证通过：`pnpm test`、`pnpm lint`、`pnpm build`、清空数据库 URL 的 file-mode `pnpm build`、database-mode `pnpm build`、standalone 路由 smoke check、未登录 Admin redirect smoke check。
 - 未新增功能、未修改公开 UI、未修改 Agent Demo 范围、未修改 Console / CLI、未修改窗口系统、未迁移内容、未修改 Docker 或已跟踪 Nginx 配置。
 
-## Phase 12：Production CMS Switch - 进行中
+## Phase 12：Production CMS Switch - 已完成
 
 目标：
 
-- 为生产环境从 file content source 切换到 PostgreSQL-backed CMS content source 做准备并分阶段执行。
-- 在明确完成每个领域切换前，当前生产安全基线继续保持 file mode。
-- Blog、Projects、Profile / Homepage 按领域逐步切换，不优先依赖一次性全局切换。
+- 已完成生产环境从 file content source 到 PostgreSQL-backed CMS content source 的切换。
+- 切换过程先保持生产安全基线为 file mode，再按 Blog、Projects、Profile / Homepage 分领域逐步切换。
+- 最终生产内容源已进入 database mode，通过 `CONTENT_SOURCE=database` 读取 PostgreSQL 内容。
+- 领域级内容源变量仍优先于 `CONTENT_SOURCE`；如果 `BLOG_CONTENT_SOURCE`、`PROJECT_CONTENT_SOURCE` 或 `PROFILE_CONTENT_SOURCE` 未配置，会 fallback 到全局 `CONTENT_SOURCE`。
 - 保持公开路由、sitemap、RSS、Agent Demo 回答范围、Console / CLI、窗口系统和已跟踪 Docker / Nginx 部署配置不变。
+- 未提交真实环境变量、PostgreSQL 连接串、凭据、生产 IP、备份 dump 路径或 dump 文件。
 
 ### Phase 12.1：Production CMS Preflight - 已完成
 
 - 新增 `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.md`。
 - 新增 `docs/PRODUCTION_CMS_SWITCH_CHECKLIST.zh-CN.md`。
 - 文档化当前生产状态检查：`/`、`/blog`、`/projects`、`/sitemap.xml`、`/rss.xml`、`/agent-demo`、Docker、Nginx 和 HTTPS。
-- 文档化生产环境变量准备，并明确 `CONTENT_SOURCE`、`BLOG_CONTENT_SOURCE`、`PROJECT_CONTENT_SOURCE`、`PROFILE_CONTENT_SOURCE` 继续保持 `file`。
+- 文档化生产环境变量准备，并明确切换前 `CONTENT_SOURCE`、`BLOG_CONTENT_SOURCE`、`PROJECT_CONTENT_SOURCE`、`PROFILE_CONTENT_SOURCE` 继续保持 `file`。
 - 文档化 PostgreSQL 准备、备份目录、migration 准备、Admin 功能准备、Nginx 上传限制、分领域切换顺序、回滚策略和 Go / No-Go 判断。
 - 在生产 CMS 部署 runbook 中链接 checklist，并补充 Phase 12 切换顺序。
 - 更新 `.env.example`，让领域级内容源显式默认到 `file`。
-- 未执行生产 migration。
-- 未导入真实生产内容。
-- 未切换生产内容源。
+- 未在 preflight 阶段执行生产 migration。
+- 未在 preflight 阶段导入真实生产内容。
+- 未在 preflight 阶段切换生产内容源。
 - 未修改 Agent Demo 回答范围、Console / CLI、窗口系统、公开 UI、Docker 或已跟踪 Nginx 部署配置。
 
-### Phase 12.2：Production Migration Execution - 计划中
+### Phase 12.2：Production PostgreSQL Connectivity & Migration - 已完成
 
-- 先备份生产 PostgreSQL。
-- 手动执行需要的生产 migration。
-- 记录 migration 执行时间、操作者和结果。
-- migration 后继续保持生产内容源为 file mode，直到 Admin 连通性和内容导入完成验证。
+- 复用已有生产 PostgreSQL Docker 服务，没有新增独立数据库容器。
+- 为 Personal Dev OS 创建独立项目数据库和数据库角色；真实凭据和连接串不写入仓库。
+- 将应用容器接入内部数据库 Docker 网络。
+- `.env.production` 保留在服务器本地，`PERSONAL_SITE_DATABASE_URL` 指向 Docker 内部 PostgreSQL host 和端口。
+- 在应用容器内验证内部 PostgreSQL hostname 可解析，`5432` 端口可连通。
+- 手动执行：
+  - `database/migrations/001_create_cms_tables.sql`
+  - `database/migrations/002_add_translation_keys_to_contact_and_stack.sql`
+  - `database/migrations/003_reset_contact_channels_single_source.sql`
+  - `database/migrations/004_reset_system_stack_single_source.sql`
+- 验证生产 PostgreSQL 中存在 8 张核心 CMS 表：
+  - `blog_posts`
+  - `blog_series`
+  - `projects`
+  - `profile_pages`
+  - `contact_channels`
+  - `homepage_sections`
+  - `system_stack_groups`
+  - `system_stack_items`
+- 确认这些表由专用项目数据库角色持有。
+- migration 和连通性检查期间，公开内容源继续保持 file mode。
 
-### Phase 12.3：Production Admin Database Verification - 计划中
+### Phase 12.3：Production Admin Database Verification - 已完成
 
-- 验证生产 Admin 登录和 database health。
-- 确认 `/admin/blog`、`/admin/projects`、`/admin/hero`、`/admin/profile`、`/admin/contact`、`/admin/stack` 可以访问 PostgreSQL。
-- 公开页面继续保持 file mode。
+- 验证生产 Admin UI 可正常展示。
+- 确认 `/admin/blog`、`/admin/projects`、`/admin/hero`、`/admin/profile`、`/admin/contact`、`/admin/stack` 均可访问 PostgreSQL。
+- 通过 Admin 创建 Blog smoke-test 草稿，确认写入 PostgreSQL 成功。
+- Admin 数据库 smoke test 期间，公开页面继续保持 file mode，因此测试草稿不会影响公开内容。
 
-### Phase 12.4：Blog Database Source Switch - 计划中
+### Phase 12.4：Blog Database Import & Source Switch - 已完成
 
-- 将 Blog 内容导入 PostgreSQL。
-- 只切换 `BLOG_CONTENT_SOURCE=database`。
-- 验证 `/blog`、文章详情、RSS、sitemap、search、tags、series 和 Agent Demo。
+- 通过 `/admin/blog` Markdown Import 导入 Blog Markdown。
+- 先执行 dry-run，再使用 `create_only` 完成生产导入。
+- 切换 Blog 公开内容源前先完成数据库备份。
+- 切换 `BLOG_CONTENT_SOURCE=database`。
+- 验证 `/blog`、文章详情、RSS、sitemap 和首页 Blog 区域均读取 PostgreSQL-backed content。
+- 切换后观察到缓存不一致：`/blog`、首页、sitemap、RSS 可能在不同时间刷新。
+- 通过在 Admin 中编辑并保存内容触发 revalidation 后，缓存恢复一致。
+- 记录后续需要新增 Maintenance / Revalidate 后台页，避免以后依赖编辑内容来刷新缓存。
 
-### Phase 12.5：Projects Database Source Switch - 计划中
+### Phase 12.5：Projects Database Import & Source Switch - 已完成
 
-- 将 Projects 内容导入 PostgreSQL。
-- 只切换 `PROJECT_CONTENT_SOURCE=database`。
-- 验证 `/projects`、项目详情、首页 Featured Projects、sitemap 和 Agent Demo。
+- 通过 `/admin/projects` Markdown Import 导入 Projects。
+- 切换 `PROJECT_CONTENT_SOURCE=database`。
+- 验证 `/projects`、项目详情页、首页 Featured Projects 和 sitemap 均读取数据库项目内容。
+- 记录经验：如果 sitemap 或首页缓存没有立即刷新，可以通过后台保存对应 Project 触发 revalidate。
 
-### Phase 12.6：Profile / Homepage Database Source Switch - 计划中
+### Phase 12.6：Profile / Homepage Database Source Switch - 已完成
 
-- 在 Admin 中录入或确认 Hero、Profile、Contact 和 Stack 内容。
-- 只切换 `PROFILE_CONTENT_SOURCE=database`。
-- 验证首页 Profile / Contact / Stack / Hero 渲染和 Agent Demo。
+- 通过后台录入并验证生产内容：
+  - `/admin/hero`
+  - `/admin/profile`
+  - `/admin/contact`
+  - `/admin/stack`
+- 切换公开 Profile / Homepage 内容源前，先确认 Hero、Profile、Contact、Stack 数据已保存至 PostgreSQL。
+- 切换 `PROFILE_CONTENT_SOURCE=database`。
+- 确认首页 Hero、Profile、Contact、Stack 和 Agent Demo sources 均读取 database-backed content。
+- 记录 schema 可见性差异：
+  - `homepage_sections` 使用 `visible` 判断公开可见。
+  - `profile_pages` 使用 key / lang 记录，不套用统一 `deleted_at` filter。
+  - `contact_channels`、`system_stack_groups`、`system_stack_items` 使用 `deleted_at`。
+  - 运维 SQL 不能对所有 CMS 表盲目套用 `WHERE deleted_at IS NULL`。
 
-### Phase 12.7：Global Database Source Review - 计划中
+### Phase 12.7：Global Database Source Review - 已完成
 
-- 评估按领域切换稳定后是否还需要 `CONTENT_SOURCE=database`。
-- 只有 Blog、Projects、Profile 领域都稳定后，才考虑全局 database mode。
+- 确认 Blog、Projects、Profile / Homepage 三个领域在 database mode 下稳定。
+- 最终生产配置切换为 `CONTENT_SOURCE=database`。
+- 确认 Blog、Projects、Hero、Profile、Contact、Stack 均从 PostgreSQL 读取。
+- 确认领域级内容源变量仍优先于 `CONTENT_SOURCE`。
+- 确认未配置领域级内容源时，会 fallback 到全局 `CONTENT_SOURCE`。
+- 全局切换后，生产内容维护路径正式转为 Admin / database。
+- 记录运维建议：本地数据库管理工具应通过 SSH Tunnel 连接生产主机上的 loopback PostgreSQL 端口，不开放公网 `5432`。
 
-### Phase 12.8：Production CMS Switch Final Review - 计划中
+### Phase 12.8：Production CMS Switch Final Review - 已完成
 
-- 重新验收公开页面、Admin 路由、sitemap、RSS、Agent Demo、回滚、备份和部署文档。
-- 所有生产检查通过后再归档 Phase 12。
+- 重新验收公开页面、Admin 路由、sitemap、RSS、Agent Demo source coverage、备份和回滚准备。
+- 确认生产内容源已经完成从 file mode 到 PostgreSQL-backed database mode 的切换。
+- 确认没有修改公开 UI、Agent Demo 回答范围、Console / CLI、窗口系统行为或已跟踪 Docker / Nginx 配置。
+- 确认未提交真实 `.env.production`、数据库 URL、密码、IP 地址、备份 dump 路径或 dump 文件。
+- 归档缓存 / revalidate 经验，并记录后续建议新增 Maintenance / Revalidate 后台页。
+- Phase 12 归档为已完成。
+
+## 后续产品化优化方向
+
+1. Admin 安全审计。
+2. 清理真实内容，保留适合作为开源项目的示例内容。
+3. 完善 `.env.example` 和部署文档。
+4. 补充 static / cms / hybrid 模式说明。
+5. 新增 Maintenance / Revalidate 后台页。
+6. AgentDemo 配置后台化。
+7. 主题和桌面个性化后台化。
 
 ## 后续原则
 

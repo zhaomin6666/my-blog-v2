@@ -1,6 +1,34 @@
 # AI Development Changelog
 
 ### 2026-06-26 - Codex
+**Summary:** Phase 12 completed. Archived the production CMS switch from file content sources to PostgreSQL-backed database mode.
+
+**Scope:**
+- Completed production PostgreSQL connectivity using an existing Docker PostgreSQL service and a dedicated project database role.
+- Manually executed the production CMS migrations through `004_reset_system_stack_single_source.sql`.
+- Verified the eight core CMS tables in production PostgreSQL: `blog_posts`, `blog_series`, `projects`, `profile_pages`, `contact_channels`, `homepage_sections`, `system_stack_groups`, and `system_stack_items`.
+- Completed the Admin database smoke test through protected Admin pages and a database-backed Blog draft write.
+- Imported Blog Markdown through `/admin/blog`, switched `BLOG_CONTENT_SOURCE=database`, and verified `/blog`, article detail routes, RSS, sitemap, and the homepage Blog section.
+- Imported Projects Markdown through `/admin/projects`, switched `PROJECT_CONTENT_SOURCE=database`, and verified `/projects`, project detail routes, homepage Featured Projects, and sitemap.
+- Entered and verified Hero, Profile, Contact, and Stack content through Admin, switched `PROFILE_CONTENT_SOURCE=database`, and verified homepage database-backed rendering and Agent Demo sources.
+- Completed the final `CONTENT_SOURCE=database` switch so production content now reads from PostgreSQL by default.
+- Confirmed domain-specific content source variables still take precedence over `CONTENT_SOURCE`, and unset domain-specific variables fall back to the global source.
+
+**Operational notes:**
+- Local DBeaver access should use an SSH tunnel to the production host and connect to a loopback PostgreSQL port; public `5432` should not be exposed.
+- Blog, homepage, sitemap, and RSS cache/revalidate behavior can refresh at different times after source switches.
+- A future Maintenance / Revalidate Admin page is recommended so operators do not need to edit content only to trigger cache refresh.
+- Operational SQL must respect table-specific visibility rules: `homepage_sections` uses `visible`, `profile_pages` uses key/language records, and only Contact / Stack tables use `deleted_at`.
+
+**Scope guard:**
+- No secrets, real env values, backup dumps, production database URLs, public IPs, or passwords were committed.
+- No public UI redesign, Agent Demo answer-scope expansion, Console / CLI behavior change, window-system behavior change, or tracked Docker / Nginx config change was made.
+
+**Verification:**
+- Production connectivity, migration, Admin write, Blog database source, Projects database source, Profile / Homepage database source, global database source, public routes, sitemap, RSS, and rollback readiness were verified operationally.
+- Local documentation-only verification in this pass: pending `pnpm lint`.
+
+### 2026-06-26 - Codex
 **Summary:** Step 8 completed. Cleaned up documentation IA and rewrote the project README for the current AI Native Portfolio CMS positioning.
 
 **Scope:**
