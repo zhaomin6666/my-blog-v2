@@ -1,6 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
+import { useState } from 'react';
 import { Save } from 'lucide-react';
 import type { AdminHomepageSection } from '@/lib/admin';
 import { saveHomepageSectionAction } from '../profile-content-actions';
@@ -21,11 +22,22 @@ const emptyAdminContentFormState: AdminContentFormState = {
   fieldErrors: {},
 };
 
+function readBadge(data: AdminHomepageSection['data']): string {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    return '';
+  }
+
+  const badge = data.badge;
+  return typeof badge === 'string' ? badge : '';
+}
+
 export function HeroSectionForm({ section }: HeroSectionFormProps) {
   const [state, formAction, pending] = useActionState(
     saveHomepageSectionAction,
     emptyAdminContentFormState,
   );
+  const [badge, setBadge] = useState(() => readBadge(section.data));
+  const dataValue = JSON.stringify({ badge: badge.trim() });
 
   return (
     <form action={formAction} className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
@@ -44,7 +56,7 @@ export function HeroSectionForm({ section }: HeroSectionFormProps) {
       <input type="hidden" name="key" value="hero" />
       <input type="hidden" name="lang" value={section.lang} />
       <input type="hidden" name="displayOrder" value="0" />
-      <input type="hidden" name="data" value="{}" />
+      <input type="hidden" name="data" value={dataValue} />
       <input type="hidden" name="contentMarkdown" value="" />
 
       <div className="space-y-5">
@@ -75,6 +87,17 @@ export function HeroSectionForm({ section }: HeroSectionFormProps) {
             className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-950 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-100"
           />
           <FieldError message={state.fieldErrors.subtitle} />
+        </label>
+
+        <label className="block text-sm font-medium">
+          Badge
+          <input
+            name="badge"
+            value={badge}
+            onChange={(event) => setBadge(event.target.value)}
+            maxLength={160}
+            className="mt-1 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-950 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-100"
+          />
         </label>
       </div>
 

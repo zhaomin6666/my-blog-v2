@@ -6,6 +6,7 @@ import { useSettings } from "@/lib/settings-context";
 import { getStyleTokens } from "@/lib/stylePresets";
 import { t } from "@/lib/translations";
 import { MainSectionId } from "@/lib/types";
+import { EmptySectionCard } from "./EmptySectionCard";
 
 interface HeroOverviewProps {
   homepageSections?: HomepageSection[];
@@ -25,6 +26,16 @@ function selectHeroSection(
   );
 }
 
+function readHeroBadge(section: HomepageSection | undefined): string {
+  const data = section?.data;
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    return "";
+  }
+
+  const badge = data.badge;
+  return typeof badge === "string" ? badge.trim() : "";
+}
+
 export function HeroOverview({
   homepageSections,
   onOpenTerminal,
@@ -34,28 +45,41 @@ export function HeroOverview({
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === "macos";
   const heroSection = selectHeroSection(homepageSections, lang);
-  const title = heroSection?.title.trim() || t("hero.title", lang);
+  const title = heroSection?.title.trim() ?? "";
   const subtitle =
     heroSection?.subtitle.trim() ||
     heroSection?.contentMarkdown.trim() ||
-    t("hero.subtitle", lang);
+    "";
+  const badge = readHeroBadge(heroSection);
+
+  if (!heroSection || (!title && !subtitle)) {
+    return (
+      <EmptySectionCard
+        titleKey="nav.overview"
+        emptyKey="hero.empty"
+        tag="homepage/hero"
+        macosAccent="bg-green-500"
+      />
+    );
+  }
 
   return (
     <div
       className={`p-6 md:p-10 ${tokens.cardBg} ${tokens.cardBorder} ${tokens.cardBorderRadius} ${tokens.cardShadow}`}
     >
       <div className="space-y-5 max-w-3xl">
-        {/* Badge */}
-        <div
-          className={`inline-flex items-center gap-2 px-3 py-1.5 ${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius}`}
-        >
-          <span className={`w-2 h-2 rounded-full bg-green-500 animate-pulse`} />
-          <span
-            className={`text-xs ${isMacos ? "font-medium" : "font-mono"} ${tokens.textMuted}`}
+        {badge ? (
+          <div
+            className={`inline-flex items-center gap-2 px-3 py-1.5 ${tokens.nestedCardBg} ${tokens.nestedCardBorder} ${tokens.nestedCardBorderRadius}`}
           >
-            {t("hero.badge", lang)}
-          </span>
-        </div>
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <span
+              className={`text-xs ${isMacos ? "font-medium" : "font-mono"} ${tokens.textMuted}`}
+            >
+              {badge}
+            </span>
+          </div>
+        ) : null}
 
         {/* Title */}
         <h1

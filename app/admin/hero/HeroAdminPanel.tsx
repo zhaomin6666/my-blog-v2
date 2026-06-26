@@ -49,7 +49,7 @@ export function HeroAdminPanel({ zhSection, enSection }: HeroAdminPanelProps) {
       </aside>
 
       <div className="min-w-0">
-        <HeroSectionForm section={activeSection} />
+        <HeroSectionForm key={activeSection.lang} section={activeSection} />
       </div>
     </div>
   );

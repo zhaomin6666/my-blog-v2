@@ -49,9 +49,7 @@ const translations = {
     'nav.logs': '日志',
     'nav.contact': '联系',
 
-    'hero.title': '面向 AI 时代构建产品的后端开发者',
-    'hero.subtitle': '我专注于构建可靠的后端系统、AI 驱动的应用，以及独立数字产品。这个网站既是我的作品集，也是我的技术笔记与产品实验室。',
-    'hero.badge': '后端开发者 · AI 构建者 · 独立开发者',
+    'hero.empty': '首页 Hero 内容尚未配置。请在 content/homepage 或 Admin CMS 中配置。',
     'hero.cta.projects': '查看项目',
     'hero.cta.terminal': '打开终端',
 
@@ -268,9 +266,7 @@ const translations = {
     'nav.logs': 'Logs',
     'nav.contact': 'Contact',
 
-    'hero.title': 'Backend Developer building AI-era products.',
-    'hero.subtitle': 'I build reliable backend systems, AI-powered applications, and independent digital products. This site is my portfolio, technical notebook, and product lab.',
-    'hero.badge': 'Backend Developer · AI Builder · Indie Hacker',
+    'hero.empty': 'Homepage hero content has not been configured. Add it in content/homepage or the Admin CMS.',
     'hero.cta.projects': 'View Projects',
     'hero.cta.terminal': 'Open Terminal',
 
