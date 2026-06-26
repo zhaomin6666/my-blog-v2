@@ -3,7 +3,8 @@ import { blogService } from '@/lib/blog';
 import { projectService } from '@/lib/projects';
 import { getAbsoluteUrl } from '@/lib/seo';
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await blogService.getPublishedPosts();

@@ -1,7 +1,8 @@
 import { blogService } from '@/lib/blog';
 import { getAbsoluteUrl, seoConfig } from '@/lib/seo';
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 function sanitizeXmlText(value: string): string {
   return value.replace(

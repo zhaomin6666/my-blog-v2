@@ -12,6 +12,9 @@ export const metadata: Metadata = buildMetadata({
   path: '/',
 });
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function Home() {
   const blogPosts = await blogService.getPublishedPosts();
   const featuredProjects = await projectService.getFeaturedProjects();
