@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "admin:secrets": "node scripts/generate-admin-secrets.mjs",
     "security:admin": "node scripts/check-admin-auth-boundary.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
