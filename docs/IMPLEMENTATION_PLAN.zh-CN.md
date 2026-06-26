@@ -4,13 +4,15 @@
 
 ## 当前状态
 
-- Phase 1 到 Phase 9 已完成。
+- Phase 1 到 Phase 12 已完成。
 - Phase 8 已完成：内容与职业展示、真实博客系列、Projects / Profile / Contact 内容体系和内容工作流文档已收口。
 - Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
 - Phase 10 已完成：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础、Phase 10.3 只读 Agent API MVP、Phase 10.4 限流 / 超时 / 滥用防护、Phase 10.5 UI 与 trace 展示、Phase 10.6 生产部署与安全验证、Phase 10.7 第一版最终验收与文档收口。
 - Phase 11 已完成：Admin / CMS 架构与实施完成最终验收，覆盖 Admin Auth、Blog / Projects / Hero / Profile / Contact / Stack Admin、Markdown Import / Export、soft delete、file mode、database mode、Agent Demo sources、sitemap / RSS、docs / env / deployment checklist。
 - Phase 12 已完成：生产环境已从 file 内容源逐步切换到 PostgreSQL-backed database mode，Blog、Projects、Hero / Profile / Contact / Stack 已通过 Admin / database 维护，最终生产内容源进入 `CONTENT_SOURCE=database`。
-- 后续进入产品化优化阶段：Admin 安全审计、清理真实内容并保留示例内容、完善 `.env.example` 和部署文档、补充 static / cms / hybrid 模式说明、增加 Maintenance / Revalidate 后台页、AgentDemo 配置后台化，以及主题和桌面个性化后台化。
+- Phase 13 已完成：开源产品化收口，覆盖 Phase 12 之后的 Step 1～8。
+- 下一阶段是 Phase 14：开源首次使用体验与发布工具。
+- Phase 15 为后续运维与可配置能力增强。
 - 当前生产地址：`https://example.com`。
 - 当前发布方式：Linux server Linux production server + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
@@ -718,15 +720,178 @@
 - 归档缓存 / revalidate 经验，并记录后续建议新增 Maintenance / Revalidate 后台页。
 - Phase 12 归档为已完成。
 
-## 后续产品化优化方向
+## Phase 13：开源产品化收口 - 已完成
 
-1. Admin 安全审计。
-2. 清理真实内容，保留适合作为开源项目的示例内容。
-3. 完善 `.env.example` 和部署文档。
-4. 补充 static / cms / hybrid 模式说明。
-5. 新增 Maintenance / Revalidate 后台页。
-6. AgentDemo 配置后台化。
-7. 主题和桌面个性化后台化。
+说明：
+
+- Phase 13 覆盖 Phase 12 之后的 Step 1～8 产品化优化工作。
+- 目标是把个人生产站点整理为可以公开发布、可以 clone、可以部署、可以二次开发的开源 starter。
+- Phase 13 不是新增业务功能阶段，而是开源发布前的内容、配置、文档、安全和使用路径收口阶段。
+- 除已归档的 Step 1～8 工作外，本次计划整理不修改 runtime code、`content/**`、database migrations 或 package 依赖。
+
+### Phase 13.1：公开仓库基线与安全清理 - 已完成
+
+#### Step 1：公开仓库定位与 README 基线
+
+- 将仓库定位从个人生产站点，调整为可复用的开源 starter。
+- 明确项目身份为 AI Native Portfolio CMS / Personal Developer OS starter。
+- 保留 live demo 作为示例入口，但避免在 docs 中扩散真实生产环境细节。
+- 将 README 作为新用户第一入口，而不是让用户直接进入较长的工程历史文档。
+- 开始区分“用户部署/使用文档”和“开发过程/工程演进文档”。
+
+#### Step 2：环境变量与密钥安全基线
+
+- 检查环境变量使用方式，确认真实 `.env` 文件、生产凭据、数据库 URL、token、服务器信息不会进入仓库。
+- 保留 `.env.example` 作为公开安全配置示例，只使用占位值。
+- 确认 Admin 登录信息通过环境变量配置，而不是硬编码在代码里。
+- 保持 `NEXT_PUBLIC_SITE_URL` 作为部署环境配置，不进入 Admin CMS 内容配置。
+- 确认 file mode 本地开发不依赖 PostgreSQL 凭据。
+
+#### Step 3：示例内容与私有内容边界清理
+
+- 替换或中性化不适合作为 starter 发布的个人/私有内容。
+- 保留 Blog、Projects、Profile、Contact、Stack、Homepage、Page Config、Site Config 所需的示例内容结构。
+- 让示例内容仍然能支撑首次运行展示，同时避免真实雇主、真实业务项目、私人联系方式和敏感职业/业务描述。
+- 确认 draft/private 内容不会进入公开路由、sitemap、RSS、Agent Demo sources 或 Console 输出。
+
+#### Step 4：Admin、数据库与内容源文档基线
+
+- 梳理 file/database 内容源模型，为后续文档收口做准备。
+- 明确 file mode 是默认且最简单的新用户路径。
+- 明确 database mode 是可选的 PostgreSQL-backed Admin CMS 路径。
+- 确立公开内容应通过稳定 service/repository 边界读取，而不是继续在组件中硬编码。
+- 建立文档边界：部署用户优先阅读简洁使用文档，工程历史文档作为参考保留。
+
+#### Step 5：运行时 placeholder、fallback 与验证基线
+
+- 检查 runtime placeholder、empty state、test fixture 和 fallback 文案是否适合作为公开 starter。
+- 保留 `translations.ts` 作为 UI 文案来源，只承载 label、button、empty state、aria label、validation message 和 command prompt。
+- 将网站内容、页面文案、站点身份、Hero、Profile、Stack、Contact、Blog posts、Project cases 标记为内容源负责的数据。
+- 确认标准验证命令仍然通过：
+  - `pnpm lint`
+  - `pnpm build`
+  - `pnpm security:admin`
+- 为后续 Phase 13.2 的内容源边界深度清理做好基线准备。
+
+### Phase 13.2：Content Source Boundary Cleanup - 已完成
+
+- 归档 Step 6A～6B-5。
+- Homepage Hero 已移动到 `content/homepage` / Admin Hero 内容源边界后面。
+- `translations.ts` 不再承载网站内容，只负责 UI labels、buttons、empty states、aria labels、validation messages 和 command prompts。
+- Blog / Projects Page Config 已移动到 `content/pages`、`page_configs`、`lib/page-config` 和 Admin Page Config。
+- Site Identity / SEO 已移动到 `content/site`、`site_configs`、`lib/site-config` 和 Admin Site Config。
+- Console `about`、`skills`、`contact`、`whoami` 已读取 `PublicProfile` / Stack / Contact sources，不再维护重复的个性化翻译内容。
+- 非 content 文件中的剩余 placeholder、test fixtures、examples 和 fallback copy 已完成脱敏与中性化。
+
+### Phase 13.3：Public Docs Sanitization And History Backfill - 已完成
+
+- 归档 Step 7。
+- 完成 docs 公开版脱敏。
+- 保留工程演进历史，但替换真实域名、服务器、账号、真实业务经历和生产路径。
+- 将 Step 6A～6B-5 补充到 changelog / implementation plan / content workflow / database source docs。
+
+### Phase 13.4：Documentation IA And README Accuracy - 已完成
+
+- 归档 Step 8。
+- `README.md` 和 `README.zh-CN.md` 已改为开源项目入口。
+- 新增或完善 Getting Started 文档。
+- 将 `docs/` 分成 user-facing docs 和 development notes。
+- README 优先引用部署和使用文档，不优先引用长篇历史文档。
+- Deployment / Content Workflow / Database Content Source 保持简洁、当前准确。
+
+### Phase 13.5：Phase 13 Final Review - 已完成
+
+- 确认 Phase 13 的目标已经完成。
+- 确认代码、content、docs、README 已完成开源产品化收口。
+- 确认后续工作进入 Phase 14 / Phase 15。
+- 未新增独立 Phase 13 产品化收口文档。
+
+## Phase 14：开源首次使用体验与发布工具 - 规划中
+
+目标：
+
+- 让陌生用户 clone 项目后，可以顺利完成本地运行、file mode 使用、database mode 初始化、部署和 release 检查。
+- Phase 14 聚焦首次使用体验和发布工具，不做大规模功能扩展。
+
+### Phase 14.1：Release Checklist And Scan Scripts - 规划中
+
+- 增加或整理发布检查清单。
+- 明确必须运行：
+  - `pnpm lint`
+  - `pnpm build`
+  - `pnpm security:admin`
+  - `pnpm admin:secrets`
+- 增加或文档化敏感信息扫描脚本。
+- 扫描 README / docs / runtime / content 中的真实账号、真实域名、真实服务器、真实业务经历和 secret。
+
+### Phase 14.2：File Mode First-run Validation - 规划中
+
+- 验证无 PostgreSQL 的 file mode 首次运行体验。
+- 确认 content 示例内容完整。
+- 确认 sitemap / robots / RSS 在 file mode 正常。
+- 确认 Admin/database 相关环境变量未配置时不会影响 file mode build。
+
+### Phase 14.3：Database Mode Seed Or Import Path - 规划中
+
+- 设计 database mode 首次使用路径。
+- 选择以下方案之一：
+  - seed SQL
+  - content-to-database import command
+  - documented Admin import workflow
+- 优先保持 file mode 示例内容和 database mode 示例内容一致。
+- 不自动切换 `CONTENT_SOURCE`。
+- 不覆盖用户内容，正式导入必须显式确认。
+
+### Phase 14.4：Database Mode First-run Validation - 规划中
+
+- 验证 PostgreSQL migration、Admin 登录、Admin CMS 保存、公开页面读取 database mode 的完整链路。
+- 明确 database mode 空表 fallback 和示例导入后的行为。
+- 补充 database mode troubleshooting。
+
+### Phase 14.5：Open-source Release Tag Preparation - 规划中
+
+- 准备 release notes。
+- 确认 License / README / docs / env examples / scans。
+- 创建正式开源 release tag。
+
+## Phase 15：运维与可配置能力增强 - 规划中
+
+目标：
+
+- 在开源基础稳定后，补充运维工具和更高级的可配置能力。
+- Phase 15 不阻塞开源发布，可以作为后续增强阶段。
+
+### Phase 15.1：Maintenance / Revalidate Admin - 规划中
+
+- 处理 Phase 12 中记录的 cache / revalidation 观察。
+- 可选新增 Admin-protected Maintenance 页面。
+- 支持安全、有限范围的 public route revalidation。
+- 不新增 unauthenticated cache purge endpoint。
+
+### Phase 15.2：Agent Demo Config Admin - 规划中
+
+- 将 Agent Demo 的展示配置、示例问题、scope notice 等迁移到 file/database 配置源。
+- API key、base URL、模型环境变量仍然留在 `.env`。
+- 不扩大 Agent Demo 回答范围。
+
+### Phase 15.3：Static / CMS / Hybrid Mode Guidance - 规划中
+
+- 明确 static / file mode、database CMS mode、hybrid mode 的使用边界。
+- 可选增加 feature flags，如 `ENABLE_ADMIN` / `ENABLE_AGENT_DEMO`。
+- 降低只想部署静态内容站用户的理解成本。
+
+### Phase 15.4：Theme / Desktop / Window Configuration - 规划中
+
+- 将默认主题、默认语言、默认视觉 preset、窗口初始状态等做成可配置项。
+- 优先保持 file mode 配置简单。
+- database mode 可以后续进入 Admin Site Config 或独立 UI Config。
+
+### Phase 15.5：Admin UX And Operations Polish - 规划中
+
+- 优化 Admin dashboard 信息架构。
+- 增加更清晰的 production warning / source mode indicator。
+- 增加更好的保存成功反馈和错误提示。
+- 不改变核心内容模型。
 
 ## 后续原则
 

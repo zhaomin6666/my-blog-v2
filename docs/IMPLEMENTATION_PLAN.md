@@ -1,5 +1,11 @@
 # Implementation Plan — Personal Dev OS
 
+## Current Status
+- Phase 1 through Phase 12 are completed.
+- Phase 13 is completed: open-source productization cleanup, covering the Step 1-8 cleanup work after the production CMS switch.
+- The next phase is Phase 14: open-source onboarding and release tooling.
+- Phase 15 is planned as a follow-up operations and optional configuration enhancement phase.
+
 ## Phase 1: Project Foundation & OS Shell ✅ COMPLETED
 - Initialize Next.js / Tailwind / TypeScript
 - Create base directory structure
@@ -224,18 +230,6 @@
 - Re-ran `pnpm lint` and `pnpm build`
 - Rechecked public blog routes, sitemap, robots, RSS, and draft safety
 - No business feature, CMS, DB, search, Console, CLI, or window-system changes
-
-### Step 6A - 6B-5: Public Content-Source Cleanup Archive COMPLETED
-- Step 6A: Homepage Hero content moved behind content-source boundaries. File mode reads `content/homepage/hero.*.md`; database mode reads `homepage_sections` through Admin Hero. Hero title, subtitle, and badge are no longer hardcoded in component code.
-- Step 6B-0: Removed unused translation keys and clarified that `translations.ts` owns UI labels, buttons, empty states, aria labels, and error prompts, not website content.
-- Step 6B-1: Removed Hero title / subtitle / badge translation fallbacks. `HomepageSection.data.badge` owns the Hero badge, and missing Hero content shows a configuration-missing state instead of silently reusing generic copy.
-- Step 6B-2A: Added Blog / Projects Page Config through `content/pages/*.md`, `page_configs`, and `lib/page-config`; `/blog` and `/projects` metadata, page copy, and footer now read Page Config.
-- Step 6B-2B: Added `/admin/pages` with `projects zh`, `projects en`, `blog zh`, and `blog en` forms. Admin upserts `page_configs` and completes the database-mode page configuration loop.
-- Step 6B-3: Console `about`, `skills`, `contact`, and `whoami` now read from `PublicProfile`, including Profile, Stack, and Contact content. Console no longer depends on `data/skills.ts` or personalized `cmd.*.output` translation content.
-- Step 6B-4A: Added Site Config through `content/site/settings.*.md`, `site_configs`, and `lib/site-config`. `lib/seo.ts` now accepts `SiteConfig`; Site Identity and default SEO are content-configured, while `siteUrl` remains controlled by `NEXT_PUBLIC_SITE_URL`.
-- Step 6B-4B: Added `/admin/site` with Site zh and en forms. Admin upserts `site_configs` and completes the database-mode Site Identity / default SEO loop.
-- Step 6B-5: Sanitized remaining non-content Admin placeholders, test fixtures, contact platform examples, and fallback copy outside `content/**`.
-- Step 7A later backfilled these records into public docs and replaced production-specific details with reusable example values.
 
 ## Phase 7: Self-hosted Production Deployment COMPLETED
 - Docker deployment configuration
@@ -1134,3 +1128,148 @@
 - Confirmed no real `.env.production`, database URL, password, IP address, backup dump path, or dump file was committed.
 - Archived the cache/revalidate observation and the follow-up recommendation for a Maintenance / Revalidate Admin page.
 - Phase 12 is archived as completed.
+
+## Phase 13: Open-source Productization Cleanup COMPLETED
+- Phase 13 covers the Step 1-8 productization cleanup work completed after Phase 12.
+- The goal was to turn the personal production site into an open-source starter that can be published, cloned, deployed, and extended by other developers.
+- Phase 13 did not add new business features. It closed the loop on content, configuration, documentation, safety, and first-use paths before public release.
+- Runtime code, `content/**`, database migrations, and package dependencies were kept out of scope unless already covered by the archived Step 1-8 work.
+
+### Phase 13.1: Public Repository Baseline And Safety Cleanup COMPLETED
+
+#### Step 1: Public Repository Positioning And README Baseline
+- Reframed the repository from a personal production site into an open-source starter.
+- Clarified the project identity as an AI Native Portfolio CMS / Personal Developer OS starter.
+- Kept the live demo as an example reference while avoiding spreading real production details through docs.
+- Established README as the primary project entry point instead of sending new users directly into long engineering-history documents.
+- Started separating user-facing setup documentation from development notes.
+
+#### Step 2: Environment And Secret Safety Baseline
+- Reviewed environment-variable usage and ensured real `.env` files, production credentials, database URLs, tokens, and private server values are not committed.
+- Kept `.env.example` as the safe public configuration reference with placeholder values.
+- Confirmed Admin authentication is configured through environment variables, not hardcoded credentials.
+- Preserved `NEXT_PUBLIC_SITE_URL` as deployment configuration rather than content stored in Admin CMS.
+- Confirmed local file-mode development can run without PostgreSQL credentials.
+
+#### Step 3: Example Content And Private-content Boundary Cleanup
+- Replaced or neutralized personal/private content that should not ship as reusable starter data.
+- Preserved the content structure needed for Blog, Projects, Profile, Contact, Stack, Homepage, Page Config, and Site Config examples.
+- Kept example content useful for first-run demonstration while avoiding real employer names, private project details, private contact information, and sensitive career/business wording.
+- Confirmed draft/private content should not appear in public routes, sitemap, RSS, Agent Demo sources, or Console output.
+
+#### Step 4: Admin, Database, And Content-source Documentation Baseline
+- Reviewed the file/database content-source model and prepared the documentation direction for later cleanup.
+- Kept file mode as the default and simplest path for new users.
+- Kept database mode as an optional PostgreSQL-backed Admin CMS path.
+- Documented the principle that public content should come from stable service/repository boundaries rather than direct component-level hardcoding.
+- Established the documentation boundary that deployment users should read concise setup docs first, while engineering-history docs remain available as reference.
+
+#### Step 5: Runtime Placeholder, Fallback, And Validation Baseline
+- Reviewed runtime placeholders, empty states, test fixtures, and fallback text for public-starter safety.
+- Kept UI labels, buttons, empty states, aria labels, validation messages, and command prompts in `translations.ts`.
+- Marked website content, page copy, site identity, Hero copy, Profile, Stack, Contact, Blog posts, and Project cases as content-source-owned data rather than translation-owned data.
+- Confirmed validation still passes through the standard checks:
+  - `pnpm lint`
+  - `pnpm build`
+  - `pnpm security:admin`
+- Prepared the project for the deeper Phase 13.2 content-source boundary cleanup.
+
+### Phase 13.2: Content Source Boundary Cleanup COMPLETED
+- Archived Step 6A through Step 6B-5.
+- Homepage Hero content moved behind content-source boundaries. File mode reads `content/homepage/hero.*.md`; database mode reads `homepage_sections` through Admin Hero.
+- `translations.ts` no longer owns website content. It remains responsible for UI labels, buttons, empty states, aria labels, validation messages, and command prompts.
+- Blog / Projects Page Config moved to `content/pages/*.md`, `page_configs`, `lib/page-config`, and Admin Page Config.
+- Site Identity and default SEO moved to `content/site/settings.*.md`, `site_configs`, `lib/site-config`, and Admin Site Config.
+- Console `about`, `skills`, `contact`, and `whoami` commands now read from `PublicProfile`, Stack, and Contact sources instead of duplicated personalized translation content.
+- Remaining non-content placeholders, test fixtures, examples, and fallback copy outside `content/**` were sanitized.
+
+### Phase 13.3: Public Docs Sanitization And History Backfill COMPLETED
+- Archived Step 7.
+- Sanitized public documentation for open-source release.
+- Preserved the engineering evolution history while replacing real domains, server details, accounts, private business context, and production paths with reusable example values.
+- Backfilled Step 6A through Step 6B-5 into the changelog, implementation plan, content workflow docs, and database source docs.
+
+### Phase 13.4: Documentation IA And README Accuracy COMPLETED
+- Archived Step 8.
+- Reworked `README.md` and `README.zh-CN.md` as open-source project entry points.
+- Added or improved Getting Started documentation for first-run and deployment decisions.
+- Split `docs/` into user-facing docs and development notes.
+- README now prioritizes current usage and deployment docs instead of long historical records.
+- Deployment, Content Workflow, and Database Content Source docs were kept concise and aligned with the current file/database content-source model.
+
+### Phase 13.5: Phase 13 Final Review COMPLETED
+- Confirmed Phase 13 goals are complete.
+- Confirmed code, content, docs, and README have gone through open-source productization cleanup.
+- Confirmed follow-up work should move into Phase 14 and Phase 15.
+- No standalone Phase 13 productization document was added.
+
+## Phase 14: Open-source Onboarding And Release Tooling PLANNED
+- Goal: make sure a new user can clone the project and complete local setup, file mode usage, database mode initialization, deployment checks, and release checks.
+- Phase 14 focuses on first-use experience and release tooling, not broad feature expansion.
+
+### Phase 14.1: Release Checklist And Scan Scripts PLANNED
+- Add or organize the release checklist.
+- Require these checks before release:
+  - `pnpm lint`
+  - `pnpm build`
+  - `pnpm security:admin`
+  - `pnpm admin:secrets`
+- Add or document sensitive-information scan scripts.
+- Scan README, docs, runtime code, and content for real accounts, real domains, real servers, private business context, and secrets.
+
+### Phase 14.2: File Mode First-run Validation PLANNED
+- Validate the first-run experience without PostgreSQL.
+- Confirm file-mode example content is complete.
+- Confirm sitemap, robots, and RSS work in file mode.
+- Confirm missing Admin/database environment variables do not affect file-mode builds.
+
+### Phase 14.3: Database Mode Seed Or Import Path PLANNED
+- Design the first-use path for database mode.
+- Choose one of these approaches:
+  - seed SQL
+  - content-to-database import command
+  - documented Admin import workflow
+- Prefer keeping file-mode example content and database-mode example content aligned.
+- Do not automatically switch `CONTENT_SOURCE`.
+- Do not overwrite user content; formal import must require explicit confirmation.
+
+### Phase 14.4: Database Mode First-run Validation PLANNED
+- Validate the full PostgreSQL migration, Admin login, Admin CMS save, and public database-mode read path.
+- Document database-mode behavior for empty-table fallback and imported sample content.
+- Add database-mode troubleshooting notes.
+
+### Phase 14.5: Open-source Release Tag Preparation PLANNED
+- Prepare release notes.
+- Confirm License, README, docs, env examples, and scans.
+- Create the formal open-source release tag.
+
+## Phase 15: Operations And Optional Configuration Enhancements PLANNED
+- Goal: after the open-source baseline is stable, add operations tools and more advanced configuration options.
+- Phase 15 does not block the open-source release and can be handled as a later enhancement phase.
+
+### Phase 15.1: Maintenance / Revalidate Admin PLANNED
+- Address the cache / revalidation observation recorded in Phase 12.
+- Optionally add an Admin-protected Maintenance page.
+- Support safe, limited public route revalidation.
+- Do not add an unauthenticated cache purge endpoint.
+
+### Phase 15.2: Agent Demo Config Admin PLANNED
+- Move Agent Demo display config, example questions, and scope notice into file/database config sources.
+- Keep API key, base URL, and model environment variables in `.env`.
+- Do not expand the Agent Demo answer scope.
+
+### Phase 15.3: Static / CMS / Hybrid Mode Guidance PLANNED
+- Clarify when to use static/file mode, database CMS mode, and hybrid mode.
+- Optionally add feature flags such as `ENABLE_ADMIN` and `ENABLE_AGENT_DEMO`.
+- Reduce the setup cost for users who only want to deploy a static content site.
+
+### Phase 15.4: Theme / Desktop / Window Configuration PLANNED
+- Make default theme, default language, default visual preset, and initial window states configurable.
+- Keep file-mode configuration simple first.
+- Database mode can later move into Admin Site Config or a dedicated UI Config area.
+
+### Phase 15.5: Admin UX And Operations Polish PLANNED
+- Improve Admin dashboard information architecture.
+- Add clearer production warnings and source mode indicators.
+- Add better save-success feedback and error messages.
+- Do not change the core content model.

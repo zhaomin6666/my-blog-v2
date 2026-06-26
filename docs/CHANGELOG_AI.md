@@ -1,6 +1,47 @@
 # AI Development Changelog
 
 ### 2026-06-26 - Codex
+**Summary:** Expanded Phase 13.1 with the concrete Step 1-5 productization archive.
+
+**Scope:**
+- Replaced the short Phase 13.1 summary in the implementation plans with Step 1 through Step 5 archive notes.
+- Added the public repository positioning and README baseline.
+- Added the environment and secret safety baseline.
+- Added the example-content and private-content boundary cleanup baseline.
+- Added the Admin, database, and content-source documentation baseline.
+- Added the runtime placeholder, fallback, and validation baseline.
+
+**Scope guard:**
+- No runtime code, `content/**`, database migrations, README files, package dependencies, or standalone Phase 13 document were changed.
+- Step 1-5 were documented as productization archive notes without inventing unconfirmed code implementation details.
+
+**Verification:**
+- `pnpm lint`
+- `pnpm build`
+- `pnpm security:admin`
+- Public docs keyword scan for the requested sensitive terms passed.
+
+### 2026-06-26 - Codex
+**Summary:** Reorganized the post-Phase 12 productization work into Phase 13 and planned Phase 14 / Phase 15.
+
+**Scope:**
+- Archived the previous Step 1-8 open-source productization cleanup as `Phase 13: Open-source Productization Cleanup`.
+- Moved the Step 6A through Step 6B-5 content-source cleanup archive out of the Phase 6 area and into Phase 13.
+- Added Phase 13.1 through Phase 13.5 to cover repository baseline cleanup, content-source boundaries, public docs sanitization, documentation IA, and final review.
+- Added `Phase 14: Open-source Onboarding And Release Tooling` as the next planned phase.
+- Added `Phase 15: Operations And Optional Configuration Enhancements` as a later planned enhancement phase.
+- Updated the Chinese implementation plan current status to reflect Phase 1-12 completed, Phase 13 completed, Phase 14 next, and Phase 15 planned.
+
+**Scope guard:**
+- No runtime code, `content/**`, database migrations, package dependencies, README files, or standalone Phase 13 productization document were changed.
+
+**Verification:**
+- `pnpm lint`
+- `pnpm build`
+- `pnpm security:admin`
+- Public docs keyword scan for the requested sensitive terms passed.
+
+### 2026-06-26 - Codex
 **Summary:** Phase 12 completed. Archived the production CMS switch from file content sources to PostgreSQL-backed database mode.
 
 **Scope:**

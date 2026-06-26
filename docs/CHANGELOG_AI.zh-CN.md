@@ -1,6 +1,49 @@
 # AI 变更记录中文摘要
 
 ### 2026-06-26 - Codex
+**摘要：** 补充 Phase 13.1 中 Step 1～5 的具体产品化归档内容。
+
+**范围：**
+- 将实施计划中 Phase 13.1 的简短概括，扩展为 Step 1～5 的归档说明。
+- 补充公开仓库定位与 README 基线。
+- 补充环境变量与密钥安全基线。
+- 补充示例内容与私有内容边界清理基线。
+- 补充 Admin、数据库与内容源文档基线。
+- 补充运行时 placeholder、fallback 与验证基线。
+
+**范围守卫：**
+- 未修改 runtime code、`content/**`、database migrations、README 文件或 package 依赖。
+- 未新增独立 Phase 13 文档。
+- Step 1～5 仅按产品化归档说明记录，没有补写无法确认的具体代码实现细节。
+
+**验证：**
+- `pnpm lint`
+- `pnpm build`
+- `pnpm security:admin`
+- 按要求扫描公开文档敏感词，未发现命中。
+
+### 2026-06-26 - Codex
+**摘要：** 将 Phase 12 之后的 Step 1～8 产品化优化统一归档为 Phase 13，并规划 Phase 14 / Phase 15。
+
+**范围：**
+- 将之前 Step 1～8 的开源产品化收口统一归档为 `Phase 13：开源产品化收口`。
+- 将 Step 6A～6B-5 的内容源边界清理记录从 Phase 6 附近移入 Phase 13。
+- 新增 Phase 13.1～13.5，覆盖开源仓库基础清理、内容源边界收紧、公开文档脱敏、README / docs 信息架构整理和 Phase 13 最终确认。
+- 新增 `Phase 14：开源首次使用体验与发布工具`，作为下一阶段计划。
+- 新增 `Phase 15：运维与可配置能力增强`，作为后续增强阶段。
+- 更新中文实施计划顶部当前状态，明确 Phase 1～12 已完成、Phase 13 已完成、Phase 14 为下一阶段、Phase 15 为后续增强。
+
+**范围守卫：**
+- 未修改 runtime code、`content/**`、database migrations、package 依赖、README 文件。
+- 按用户要求，未新增独立 Phase 13 产品化收口文档。
+
+**验证：**
+- `pnpm lint`
+- `pnpm build`
+- `pnpm security:admin`
+- 按要求扫描公开文档敏感词，未发现命中。
+
+### 2026-06-26 - Codex
 **摘要：** Phase 12 已完成，归档生产环境从 file 内容源切换到 PostgreSQL database mode 的完整过程。
 
 **范围：**
