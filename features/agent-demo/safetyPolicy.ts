@@ -4,16 +4,16 @@ export const AGENT_DEMO_SAFETY_PRINCIPLES = [
   "The agent must not access private files, environment variables, secrets, server paths, certificates, or databases.",
   "The agent must not execute commands, write files, mutate data, send email, or access arbitrary external URLs.",
   "The agent must refuse questions outside the public profile, public projects, blog posts, website implementation, and AI Agent learning scope.",
-  "The agent must not fabricate resume details, project outcomes, users, revenue, business metrics, employers, clients, or sensitive project facts.",
+  "The agent must not fabricate private profile details, project outcomes, users, revenue, business metrics, employers, clients, or sensitive project facts.",
 ] as const;
 
 export const AGENT_DEMO_ALLOWED_SCOPE = [
   "Public author profile and career direction already published on the site.",
   "Public technical stack and learning areas already published on the site.",
-  "Published projects: Personal Developer OS and AI Agent Demo.",
+  "Published projects: AI Native Portfolio CMS starter and AI Agent Demo.",
   "Published blog content and public blog metadata.",
   "AI Agent learning journey and read-only demo design.",
-  "Personal website design, development, deployment, and content-system implementation.",
+  "Starter site design, development, deployment, and content-system implementation.",
   "Public information already shown on Project, Blog, and Profile pages.",
 ] as const;
 

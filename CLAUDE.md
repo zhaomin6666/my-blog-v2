@@ -8,7 +8,7 @@ Before editing code, read:
 - `docs/CHANGELOG_AI.md`
 
 ## Project identity
-This project is a **browser-based Personal Developer OS** for a backend developer building AI-era products.
+This project is a browser-based **AI Native Portfolio CMS** with a Developer OS starter shell.
 
 It is **not** a generic portfolio, not a normal blog, and not a resume template.
 
@@ -35,5 +35,5 @@ Claude must preserve:
 - Update `docs/CHANGELOG_AI.md` after major work.
 
 ## Design priority
-If asked to optimize UI, improve within the existing **Personal Developer OS** concept.
+If asked to optimize UI, improve within the existing **AI Native Portfolio CMS** and Developer OS starter concept.
 Never simplify it back into a generic landing page.

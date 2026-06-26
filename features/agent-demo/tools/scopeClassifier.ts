@@ -145,9 +145,9 @@ const allowedRules: KeywordRule[] = [
   {
     category: "website",
     keywords: [
-      "personal developer os",
-      "developer os",
-      "personal dev os",
+      "ai native portfolio cms",
+      "portfolio cms",
+      "developer os starter",
       "website",
       "site",
       "next.js",
@@ -165,14 +165,15 @@ const allowedRules: KeywordRule[] = [
       "站点",
       "网站",
     ],
-    reason: "The question is about the Personal Developer OS website or its implementation.",
+    reason: "The question is about the AI Native Portfolio CMS starter site or its implementation.",
   },
   {
     category: "project",
     keywords: [
       "project",
       "portfolio",
-      "personal developer os",
+      "ai native portfolio cms",
+      "example portfolio",
       "ai agent demo",
       "项目",
       "作品",
@@ -208,10 +209,8 @@ const allowedRules: KeywordRule[] = [
       "resume",
       "联系",
       "邮箱",
-      "简历",
-      "求职",
     ],
-    reason: "The question is about public contact channels or resume availability.",
+    reason: "The question is about public contact channels.",
   },
   {
     category: "profile",

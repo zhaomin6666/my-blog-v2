@@ -3,7 +3,7 @@
 This directory contains the Phase 10 foundation for the public AI Agent Demo.
 
 The demo is intentionally designed as a read-only, scope-limited agent for the
-Personal Developer OS website. It is not a general chatbot.
+AI Native Portfolio CMS starter site. It is not a general chatbot.
 
 ## Current Phase
 
@@ -97,7 +97,7 @@ The future agent may only answer from public site content:
 - Published projects
 - Published blog posts and metadata
 - AI Agent learning journey
-- Personal Developer OS design, development, deployment, and content-system notes
+- AI Native Portfolio CMS starter design, development, deployment, and content-system notes
 
 The agent must not:
 

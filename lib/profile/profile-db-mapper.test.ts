@@ -24,7 +24,7 @@ describe('profile-db-mapper', () => {
         intro: 'Chinese intro',
         status: 'Open',
         fields: [
-          { labelKey: 'about.role', value: 'Backend Developer' },
+          { labelKey: 'about.role', value: 'Product Builder' },
           { labelKey: 'about.direction', value: 'AI Agent' },
         ],
         focus: ['RAG', 'LangGraph'],
@@ -42,7 +42,7 @@ describe('profile-db-mapper', () => {
         intro: 'English intro',
         status: 'Open to talk',
         fields: [
-          { labelKey: 'about.role', value: 'Backend Developer' },
+          { labelKey: 'about.role', value: 'Product Builder' },
           { labelKey: 'about.direction', value: 'AI Agent' },
         ],
         focus: ['RAG', 'LangGraph'],
@@ -56,7 +56,7 @@ describe('profile-db-mapper', () => {
     expect(profile.status).toEqual({ zh: 'Open', en: 'Open to talk' });
     expect(profile.fields[0]).toEqual({
       labelKey: 'about.role',
-      value: { zh: 'Backend Developer', en: 'Backend Developer' },
+      value: { zh: 'Product Builder', en: 'Product Builder' },
     });
     expect(profile.focus[0]).toEqual({ zh: 'RAG', en: 'RAG' });
     expect(profile.published).toBe(true);
@@ -124,8 +124,8 @@ describe('profile-db-mapper', () => {
           { zh: 'Next.js', en: '' },
         ],
         background: [
-          { zh: 'Enterprise systems', en: '' },
-          { zh: 'Bidding projects', en: '' },
+          { zh: 'Starter systems', en: '' },
+          { zh: 'Example projects', en: '' },
         ],
         workStyle: [
           { zh: 'Start from real business problems', en: '' },
@@ -138,7 +138,7 @@ describe('profile-db-mapper', () => {
     const profile = mapProfilePageRowsToProfile({ zh: zhRow, en: null });
 
     expect(profile.focus.map((item) => item.zh)).toEqual(['AI Agent', 'TypeScript', 'Next.js']);
-    expect(profile.background.map((item) => item.zh)).toEqual(['Enterprise systems', 'Bidding projects']);
+    expect(profile.background.map((item) => item.zh)).toEqual(['Starter systems', 'Example projects']);
     expect(profile.workStyle.map((item) => item.zh)).toEqual([
       'Start from real business problems',
       'Keep delivery records',
@@ -151,7 +151,7 @@ describe('profile-db-mapper', () => {
         id: 'contact-1',
         platform: 'blog',
         custom_label: '',
-        value: 'https://oli6666.top/blog',
+        value: 'https://example.com/blog',
         href_override: '',
         display_order: 1,
       },
@@ -159,7 +159,7 @@ describe('profile-db-mapper', () => {
         id: 'contact-2',
         platform: 'github',
         custom_label: '',
-        value: 'oli6666',
+        value: 'example-dev',
         href_override: '',
         display_order: 2,
       },
@@ -171,14 +171,14 @@ describe('profile-db-mapper', () => {
     expect(channels[0]).toMatchObject({
       platform: 'blog',
       label: 'Blog',
-      href: 'https://oli6666.top/blog',
-      value: 'https://oli6666.top/blog',
+      href: 'https://example.com/blog',
+      value: 'https://example.com/blog',
     });
     expect(channels[1]).toMatchObject({
       platform: 'github',
       label: 'GitHub',
-      href: 'https://github.com/oli6666',
-      value: '@oli6666',
+      href: 'https://github.com/example-dev',
+      value: '@example-dev',
     });
   });
 

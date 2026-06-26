@@ -8,7 +8,7 @@ Before making changes, read:
 - `docs/CHANGELOG_AI.md`
 
 ## Project identity
-This is a **Personal Developer OS**, not a normal portfolio template.
+This is an **AI Native Portfolio CMS** with a Developer OS starter shell, not a normal portfolio template.
 
 The page is a lightweight browser-based desktop OS containing exactly two apps:
 - **Main App**: The primary content window
@@ -36,4 +36,4 @@ When both apps are closed, a **Desktop** placeholder is shown.
 - Update `docs/CHANGELOG_AI.md` after major changes.
 
 ## First principle
-When design and implementation conflict, preserve the **Personal Developer OS** product concept first.
+When design and implementation conflict, preserve the **AI Native Portfolio CMS** product concept and Developer OS starter shell first.

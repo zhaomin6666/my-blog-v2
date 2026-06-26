@@ -29,12 +29,12 @@ describe('profile form utils', () => {
 
   it('parses building textarea lines as title description link triplets', () => {
     expect(
-      mergeLinksByLanguage([], '个人网站 | 主站入口 | https://oli6666.top/', 'zh'),
+      mergeLinksByLanguage([], 'Example Portfolio | Starter entry | https://example.com/', 'zh'),
     ).toEqual([
       {
-        href: 'https://oli6666.top/',
-        label: { zh: '个人网站', en: '' },
-        description: { zh: '主站入口', en: '' },
+        href: 'https://example.com/',
+        label: { zh: 'Example Portfolio', en: '' },
+        description: { zh: 'Starter entry', en: '' },
       },
     ]);
   });

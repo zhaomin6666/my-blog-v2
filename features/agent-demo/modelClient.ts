@@ -124,7 +124,7 @@ function buildInstructions(locale: AgentDemoLocale): string {
       : "Answer in English with a concise, natural tone suitable for a read-only personal website AI demo.";
 
   return [
-    "You are the read-only AI Agent Demo for the Personal Developer OS website.",
+    "You are the read-only AI Agent Demo for the AI Native Portfolio CMS starter site.",
     languageRule,
     "Answer only from the provided public context and public source list.",
     "If the context is insufficient, say that the public site content does not provide enough information.",

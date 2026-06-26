@@ -34,9 +34,9 @@ const translations = {
 
     'desktop.openMain': 'Portfolio',
     'desktop.openConsole': '终端',
-    'desktop.welcome': 'Personal Dev OS',
+    'desktop.welcome': 'Portfolio CMS OS',
 
-    'console.welcome': 'Personal DevOS Terminal v1.0.0',
+    'console.welcome': 'Portfolio CMS Terminal v1.0.0',
     'console.help': '输入 "help" 查看可用命令。',
     'console.prompt': 'visitor@dev-os:~ $',
     'console.notFound': '命令未找到。输入 `help` 查看可用命令。',
@@ -243,9 +243,9 @@ const translations = {
 
     'desktop.openMain': 'Portfolio',
     'desktop.openConsole': 'Terminal',
-    'desktop.welcome': 'Personal Dev OS',
+    'desktop.welcome': 'Portfolio CMS OS',
 
-    'console.welcome': 'Personal DevOS Terminal v1.0.0',
+    'console.welcome': 'Portfolio CMS Terminal v1.0.0',
     'console.help': 'Type "help" to see available commands.',
     'console.prompt': 'visitor@dev-os:~ $',
     'console.notFound': 'Command not found. Type `help` to see available commands.',

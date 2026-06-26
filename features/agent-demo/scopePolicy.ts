@@ -17,7 +17,7 @@ export const AGENT_DEMO_SCOPE_CATEGORY_DESCRIPTIONS: Record<
   project: "Published project pages and public project metadata.",
   blog: "Published blog posts, tags, series, summaries, and public article excerpts.",
   agent_learning: "AI Agent Demo scope and public AI Agent learning journey.",
-  website: "Personal Developer OS design, implementation, deployment, and content system.",
+  website: "AI Native Portfolio CMS starter design, implementation, deployment, and content system.",
   contact_public: "Public contact channels and privacy-safe contact guidance.",
   out_of_scope: "Questions unrelated to the author, website, public projects, or blog content.",
   privacy: "Requests for private personal, employer, client, buyer, or contact information.",

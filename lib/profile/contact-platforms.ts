@@ -87,7 +87,7 @@ const websiteMeta = {
   label: 'Website',
   inputMode: 'url',
   placeholder: 'https://example.com',
-  example: 'https://oli6666.top',
+  example: 'https://example.com',
   icon: Globe,
 } satisfies ContactPlatformMeta;
 
@@ -96,7 +96,7 @@ const blogMeta = {
   label: 'Blog',
   inputMode: 'url',
   placeholder: 'https://blog.example.com',
-  example: 'https://oli6666.top/blog',
+  example: 'https://example.com/blog',
   icon: LinkIcon,
 } satisfies ContactPlatformMeta;
 
@@ -141,7 +141,7 @@ export const CONTACT_PLATFORM_META: Record<ContactPlatform, ContactPlatformMeta>
     label: 'LinkedIn',
     inputMode: 'username',
     placeholder: 'username',
-    example: 'in/example',
+    example: 'in/example-dev',
     icon: Linkedin,
     hrefTemplate: 'https://www.linkedin.com/{value}',
   },
