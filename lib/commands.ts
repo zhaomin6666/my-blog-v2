@@ -1,5 +1,5 @@
-import { skills } from '@/data/skills';
 import type { BlogPostMeta } from './blog/blog-types';
+import type { PublicProfile } from './profile';
 import type { ProjectMeta } from './projects';
 import { Lang, MainSectionId, ProjectStatus } from './types';
 import { t } from './translations';
@@ -23,6 +23,7 @@ type CommandDefinition = {
 export type CommandContext = {
   lang: Lang;
   blogPosts: BlogPostMeta[];
+  profile: PublicProfile;
   projects: ProjectMeta[];
 };
 
@@ -68,13 +69,45 @@ const clearCommand = (): CommandResult => ({
   action: 'clear',
 });
 
-function formatSkills(lang: Lang) {
-  return [
-    t('cmd.skills.header', lang),
-    ...skills.map((category) => {
-      return `${category.category[lang]}: ${category.items.join(', ')}`;
-    }),
-  ].join('\n');
+function localizedText(value: { zh: string; en: string }, lang: Lang) {
+  return value[lang].trim();
+}
+
+function formatAbout(lang: Lang, profile: PublicProfile) {
+  const intro = localizedText(profile.profile.intro, lang);
+  const fields = profile.profile.fields
+    .map((field) => {
+      const value = localizedText(field.value, lang);
+      if (!value) return null;
+      return `${t(field.labelKey, lang)}: ${value}`;
+    })
+    .filter((item): item is string => item !== null);
+
+  if (!intro && fields.length === 0) {
+    return t('about.empty', lang);
+  }
+
+  return [intro, ...fields].filter(Boolean).join('\n');
+}
+
+function formatSkills(lang: Lang, profile: PublicProfile) {
+  const groups = profile.systemStack.groups
+    .map((group) => {
+      const groupName = group.name.trim();
+      if (!groupName) return null;
+      const items = group.items
+        .map((item) => item.name.trim())
+        .filter(Boolean);
+
+      return `${groupName}: ${items.join(', ')}`;
+    })
+    .filter((item): item is string => item !== null);
+
+  if (groups.length === 0) {
+    return t('skills.empty', lang);
+  }
+
+  return [t('cmd.skills.header', lang), ...groups].join('\n');
 }
 
 function formatProjects(lang: Lang, projects: ProjectMeta[]) {
@@ -113,14 +146,38 @@ function formatBlogs(lang: Lang, posts: BlogPostMeta[]) {
   ].join('\n\n');
 }
 
-function formatContact(lang: Lang) {
-  return [
-    t('cmd.contact.header', lang),
-    `Email: ${t('cmd.contact.statusComingSoon', lang)}`,
-    `GitHub: ${t('cmd.contact.statusComingSoon', lang)}`,
-    `LinkedIn: ${t('cmd.contact.statusComingSoon', lang)}`,
-    `${t('contact.resume', lang)}: ${t('contact.comingSoon', lang)}`,
-  ].join('\n');
+function formatContact(lang: Lang, profile: PublicProfile) {
+  const channels = profile.contactChannels.channels
+    .filter((channel) => channel.href && channel.value)
+    .map((channel) => {
+      const label = channel.label.trim();
+      const href = channel.href.trim();
+      if (!label || !href) return null;
+      return `${label}: ${href}`;
+    })
+    .filter((item): item is string => item !== null);
+
+  if (channels.length === 0) {
+    return t('contact.empty', lang);
+  }
+
+  return [t('cmd.contact.header', lang), ...channels].join('\n');
+}
+
+function formatWhoami(lang: Lang, profile: PublicProfile) {
+  const role = localizedText(profile.profile.role, lang);
+  if (role) {
+    return role;
+  }
+
+  const intro = localizedText(profile.profile.intro, lang);
+  if (intro) {
+    return intro;
+  }
+
+  return lang === 'zh'
+    ? '当前访问者正在浏览这个 AI Native Portfolio CMS starter。'
+    : 'You are visiting this AI Native Portfolio CMS starter.';
 }
 
 const commandDefinitions: CommandDefinition[] = [
@@ -138,12 +195,12 @@ const commandDefinitions: CommandDefinition[] = [
   {
     name: 'about',
     descriptionKey: 'cmd.about.desc',
-    run: ({ lang }) => command(t('cmd.about.output', lang), { navigationTarget: 'about' }),
+    run: ({ lang, profile }) => command(formatAbout(lang, profile), { navigationTarget: 'about' }),
   },
   {
     name: 'skills',
     descriptionKey: 'cmd.skills.desc',
-    run: ({ lang }) => command(formatSkills(lang), { navigationTarget: 'skills' }),
+    run: ({ lang, profile }) => command(formatSkills(lang, profile), { navigationTarget: 'skills' }),
   },
   {
     name: 'projects',
@@ -158,7 +215,7 @@ const commandDefinitions: CommandDefinition[] = [
   {
     name: 'contact',
     descriptionKey: 'cmd.contact.desc',
-    run: ({ lang }) => command(formatContact(lang), { navigationTarget: 'contact' }),
+    run: ({ lang, profile }) => command(formatContact(lang, profile), { navigationTarget: 'contact' }),
   },
   {
     name: 'resume',
@@ -181,7 +238,7 @@ const commandDefinitions: CommandDefinition[] = [
   {
     name: 'whoami',
     descriptionKey: 'cmd.whoami.desc',
-    run: ({ lang }) => command(t('cmd.whoami.output', lang)),
+    run: ({ lang, profile }) => command(formatWhoami(lang, profile)),
   },
   {
     name: 'sudo hire me',

@@ -121,6 +121,7 @@ export function DeveloperOS({ blogPosts, homepageSections, projects, profile }: 
         >
           <ConsoleApp
             blogPosts={blogPosts}
+            profile={profile}
             projects={projects}
             onCommandResult={handleConsoleCommandResult}
           />

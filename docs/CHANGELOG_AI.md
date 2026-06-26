@@ -1,6 +1,37 @@
 # AI Development Changelog
 
 ### 2026-06-26 - Codex
+**Summary:** Fixed Console profile command formatting to match Main App visibility rules.
+
+**Scope:**
+- Aligned Console `contact` output with the homepage Contact section by only listing channels that have both `href` and `value`.
+- Adjusted Console `skills` formatting to preserve visible stack groups while trimming group and item names.
+- Added focused command tests for profile-backed `skills` and `contact` output.
+
+**Verification:**
+- `pnpm vitest run lib/commands.test.ts`
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-26 - Codex
+**Summary:** Step 6B-3 completed. Unified Console command content with PublicProfile.
+
+**Scope:**
+- Passed the existing `PublicProfile` from `DeveloperOS` into `ConsoleApp` and then into `executeCommand`.
+- Updated Console `about`, `skills`, `contact`, and `whoami` commands to format output from `profile.profile`, `profile.systemStack`, and `profile.contactChannels`.
+- Removed the Console dependency on the legacy static `data/skills.ts` file and deleted that unused file.
+- Removed old personalized command output translation keys and neutralized `resume` / `sudo` command copy.
+
+**Behavior notes:**
+- Console Stack and Contact output now follows the same file/database profile source used by Main App.
+- `projects` and `blog` commands continue to use their existing server-provided props.
+- `resume` remains a neutral text response only; no download behavior was added.
+
+**Verification:**
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-26 - Codex
 **Summary:** Tightened Blog / Projects Page Config ownership by removing page-level translation fallbacks.
 
 **Scope:**
