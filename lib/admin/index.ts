@@ -13,6 +13,12 @@ export type {
   AdminProjectStatus,
 } from './project-admin-types';
 export type {
+  AdminPageConfig,
+  AdminPageConfigInput,
+  AdminPageConfigKey,
+  AdminPageConfigLanguage,
+} from './page-config-admin-types';
+export type {
   AdminContactChannel,
   AdminContactChannelInput,
   AdminContentLanguage,

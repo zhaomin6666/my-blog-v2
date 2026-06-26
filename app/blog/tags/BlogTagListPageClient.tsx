@@ -13,7 +13,7 @@ export function BlogTagListPageClient({ tags }: BlogTagListPageClientProps) {
   const { stylePreset, lang } = useSettings();
 
   return (
-    <BlogLayout backHref="/blog" backLabel={t('blog.title', lang)}>
+    <BlogLayout backHref="/blog" backLabel={t('blog.backToBlog', lang)}>
       <BlogTagList tags={tags} stylePreset={stylePreset} lang={lang} />
     </BlogLayout>
   );

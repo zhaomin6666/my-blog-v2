@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Contact, FileText, Layers3, LayoutDashboard, PanelsTopLeft, UserRound } from 'lucide-react';
+import { Contact, FileCog, FileText, Layers3, LayoutDashboard, PanelsTopLeft, UserRound } from 'lucide-react';
 import { requireAdminSession } from '@/lib/admin/admin-auth';
 import { AdminShell } from './AdminShell';
 
@@ -46,6 +46,18 @@ export default async function AdminDashboardPage() {
           <h2 className="font-semibold">Projects Admin</h2>
           <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
             Create, publish, feature, import Project Markdown, and export Project backups from PostgreSQL.
+          </p>
+        </Link>
+        <Link
+          href="/admin/pages"
+          className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
+        >
+          <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-md bg-zinc-950 text-white dark:bg-zinc-50 dark:text-zinc-950">
+            <FileCog size={18} />
+          </div>
+          <h2 className="font-semibold">Page Configs</h2>
+          <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            Configure blog and project page titles, subtitles, footers, and SEO text.
           </p>
         </Link>
         <Link

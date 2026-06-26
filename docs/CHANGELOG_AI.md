@@ -1,6 +1,47 @@
 # AI Development Changelog
 
 ### 2026-06-26 - Codex
+**Summary:** Tightened Blog / Projects Page Config ownership by removing page-level translation fallbacks.
+
+**Scope:**
+- `/blog` and `/projects` list page titles and subtitles now render only from Page Config data.
+- Removed `blog.title`, `blog.subtitle`, and `projects.pageTitle` from `lib/translations.ts`.
+- Switched remaining Blog UI labels to UI-oriented translation keys such as `blog.logs` and `blog.backToBlog`.
+
+**Behavior notes:**
+- Page-level Blog / Projects title, subtitle, footer, and SEO copy are owned by `content/pages/*.md` in file mode or Admin `page_configs` in database mode.
+- `translations.ts` keeps UI labels, actions, counts, empty states, aria labels, and navigation copy.
+
+**Verification:**
+- `pnpm lint`
+- `pnpm build`
+
+### 2026-06-26 - Codex
+**Summary:** Step 6B-2B completed. Added Admin management for database-backed Blog / Projects page configs.
+
+**Scope:**
+- Added `lib/admin/page-config-admin-*` types, validation, repository, and service for PostgreSQL `page_configs`.
+- Added protected `/admin/pages` with four forms for `projects zh`, `projects en`, `blog zh`, and `blog en`.
+- Added a protected `savePageConfigAction` Server Action that upserts page config rows and revalidates public Blog / Projects pages.
+- Added Page Configs entries to the Admin shell navigation and Admin dashboard.
+
+**Behavior notes:**
+- Admin upsert uses the existing `(key, lang)` unique constraint and restores `deleted_at` to `null`.
+- New rows and updates keep `data` as a JSON object and allow editing `published`.
+- Missing database records render as empty defaults so the first save can create them.
+- File mode remains unchanged and still reads `content/pages/*.md`.
+
+**Scope guard:**
+- No `content/pages`, Blog posts, Project content, Hero, Profile, Contact, Stack, Site Settings, Agent Demo, migration, or dependency changes were made.
+- `lib/page-config` public API was not changed.
+- `projects.pageSubtitle`, `projects.footer`, and `blog.footer` were not reintroduced.
+
+**Verification:**
+- `pnpm lint`
+- `pnpm security:admin`
+- `pnpm build`
+
+### 2026-06-26 - Codex
 **Summary:** Step 6B-2A completed. Added file/database Page Config reads for Projects and Blog page-level copy.
 
 **Scope:**

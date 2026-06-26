@@ -65,7 +65,6 @@ const translations = {
     'skills.module': '模块',
 
     'projects.title': '服务',
-    'projects.pageTitle': 'Project Case Studies',
     'projects.count': '个项目',
     'projects.caseStudy': '查看项目详情',
     'projects.backToProjects': '返回项目列表',
@@ -122,7 +121,6 @@ const translations = {
     'agentDemo.backToProject': '返回 AI Agent Demo 项目',
     'agentDemo.openDemo': '体验在线 Demo',
 
-    'blog.title': '日志',
     'blog.logLevel': 'INFO',
     'blog.readMore': '查看详情',
     'blog.tags': 'Tags',
@@ -131,7 +129,6 @@ const translations = {
     'blog.empty': '暂无已发布的日志。',
     'blog.home': '首页',
     'blog.logs': '日志',
-    'blog.subtitle': '技术日志、工程笔记和开发洞察。',
     'blog.count': '篇',
     'blog.updated': '更新',
     'blog.back': '返回',
@@ -279,7 +276,6 @@ const translations = {
     'skills.module': 'Module',
 
     'projects.title': 'Services',
-    'projects.pageTitle': 'Project Case Studies',
     'projects.count': 'projects',
     'projects.caseStudy': 'View case study',
     'projects.backToProjects': 'Back to projects',
@@ -336,7 +332,6 @@ const translations = {
     'agentDemo.backToProject': 'Back to AI Agent Demo project',
     'agentDemo.openDemo': 'Try live demo',
 
-    'blog.title': 'Engineering Logs',
     'blog.logLevel': 'INFO',
     'blog.readMore': 'Read More',
     'blog.tags': 'Tags',
@@ -345,7 +340,6 @@ const translations = {
     'blog.empty': 'No published logs found.',
     'blog.home': 'Home',
     'blog.logs': 'Logs',
-    'blog.subtitle': 'Technical logs, engineering notes, and development insights.',
     'blog.count': 'entries',
     'blog.updated': 'Updated',
     'blog.back': 'Back',

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Contact, Database, FileText, Layers3, LayoutDashboard, LogOut, PanelsTopLeft, UserRound } from 'lucide-react';
+import { Contact, Database, FileCog, FileText, Layers3, LayoutDashboard, LogOut, PanelsTopLeft, UserRound } from 'lucide-react';
 import { logoutAction } from './actions';
 
 interface AdminShellProps {
@@ -39,6 +39,13 @@ export function AdminShell({ children, title, description, action }: AdminShellP
             >
               <PanelsTopLeft size={14} />
               Projects
+            </Link>
+            <Link
+              href="/admin/pages"
+              className="hidden items-center gap-1.5 rounded-md px-2.5 py-1.5 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white md:flex"
+            >
+              <FileCog size={14} />
+              Pages
             </Link>
             <Link
               href="/admin/hero"

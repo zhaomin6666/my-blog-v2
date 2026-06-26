@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { BookOpen, FileText, Search, Tags } from 'lucide-react';
 import type { BlogPostMeta } from '@/lib/blog/blog-types';
+import type { PageConfig } from '@/lib/page-config/page-config-types';
 import { getStyleTokens } from '@/lib/stylePresets';
 import { t } from '@/lib/translations';
 import type { StylePreset, Lang } from '@/lib/types';
@@ -8,11 +9,12 @@ import { BlogCard } from './BlogCard';
 
 interface BlogListProps {
   posts: BlogPostMeta[];
+  pageConfig: PageConfig;
   stylePreset: StylePreset;
   lang: Lang;
 }
 
-export function BlogList({ posts, stylePreset, lang }: BlogListProps) {
+export function BlogList({ posts, pageConfig, stylePreset, lang }: BlogListProps) {
   const tokens = getStyleTokens(stylePreset);
 
   if (posts.length === 0) {
@@ -30,9 +32,14 @@ export function BlogList({ posts, stylePreset, lang }: BlogListProps) {
         <div className="flex items-center gap-2">
           <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
           <h1 className={`text-xl md:text-2xl font-bold ${tokens.textPrimary}`}>
-            {t('blog.title', lang)}
+            {pageConfig.title}
           </h1>
         </div>
+        {pageConfig.subtitle ? (
+          <p className={`max-w-2xl text-sm leading-relaxed ${tokens.textSecondary}`}>
+            {pageConfig.subtitle}
+          </p>
+        ) : null}
         <div className="flex flex-wrap items-center gap-3">
           <Link
             href="/blog/search"

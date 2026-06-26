@@ -22,7 +22,7 @@ export function BlogSection({ posts }: BlogSectionProps) {
       <div className="flex items-center gap-2 mb-5">
         <div className={`w-1 h-5 rounded-full ${isMacos ? 'bg-orange-500' : 'bg-zinc-900 dark:bg-zinc-100'}`} />
         <h2 className={`${isMacos ? 'text-lg font-semibold' : 'text-xs font-mono font-bold uppercase tracking-wider'} ${tokens.textPrimary}`}>
-          {t('blog.title', lang)}
+          {t('blog.logs', lang)}
         </h2>
         <span className={`ml-auto text-[10px] px-2 py-0.5 ${tokens.tagBg} ${tokens.tagText} ${tokens.tagBorder} ${tokens.tagBorderRadius}`}>
           logs/

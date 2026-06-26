@@ -22,7 +22,12 @@ export function BlogPageClient({ posts, pageConfig }: BlogPageClientProps) {
       backLabel={t('blog.home', lang)}
       footerText={currentPageConfig.footer}
     >
-      <BlogList posts={posts} stylePreset={stylePreset} lang={lang} />
+      <BlogList
+        posts={posts}
+        pageConfig={currentPageConfig}
+        stylePreset={stylePreset}
+        lang={lang}
+      />
     </BlogLayout>
   );
 }

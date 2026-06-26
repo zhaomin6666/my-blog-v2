@@ -66,7 +66,6 @@ export function ProjectListPage({
 }: ProjectListPageProps) {
   const tokens = getStyleTokens(stylePreset);
   const isMacos = stylePreset === 'macos';
-  const title = pageConfig.title || t('projects.pageTitle', lang);
 
   return (
     <div className="space-y-5">
@@ -77,7 +76,7 @@ export function ProjectListPage({
               projects/
             </div>
             <h1 className={`${isMacos ? 'text-2xl font-semibold md:text-3xl' : 'font-mono text-xl font-bold uppercase md:text-2xl'} ${tokens.textPrimary}`}>
-              {title}
+              {pageConfig.title}
             </h1>
             {pageConfig.subtitle ? (
               <p className={`mt-3 max-w-2xl ${isMacos ? 'text-sm leading-relaxed' : 'font-mono text-xs leading-relaxed'} ${tokens.textSecondary}`}>
