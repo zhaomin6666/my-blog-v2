@@ -49,12 +49,26 @@ describe('HomepageService', () => {
   });
 
   it('keeps file mode independent from database homepage rows', async () => {
+    const fileSections: HomepageSection[] = [
+      {
+        id: 'hero.en',
+        key: 'hero',
+        title: 'File Hero',
+        subtitle: 'From Markdown',
+        contentMarkdown: '',
+        data: {},
+        visible: true,
+        displayOrder: 0,
+        lang: 'en',
+      },
+    ];
     const service = new HomepageService(
       new MemoryHomepageRepository(sections),
       'file',
+      new MemoryHomepageRepository(fileSections),
     );
 
-    await expect(service.getVisibleSections()).resolves.toEqual([]);
+    await expect(service.getVisibleSections()).resolves.toEqual(fileSections);
   });
 
   it('passes through non-hero rows without runtime fallback logic in the service layer', async () => {
