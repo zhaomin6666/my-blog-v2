@@ -225,10 +225,22 @@
 - Rechecked public blog routes, sitemap, robots, RSS, and draft safety
 - No business feature, CMS, DB, search, Console, CLI, or window-system changes
 
+### Step 6A - 6B-5: Public Content-Source Cleanup Archive COMPLETED
+- Step 6A: Homepage Hero content moved behind content-source boundaries. File mode reads `content/homepage/hero.*.md`; database mode reads `homepage_sections` through Admin Hero. Hero title, subtitle, and badge are no longer hardcoded in component code.
+- Step 6B-0: Removed unused translation keys and clarified that `translations.ts` owns UI labels, buttons, empty states, aria labels, and error prompts, not website content.
+- Step 6B-1: Removed Hero title / subtitle / badge translation fallbacks. `HomepageSection.data.badge` owns the Hero badge, and missing Hero content shows a configuration-missing state instead of silently reusing generic copy.
+- Step 6B-2A: Added Blog / Projects Page Config through `content/pages/*.md`, `page_configs`, and `lib/page-config`; `/blog` and `/projects` metadata, page copy, and footer now read Page Config.
+- Step 6B-2B: Added `/admin/pages` with `projects zh`, `projects en`, `blog zh`, and `blog en` forms. Admin upserts `page_configs` and completes the database-mode page configuration loop.
+- Step 6B-3: Console `about`, `skills`, `contact`, and `whoami` now read from `PublicProfile`, including Profile, Stack, and Contact content. Console no longer depends on `data/skills.ts` or personalized `cmd.*.output` translation content.
+- Step 6B-4A: Added Site Config through `content/site/settings.*.md`, `site_configs`, and `lib/site-config`. `lib/seo.ts` now accepts `SiteConfig`; Site Identity and default SEO are content-configured, while `siteUrl` remains controlled by `NEXT_PUBLIC_SITE_URL`.
+- Step 6B-4B: Added `/admin/site` with Site zh and en forms. Admin upserts `site_configs` and completes the database-mode Site Identity / default SEO loop.
+- Step 6B-5: Sanitized remaining non-content Admin placeholders, test fixtures, contact platform examples, and fallback copy outside `content/**`.
+- Step 7A later backfilled these records into public docs and replaced production-specific details with reusable example values.
+
 ## Phase 7: Self-hosted Production Deployment COMPLETED
 - Docker deployment configuration
 - GitHub remote repository setup
-- Server Docker runtime on CentOS 9
+- Server Docker runtime on Linux server
 - Next.js standalone output in Docker
 - Docker Nginx reverse proxy
 - Domain DNS setup
@@ -249,12 +261,12 @@
 
 ### Phase 7.3 - 7.6: Server Release Path COMPLETED
 - Set up GitHub remote repository flow for server clone / pull updates
-- Deployed on self-owned Korea cloud server with CentOS 9
+- Deployed on Linux production server with Linux server
 - Ran the app via Docker Compose and Next.js standalone server
 - Configured Docker Nginx reverse proxy
-- Connected `oli6666.top` DNS to production
+- Connected `example.com` DNS to production
 - Configured Let's Encrypt HTTPS
-- Redirected `www.oli6666.top` to `oli6666.top`
+- Redirected `www.example.com` to `example.com`
 - Validated production routes, SEO outputs, HTTPS redirects, and mobile baseline
 
 ### Phase 7.7: Post-release Operations Archive COMPLETED
@@ -263,7 +275,7 @@
 
 ## Phase 8: Content & Career Launch COMPLETED
 - Publish real blog content around the Personal Developer OS build process
-- Use the site as a personal brand, job-search showcase, and technical writing archive
+- Use the site as a open-source product documentation, portfolio content, and technical writing archive
 - Keep Phase 8 content-first: no blog-system, UI, Console / CLI, window-system, or deployment-config changes unless separately planned
 - Completed scope:
   - Blog content and the Personal Developer OS article series
@@ -278,7 +290,7 @@
 
 ### Phase 8.1: Release Archive & Version Tag COMPLETED
 - Archived the v1.0.0 production release and version milestone
-- Production URL: `https://oli6666.top`
+- Production URL: `https://example.com`
 - Phase 1-7 completed before content launch work
 
 ### Phase 8.2: Real Blog Content Series COMPLETED
@@ -351,7 +363,7 @@
 - Refactored `Project` data into a richer portfolio structure with subtitle, type, status label, highlights, features, role, links, related posts, featured flag, and order.
 - Promoted `Personal Developer OS` to the first featured project and connected it to the live site, GitHub repository, `/blog/series/personal-developer-os`, and selected existing series articles.
 - Added `AI Agent Demo` as the second featured project, clearly positioned as an in-progress learning / showcase project rather than a mature production product.
-- Kept `Bidding System Platform` as supporting backend enterprise-system experience.
+- Kept `Enterprise Workflow Platform` as supporting backend enterprise-system experience.
 - Updated the Projects section to show featured portfolio cards with tech stack, engineering notes, current scope, roles, links, and related logs while keeping supporting projects compact.
 - No Console / CLI logic, window-system behavior, blog core logic, blog article content, deployment configuration, database, CMS, search, filters, or Agent API changes.
 
@@ -383,7 +395,7 @@
 - Strengthened `AI Agent Demo` project content in `content/projects/ai-agent-demo/index.md`.
 - Clarified the project as an `In Progress / Learning Project`, not a mature production product.
 - Repositioned the case study around enterprise knowledge base and business workflow understanding.
-- Added a more grounded Java backend-to-AI Agent background, covering enterprise systems, documents, interfaces, workflow context, and delivery scenarios.
+- Added a more grounded backend engineering-to-AI Agent background, covering enterprise systems, documents, interfaces, workflow context, and delivery scenarios.
 - Expanded the learning route around TypeScript, LangChain.js, LangGraph.js, Zod, Prompt Messages, Structured Output, Intent Classifier, Tool Calling, Agent Executor, RAG, Agent State, Persistence, and future MCP / OAuth / enterprise integration.
 - Kept `relatedPosts` empty because no published AI Agent learning series exists yet.
 - Preserved file-based Projects content architecture, `slug: ai-agent-demo`, `published: true`, `featured: true`, and `order: 2`.
@@ -411,7 +423,7 @@
 - Small fix: removed the generic `/blog` link from `AI Agent Demo` until a real AI Agent blog series exists.
 - No Console / CLI, window-system behavior, Blog article body content, deployment configuration, database, CMS, search, online chat, or Agent API changes.
 
-### Phase 8.4: About / Resume / Contact 求职转化优化 COMPLETED
+### Phase 8.4: About / Resume / Contact 内容转化优化 COMPLETED
 - Phase 8 was still in progress at this subphase; it is now closed by Phase 8.6.
 - Completed the career conversion content work around About, Resume, Contact, and System Stack.
 - Completed scope:
@@ -420,10 +432,10 @@
   - Contact / CTA contact entry optimization
   - Profile i18n & content mapping polish
   - About / Profile / Contact final acceptance
-- Keep this phase content-first: no Console / CLI, window-system, deployment-config, database, CMS, online chat, or fake resume-download changes unless separately planned.
+- Keep this phase content-first: no Console / CLI, window-system, deployment-config, database, CMS, online chat, or fake private-profile download changes unless separately planned.
 
 ### Phase 8.4.1: About Content Structure Optimization COMPLETED
-- Optimized the homepage About / Profile section to clarify the author's positioning as a Java backend developer transitioning into AI Agent and TypeScript full-stack development.
+- Optimized the homepage About / Profile section to clarify the author's positioning as a backend engineer transitioning into AI Agent and TypeScript full-stack development.
 - Added structured About content for current focus, enterprise-system background, what is being built, work style, and career direction.
 - Extracted the main About content into `lib/profile.ts` as centralized bilingual profile data for easier maintenance.
 - Linked the About section to real existing entries:
@@ -446,30 +458,30 @@
   - `ProfileService`
 - Homepage data assembly now fetches `PublicProfile` through `ProfileService` and passes serializable data into the Main App client components.
 - About / Profile, Contact Channels, and System Stack homepage sections now render from ProfileService-provided content instead of maintaining full content in components.
-- Kept Profile as a public, privacy-friendly personal profile rather than a full online resume or PDF download feature.
-- Preserved anonymized enterprise-system experience, Java backend positioning, AI Agent / full-stack direction, Personal Developer OS and AI Agent Demo project links, and resume privacy note.
+- Kept Profile as a public, privacy-friendly personal profile rather than a full private profile or PDF download feature.
+- Preserved anonymized enterprise-system experience, backend engineering positioning, AI Agent / full-stack direction, Personal Developer OS and AI Agent Demo project links, and profile privacy note.
 - Future CMS / database / admin sources can replace the repository implementation without rewriting page or component rendering.
-- No real resume PDF, phone number, WeChat, address, real employer name, real client name, buyer name, sensitive project details, database, CMS, admin, Console / CLI behavior, window-system behavior, or deployment config changes.
+- No real private profile PDF, phone number, WeChat, address, real employer name, real client name, buyer name, sensitive project details, database, CMS, admin, Console / CLI behavior, window-system behavior, or deployment config changes.
 
 ### Phase 8.4.3: Contact / CTA 联系入口优化 COMPLETED
 - Contact / CTA optimization is treated as completed before the current fix.
-- Keep contact entry points privacy-friendly and avoid public resume PDF download links.
+- Keep contact entry points privacy-friendly and avoid public private profile PDF download links.
 - Phase 8 was still in progress at this subphase; it is now closed by Phase 8.6.
 
 #### Phase 8.4.3-fix: Merge Career Snapshot into Profile COMPLETED
 - Removed the independent Career Snapshot / Resume Summary homepage module.
 - Kept Profile as the unified public personal profile entry.
 - Merged required career information into the Profile display:
-  - Java backend background
+  - backend engineering background
   - AI Agent / TypeScript full-stack direction
   - anonymized enterprise-system experience
   - active project direction
   - career direction
-  - resume privacy note
+  - profile privacy note
 - Renamed the Profile content source from `content/profile/career-snapshot.md` to `content/profile/profile.md`.
 - Updated ProfileService semantics from `getCareerSnapshot()` to `getProfile()` while preserving `getPublicProfile()`.
 - Preserved System Stack, Contact Channels, Projects, Blog, Main App, Console App, Desktop fallback, and System Status Bar.
-- No real resume PDF, resume download link, phone number, WeChat, address, real employer name, real client name, buyer name, Console / CLI, window-system behavior, or deployment config changes.
+- No real private profile PDF, private profile download link, phone number, WeChat, address, real employer name, real client name, buyer name, Console / CLI, window-system behavior, or deployment config changes.
 
 #### Phase 8.4.3-fix: Profile i18n & Content Mapping Polish COMPLETED
 - Fixed Main App navigation labels that were still English in Chinese mode.
@@ -484,12 +496,12 @@
 - Completed final acceptance for Phase 8.4 About / Profile / Contact / System Stack work.
 - Confirmed Profile / Contact Channels / System Stack are loaded through `ProfileService` and passed into the Main App as serializable `PublicProfile` data.
 - Confirmed the independent Career Snapshot / Resume Summary module remains removed; career positioning is merged into Profile.
-- Confirmed Profile naturally covers Java backend background, anonymized enterprise-system experience, AI Agent / TypeScript full-stack direction, Personal Developer OS, AI Agent Demo, career direction, and resume privacy note.
+- Confirmed Profile naturally covers backend engineering background, anonymized enterprise-system experience, AI Agent / TypeScript full-stack direction, Personal Developer OS, AI Agent Demo, career direction, and profile privacy note.
 - Confirmed Main App tabs support bilingual labels: Overview / Profile / Stack / Services / Logs / Contact and the corresponding zh labels.
 - Confirmed `content/profile/profile.md`, `content/profile/contact-channels.md`, and `content/profile/system-stack.md` include non-rendered maintenance comments for content-to-frontend mapping.
 - Confirmed `summary` fields are reserved for metadata / CMS preview / future card or SEO summary use and are not rendered directly on the homepage.
 - Confirmed Contact CTAs stay focused on public routes: `/blog`, `/projects`, `/projects/personal-developer-os`, and `/projects/ai-agent-demo`.
-- Confirmed no real resume PDF was uploaded or linked.
+- Confirmed no real private profile PDF was uploaded or linked.
 - Confirmed phone number, WeChat ID, address, birthday, ID number, real employer names, real client names, buyer names, and sensitive project details are not publicly displayed.
 - Confirmed unit / client / buyer information remains anonymized.
 - Confirmed Learning / Exploring stack items are represented as learning areas rather than mature production expertise.
@@ -525,7 +537,7 @@
 - Confirmed sitemap includes published blog posts, series pages, and published project pages.
 - Confirmed RSS includes published blog posts only and does not include project pages.
 - Confirmed robots.txt points to sitemap.
-- Confirmed privacy boundaries remain intact: no real resume PDF, phone number, WeChat ID, address, real employer names, real client names, buyer names, secrets, or fabricated metrics were added.
+- Confirmed privacy boundaries remain intact: no real private profile PDF, phone number, WeChat ID, address, real employer names, real client names, buyer names, secrets, or fabricated metrics were added.
 - No Console / CLI changes were made.
 - No window-system behavior changes were made.
 - No deployment configuration changes were made.

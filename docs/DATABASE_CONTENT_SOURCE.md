@@ -8,9 +8,12 @@ keeping file content as the default production-safe source.
 The public site still reads content through services:
 
 ```text
-BlogService    -> BlogRepository    -> FileBlogRepository | DatabaseBlogRepository
-ProjectService -> ProjectRepository -> FileProjectRepository | DatabaseProjectRepository
-ProfileService -> ProfileRepository -> FileProfileRepository | DatabaseProfileRepository
+SiteConfigService -> SiteConfigRepository -> FileSiteConfigRepository | DatabaseSiteConfigRepository
+HomepageService   -> HomepageRepository   -> FileHomepageRepository   | DatabaseHomepageRepository
+PageConfigService -> PageConfigRepository -> FilePageConfigRepository | DatabasePageConfigRepository
+BlogService       -> BlogRepository       -> FileBlogRepository       | DatabaseBlogRepository
+ProjectService    -> ProjectRepository    -> FileProjectRepository    | DatabaseProjectRepository
+ProfileService    -> ProfileRepository    -> FileProfileRepository    | DatabaseProfileRepository
 ```
 
 Pages, sitemap, RSS, Blog Search, Tags, Series, Projects, Profile, and Agent
@@ -60,6 +63,8 @@ database/migrations/001_create_cms_tables.sql
 database/migrations/002_add_translation_keys_to_contact_and_stack.sql
 database/migrations/003_reset_contact_channels_single_source.sql
 database/migrations/004_reset_system_stack_single_source.sql
+database/migrations/005_create_page_configs.sql
+database/migrations/006_create_site_configs.sql
 ```
 
 Migrations are not executed automatically. Run them manually against the
@@ -70,6 +75,8 @@ psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/001_create_cms_tables.
 psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/002_add_translation_keys_to_contact_and_stack.sql
 psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/003_reset_contact_channels_single_source.sql
 psql "$PERSONAL_SITE_DATABASE_URL" -f database/migrations/004_reset_system_stack_single_source.sql
+database/migrations/005_create_page_configs.sql
+database/migrations/006_create_site_configs.sql
 ```
 
 Production rules:
@@ -96,6 +103,8 @@ The MVP schema includes:
 - `system_stack_groups`
 - `system_stack_items`
 - `homepage_sections`
+- `page_configs`
+- `site_configs`
 
 The migration also adds common indexes for public reads, including slug,
 published/status, language, display order, soft delete, series, and blog tag GIN
@@ -126,10 +135,37 @@ Default mode remains `file`.
 
 File mode:
 
-- Reads from `content/blog`, `content/projects`, and `content/profile`.
+- Reads from `content/site`, `content/homepage`, `content/pages`, `content/profile`, `content/blog`, and `content/projects`.
 - Does not require `PERSONAL_SITE_DATABASE_URL`.
 - Does not create a PostgreSQL Pool.
 - Keeps current public URLs and rendering behavior.
+
+
+## Site / Homepage / Page Config Sources
+
+Step 6A through Step 6B-4B moved public site copy out of runtime code and into explicit content/config sources.
+
+File mode:
+
+```text
+content/site      -> Site Identity / default SEO
+content/homepage  -> Homepage Hero
+content/pages     -> Blog / Projects page config
+```
+
+Database mode:
+
+```text
+/admin/site   -> site_configs
+/admin/hero   -> homepage_sections
+/admin/pages  -> page_configs
+```
+
+Important boundaries:
+
+- `siteUrl` is not Admin-managed content. It remains deployment configuration from `NEXT_PUBLIC_SITE_URL`.
+- `translations.ts` owns UI labels and prompts only; it does not own Hero, page-level copy, Site Identity, or default SEO content.
+- Missing Hero content should surface as a configuration-missing state instead of silently falling back to old translation keys.
 
 ## Blog Admin Writes
 
@@ -291,7 +327,7 @@ Use an isolated PostgreSQL setup for the personal site:
 - Dedicated database.
 - Dedicated database user.
 - Least-privilege permissions.
-- Do not reuse the `sub2api` business database.
+- Do not reuse the `another application` business database.
 - Do not commit real connection strings.
 - Keep `.env.production` outside Git.
 

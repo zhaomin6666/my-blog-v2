@@ -1,4 +1,4 @@
-﻿# AI 变更记录中文摘要
+# AI 变更记录中文摘要
 
 ### 2026-06-25 - Codex
 **摘要：** Phase 12 已开始，Phase 12.1 Production CMS Preflight 已完成，新增生产 CMS 切换执行清单。
@@ -785,7 +785,7 @@ Codex 完成 Phase 8 的最终验收，并将 Phase 8 标记为 completed。
 - 确认 Profile / Contact / System Stack 通过 `ProfileService` 读取，且 Career Snapshot 已合并进 Profile。
 - 确认中英文 Content Workflow 文档正常，并已在 README / docs 入口中链接。
 - 确认 sitemap、RSS、robots 输出正常；RSS 只包含博客文章，不包含项目页。
-- 确认公开内容没有真实简历 PDF、手机号、微信、住址、真实单位、真实客户、真实甲方、部署密钥或编造指标。
+- 确认公开内容没有私人资料 PDF、手机号、微信、住址、真实单位、真实客户、真实甲方、部署密钥或编造指标。
 
 范围约束：
 
@@ -825,7 +825,7 @@ Codex 补充了中英文内容发布流程文档，用于长期维护 Blog、Pro
 - 未修改窗口系统。
 - 未修改部署配置。
 - 未修改 Blog / Projects / Profile 核心逻辑。
-- 未新增真实联系方式或真实简历 PDF。
+- 未新增真实联系方式或私人资料 PDF。
 
 验证：
 
@@ -848,7 +848,7 @@ Codex 为 docs 添加中文工作文档。
 
 - 部署手册改写为中文发布操作手册。
 - 明确 `NEXT_PUBLIC_SITE_URL` 同时影响构建期和运行期。
-- 明确当前 Docker Compose 使用 `web-proxy` 外部网络，Nginx 应代理到 `personal-dev-os:3000`。
+- 明确当前 Docker Compose 使用 `app-proxy` 外部网络，Nginx 应代理到 `app:3000`。
 - 补充每次发布、无缓存构建、日志、Nginx 重载、证书续期、线上验证和回滚流程。
 
 ## 当前状态
@@ -857,9 +857,9 @@ Codex 为 docs 添加中文工作文档。
 - Phase 8 已完成：内容与职业展示、项目案例、Profile / Contact、内容工作流文档已收口。
 - Phase 9 已完成：Blog Tag Pages、Article TOC、Previous / Next Navigation、Blog Search 和 Blog UX Final Polish 已完成最终验收。
 - Phase 10 已完成：AI Agent Demo Integration 第一版公开 Demo 已完成最终验收与文档收口。
-- 当前生产站点：`https://oli6666.top`。
+- 当前生产站点：`https://example.com`。
 - 当前重点：保持公开 Agent Demo 的只读安全边界，后续按需规划 Redis 分布式限流、评测集或独立 agent-api。
-- 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
+- 当前发布方式：Linux server Linux production server + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
 ## 2026-06-08 - Phase 8.2.1
 
@@ -869,7 +869,7 @@ Claude Code 完成前三篇真实博客文章的去 AI 味润色。
 
 - 润色 `从 Hexo 到 Personal Developer OS` 系列前三篇文章。
 - 减少模板化表达和过度总结。
-- 保留真实 Java 后端开发者的开发日志口吻。
+- 保留真实工程开发者的开发日志口吻。
 - 不改博客系统代码、Main App、Console / CLI、窗口系统、UI 或部署配置。
 
 验证：
@@ -902,14 +902,14 @@ Codex 完成生产部署和发布后运维归档。
 
 范围：
 
-- 在自有韩国云服务器上完成生产发布。
-- 使用 CentOS 9、Docker、Docker Compose、Next.js standalone。
+- 在Linux production server上完成生产发布。
+- 使用 Linux server、Docker、Docker Compose、Next.js standalone。
 - 添加 Docker Nginx 反向代理。
-- 上线 `https://oli6666.top`。
-- 配置 `www.oli6666.top` 跳转到 `oli6666.top`。
+- 上线 `https://example.com`。
+- 配置 `www.example.com` 跳转到 `example.com`。
 - 配置 Let's Encrypt HTTPS。
 - 确认 sitemap、robots、RSS 在线可访问。
-- 确认生产 SEO 输出使用 `https://oli6666.top`。
+- 确认生产 SEO 输出使用 `https://example.com`。
 - 将目录布局、更新流程、日志检查、Nginx 重载、证书续期、回滚和线上验证清单归档到部署文档。
 
 注意：

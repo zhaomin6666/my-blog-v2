@@ -32,15 +32,15 @@ Use `pg_dump` custom format so `pg_restore` can restore reliably.
 Recommended server directory:
 
 ```text
-/opt/backups/personal-dev-os/postgres
+/srv/example-backups/postgres
 ```
 
 Create it with restricted permissions:
 
 ```bash
-sudo mkdir -p /opt/backups/personal-dev-os/postgres
-sudo chown -R "$USER":"$USER" /opt/backups/personal-dev-os/postgres
-chmod 700 /opt/backups/personal-dev-os/postgres
+sudo mkdir -p /srv/example-backups/postgres
+sudo chown -R "$USER":"$USER" /srv/example-backups/postgres
+chmod 700 /srv/example-backups/postgres
 ```
 
 Do not commit dump files to Git.
@@ -48,8 +48,8 @@ Do not commit dump files to Git.
 ## External Or Host PostgreSQL Backup
 
 ```bash
-export BACKUP_DIR=/opt/backups/personal-dev-os/postgres
-export BACKUP_FILE="$BACKUP_DIR/personal-dev-os-$(date +%Y%m%d-%H%M%S).dump"
+export BACKUP_DIR=/srv/example-backups/postgres
+export BACKUP_FILE="$BACKUP_DIR/app-backup-$(date +%Y%m%d-%H%M%S).dump"
 
 pg_dump "$PERSONAL_SITE_DATABASE_URL" -F c -f "$BACKUP_FILE"
 ls -lh "$BACKUP_FILE"
@@ -67,8 +67,8 @@ Use the real container, user, and database names from your deployment:
 export POSTGRES_CONTAINER=<postgres_container>
 export DB_USER=<db_user>
 export DB_NAME=<db_name>
-export BACKUP_DIR=/opt/backups/personal-dev-os/postgres
-export BACKUP_NAME=personal-dev-os-$(date +%Y%m%d-%H%M%S).dump
+export BACKUP_DIR=/srv/example-backups/postgres
+export BACKUP_NAME=app-backup-$(date +%Y%m%d-%H%M%S).dump
 
 docker exec "$POSTGRES_CONTAINER" pg_dump -U "$DB_USER" -d "$DB_NAME" -F c -f "/tmp/$BACKUP_NAME"
 docker cp "$POSTGRES_CONTAINER:/tmp/$BACKUP_NAME" "$BACKUP_DIR/$BACKUP_NAME"
@@ -83,7 +83,7 @@ Do not assume a fixed container name in reusable docs or scripts.
 ## Download Backup To Local
 
 ```bash
-scp user@your-server:/opt/backups/personal-dev-os/postgres/personal-dev-os-YYYYMMDD-HHMMSS.dump .
+scp user@your-server:/srv/example-backups/postgres/app-backup-YYYYMMDD-HHMMSS.dump .
 ```
 
 Store local copies outside the repository.
@@ -93,26 +93,26 @@ Store local copies outside the repository.
 List backups:
 
 ```bash
-ls -lhtr /opt/backups/personal-dev-os/postgres/*.dump
+ls -lhtr /srv/example-backups/postgres/*.dump
 ```
 
 Keep the newest 10 manually:
 
 ```bash
-cd /opt/backups/personal-dev-os/postgres
-ls -1t personal-dev-os-*.dump | tail -n +11
+cd /srv/example-backups/postgres
+ls -1t app-backup-*.dump | tail -n +11
 ```
 
 After reviewing the list, delete old backups manually:
 
 ```bash
-rm /opt/backups/personal-dev-os/postgres/personal-dev-os-YYYYMMDD-HHMMSS.dump
+rm /srv/example-backups/postgres/app-backup-YYYYMMDD-HHMMSS.dump
 ```
 
 Future cron example, not implemented in Phase 11.9:
 
 ```cron
-15 3 * * * pg_dump "$PERSONAL_SITE_DATABASE_URL" -F c -f "/opt/backups/personal-dev-os/postgres/personal-dev-os-$(date +\%Y\%m\%d-\%H\%M\%S).dump"
+15 3 * * * pg_dump "$PERSONAL_SITE_DATABASE_URL" -F c -f "/srv/example-backups/postgres/app-backup-$(date +\%Y\%m\%d-\%H\%M\%S).dump"
 ```
 
 ## Restore Safety Rules
@@ -126,8 +126,8 @@ Future cron example, not implemented in Phase 11.9:
 ## Restore To Test Database
 
 ```bash
-createdb personal_dev_os_restore_test
-pg_restore -d personal_dev_os_restore_test /path/to/personal-dev-os-YYYYMMDD-HHMMSS.dump
+createdb app_restore_test
+pg_restore -d app_restore_test /path/to/app-backup-YYYYMMDD-HHMMSS.dump
 ```
 
 Validate the restored database by pointing a local or staging env to it:

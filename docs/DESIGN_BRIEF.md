@@ -8,7 +8,7 @@ Single source of truth for the entire project. Both Codex and Claude Code must f
 **Personal Dev OS**
 
 ## 2. One-line Positioning
-**EN:** A browser-based Personal Developer OS for a backend developer building AI-era products.
+**EN:** A browser-based AI Native Portfolio CMS / Personal Developer OS starter for builders documenting projects, writing, and content workflows.
 
 **ZH:** 一个运行在浏览器中的个人开发者操作系统，用于展示后端开发、AI 应用、技术博客、项目作品和独立产品入口。
 
@@ -126,14 +126,14 @@ Requirements:
 ## 12. Content Modules
 
 ### Hero
-**EN:** Backend Developer building AI-era products.
+**EN:** AI Native Portfolio CMS / Personal Developer OS starter.
 
 **ZH:** 面向 AI 时代构建产品的后端开发者
 
 ### About
 **ZH:** 我是一名后端开发者，专注于构建稳定可靠的业务系统，并持续探索 AI 原生应用。我关注架构设计、工程实践、产品思维，以及如何借助 AI 工具更高效地完成独立交付。
 
-**EN:** I am a backend developer focused on building reliable business systems and exploring AI-native applications. I care about clean architecture, practical engineering, product thinking, and using AI tools to ship faster as an independent builder.
+**EN:** This starter focuses on project documentation, technical writing, AI-native workflows, and a CMS-ready content architecture. It keeps the Developer OS shell while allowing public content to come from files or database-backed Admin tools.
 
 ### Skills
 - Backend: Java, Spring Boot, MyBatis, REST APIs
@@ -145,11 +145,11 @@ Requirements:
 
 ### Projects
 - AI Agent Demo
-- Bidding System Platform
+- Enterprise Workflow Platform Example
 - Personal Dev OS
 
 ### Blog
-- 从 Java 后端到 AI Agent 开发的学习路线
+- AI Agent workflow learning notes
 - LangChain 和 LangGraph 的关系与实践
 - 如何设计一个程序员的个人网站
 - RAG 应用从 0 到 1 实战记录
@@ -158,7 +158,7 @@ Requirements:
 - Email
 - GitHub
 - LinkedIn
-- Resume Download
+- Public Profile
 
 ## 13. Prohibited
 Do NOT:

@@ -64,6 +64,11 @@ ADMIN_PASSWORD_HASH=<sha256_password_hash>
 ADMIN_SESSION_SECRET=<random_32_chars_or_longer>
 ```
 
+Admin username?password hash ? session secret Linux production serverLinux production server? Admin CMS Linux server
+
+Linux production server database mode Linux production server `CONTENT_SOURCE`?`BLOG_CONTENT_SOURCE`?`PROJECT_CONTENT_SOURCE`?`PROFILE_CONTENT_SOURCE` Linux production server?
+
+
 不要提交 `.env.production`、真实数据库连接串、password hash、session secret 或备份 dump。
 
 生成 password hash：

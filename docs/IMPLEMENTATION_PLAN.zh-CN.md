@@ -1,4 +1,4 @@
-﻿# 实施计划 - Personal Dev OS
+# 实施计划 - Personal Dev OS
 
 本文件是项目阶段计划的中文工作版，用于快速了解当前进度和后续方向。
 
@@ -10,8 +10,8 @@
 - Phase 10 已完成：AI Agent Demo Integration 已完成 Phase 10.1 架构与安全基础、Phase 10.2 只读知识工具与范围识别器、Phase 10.2.1 单元测试基础、Phase 10.3 只读 Agent API MVP、Phase 10.4 限流 / 超时 / 滥用防护、Phase 10.5 UI 与 trace 展示、Phase 10.6 生产部署与安全验证、Phase 10.7 第一版最终验收与文档收口。
 - Phase 11 已完成：Admin / CMS 架构与实施完成最终验收，覆盖 Admin Auth、Blog / Projects / Hero / Profile / Contact / Stack Admin、Markdown Import / Export、soft delete、file mode、database mode、Agent Demo sources、sitemap / RSS、docs / env / deployment checklist。
 - Phase 12 进行中：Production CMS Switch 已进入生产切换前检查阶段，当前仍保持 file mode，不执行生产 migration，不导入真实内容，不切换生产内容源。
-- 当前生产地址：`https://oli6666.top`。
-- 当前发布方式：CentOS 9 自有云服务器 + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
+- 当前生产地址：`https://example.com`。
+- 当前发布方式：Linux server Linux production server + Docker Compose + Next.js standalone + Docker Nginx + Let's Encrypt HTTPS。
 
 ## Phase 1：项目基础与 OS Shell - 已完成
 
@@ -133,12 +133,12 @@
 
 - 添加 Docker 部署配置。
 - 建立 GitHub 远程仓库更新流程。
-- 在 CentOS 9 云服务器配置 Docker runtime。
+- 在 Linux server Linux server配置 Docker runtime。
 - 使用 Next.js standalone 输出运行生产服务。
 - 使用 Docker Nginx 反向代理。
-- 绑定域名 `oli6666.top`。
+- 绑定域名 `example.com`。
 - 配置 Let's Encrypt HTTPS。
-- `www.oli6666.top` 重定向到 `oli6666.top`。
+- `www.example.com` 重定向到 `example.com`。
 - 验证生产路由、SEO 输出、HTTPS 重定向和移动端基础表现。
 - 归档发布后运维流程。
 
@@ -147,7 +147,7 @@
 目标：
 
 - 发布围绕 Personal Developer OS 构建过程的真实博客内容。
-- 将站点作为个人品牌、求职展示和技术写作归档。
+- 将站点作为开源产品文档、作品内容和技术写作归档。
 - 保持 Phase 8 内容优先；除非单独规划，不改博客系统、UI、Console / CLI、窗口系统或部署配置。
 
 已完成：
@@ -160,7 +160,7 @@
   - `AI Agent Demo`
 - 完成 Projects 文件型内容源：`content/projects` + `ProjectService`。
 - 完成 Profile / Contact / System Stack 文件型内容源：`content/profile` + `ProfileService`。
-- 完成 About / Profile / Contact 求职转化内容收口。
+- 完成 About / Profile / Contact 公开内容收口。
 - 完成中英文内容发布流程文档：
   - `docs/CONTENT_WORKFLOW.md`
   - `docs/CONTENT_WORKFLOW.zh-CN.md`

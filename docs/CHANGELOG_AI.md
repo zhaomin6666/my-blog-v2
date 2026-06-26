@@ -1,6 +1,32 @@
 # AI Development Changelog
 
 ### 2026-06-26 - Codex
+**Summary:** Step 7A completed. Sanitized public docs and backfilled Step 6A through Step 6B-5 content-source evolution records.
+
+**Scope:**
+- Sanitized docs-only references to the previous live domain, server region, server OS wording, deployment paths, backup paths, container names, and private career/business wording.
+- Kept the engineering history intact while replacing production-specific details with reusable example values such as `https://example.com`, `/srv/example-app`, `/srv/example-nginx`, `/srv/example-backups/postgres`, `app`, and `app-proxy`.
+- Backfilled Step 6A through Step 6B-5 in the changelog and implementation plans.
+- Updated content-source documentation with the current file-mode and database-mode source matrix.
+
+**Step 6A through Step 6B-5 archive:**
+- Step 6A: Homepage Hero moved to content sources. File mode reads `content/homepage/hero.*.md`; database mode reads `homepage_sections` through Admin Hero. Hero copy is no longer owned by hardcoded component code.
+- Step 6B-0: Removed unused translation keys and narrowed `translations.ts` to UI labels, buttons, empty states, aria labels, and error prompts.
+- Step 6B-1: Tightened the Hero fallback boundary. `hero.title`, `hero.subtitle`, and `hero.badge` no longer come from `translations.ts`; `badge` comes from `HomepageSection.data.badge`, and missing content renders a configuration-missing state.
+- Step 6B-2A: Added Page Config for Blog and Projects through `content/pages/*.md`, `page_configs`, and `lib/page-config`; `/blog` and `/projects` metadata, page copy, and footer now read Page Config.
+- Step 6B-2B: Added `/admin/pages` with Blog / Projects zh and en forms. Admin upserts `page_configs` and completes the database-mode page-level configuration loop.
+- Step 6B-3: Console `about`, `skills`, `contact`, and `whoami` now read `PublicProfile`; Console output follows Profile / Stack / Contact edits and no longer depends on `data/skills.ts` or personalized `cmd.*.output` content.
+- Step 6B-4A: Added Site Config through `content/site/settings.*.md`, `site_configs`, and `lib/site-config`; `lib/seo.ts` accepts `SiteConfig`, while `siteUrl` remains deployment configuration from `NEXT_PUBLIC_SITE_URL`.
+- Step 6B-4B: Added `/admin/site` with Site zh and en forms. Admin upserts `site_configs` and completes the database-mode Site Identity / default SEO configuration loop.
+- Step 6B-5: Sanitized remaining non-content placeholders, test fixtures, contact platform examples, and fallback copy outside `content/**`.
+
+**Scope guard:**
+- No runtime code, `content/**`, database migrations, dependencies, or README files were changed.
+
+**Verification:**
+- Pending in this documentation pass: `pnpm lint`, `pnpm build`, `pnpm security:admin`, and docs sanitization scan.
+
+### 2026-06-26 - Codex
 **Summary:** Step 6B-4B completed. Added database-backed Site Config Admin.
 
 **Scope:**
@@ -1151,7 +1177,7 @@
   - Contact stays privacy-friendly and does not expose private channels.
 - Confirmed bilingual Content Workflow documentation is complete and linked from README / docs index.
 - Confirmed sitemap, RSS, and robots outputs are available and aligned with published-only content rules.
-- Confirmed public content does not include real resume PDF, phone number, WeChat ID, address, real employer names, real client names, buyer names, deployment secrets, or fabricated metrics.
+- Confirmed public content does not include real private profile PDF, phone number, WeChat ID, address, real employer names, real client names, buyer names, deployment secrets, or fabricated metrics.
 - Updated `docs/IMPLEMENTATION_PLAN.md` to mark Phase 8 and Phase 8.6 as completed and add Phase 9 as planned.
 
 **Scope guard:**
@@ -1190,7 +1216,7 @@
 - No window-system behavior changes were made.
 - No deployment configuration changes were made.
 - No Blog, Projects, or Profile core logic changes were made.
-- No private contact information or real resume PDF was added.
+- No private contact information or real private profile PDF was added.
 
 **Verification:**
 - `pnpm lint` passed.
@@ -1205,13 +1231,13 @@
 - Confirmed Profile / Contact Channels / System Stack are all loaded through `ProfileService`.
 - Confirmed Main App tabs support bilingual labels through `lib/translations.ts`.
 - Confirmed `content/profile` includes non-rendered maintenance comments for field-to-frontend mapping.
-- Confirmed the full resume is available on request only; no real resume PDF was uploaded or linked.
+- Confirmed the full resume is available on request only; no real private profile PDF was uploaded or linked.
 - Confirmed phone number, WeChat ID, address, birthday, ID number, real employer names, real client names, buyer names, and sensitive project details are not publicly displayed.
 - Confirmed unit / client / buyer information remains anonymized.
 
 **Small fix:**
 - Added focused Contact CTA entries for `/projects/personal-developer-os` and `/projects/ai-agent-demo` in `content/profile/contact-channels.md`.
-- Kept Contact privacy-friendly and did not add private email, phone, WeChat, address, or resume PDF links.
+- Kept Contact privacy-friendly and did not add private email, phone, WeChat, address, or private profile PDF links.
 
 **Scope guard:**
 - No Console / CLI command system changes were made.
@@ -1262,12 +1288,12 @@
 - Removed the independent Career Snapshot / Resume Summary module from the homepage Main App.
 - Kept Profile as the unified public personal profile entry.
 - Merged the required career information into Profile:
-  - Java backend background
+  - backend engineering background
   - AI Agent / TypeScript full-stack direction
   - anonymized enterprise-system experience
   - active project direction
   - career direction
-  - resume privacy note
+  - profile privacy note
 - Renamed the profile content source:
   - from `content/profile/career-snapshot.md`
   - to `content/profile/profile.md`
@@ -1280,8 +1306,8 @@
 - Preserved System Stack and Contact Channels as separate profile-backed sections.
 
 **Privacy guard:**
-- No real resume PDF was uploaded.
-- No real resume download link was added.
+- No real private profile PDF was uploaded.
+- No real private profile download link was added.
 - No phone number, WeChat ID, address, birthday, ID number, real employer name, real client name, buyer name, or sensitive project details were added.
 - Enterprise experience remains anonymized.
 
@@ -1321,8 +1347,8 @@
 - Kept future CMS / database / admin replacement path open through the repository boundary.
 
 **Privacy guard:**
-- No real resume PDF was uploaded.
-- No real resume download link was added.
+- No real private profile PDF was uploaded.
+- No real private profile download link was added.
 - No phone number, WeChat ID, address, birthday, ID number, real employer name, real client name, buyer name, or sensitive project details were added.
 - Enterprise experience is described with anonymized project categories such as bidding, e-procurement, supplier management, expert management, procurement planning, and enterprise system integration.
 
@@ -1343,7 +1369,7 @@
 
 **Phase 8.4.1 scope:**
 - Optimized the homepage About / Profile section content structure.
-- Clarified the personal positioning as a Java backend developer transitioning into AI Agent and TypeScript full-stack development.
+- Clarified the personal positioning as a backend engineer transitioning into AI Agent and TypeScript full-stack development.
 - Added concise bilingual content for:
   - current focus
   - enterprise-system background
@@ -1447,7 +1473,7 @@
 - Updated `content/projects/ai-agent-demo/index.md`.
 - Clarified `AI Agent Demo` as an `In Progress / Learning Project`, not a mature production product.
 - Repositioned the project as an AI Agent learning project for enterprise knowledge base and business workflow understanding.
-- Strengthened the Java backend-to-AI Agent background:
+- Strengthened the backend engineering-to-AI Agent background:
   - enterprise system development
   - bidding / supplier / expert / procurement workflow scenarios
   - documents, interfaces, requirements communication, delivery context, and business process understanding
@@ -1558,9 +1584,9 @@
 - Promoted `Personal Developer OS` to the first featured project.
 - Added live site, GitHub, related series, and selected related article links for `Personal Developer OS`.
 - Added `AI Agent Demo` as the second featured project and clearly positioned it as an in-progress learning / showcase project.
-- Kept `Bidding System Platform` as supporting enterprise backend experience.
+- Kept `Enterprise Workflow Platform` as supporting enterprise backend experience.
 - Updated the Projects section UI to render featured portfolio cards with tech stacks, engineering notes, current scope, project roles, links, and related logs.
-- Projects now better supports job-search portfolio presentation while staying inside the Main App / Developer OS model.
+- Projects now better supports portfolio presentation while staying inside the Main App / Developer OS model.
 
 **Scope guard:**
 - No Console / CLI logic was modified.
@@ -1686,7 +1712,7 @@
 **Deployment documentation focus:**
 - Rewrote the deployment guide in Chinese as an operational release manual.
 - Highlighted that `NEXT_PUBLIC_SITE_URL` is required at both Docker build time and runtime.
-- Documented the current Docker Compose topology: app service on the external `web-proxy` network, with Nginx proxying to `personal-dev-os:3000`.
+- Documented the current Docker Compose topology: app service on the external `app-proxy` network, with Nginx proxying to `app:3000`.
 - Added Chinese release, no-cache rebuild, log check, Nginx reload, certificate renewal, online validation, and rollback guidance.
 - Corrected the English deployment guide to match the current `docker-compose.yml` network topology.
 
@@ -1711,7 +1737,7 @@
   - Reduced over-neat parallel structures and abstract buzzwords.
   - Kept technical expressions, phase names, component names, and project facts.
   - Preserved slug, date, updatedAt, status, lang, series frontmatter fields.
-  - Made tone more like a real Java backend developer's development journal.
+  - Made tone more like a real backend engineer's development journal.
 
 **Scope guard:**
 - No blog-system code was modified.
@@ -1753,14 +1779,14 @@
 **Summary:** Phase 7 completed. Archived the production release and post-release operations for the Personal Developer OS.
 
 **Phase 7 completed scope:**
-- Completed production release on a self-owned Korea cloud server running CentOS 9.
+- Completed production release on a Linux production server running Linux server.
 - Deployed the Next.js standalone app with Docker and Docker Compose.
 - Added Docker Nginx reverse proxy for public traffic.
-- Brought `https://oli6666.top` online as the primary domain.
-- Configured `www.oli6666.top` to redirect to `oli6666.top`.
+- Brought `https://example.com` online as the primary domain.
+- Configured `www.example.com` to redirect to `example.com`.
 - Configured Let's Encrypt HTTPS.
 - Confirmed sitemap, robots, and RSS are available online.
-- Confirmed production SEO outputs use `https://oli6666.top`.
+- Confirmed production SEO outputs use `https://example.com`.
 - Archived server directory layout, update flow, logs, Nginx reload, certificate renewal, rollback, and online validation checklist in `docs/DEPLOYMENT.md`.
 
 **Scope guard:**
@@ -1790,7 +1816,7 @@
 - Docker Compose runtime verification should be performed on the server because this workspace does not have Docker installed.
 
 ### 2026-06-08 - Codex
-**Summary:** Phase 7.1.1 started. Added Docker self-hosting preparation for the Personal Developer OS on a CentOS 9 server.
+**Summary:** Phase 7.1.1 started. Added Docker self-hosting preparation for the Personal Developer OS on a Linux server.
 
 **Phase 7.1.1 deliverables:**
 - Added a multi-stage `Dockerfile` using Node LTS, Corepack, pnpm frozen lockfile install, `pnpm build`, and Next.js standalone runtime output.
@@ -1801,7 +1827,7 @@
 - Added `.npmrc` with hoisted pnpm linking so standalone tracing can complete reliably on Windows and in Docker.
 - Added `public/.gitkeep` so the Docker runner can consistently copy the required `public` directory.
 - Updated `.gitignore` to prevent committing `.env.production`.
-- Updated `docs/DEPLOYMENT.md` with CentOS 9 + Docker Compose deployment steps, env setup, localhost checks, Nginx reverse-proxy notes, and rollback guidance.
+- Updated `docs/DEPLOYMENT.md` with Linux server + Docker Compose deployment steps, env setup, localhost checks, Nginx reverse-proxy notes, and rollback guidance.
 
 **Scope guard:**
 - No business feature, blog content, Console / CLI, window-system, or UI changes were added.
@@ -1902,7 +1928,7 @@
 - `docs/CHANGELOG_AI.md`
 
 **Architecture impact:**
-- Site URL is centralized through `NEXT_PUBLIC_SITE_URL` with a local fallback of `http://localhost:3000`; production deployments should set the real domain.
+- Site URL is centralized through `NEXT_PUBLIC_SITE_URL` with a local fallback of `http://localhost:3000`; production deployments should set the deployment domain.
 - Public SEO outputs remain layered through `BlogService` and do not read `content/blog` directly.
 - Phase 6 remains in progress because deployment prep is still deferred.
 

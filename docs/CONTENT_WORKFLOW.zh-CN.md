@@ -2,14 +2,29 @@
 
 本文档用于固化 Personal Developer OS 当前的文件型内容维护方式。
 
-当前站点有三类内容源：
+当前 file mode 站点有六类内容源：
 
 ```text
-content/blog      -> BlogRepository -> FileBlogRepository -> BlogService
-content/projects  -> ProjectRepository -> FileProjectRepository -> ProjectService
-content/profile   -> ProfileRepository -> FileProfileRepository -> ProfileService
+content/site      -> SiteConfigService    -> Site Identity / 默认 SEO
+content/homepage  -> HomepageService      -> Homepage Hero
+content/pages     -> PageConfigService    -> Blog / Projects 页面配置
+content/profile   -> ProfileService       -> Profile / Stack / Contact
+content/blog      -> BlogService          -> Blog posts
+content/projects  -> ProjectService       -> Project cases
 ```
 
+database mode 使用对应的 Admin 和 PostgreSQL 内容源：
+
+```text
+/admin/site      -> site_configs
+/admin/hero      -> homepage_sections
+/admin/pages     -> page_configs
+/admin/profile   -> profile_pages
+/admin/stack     -> system_stack_groups / system_stack_items
+/admin/contact   -> contact_channels
+/admin/blog      -> blog_posts / blog_series
+/admin/projects  -> projects
+```
 这份文档偏向日常操作：文件放在哪里、frontmatter 字段怎么填、公开 URL 怎么生成、发布前怎么验证。
 
 ## 1. 内容架构概览
@@ -25,6 +40,29 @@ content/profile   -> ProfileRepository -> FileProfileRepository -> ProfileServic
 - 公开页面、sitemap、RSS、SEO 输出和 Console 元数据只使用已发布内容。
 - Repository 接口保持稳定，未来可以替换成 CMS 或数据库实现。
 - 不要在 React 组件里重复维护 Blog、Project 或 Profile 数据。
+
+### Site、Homepage 与 Page Config
+
+以下文件负责站点级和页面级文案，不应该再放进 `lib/translations.ts`：
+
+```text
+content/site/settings.en.md
+content/site/settings.zh.md
+content/homepage/hero.en.md
+content/homepage/hero.zh.md
+content/pages/blog.en.md
+content/pages/blog.zh.md
+content/pages/projects.en.md
+content/pages/projects.zh.md
+```
+
+维护规则：
+
+- Site Identity 和默认 SEO 在 file mode 下来自 `content/site`，在 database mode 下来自 `/admin/site`。
+- `siteUrl` 是部署配置，仍由 `NEXT_PUBLIC_SITE_URL` 控制，不通过 Admin CMS 编辑。
+- Homepage Hero 的标题、副标题和 badge 在 file mode 下来自 `content/homepage`，在 database mode 下来自 `/admin/hero`。
+- Blog / Projects 的页面标题、副标题、footer 文案和默认 metadata 在 file mode 下来自 `content/pages`，在 database mode 下来自 `/admin/pages`。
+- `lib/translations.ts` 只放 UI chrome：label、按钮、空状态、aria label、校验提示和命令提示，不再承载网站内容。
 
 ## 2. Blog 发布流程
 
@@ -266,14 +304,14 @@ content/profile/system-stack.md
 
 用于维护公开个人档案：
 
-- Java 后端背景
+- backend engineering 背景
 - AI Agent / 全栈方向
 - 脱敏企业系统经验
 - 当前关注方向
 - 工作方式
 - 正在建设的项目
-- 求职方向
-- 简历隐私说明
+- 公开协作方向
+- 资料隐私说明
 
 文件中已有不会渲染到前台的 HTML 注释，用来说明 frontmatter 和前台展示的映射关系。保留这些注释为编辑维护说明，不要改成可见页面文字。
 
@@ -288,7 +326,7 @@ content/profile/system-stack.md
 - 真实客户名称
 - 真实甲方名称
 - 敏感项目细节
-- 真实简历 PDF 链接
+- 私人资料 PDF 链接
 
 ### contact-channels.md
 
@@ -301,7 +339,7 @@ content/profile/system-stack.md
 - `href` 为空时不应渲染成可点击链接。
 - `disabled: true` 可以展示可用性或状态说明，但不跳转。
 - Contact 保持克制，不要变成营销式链接墙。
-- 除非隐私策略改变，不要公开私人邮箱、手机、微信、住址或简历 PDF 链接。
+- 除非隐私策略改变，不要公开私人邮箱、手机、微信、住址或私人资料 PDF 链接。
 
 ### system-stack.md
 
@@ -378,14 +416,14 @@ git commit -m "docs: add content workflow"
 git push
 ```
 
-不要提交本地环境变量、生成日志、证书、私钥、服务器 IP 或私人简历文件。
+不要提交本地环境变量、生成日志、证书、私钥、服务器 IP 或私人私人资料文件。
 
 ## 7. 部署流程
 
 生产更新路径：
 
 ```bash
-cd /opt/apps/personal-dev-os
+cd /srv/example-app
 git pull
 docker compose --env-file .env.production up -d --build
 ```
@@ -405,14 +443,14 @@ docker compose --env-file .env.production up -d
 线上检查：
 
 ```text
-https://oli6666.top
-https://oli6666.top/blog
-https://oli6666.top/projects
-https://oli6666.top/sitemap.xml
-https://oli6666.top/rss.xml
+https://example.com
+https://example.com/blog
+https://example.com/projects
+https://example.com/sitemap.xml
+https://example.com/rss.xml
 ```
 
-确认 sitemap 和 RSS 使用 `https://oli6666.top`，并且没有暴露草稿内容。
+确认 sitemap 和 RSS 使用 `https://example.com`，并且没有暴露草稿内容。
 
 ## 8. 隐私规则
 
@@ -424,7 +462,7 @@ https://oli6666.top/rss.xml
 - 私钥
 - 服务器 IP
 - 部署密钥
-- 真实简历 PDF
+- 私人资料 PDF
 - 手机号
 - 微信号
 - 地址
@@ -438,11 +476,11 @@ https://oli6666.top/rss.xml
 
 允许使用脱敏表达，例如：
 
-- 企业招投标系统
+- 企业流程系统
 - 电子招采平台
-- 供应商管理
-- 专家管理
-- 采购计划管理
+- 业务对象管理
+- 评审资源管理
+- 计划流程管理
 - 企业系统对接
 - 公共资源交易服务平台
 - 企业数字化服务团队

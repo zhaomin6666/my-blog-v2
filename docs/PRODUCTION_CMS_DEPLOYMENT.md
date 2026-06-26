@@ -19,6 +19,8 @@ The Admin surface is author-only and writes to PostgreSQL:
 
 - `/admin/blog`: Blog Posts, Markdown import/export, soft delete.
 - `/admin/projects`: Projects, Markdown import/export.
+- `/admin/site`: Site Identity and default SEO, except `siteUrl`.
+- `/admin/pages`: Blog / Projects page-level configuration.
 - `/admin/hero`: homepage Hero.
 - `/admin/profile`: profile/about content.
 - `/admin/contact`: public contact channels.
@@ -33,8 +35,8 @@ the matching source is set to `database`.
 - `database/migrations/*.sql` have been applied in order.
 - A fresh PostgreSQL backup exists before any migration or source switch.
 - Admin credentials are configured with non-default values.
-- Blog, Projects, Hero, Profile, Contact, and Stack content have been created or
-  imported and reviewed in Admin.
+- Blog, Projects, Site Config, Page Config, Hero, Profile, Contact, and Stack content have been created or imported and reviewed in Admin.
+- `siteUrl` is set with `NEXT_PUBLIC_SITE_URL`; it is not edited through Admin CMS.
 - File mode build passes without a database connection.
 - Database mode build passes in local or staging with a test database.
 - `.env.production` is created on the server and is not committed.
@@ -72,6 +74,11 @@ ADMIN_USERNAME=<admin_username>
 ADMIN_PASSWORD_HASH=<sha256_password_hash>
 ADMIN_SESSION_SECRET=<random_32_chars_or_longer>
 ```
+
+Admin username, password hash, and session secret are environment-managed deployment secrets. Do not store them in Admin CMS content tables.
+
+Before switching any public domain to database mode, confirm `CONTENT_SOURCE`, `BLOG_CONTENT_SOURCE`, `PROJECT_CONTENT_SOURCE`, and `PROFILE_CONTENT_SOURCE` are set deliberately and match the intended source order.
+
 
 Do not commit `.env.production`, real database URLs, password hashes, session
 secrets, or backup dumps.

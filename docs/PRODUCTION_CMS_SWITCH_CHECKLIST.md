@@ -64,7 +64,7 @@ PROFILE_CONTENT_SOURCE=file
 Expected server directory:
 
 ```text
-/opt/backups/personal-dev-os/postgres
+/srv/example-backups/postgres
 ```
 
 - [ ] Backup directory exists.
@@ -98,6 +98,8 @@ database/migrations/001_create_cms_tables.sql
 - [ ] `/admin` is reachable after login.
 - [ ] `/admin/blog` is reachable.
 - [ ] `/admin/projects` is reachable.
+- [ ] `/admin/site` is reachable.
+- [ ] `/admin/pages` is reachable.
 - [ ] `/admin/hero` is reachable.
 - [ ] `/admin/profile` is reachable.
 - [ ] `/admin/contact` is reachable.

@@ -165,12 +165,12 @@ Console App 默认是固定在浏览器底部的 dock 面板。
 ### Projects
 
 - AI Agent Demo
-- Bidding System Platform
+- Enterprise Workflow Platform Example
 - Personal Dev OS
 
 ### Blog
 
-- 从 Java 后端到 AI Agent 开发的学习路线。
+- AI Agent workflow learning notes。
 - LangChain 和 LangGraph 的关系与实践。
 - 如何设计一个程序员的个人网站。
 - RAG 应用从 0 到 1 实战记录。
@@ -180,7 +180,7 @@ Console App 默认是固定在浏览器底部的 dock 面板。
 - Email
 - GitHub
 - LinkedIn
-- Resume Download
+- Public Profile
 
 ## 13. 禁止事项
 

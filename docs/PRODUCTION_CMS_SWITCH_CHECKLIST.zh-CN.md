@@ -64,7 +64,7 @@ PROFILE_CONTENT_SOURCE=file
 服务器备份目录：
 
 ```text
-/opt/backups/personal-dev-os/postgres
+/srv/example-backups/postgres
 ```
 
 - [ ] 服务器存在备份目录。

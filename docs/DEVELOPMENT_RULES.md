@@ -26,11 +26,13 @@ lib/                → Types, commands, translations, style tokens
 data/               → Mock data
 ```
 
-## 4. Copy Rules
-- Chinese and English copy must be centralized in `lib/translations.ts`.
-- No hardcoded strings scattered in components.
-- Use `t(key, lang)` from `@/lib/translations` for all user-facing text.
-- Mock data should also consider bilingual structure.
+## 4. Copy And Content Rules
+- UI chrome must be centralized in `lib/translations.ts`: labels, buttons, empty states, aria labels, validation messages, and command prompts.
+- Website content must live in content sources or database-backed Admin CMS, not in `lib/translations.ts`.
+- File-mode content sources include `content/site`, `content/homepage`, `content/pages`, `content/profile`, `content/blog`, and `content/projects`.
+- Database-mode Admin sources include `/admin/site`, `/admin/hero`, `/admin/pages`, `/admin/profile`, `/admin/stack`, `/admin/contact`, `/admin/blog`, and `/admin/projects`.
+- No hardcoded Chinese or English website content scattered in components.
+- Use `t(key, lang)` from `@/lib/translations` for UI text only.
 
 ## 5. Settings Rules
 - All global settings (theme, lang, stylePreset) must come from `useSettings()` in `@/lib/settings-context`.
@@ -75,7 +77,7 @@ data/               → Mock data
 - Public SEO outputs (`metadata`, `sitemap.xml`, `robots.txt`, `rss.xml`) must not expose draft content.
 - Sitemap and RSS must fetch blog entries through `BlogService.getPublishedPosts()`.
 - Article metadata must fetch entries through `BlogService.getPublishedPostBySlug()` or another published-only service method.
-- Site URL and default SEO copy must be centralized in `lib/seo.ts`; production deployments should set `NEXT_PUBLIC_SITE_URL`.
+- Site URL must come from `NEXT_PUBLIC_SITE_URL`; Site Identity and default SEO copy must come from Site Config (`content/site` or `site_configs`).
 - Future CMS / DB upgrades should add or swap a `BlogRepository` implementation instead of rewriting page, Console, or SEO consumers.
 
 ## 9.1 Project Content Architecture Rules

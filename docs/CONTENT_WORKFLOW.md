@@ -2,12 +2,28 @@
 
 This document explains how to maintain the file-based content sources for the Personal Developer OS.
 
-The current site has three content sources:
+The current file-mode site has six content-source areas:
 
 ```text
-content/blog      -> BlogRepository -> FileBlogRepository -> BlogService
-content/projects  -> ProjectRepository -> FileProjectRepository -> ProjectService
-content/profile   -> ProfileRepository -> FileProfileRepository -> ProfileService
+content/site      -> SiteConfigService    -> Site Identity / default SEO
+content/homepage  -> HomepageService      -> Homepage Hero
+content/pages     -> PageConfigService    -> Blog / Projects page config
+content/profile   -> ProfileService       -> Profile / Stack / Contact
+content/blog      -> BlogService          -> Blog posts
+content/projects  -> ProjectService       -> Project cases
+```
+
+Database mode uses the matching Admin and PostgreSQL sources:
+
+```text
+/admin/site      -> site_configs
+/admin/hero      -> homepage_sections
+/admin/pages     -> page_configs
+/admin/profile   -> profile_pages
+/admin/stack     -> system_stack_groups / system_stack_items
+/admin/contact   -> contact_channels
+/admin/blog      -> blog_posts / blog_series
+/admin/projects  -> projects
 ```
 
 Keep this document close to daily publishing work. It is intentionally practical: where to put files, which frontmatter fields matter, how public routes are generated, and how to validate before release.
@@ -25,6 +41,30 @@ Key principles:
 - Published-only queries power public pages, sitemap, RSS, SEO output, and Console metadata.
 - Repository interfaces should stay stable so future CMS or database implementations can replace file repositories.
 - Do not duplicate Blog, Project, or Profile data inside React components.
+
+
+### Site, Homepage, And Page Config
+
+These files own site-level and page-level copy that should not live in `lib/translations.ts`:
+
+```text
+content/site/settings.en.md
+content/site/settings.zh.md
+content/homepage/hero.en.md
+content/homepage/hero.zh.md
+content/pages/blog.en.md
+content/pages/blog.zh.md
+content/pages/projects.en.md
+content/pages/projects.zh.md
+```
+
+Rules:
+
+- Site Identity and default SEO come from `content/site` in file mode or `/admin/site` in database mode.
+- `siteUrl` is deployment configuration and remains controlled by `NEXT_PUBLIC_SITE_URL`; do not edit it through Admin CMS.
+- Homepage Hero title, subtitle, and badge come from `content/homepage` in file mode or `/admin/hero` in database mode.
+- Blog and Projects page titles, subtitles, footer copy, and default metadata come from `content/pages` in file mode or `/admin/pages` in database mode.
+- `lib/translations.ts` is for UI chrome: labels, buttons, empty states, aria labels, validation messages, and command prompts. Do not put website content there.
 
 ## 2. Blog Workflow
 
@@ -266,14 +306,14 @@ All three files are loaded through `ProfileService` and passed into the Main App
 
 Use this file to maintain the public profile:
 
-- Java backend background
+- backend engineering background
 - AI Agent / full-stack direction
 - anonymized enterprise-system experience
 - current focus
 - work style
 - active projects
 - career direction
-- resume privacy note
+- profile privacy note
 
 The file already contains non-rendered HTML comments explaining how frontmatter maps to the current frontend. Keep those comments private to editors; do not convert them into visible page text.
 
@@ -288,7 +328,7 @@ Do not add:
 - real client names
 - buyer names
 - sensitive project details
-- real resume PDF links
+- real private profile PDF links
 
 ### contact-channels.md
 
@@ -301,7 +341,7 @@ Rules:
 - Empty `href` should not become an active link.
 - `disabled: true` shows availability/status without navigation.
 - Keep the Contact section focused. Avoid turning it into a large marketing link list.
-- Do not publish private email, phone, WeChat, address, or resume PDF links unless the privacy policy changes.
+- Do not publish private email, phone, WeChat, address, or private profile PDF links unless the privacy policy changes.
 
 ### system-stack.md
 
@@ -378,14 +418,14 @@ git commit -m "docs: add content workflow"
 git push
 ```
 
-Do not commit local env files, generated logs, certificates, private keys, server IPs, or private resume files.
+Do not commit local env files, generated logs, certificates, private keys, server IPs, or private profile files.
 
 ## 7. Deployment Workflow
 
 Production update path:
 
 ```bash
-cd /opt/apps/personal-dev-os
+cd /srv/example-app
 git pull
 docker compose --env-file .env.production up -d --build
 ```
@@ -405,14 +445,14 @@ docker compose --env-file .env.production up -d
 Online checks:
 
 ```text
-https://oli6666.top
-https://oli6666.top/blog
-https://oli6666.top/projects
-https://oli6666.top/sitemap.xml
-https://oli6666.top/rss.xml
+https://example.com
+https://example.com/blog
+https://example.com/projects
+https://example.com/sitemap.xml
+https://example.com/rss.xml
 ```
 
-Confirm sitemap and RSS use `https://oli6666.top` and do not expose draft content.
+Confirm sitemap and RSS use `https://example.com` and do not expose draft content.
 
 ## 8. Privacy Rules
 
@@ -424,7 +464,7 @@ Do not commit or publish:
 - private keys
 - server IPs
 - deployment secrets
-- real resume PDF
+- real private profile PDF
 - phone number
 - WeChat ID
 - address
@@ -438,7 +478,7 @@ Do not commit or publish:
 
 Allowed public wording should stay anonymized, such as:
 
-- enterprise bidding system
+- enterprise workflow system
 - e-procurement platform
 - supplier management
 - expert management

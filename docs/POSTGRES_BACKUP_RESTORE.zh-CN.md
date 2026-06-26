@@ -30,15 +30,15 @@
 推荐服务器目录：
 
 ```text
-/opt/backups/personal-dev-os/postgres
+/srv/example-backups/postgres
 ```
 
 创建目录并限制权限：
 
 ```bash
-sudo mkdir -p /opt/backups/personal-dev-os/postgres
-sudo chown -R "$USER":"$USER" /opt/backups/personal-dev-os/postgres
-chmod 700 /opt/backups/personal-dev-os/postgres
+sudo mkdir -p /srv/example-backups/postgres
+sudo chown -R "$USER":"$USER" /srv/example-backups/postgres
+chmod 700 /srv/example-backups/postgres
 ```
 
 不要把 dump 文件提交到 Git。
@@ -46,8 +46,8 @@ chmod 700 /opt/backups/personal-dev-os/postgres
 ## 外部或宿主机 PostgreSQL 备份
 
 ```bash
-export BACKUP_DIR=/opt/backups/personal-dev-os/postgres
-export BACKUP_FILE="$BACKUP_DIR/personal-dev-os-$(date +%Y%m%d-%H%M%S).dump"
+export BACKUP_DIR=/srv/example-backups/postgres
+export BACKUP_FILE="$BACKUP_DIR/app-backup-$(date +%Y%m%d-%H%M%S).dump"
 
 pg_dump "$PERSONAL_SITE_DATABASE_URL" -F c -f "$BACKUP_FILE"
 ls -lh "$BACKUP_FILE"
@@ -65,8 +65,8 @@ chmod 600 "$BACKUP_FILE"
 export POSTGRES_CONTAINER=<postgres_container>
 export DB_USER=<db_user>
 export DB_NAME=<db_name>
-export BACKUP_DIR=/opt/backups/personal-dev-os/postgres
-export BACKUP_NAME=personal-dev-os-$(date +%Y%m%d-%H%M%S).dump
+export BACKUP_DIR=/srv/example-backups/postgres
+export BACKUP_NAME=app-backup-$(date +%Y%m%d-%H%M%S).dump
 
 docker exec "$POSTGRES_CONTAINER" pg_dump -U "$DB_USER" -d "$DB_NAME" -F c -f "/tmp/$BACKUP_NAME"
 docker cp "$POSTGRES_CONTAINER:/tmp/$BACKUP_NAME" "$BACKUP_DIR/$BACKUP_NAME"
@@ -81,7 +81,7 @@ chmod 600 "$BACKUP_DIR/$BACKUP_NAME"
 ## 下载备份到本地
 
 ```bash
-scp user@your-server:/opt/backups/personal-dev-os/postgres/personal-dev-os-YYYYMMDD-HHMMSS.dump .
+scp user@your-server:/srv/example-backups/postgres/app-backup-YYYYMMDD-HHMMSS.dump .
 ```
 
 本地备份也应放在仓库外。
@@ -91,26 +91,26 @@ scp user@your-server:/opt/backups/personal-dev-os/postgres/personal-dev-os-YYYYM
 列出备份：
 
 ```bash
-ls -lhtr /opt/backups/personal-dev-os/postgres/*.dump
+ls -lhtr /srv/example-backups/postgres/*.dump
 ```
 
 查看超过最近 10 份的旧备份：
 
 ```bash
-cd /opt/backups/personal-dev-os/postgres
-ls -1t personal-dev-os-*.dump | tail -n +11
+cd /srv/example-backups/postgres
+ls -1t app-backup-*.dump | tail -n +11
 ```
 
 人工确认后删除旧备份：
 
 ```bash
-rm /opt/backups/personal-dev-os/postgres/personal-dev-os-YYYYMMDD-HHMMSS.dump
+rm /srv/example-backups/postgres/app-backup-YYYYMMDD-HHMMSS.dump
 ```
 
 未来 cron 示例，Phase 11.9 不实现：
 
 ```cron
-15 3 * * * pg_dump "$PERSONAL_SITE_DATABASE_URL" -F c -f "/opt/backups/personal-dev-os/postgres/personal-dev-os-$(date +\%Y\%m\%d-\%H\%M\%S).dump"
+15 3 * * * pg_dump "$PERSONAL_SITE_DATABASE_URL" -F c -f "/srv/example-backups/postgres/app-backup-$(date +\%Y\%m\%d-\%H\%M\%S).dump"
 ```
 
 ## 恢复前注意事项
@@ -124,8 +124,8 @@ rm /opt/backups/personal-dev-os/postgres/personal-dev-os-YYYYMMDD-HHMMSS.dump
 ## 恢复到测试库
 
 ```bash
-createdb personal_dev_os_restore_test
-pg_restore -d personal_dev_os_restore_test /path/to/personal-dev-os-YYYYMMDD-HHMMSS.dump
+createdb app_restore_test
+pg_restore -d app_restore_test /path/to/app-backup-YYYYMMDD-HHMMSS.dump
 ```
 
 把本地或 staging 指向测试库验证：

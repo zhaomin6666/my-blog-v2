@@ -32,7 +32,7 @@ PostgreSQL -> DatabaseProfileRepository -> ProfileService -> 页面
 
 ## 为什么要从文件型内容源迁移
 
-文件型 Markdown 很适合 v1.0 发布和可版本化内容，但当网站成为长期写作、求职展示和作品维护系统后，会出现几个问题：
+文件型 Markdown 很适合 v1.0 发布和可版本化内容，但当网站成为长期写作、作品展示和作品维护系统后，会出现几个问题：
 
 - 每次内容更新都需要 Git 提交和生产构建，发布链路偏重。
 - 博客草稿后续可能放在独立写作目录或内容仓库，而不是 Next.js 项目内。
@@ -115,7 +115,7 @@ PostgreSQL -> DatabaseProfileRepository -> ProfileService -> 页面
 - focus
 - public summary
 - privacy note
-- public resume note
+- public profile privacy note
 
 ### Contact Channels
 
@@ -427,6 +427,8 @@ createBlogRepository()
 /admin/projects
 /admin/projects/new
 /admin/projects/[id]
+/admin/pages
+/admin/site
 /admin/profile
 /admin/contact
 /admin/stack
@@ -638,7 +640,7 @@ ADMIN_SESSION_SECRET=
 CONTENT_SOURCE=database
 ```
 
-如果当前部署环境完全独立，也可以使用 `DATABASE_URL`；但如果服务器已有 sub2api 等其他应用，推荐使用 `PERSONAL_SITE_DATABASE_URL`。
+如果当前部署环境完全独立，也可以使用 `DATABASE_URL`；但如果服务器已有 another application 等其他应用，推荐使用 `PERSONAL_SITE_DATABASE_URL`。
 
 备份规则：
 

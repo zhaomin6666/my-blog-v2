@@ -10,18 +10,24 @@ system changes, content migration, or Agent Demo scope changes are implemented.
 The current site already has a CMS-ready shape:
 
 ```text
-content/blog      -> FileBlogRepository    -> BlogService    -> pages
-content/projects  -> FileProjectRepository -> ProjectService -> pages
-content/profile   -> FileProfileRepository -> ProfileService -> pages
+content/site      -> FileSiteConfigRepository -> SiteConfigService -> metadata / SEO
+content/homepage  -> FileHomepageRepository   -> HomepageService   -> homepage Hero
+content/pages     -> FilePageConfigRepository -> PageConfigService -> Blog / Projects page config
+content/profile   -> FileProfileRepository    -> ProfileService    -> Profile / Stack / Contact
+content/blog      -> FileBlogRepository       -> BlogService       -> Blog posts
+content/projects  -> FileProjectRepository    -> ProjectService    -> Project cases
 ```
 
 The target shape keeps the same application boundary while changing the primary
 content source:
 
 ```text
-PostgreSQL -> DatabaseBlogRepository    -> BlogService    -> pages
-PostgreSQL -> DatabaseProjectRepository -> ProjectService -> pages
-PostgreSQL -> DatabaseProfileRepository -> ProfileService -> pages
+PostgreSQL -> DatabaseSiteConfigRepository -> SiteConfigService -> metadata / SEO
+PostgreSQL -> DatabaseHomepageRepository   -> HomepageService   -> homepage Hero
+PostgreSQL -> DatabasePageConfigRepository -> PageConfigService -> Blog / Projects page config
+PostgreSQL -> DatabaseProfileRepository    -> ProfileService    -> Profile / Stack / Contact
+PostgreSQL -> DatabaseBlogRepository       -> BlogService       -> Blog posts
+PostgreSQL -> DatabaseProjectRepository    -> ProjectService    -> Project cases
 ```
 
 The main goals are:
@@ -126,7 +132,7 @@ Managed content:
 - Focus areas
 - Public summary
 - Privacy note
-- Public resume note
+- Public profile privacy note
 
 ### Contact Channels
 
@@ -445,6 +451,8 @@ Full route design:
 /admin/projects
 /admin/projects/new
 /admin/projects/[id]
+/admin/pages
+/admin/site
 /admin/profile
 /admin/contact
 /admin/stack
@@ -990,6 +998,18 @@ Boundaries:
   Nginx deployment config changes were made.
 - No automatic backup job, migration runner, production content-source switch,
   hard delete, or database content deletion was added.
+
+
+### Phase 11.11 / Step 6A-6B-5 Documentation Backfill
+
+The current public-content ownership model includes the follow-up Step 6A through Step 6B-5 cleanup:
+
+- `/admin/site` manages Site Identity and default SEO in `site_configs`. `siteUrl` is not editable here and remains controlled by `NEXT_PUBLIC_SITE_URL`.
+- `/admin/hero` manages Homepage Hero content in `homepage_sections`; file mode uses `content/homepage/hero.*.md`.
+- `/admin/pages` manages Blog / Projects page-level title, subtitle, footer, and metadata in `page_configs`; file mode uses `content/pages/*.md`.
+- `/admin/profile`, `/admin/stack`, and `/admin/contact` remain the database-mode source for Profile, Stack, and Contact content.
+- `translations.ts` is intentionally narrowed to UI chrome and should not regain ownership of website content.
+- Non-content placeholders, test fixtures, contact platform examples, and fallback copy should stay neutral for open-source reuse.
 
 ### Phase 11.10: Phase 11 Final Review
 
