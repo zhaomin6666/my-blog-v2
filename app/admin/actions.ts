@@ -15,17 +15,26 @@ import {
   verifyAdminPassword,
 } from '@/lib/admin/admin-auth';
 
-function getClientIdentifier(headerStore: Headers): string {
-  return (
-    headerStore.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    headerStore.get('x-real-ip')?.trim() ||
-    'local'
-  );
+function cleanHeaderValue(value: string | null): string {
+  return value?.trim() || '';
+}
+
+function getAdminClientIdentifier(headerStore: Headers): string {
+  const cloudflareIp = cleanHeaderValue(headerStore.get('cf-connecting-ip'));
+  if (cloudflareIp) return cloudflareIp;
+
+  const realIp = cleanHeaderValue(headerStore.get('x-real-ip'));
+  if (realIp) return realIp;
+
+  const forwardedFor = cleanHeaderValue(headerStore.get('x-forwarded-for')?.split(',')[0] ?? null);
+  if (forwardedFor) return forwardedFor;
+
+  return 'local';
 }
 
 export async function loginAction(formData: FormData): Promise<void> {
   const headerStore = await headers();
-  const identifier = getClientIdentifier(headerStore);
+  const identifier = getAdminClientIdentifier(headerStore);
   const rateLimit = checkAdminLoginRateLimit(identifier);
 
   logAdminAuth('login.rate_limit', {
