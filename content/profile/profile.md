@@ -1,160 +1,135 @@
 ---
-title: "Profile"
+title: "Example Developer Profile"
 slug: "profile"
 summary:
-  zh: "脱敏版公开个人档案，展示 Java 后端、企业系统经验和 AI Agent / 全栈方向。"
-  en: "A privacy-friendly public profile covering Java backend experience, enterprise systems, and AI Agent / full-stack direction."
+  zh: "Example Developer 的示例公开档案，用于展示 Personal Developer OS / AI Native Portfolio CMS 的 file mode 内容结构。"
+  en: "An example public profile for showing the file-mode content structure of the Personal Developer OS / AI Native Portfolio CMS."
 role:
-  zh: "Java 后端开发者，正在向 AI Agent 与全栈开发方向拓展。关注企业知识库、业务流程理解、工具调用、RAG、LangGraph 工作流和 AI 辅助开发。"
-  en: "Java backend developer transitioning toward AI Agent and full-stack development, focusing on enterprise knowledge systems, business workflow understanding, tool calling, RAG, LangGraph workflows, and AI-assisted development."
+  zh: "Example Developer 是一名 Full-stack Developer / AI Application Builder，用于演示 profile、project、blog、contact 和 stack 内容如何组合成一个可替换的开发者档案。"
+  en: "Example Developer is a Full-stack Developer / AI Application Builder used to demonstrate how profile, project, blog, contact, and stack content can form a replaceable developer profile."
 status:
-  zh: "完整简历：正式沟通时提供"
-  en: "Full resume: available on request"
+  zh: "Starter content: replace with your own public profile before publishing."
+  en: "Starter content: replace with your own public profile before publishing."
 intro:
-  zh: "我是一名 Java 后端开发者，正在把企业业务系统开发经验、TypeScript 全栈能力和 AI Agent 学习结合起来，构建自己的项目、博客和作品集。"
-  en: "I am a Java backend developer transitioning into AI Agent and full-stack development, combining enterprise-system experience with TypeScript, Next.js, and AI-assisted product building."
+  zh: "这是一个中性的 example profile，用于帮助开源用户在 file mode 下快速看到完整页面效果。你可以将这里的背景、项目、技能和联系方式替换为自己的公开内容。"
+  en: "This is a neutral example profile that helps open-source users see a complete file-mode page. You can replace the background, projects, skills, and contact channels with your own public content."
 fields:
   - labelKey: "about.role"
     value:
-      zh: "Java 后端开发者 / AI Agent 学习者"
-      en: "Java Backend Developer / AI Agent Learner"
+      zh: "Example Developer"
+      en: "Example Developer"
   - labelKey: "about.direction"
     value:
-      zh: "AI Agent / TypeScript 全栈开发"
-      en: "AI Agent / TypeScript Full-stack"
+      zh: "Full-stack Developer / AI Application Builder"
+      en: "Full-stack Developer / AI Application Builder"
   - labelKey: "about.status"
     value:
-      zh: "正在建设作品集，关注 AI 应用与全栈机会"
-      en: "Building a portfolio, open to AI application and full-stack opportunities"
+      zh: "Starter profile for an AI Native Portfolio CMS"
+      en: "Starter profile for an AI Native Portfolio CMS"
 focus:
-  - zh: "AI Agent 应用开发"
-    en: "AI Agent application development"
-  - zh: "TypeScript / Next.js 全栈开发"
-    en: "TypeScript / Next.js full-stack development"
-  - zh: "LangChain.js / LangGraph.js"
-    en: "LangChain.js / LangGraph.js"
-  - zh: "企业知识库 / RAG"
-    en: "Enterprise knowledge base / RAG"
-  - zh: "工具调用 / Agent Workflow"
-    en: "Tool calling / Agent workflow"
-  - zh: "AI 辅助开发流程"
-    en: "AI-assisted development workflow"
+  - zh: "Portfolio CMS"
+    en: "Portfolio CMS"
+  - zh: "AI 应用原型"
+    en: "AI application prototypes"
+  - zh: "内容建模"
+    en: "Content modeling"
+  - zh: "Full-stack product UI"
+    en: "Full-stack product UI"
+  - zh: "Admin CMS workflow"
+    en: "Admin CMS workflow"
+  - zh: "安全的示例内容"
+    en: "Safe example content"
 background:
-  - zh: "过去主要参与脱敏后的企业业务系统、招投标、采购、供应商管理、专家管理和采购计划管理等项目。"
-    en: "Worked on anonymized enterprise business systems, bidding and procurement scenarios, supplier management, expert management, and procurement planning."
-  - zh: "熟悉 Java、Spring Boot、业务流程建模、接口对接、需求沟通、文档沉淀和阶段性交付。"
-    en: "Experienced with Java, Spring Boot, business workflow modeling, system integration, requirement communication, documentation, and staged delivery."
-  - zh: "现在从真实业务系统经验出发，逐步补齐 AI Agent 与全栈产品开发能力。"
-    en: "Now using real business-system experience as the starting point for learning AI Agent and full-stack product development."
+  - zh: "这个档案是 starter content，不代表任何具体个人、公司、客户或生产系统。"
+    en: "This profile is starter content and does not represent a specific person, company, client, or production system."
+  - zh: "它展示 file mode 可以怎样组织公开 profile 数据，并与 projects、blog、contact 和 stack 内容配合。"
+    en: "It shows how file mode can organize public profile data alongside projects, blog posts, contact channels, and stack content."
+  - zh: "在正式发布前，请将这些示例字段替换为你自己的公开背景、项目、技能和联系方式。"
+    en: "Before publishing, replace these example fields with your own public background, projects, skills, and contact details."
 building:
   - label:
-      zh: "Personal Developer OS"
-      en: "Personal Developer OS"
-    href: "/projects/personal-developer-os"
+      zh: "Example AI Native Portfolio"
+      en: "Example AI Native Portfolio"
+    href: "/projects/example-ai-native-portfolio"
     description:
-      zh: "已上线的个人开发者操作系统风格网站，承载博客、作品集、求职入口和 AI Agent 学习记录。"
-      en: "A live browser-based developer OS site for blogs, portfolio work, career entry points, and AI Agent learning notes."
+      zh: "一个中性的 example project，用于演示 Personal Developer OS / AI Native Portfolio CMS 的项目内容模型。"
+      en: "A neutral example project that demonstrates the project content model for a Personal Developer OS / AI Native Portfolio CMS."
   - label:
-      zh: "AI Agent Demo"
-      en: "AI Agent Demo"
-    href: "/projects/ai-agent-demo"
-    description:
-      zh: "面向企业知识库和业务流程理解的 AI Agent 学习项目，目前处于持续建设阶段。"
-      en: "An in-progress AI Agent learning project focused on enterprise knowledge bases and business workflow understanding."
-  - label:
-      zh: "工程日志"
-      en: "Engineering Logs"
+      zh: "Example Blog"
+      en: "Example Blog"
     href: "/blog"
     description:
-      zh: "用博客记录网站建设、工程实践和学习过程。"
-      en: "Blog notes for site building, engineering practice, and learning progress."
-  - label:
-      zh: "Personal Developer OS 系列"
-      en: "Personal Developer OS Series"
-    href: "/blog/series/personal-developer-os"
-    description:
-      zh: "从想法、设计、开发到部署的完整建设记录。"
-      en: "The complete build log from idea and design to development and deployment."
+      zh: "一篇示例博客，用于说明 file mode、database mode、Admin CMS 和安全内容替换流程。"
+      en: "An example blog post explaining file mode, database mode, Admin CMS editing, and safe content replacement."
 workStyle:
-  - zh: "小步拆分需求，按阶段验收"
-    en: "Break work into small steps and review by phase"
-  - zh: "从真实业务问题出发，保留文档和交付记录"
-    en: "Start from real business problems and keep delivery notes"
-  - zh: "把 AI 作为协作工具，用项目和博客沉淀学习过程"
-    en: "Use AI as a collaborator and record learning through projects and writing"
+  - zh: "Keep example data small, clear, and easy to replace"
+    en: "Keep example data small, clear, and easy to replace"
+  - zh: "Use file mode for Git-managed starter content"
+    en: "Use file mode for Git-managed starter content"
+  - zh: "Use database mode for Admin CMS-managed production content"
+    en: "Use database mode for Admin CMS-managed production content"
 coreSkills:
-  - "Java"
-  - "Spring Boot"
-  - "MyBatis"
-  - "Redis"
-  - "Docker"
-  - "Nginx"
-  - "Relational Databases"
-  - "TypeScript"
   - "Next.js"
   - "React"
-  - "LangChain.js"
-  - "LangGraph.js"
-  - "Zod"
-  - "AI-assisted Development"
+  - "TypeScript"
+  - "Tailwind CSS"
+  - "Node.js"
+  - "PostgreSQL"
+  - "LLM Apps"
+  - "RAG"
+  - "Tool Calling"
+  - "Structured Output"
+  - "Docker"
+  - "Nginx"
+  - "Markdown"
+  - "Admin CMS"
+  - "SEO"
+  - "RSS"
 aiFocus:
-  - zh: "Prompt Messages 与上下文组织"
-    en: "Prompt messages and context organization"
-  - zh: "Structured Output 与 Zod Schema"
-    en: "Structured output and Zod schemas"
-  - zh: "Intent Classification 与工具调用"
-    en: "Intent classification and tool calling"
-  - zh: "RAG 与企业知识库问答"
-    en: "RAG and enterprise knowledge-base Q&A"
-  - zh: "LangGraph Workflow、Agent State 与 Persistence 正在学习中"
-    en: "Learning LangGraph workflows, agent state, and persistence"
-  - zh: "MCP / OAuth / 企业系统集成为后续学习方向"
-    en: "MCP, OAuth, and enterprise integration are follow-up learning areas"
+  - zh: "LLM app content flows"
+    en: "LLM app content flows"
+  - zh: "RAG-ready documentation structure"
+    en: "RAG-ready documentation structure"
+  - zh: "Tool calling examples"
+    en: "Tool calling examples"
+  - zh: "Structured output examples"
+    en: "Structured output examples"
+  - zh: "Admin CMS editing boundaries"
+    en: "Admin CMS editing boundaries"
 enterpriseExperience:
-  - zh: "参与过脱敏后的企业招投标、电子招采、供应商管理、专家管理和采购计划管理等业务系统。"
-    en: "Worked on anonymized enterprise bidding, e-procurement, supplier management, expert management, and procurement planning systems."
-  - zh: "熟悉需求沟通、接口联调、Bug 排查、单元测试、文档整理、部署协作和阶段性交付支持。"
-    en: "Experienced in requirement communication, API integration, bug fixing, unit testing, documentation, deployment collaboration, and staged delivery support."
-  - zh: "公开展示中不披露真实单位、客户、甲方名称和敏感业务细节。"
-    en: "Public materials avoid real employer names, client names, buyer names, and sensitive business details."
+  - zh: "Example content can describe public product scope, architecture notes, and safe implementation details."
+    en: "Example content can describe public product scope, architecture notes, and safe implementation details."
+  - zh: "Keep private credentials, production configuration, server details, and confidential customer data out of Markdown files."
+    en: "Keep private credentials, production configuration, server details, and confidential customer data out of Markdown files."
 featuredProjects:
   - title:
-      zh: "Personal Developer OS"
-      en: "Personal Developer OS"
-    href: "/projects/personal-developer-os"
+      zh: "Example AI Native Portfolio"
+      en: "Example AI Native Portfolio"
+    href: "/projects/example-ai-native-portfolio"
     summary:
-      zh: "已上线的个人开发者操作系统风格网站，用于展示博客、项目、求职入口和学习记录。"
-      en: "A live browser-based developer OS site for blogs, projects, career entry points, and learning notes."
-  - title:
-      zh: "AI Agent Demo"
-      en: "AI Agent Demo"
-    href: "/projects/ai-agent-demo"
-    summary:
-      zh: "面向企业知识库和业务流程理解的 AI Agent 学习项目，仍在持续建设中。"
-      en: "An in-progress AI Agent learning project for enterprise knowledge bases and business workflow understanding."
+      zh: "一个用于开源 starter 的中性项目示例，展示 homepage、projects、blog、profile、contact 和 stack 的内容组织方式。"
+      en: "A neutral project example for the open-source starter, showing content organization for homepage, projects, blog, profile, contact, and stack."
 careerDirection:
-  - zh: "AI Agent Developer"
-    en: "AI Agent Developer"
-  - zh: "AI Application Engineer"
-    en: "AI Application Engineer"
-  - zh: "Full-stack Developer with AI focus"
-    en: "Full-stack Developer with AI focus"
-  - zh: "Java Backend Developer with AI Agent direction"
-    en: "Java Backend Developer with AI Agent direction"
-  - zh: "Enterprise AI Application Developer"
-    en: "Enterprise AI Application Developer"
+  - zh: "Full-stack Development"
+    en: "Full-stack Development"
+  - zh: "AI Application Building"
+    en: "AI Application Building"
+  - zh: "Portfolio CMS"
+    en: "Portfolio CMS"
+  - zh: "Developer Tooling"
+    en: "Developer Tooling"
 privacyNote:
-  zh: "为了避免公开暴露个人隐私和单位信息，本站暂不提供完整简历 PDF 下载。这里展示的是脱敏后的公开资料，完整简历可在正式沟通时提供。"
-  en: "To avoid exposing personal and employer-sensitive information, the full resume PDF is not published here. This section provides a privacy-friendly career snapshot, and the full resume can be shared during formal communication."
+  zh: "This is placeholder content. Replace it with public information you are comfortable publishing, and keep secrets or private production data out of the repository."
+  en: "This is placeholder content. Replace it with public information you are comfortable publishing, and keep secrets or private production data out of the repository."
 published: true
-lang: "zh"
+lang: "en"
 ---
 
 <!--
 Profile content mapping:
 
 This file is the source for the public Profile section in the Main App.
-It is a privacy-friendly public profile, not a full resume.
+It is starter content for an example developer profile.
 
 Frontmatter fields:
 - title:
@@ -163,14 +138,13 @@ Frontmatter fields:
 - slug:
   Stable content identifier for the Profile repository.
 - summary:
-  Parsed into publicProfile.profile.summary. It is not rendered directly on the
-  current homepage to avoid repeating intro/body copy. Keep it as content
-  metadata, CMS/admin preview text, and a future card or SEO summary candidate.
+  Parsed into publicProfile.profile.summary. It is useful for content metadata,
+  CMS/admin preview text, and future profile cards.
 - role:
   Parsed into publicProfile.profile.role. Reserved for a future compact hero,
   badge, or metadata display. Current homepage uses fields/intro instead.
 - status:
-  Displayed in the Profile section resume/status note.
+  Displayed in the Profile section status note.
 - intro:
   Displayed as the short opening paragraph in the Profile section.
 - fields:
@@ -185,22 +159,20 @@ Frontmatter fields:
 - workStyle:
   Displayed in the How I Work area of the Profile section.
 - coreSkills:
-  Parsed for future profile metadata/CMS use. The current visible Stack section
-  comes from content/profile/system-stack.md instead.
+  Parsed for future profile metadata/CMS use. The visible Stack section comes
+  from content/profile/system-stack.md.
 - aiFocus:
-  Parsed for future detailed resume/profile views. Not displayed directly on the
-  current homepage to keep Profile compact.
+  Parsed for future detailed profile views.
 - enterpriseExperience:
-  Parsed for future detailed resume/profile views. Not displayed directly on the
-  current homepage because background already provides the public summary.
+  Parsed for future detailed profile views. In this starter file it contains
+  general safe-content notes, not private history.
 - featuredProjects:
   Parsed for future CMS/project cross-linking. Current visible project cards come
   from content/projects through ProjectService.
 - careerDirection:
-  Displayed as Career Direction tags in the Profile section.
+  Displayed as direction tags in the Profile section.
 - privacyNote:
-  Displayed in the Profile privacy note. Contact also has its own privacy note in
-  contact-channels.md.
+  Displayed in the Profile note area.
 - published:
   Controls whether ProfileService returns this public profile.
 - lang:
@@ -210,7 +182,7 @@ Markdown body:
 - Parsed into publicProfile.profile.content and rawContent.
 - The current Main App does not render the markdown body directly. Keep it as an
   editor-facing narrative/metadata reserve for a future detail view or CMS
-  preview. Do not put private resume details here.
+  preview.
 
 Frontend display mapping:
 - Main App / Profile:
@@ -219,16 +191,12 @@ Frontend display mapping:
 - Main App / Stack:
   Reads publicProfile.systemStack.groups from system-stack.md.
 - Main App / Contact:
-  Reads publicProfile.contactChannels visible channels plus privacyNote and
-  resumeNote from contact-channels.md.
-- Career Snapshot:
-  No longer exists as a separate homepage module. Career information is merged
-  into Profile.
+  Reads publicProfile.contactChannels visible channels from
+  contact-channels.md.
 
-Privacy guard:
-- Do not add phone number, WeChat ID, address, ID number, birthday, real employer
-  name, real client name, buyer name, or sensitive project details.
-- Do not add a real resume PDF link here.
+Safety guard:
+- Do not add secrets, API keys, database URLs, private server details, private
+  customer data, phone numbers, private addresses, or confidential identifiers.
 -->
 
-这是一份公开网站上的脱敏个人档案，不是完整在线简历，也不包含真实单位、客户、甲方名称或个人隐私信息。
+This is an example developer profile for the file-mode starter. Replace it with your own public profile content when you customize the project.

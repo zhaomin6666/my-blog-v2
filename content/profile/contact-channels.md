@@ -1,17 +1,17 @@
 ---
 channels:
   - platform: "blog"
-    value: "https://oli6666.top/blog"
+    value: "https://example.com/blog"
     displayOrder: 0
   - platform: "github"
-    value: "oli6666"
+    value: "example-dev"
     displayOrder: 1
   - platform: "linkedin"
-    value: "in/oli6666"
+    value: "in/example-dev"
     displayOrder: 2
   - platform: "custom"
-    customLabel: "Agent Demo"
-    value: "AI Agent Demo"
-    hrefOverride: "https://oli6666.top/agent-demo"
+    customLabel: "Example Project"
+    value: "Example AI Native Portfolio"
+    hrefOverride: "https://example.com/projects/example-ai-native-portfolio"
     displayOrder: 3
 ---

@@ -1,69 +1,55 @@
 ---
 groups:
-  - name: "Backend"
+  - name: "Frontend"
     order: 0
     items:
-      - name: "Java"
-        order: 0
-      - name: "Spring Boot"
-        order: 1
-      - name: "MyBatis"
-        order: 2
-      - name: "Redis"
-        order: 3
-      - name: "REST APIs"
-        order: 4
-      - name: "Relational Databases"
-        order: 5
-  - name: "Frontend / Full-stack"
-    order: 1
-    items:
-      - name: "TypeScript"
+      - name: "Next.js"
         order: 0
       - name: "React"
         order: 1
-      - name: "Next.js"
+      - name: "TypeScript"
         order: 2
       - name: "Tailwind CSS"
         order: 3
-  - name: "AI Agent"
+  - name: "Backend"
+    order: 1
+    items:
+      - name: "Node.js"
+        order: 0
+      - name: "PostgreSQL"
+        order: 1
+      - name: "REST APIs"
+        order: 2
+  - name: "AI Apps"
     order: 2
     items:
-      - name: "LangChain.js"
+      - name: "LLM Apps"
         order: 0
-      - name: "LangGraph.js"
-        order: 1
-      - name: "Structured Output"
-        order: 2
-      - name: "Tool Calling"
-        order: 3
       - name: "RAG"
-        order: 4
-      - name: "Agent Workflow"
-        order: 5
-  - name: "DevOps / Deployment"
+        order: 1
+      - name: "Tool Calling"
+        order: 2
+      - name: "Structured Output"
+        order: 3
+  - name: "DevOps"
     order: 3
     items:
       - name: "Docker"
         order: 0
-      - name: "Docker Compose"
-        order: 1
       - name: "Nginx"
+        order: 1
+      - name: "CI/CD"
         order: 2
-      - name: "Linux"
-        order: 3
-      - name: "HTTPS / Let's Encrypt"
-        order: 4
-  - name: "Learning / Exploring"
+  - name: "Content"
     order: 4
     items:
-      - name: "MCP"
+      - name: "Markdown"
         order: 0
-      - name: "OAuth"
+      - name: "Admin CMS"
         order: 1
-      - name: "Agent Persistence"
+      - name: "SEO"
         order: 2
-      - name: "Enterprise Knowledge Base"
+      - name: "RSS"
         order: 3
 ---
 
@@ -84,8 +70,7 @@ System stack content mapping:
   Controls item order inside the group.
 
 Maintenance notes:
-- Learning / Exploring means the area is being studied or explored. It should not
-  be presented as mature production expertise.
+- This is neutral example stack content for the starter.
 - To update the visible stack, edit groups in this file. Do not duplicate stack
   data inside components.
 -->
