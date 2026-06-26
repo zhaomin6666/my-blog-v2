@@ -59,6 +59,17 @@ describe('checkAdminEnv', () => {
     expect(result.errors).toContain('ADMIN_PASSWORD_HASH must not match a known default password.');
   });
 
+  it('allows admin as a username while still requiring a non-default password hash', () => {
+    const result = checkAdminEnv({
+      ADMIN_USERNAME: 'admin',
+      ADMIN_PASSWORD_HASH: sha256('a long local admin password'),
+      ADMIN_SESSION_SECRET: 'x'.repeat(MIN_ADMIN_SESSION_SECRET_LENGTH),
+    });
+
+    expect(result.ok).toBe(true);
+    expect(result.errors).toEqual([]);
+  });
+
   it('accepts complete non-default credentials', () => {
     const result = checkAdminEnv({
       ADMIN_USERNAME: 'owner',
@@ -70,4 +81,3 @@ describe('checkAdminEnv', () => {
     expect(result.errors).toEqual([]);
   });
 });
-

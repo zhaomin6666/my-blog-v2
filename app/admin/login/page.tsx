@@ -3,6 +3,9 @@ import { redirect } from 'next/navigation';
 import { hasAdminSession } from '@/lib/admin/admin-auth';
 import { loginAction } from '../actions';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: 'Admin Login',
   robots: {

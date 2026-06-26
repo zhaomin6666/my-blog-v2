@@ -25,6 +25,10 @@ const placeholderValues = new Set([
   'replace-me',
   'todo',
   'example',
+]);
+
+const secretPlaceholderValues = new Set([
+  ...placeholderValues,
   'password',
   'admin',
   'secret',
@@ -55,6 +59,11 @@ function isPlaceholder(value: string | undefined): boolean {
   return placeholderValues.has(value.trim().toLowerCase());
 }
 
+function isSecretPlaceholder(value: string | undefined): boolean {
+  if (!value) return false;
+  return secretPlaceholderValues.has(value.trim().toLowerCase());
+}
+
 export function checkAdminEnv(env: NodeJS.ProcessEnv = process.env): AdminEnvCheckResult {
   const { username, passwordHash, sessionSecret } = readAdminEnvValues(env);
   const errors: string[] = [];
@@ -79,7 +88,7 @@ export function checkAdminEnv(env: NodeJS.ProcessEnv = process.env): AdminEnvChe
 
   if (!sessionSecret) {
     errors.push(`${ADMIN_SESSION_SECRET_ENV} is required for Admin sessions.`);
-  } else if (isPlaceholder(sessionSecret)) {
+  } else if (isSecretPlaceholder(sessionSecret)) {
     errors.push(`${ADMIN_SESSION_SECRET_ENV} must not use a placeholder value.`);
   } else if (sessionSecret.length < MIN_ADMIN_SESSION_SECRET_LENGTH) {
     errors.push(
@@ -93,4 +102,3 @@ export function checkAdminEnv(env: NodeJS.ProcessEnv = process.env): AdminEnvChe
     warnings,
   };
 }
-
